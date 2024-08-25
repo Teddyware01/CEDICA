@@ -1,7 +1,9 @@
+from src import sumar
+
 def opciones(op):
     match op:
         case '+':
-            print("algo")
+            return sumar.sumar
         case '-':
             print("algo")
         case '/':
