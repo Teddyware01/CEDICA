@@ -1,7 +1,4 @@
-from src import sumar
-from src import restar
-from src import dividir
-#from src import multiplicar
+from src import sumar, multiplicar, restar, dividir
 
 def opciones(op, num1):
     match op:
@@ -16,7 +13,7 @@ def opciones(op, num1):
             return dividir.dividir(num1, numero2)
         case '*':
             numero2 = float(input("Ingrese otro numero:  "))
-            ##return multiplicar.multiplicar(num1,numero2)
+            return multiplicar.multiplicar(num1,numero2)
         case _:
             print("Operacion invalida ")
 
