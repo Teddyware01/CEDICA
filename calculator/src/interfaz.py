@@ -1,4 +1,4 @@
-from src import sumar
+from src import sumar, multiplicar
 
 def opciones(op, num1):
     match op:
@@ -13,7 +13,7 @@ def opciones(op, num1):
             print("algo")
         case '*':
             numero2 = float(input("Ingrese otro numero:  "))
-            print("algo") 
+            return multiplicar.multiplicar(num1,numero2)
         case _:
             print("Operacion invalida ")
 
