@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <h1>Inicio</h1>
+    <p>Pagina de inicio de la aplicacion</p>
+    <a href="{{ url_for('sobre_nosotros') }}">Conoce mas sobre nosotros</a>
+{% endblock %}
