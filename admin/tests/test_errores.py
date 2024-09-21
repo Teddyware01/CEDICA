@@ -1,11 +1,11 @@
 import pytest
-from src.web import create_app
 from flask import render_template
+from tests import client
 
 @pytest.fixture
 def app():
-    app = create_app()
-    app.testing = True
+
+
 
     # Añadir dinámicamente la ruta para las pruebas
     @app.route('/cause_500')
