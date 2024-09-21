@@ -1,3 +1,5 @@
+from os import environ
+
 class Config(object):
     """Base configuracion. """
     
@@ -8,7 +10,7 @@ class Config(object):
 
 class ProductionConfig(Config):
     """Producton configuration."""
-    SQLALCHEMY_DATABASE_URI = None
+    SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
     
 
 
