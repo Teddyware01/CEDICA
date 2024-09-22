@@ -51,4 +51,15 @@ def run():
     board.assign_user(issue2, user2)
     board.assign_user(issue3, user3)
 
+    label1 = board.create_label(
+        title = "urgente",
+        description = "isda irge 24hs",
+    )
+    
+    label2 = board.create_label(
+        title = "Soporte",
+        description = "is 19hs how",
+    )
 
+    board.assign_labels(issue1, [label1])
+    board.assign_labels(issue2, [label1,label2])
