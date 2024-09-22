@@ -1,4 +1,6 @@
 from src.core import board
+from src.core import auth
+
 
 def run():
     issue1 = board.create_issue(
@@ -29,5 +31,24 @@ def run():
         description = "El sistema de pagos necesita una actualización para cumplir con las nuevas normativas.",
         status = "Open",
     )
+
+    user1 = auth.create_user(
+         email = "user11@example.com",
+         password = "sdad123",
+    )
+
+    user2 = auth.create_user(
+        email = "user22@example.com",
+        password = "12313213",
+    )
+
+    user3 = auth.create_user(
+        email = "user33@example.com",
+        password = "123",
+    )
+
+    board.assign_user(issue1, user1)
+    board.assign_user(issue2, user2)
+    board.assign_user(issue3, user3)
 
 
