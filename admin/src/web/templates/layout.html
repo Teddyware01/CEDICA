@@ -1,16 +1,67 @@
 <!DOCTYPE html>
-<html lang="es">
-  <head>
+<html>
+<head>
     {% block head %}
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles.css') }}"></link>
-    <title>{% block title %} {% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>{% block title %}{% endblock %} - CEDICA</title>
     {% endblock %}
-  </head>
-  <body>
-    <div>{% block navbar %}  {% endblock %}</div>
-    <div id="container">{% block content %} {% endblock %}</div>
-    <div>{% block footer %} {% endblock %}</div>
-  </body>
+</head>
+<body>
+    <!-- Barra de navegación superior -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('home') }}">
+            <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="height: 40px;">
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <!-- Botones de módulos según rol del usuario -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('sobre_nosotros') }}">J&A</a>
+                </li>
+
+                <!-- Dropdown de usuario -->
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProfile" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user-circle"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
+                    <a class="dropdown-item disabled" href="#" role="button">Perfil</a>
+                    <a class="dropdown-item disabled" href="#" role="button">Cerrar Sesión</a>
+                  </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light text-dark">
+      <div class="container py-3">
+          <div class="row">
+              <div class="col-md-12 text-center">
+                  <!-- Texto estático temporal para datos de contacto -->
+                  <p>Dirección: Información no disponible</p>
+                  <p>Teléfono: Información no disponible</p>
+                  <p>Correo Electrónico: Información no disponible</p>
+  
+                  <p>Proyecto de Software 2024 - Grupo 15: 
+                      <a href="https://gitlab.catedras.linti.unlp.edu.ar/proyecto2024/proyectos/grupo15">
+                          <i class="fab fa-gitlab"></i> GitLab
+                      </a>
+                  </p>
+                  <img id="logo" src="{{ url_for('static', filename='images/tiro_al_blanco.png') }}" alt="Banner del caballo" style="max-width: 100%; height: auto;">
+              </div>
+          </div>
+      </div>
+  </footer>
+</body>
 </html>
