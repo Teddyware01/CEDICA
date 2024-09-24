@@ -6,21 +6,30 @@ from src.web.config import config
 from src.core import database
 from src.core import seeds
 
+
 def create_app(env="development", static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)
+<<<<<<< HEAD
     app.config.from_object(config[env])
     database.init_app(app)
     
     @app.route('/')
+=======
+
+    @app.route("/")
+>>>>>>> e27f665740dd64ab56d107a82b4c56a124d28d86
     def home():
         return render_template("home.html")
-    
-    @app.route('/sobre_nosotros')
+
+    @app.route("/sobre_nosotros")
     def sobre_nosotros():
         return render_template("sobre_nosotros.html")
+<<<<<<< HEAD
     
     
     app.register_blueprint(issues_bp)
+=======
+>>>>>>> e27f665740dd64ab56d107a82b4c56a124d28d86
 
     app.register_error_handler(404, error.error_not_found)
     app.register_error_handler(500, error.error_internal_server_error)
@@ -34,4 +43,3 @@ def create_app(env="development", static_folder="../../static"):
         seeds.run()
 
     return app
-
