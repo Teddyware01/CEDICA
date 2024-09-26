@@ -15,14 +15,14 @@ def issues_index():
 
 @equipo_blueprint.route("/equipo/add", methods=["GET"])
 def issues_add():  # revisar si deberian tener distinto nombre
-    return render_template("equipo/formulario_equipo.html")
+    return render_template("equipo/formulario_alta_empleado.html")
 
 
 @equipo_blueprint.route("/equipo/add", methods=["POST"])
 def issues_add():  # revisar si deberian tener distinto nombre
     nuevo_empleado = {
         "id": request.form.get("id"),
-        "email": request.form.get("user"),
+        "email": request.form.get("email"),
         # ...COMPLETAR FORMULARIO...
         # CHECKEAR VALIDACIONES DEL FORMULARIO
     }

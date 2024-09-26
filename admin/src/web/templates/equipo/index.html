@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %} Listado de Empleados {% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <h1>Empleados</h1>
+    <p>Listado de empleados</p>
+    <div>
+        {% if empleados %}
+            {% for emp in empleados %}
+                <p>Nombre: {{ emp.nombre }}, Apellido: {{ emp.apellido }}, Email: {{ emp.email }}</p>
+            {% endfor %}
+        {% else %}
+            <p>No hay empleados para mostrar.</p>
+        {% endif %}
+    </div>
+{% endblock %}
