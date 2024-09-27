@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %} Ecuestre {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <h1>Modulo Ecuestre</h1>
+    <p>Este es el contenido que tendra el modulo Ecuestre.</p>
+
+    <a href="{{ url_for('home') }}">Volver a inicio</a>
+
+{% endblock %}

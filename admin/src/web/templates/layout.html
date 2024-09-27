@@ -13,31 +13,34 @@
 </head>
 <body>
     <!-- Barra de navegación superior -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('home') }}">
-            <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="height: 40px;">
-        </a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <!-- Botones de módulos según rol del usuario -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('sobre_nosotros') }}">J&A</a>
-                </li>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" title="logo" alt="Logo" style="height: 40px;">
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <!-- Botones de módulos según rol del usuario -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('jya') }}">J&A</a>
+                        <a class="nav-link" href="{{ url_for('ecuestre') }}">Ecuestre</a>
+                        <a class="nav-link" href="{{ url_for('equipo') }}">Equipo</a>
+                    </li>
 
-                <!-- Dropdown de usuario -->
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProfile" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-user-circle"></i>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                    <a class="dropdown-item disabled" href="#" role="button">Perfil</a>
-                    <a class="dropdown-item disabled" href="#" role="button">Cerrar Sesión</a>
-                  </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
+                    <!-- Dropdown de usuario -->
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProfile" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
+                        <a class="dropdown-item disabled" href="#" role="button">Perfil</a>
+                        <a class="dropdown-item disabled" href="#" role="button">Cerrar Sesión</a>
+                    </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
     <!-- Contenido principal -->
     <div id="content">
         {% block content %}{% endblock %}
@@ -49,16 +52,16 @@
           <div class="row">
               <div class="col-md-12 text-center">
                   <!-- Texto estático temporal para datos de contacto -->
-                  <p>Dirección: Información no disponible</p>
-                  <p>Teléfono: Información no disponible</p>
-                  <p>Correo Electrónico: Información no disponible</p>
+                  <p>Dirección: </p>
+                  <p>Teléfono: </p>
+                  <p>Correo Electrónico: </p>
   
                   <p>Proyecto de Software 2024 - Grupo 15: 
                       <a href="https://gitlab.catedras.linti.unlp.edu.ar/proyecto2024/proyectos/grupo15">
                           <i class="fab fa-gitlab"></i> GitLab
                       </a>
                   </p>
-                  <img id="logo" src="{{ url_for('static', filename='images/tiro_al_blanco.png') }}" alt="Banner del caballo" style="max-width: 100%; height: auto;">
+                  <img id="logo" src="{{ url_for('static', filename='images/tiro_al_blanco.png') }}" title="foto caballo" alt="Banner del caballo">
               </div>
           </div>
       </div>
