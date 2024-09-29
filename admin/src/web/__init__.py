@@ -9,27 +9,33 @@ from src.core import seeds
 
 def create_app(env="development", static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)
-<<<<<<< HEAD
-    app.config.from_object(config[env])
-    database.init_app(app)
-    
-    @app.route('/')
-=======
 
     @app.route("/")
->>>>>>> e27f665740dd64ab56d107a82b4c56a124d28d86
     def home():
         return render_template("home.html")
 
     @app.route("/sobre_nosotros")
     def sobre_nosotros():
         return render_template("sobre_nosotros.html")
-<<<<<<< HEAD
+    
+
+    @app.route("/listado_usuarios")
+    def listado_usuarios():
+        return render_template("listado.html")
+    
+    @app.route("/add_client")
+    def add_client():
+        return render_template("add_client.html")
     
     
-    app.register_blueprint(issues_bp)
-=======
->>>>>>> e27f665740dd64ab56d107a82b4c56a124d28d86
+    @app.route("/edit_client")
+    def edit_client():
+        return render_template("listado.html")
+
+    @app.route("/delete_client")
+    def delete_client():
+        return render_template("listado.html")
+    
 
     app.register_error_handler(404, error.error_not_found)
     app.register_error_handler(500, error.error_internal_server_error)

@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %} Agregar Cliente {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='crear_usuario_Style.css') }}">
+{% endblock %}
+
+{% block navbar %}
+    <nav>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Agregar Nuevo Cliente</h1>
+
+    <form action="{{ url_for('add_client') }}" method="POST" class="client-form">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="alias">Alias</label>
+            <input type="text" id="alias" name="alias" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="is_admin">¿Es administrador del sistema?</label>
+            <input type="checkbox" id="is_admin" name="is_admin">
+        </div>
+
+        <div class="form-group">
+            <label for="is_active">¿Está activo?</label>
+            <input type="checkbox" id="is_active" name="is_active">
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-submit">Agregar Cliente</button>
+            <a href="{{ url_for('listado_usuarios') }}" class="btn btn-cancel">Cancelar</a>
+        </div>
+    </form>
+{% endblock %}
+
+{% block footer %}
+    <footer>
+        <p>&copy; 2024 Sistema de Clientes</p>
+    </footer>
+{% endblock %}

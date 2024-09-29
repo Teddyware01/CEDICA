@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %} Listado de Clientes {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='listadoStyle.css') }}">
+{% endblock %}
+
+{% block navbar %}
+    <nav>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Listado de Clientes</h1>
+
+    <div class="actions">
+        <a href="{{ url_for('add_client') }}" class="btn btn-add">Agregar Cliente</a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Alias</th>
+                <th>System Admin</th>
+                <th>Activo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>{{ client.email }}</td>
+                <td>{{ client.alias }}</td>
+                <td>{{ 'Sí' if client.is_admin else 'No' }}</td>
+                <td>{{ 'Sí' if client.is_active else 'No' }}</td>
+                <td>
+                    <a href="{{ url_for('edit_client', client_id=client.id) }}" class="btn btn-edit">Editar</a>
+                    <a href="{{ url_for('delete_client', client_id=client.id) }}" class="btn btn-delete">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block footer %}
+    <footer>
+        <p>&copy; 2024 Listado de Clientes</p>
+    </footer>
+{% endblock %}
