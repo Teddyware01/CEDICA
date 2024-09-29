@@ -4,8 +4,8 @@ from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
 
 def list_users():
-    Users = Users.query.all()
-    return Users
+    User = Users.query.all()
+    return User
 
 def create_user(**kwargs):
     User = Users(**kwargs)

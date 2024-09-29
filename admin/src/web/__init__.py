@@ -5,10 +5,16 @@ from src.web.controllers.issues import bp as issues_bp
 from src.web.config import config
 from src.core import database
 from src.core import seeds
+from src.web.controllers.usuarios import bp as usuarios_bp
 
 
 def create_app(env="development", static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)
+    app.config.from_object(config[env])
+    database.init_app(app)
+
+    app.register_blueprint(usuarios_bp)
+    app.register_blueprint(issues_bp)
 
     @app.route("/")
     def home():
@@ -18,10 +24,6 @@ def create_app(env="development", static_folder="../../static"):
     def sobre_nosotros():
         return render_template("sobre_nosotros.html")
     
-
-    @app.route("/listado_usuarios")
-    def listado_usuarios():
-        return render_template("listado.html")
     
     @app.route("/add_client")
     def add_client():
