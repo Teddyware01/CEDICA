@@ -25,18 +25,6 @@ def create_app(env="development", static_folder="../../static"):
         return render_template("sobre_nosotros.html")
     
     
-    @app.route("/add_client")
-    def add_client():
-        return render_template("add_client.html")
-    
-    
-    @app.route("/edit_client")
-    def edit_client():
-        return render_template("listado.html")
-
-    @app.route("/delete_client")
-    def delete_client():
-        return render_template("listado.html")
     
 
     app.register_error_handler(404, error.error_not_found)

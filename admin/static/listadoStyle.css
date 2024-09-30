@@ -1,11 +1,9 @@
-
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f7fa;
     margin: 0;
     padding: 20px;
 }
-
 
 .container {
     max-width: 900px;
@@ -16,13 +14,11 @@ body {
     border-radius: 8px;
 }
 
-
 h1 {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
 }
-
 
 .table {
     width: 100%;
@@ -45,7 +41,6 @@ h1 {
     background-color: #f9f9f9;
 }
 
-
 .btn {
     padding: 8px 12px;
     border-radius: 4px;
@@ -59,23 +54,58 @@ h1 {
 }
 
 .btn-add {
-    background-color: #28a745;
+    background-color: #28a745; 
 }
 
 .btn-edit {
-    background-color: #007bff;
+    background-color: #007bff; 
 }
 
 .btn-delete {
-    background-color: #dc3545;
+    background-color: #dc3545; 
+}
+
+.btn-block {
+    background-color: #ffc107; 
+}
+
+.btn-activate {
+    background-color: #17a2b8; 
+}
+
+.btn-sort {
+    background-color: #6c757d;
 }
 
 .btn:hover {
     opacity: 0.8;
 }
 
-
 .actions {
     text-align: right;
     margin-bottom: 10px;
+}
+
+
+form {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+form label {
+    margin-right: 10px;
+    font-weight: bold;
+    align-self: center; 
+}
+
+form select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-right: 10px;
+}
+
+form .btn-sort {
+    background-color: #007bff; 
 }
