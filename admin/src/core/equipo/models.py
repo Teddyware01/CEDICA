@@ -20,28 +20,31 @@ class Empleado(db.Model):
     fecha_cese = db.Column(db.DateTime, nullable=True)
     condicion = db.Column(db.Enum(CondicionEnum), nullable=False)
     activo = db.Column(db.Boolean, default=True)
-
+    obra_social = db.Column(db.String(25), nullable=False, unique=False)
+    nro_afiliado = db.Column(db.Integer, nullable=False)
     profesion_id = db.Column(db.Integer, db.ForeignKey("profesion.id"), nullable=False)
     puesto_laboral_id = db.Column(
         db.Integer, db.ForeignKey("puesto_laboral.id"), nullable=False
     )
     domicilio_id = db.Column(db.Integer, db.ForeignKey("domicilio.id"), nullable=False)
-    conctacto_emergencia_id = db.Column(
+
+    contacto_emergencia_id = db.Column(
         db.Integer, db.ForeignKey("contacto_emergencia.id"), nullable=False
     )
+    obra_social_id = db.Column(
+        db.Integer, db.ForeignKey("obra_social_id.id"), nullable=False
+    )
 
+    profesion = db.relationship("Profesion", back_populates="empleado")
+    puesto_laboral = db.relationship("PuestoLaboral", back_populates="empleado")
     domicilio = db.relationship(
         "Domicilio", secondary="empleado_domicilio", back_populates="empleado"
     )
-    profesion = db.relationship("Profesion", back_populates="empleado")
-    puesto_laboral = db.relationship("PuestoLaboral", back_populates="empleado")
+
     contacto_emergencia = db.relationship(
         "ContactoEmergencia",
         secondary="empleado_contacto_emergencia",
-        back_populates="empleado",
-    )
-    obra_social = db.relationship(
-        "ObraSocial", secondary="empleado_obra_social", back_populates="empleado"
+        back_populates="empleados",
     )
 
     def __repr__(self):
@@ -54,17 +57,18 @@ empleado_domicilio = db.Table(
     db.Column("domicilio_id", db.Integer, db.ForeignKey("domicilio.id")),
 )
 
+# Tabla intermedia para la relación muchos a muchos entre Empleado y ContactoEmergencia
 empleado_contacto_emergencia = db.Table(
     "empleado_contacto_emergencia",
-    db.Column("empleado_id", db.Integer, db.ForeignKey("empleado.id")),
-    db.Column("domicilio_id", db.Integer, db.ForeignKey("domicilio.id")),
-)
-
-empleado_obra_social = db.Table(
-    "empleado_obra_social",
-    db.Column("empleado_id", db.Integer, db.ForeignKey("empleado.id")),
-    db.Column("obra_social_id", db.Integer, db.ForeignKey("obra_social.id")),
-    nro_afiliado=db.Column("nro_afiliado", db.Integer, nullable=False),
+    db.Column(
+        "empleado_id", db.Integer, db.ForeignKey("empleado.id"), primary_key=True
+    ),
+    db.Column(
+        "contacto_emergencia_id",
+        db.Integer,
+        db.ForeignKey("contacto_emergencia.id"),
+        primary_key=True,
+    ),
 )
 
 
@@ -72,7 +76,11 @@ class Profesion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False, unique=True)
 
+    empleado = db.relationship("Empleado", back_populates="profesion")
+
 
 class PuestoLaboral(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False, unique=True)
+
+    empleado = db.relationship("Empleado", back_populates="puesto_laboral")
