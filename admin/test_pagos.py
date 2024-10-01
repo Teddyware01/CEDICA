@@ -107,4 +107,3 @@ def test_buscar_pagos(client):
     })
     assert b"Luis Martinez" in response.data
     assert b"Pedro Fernandez" in response.data  # Ambos deben aparecer en el rango
-
