@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %} Equipo {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <h1>Modulo Equipo</h1>
+    <p>Este es el contenido que tendra el modulo Equipo.</p>
+
+    <a href="{{ url_for('home') }}">Volver a inicio</a>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %} J&A {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <h1>Modulo J&A</h1>
+    <p>Este es el contenido que tendra el modulo J&A.</p>
+
+    <a href="{{ url_for('home') }}">Volver a inicio</a>
+
+{% endblock %}
