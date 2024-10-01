@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+
+{% block title %}Formulario de alta de empleado{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <h1>Registro de Empleado</h1>
+        
+    Agregar campos faltantes !!!!
+    
+    <form method="POST" action="{{ url_for('equipo.add_empleado') }}">
+        {{ form.hidden_tag() }}
+        
+        <div>
+            <label for="nombre">Nombre:</label>
+            {{ form.nombre(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="apellido">Apellido:</label>
+            {{ form.apellido(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="dni">DNI:</label>
+            {{ form.dni(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="email">Email:</label>
+            {{ form.email(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="telefono">Teléfono:</label>
+            {{ form.telefono(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="fecha_inicio">Fecha de Inicio:</label>
+            {{ form.fecha_inicio(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="fecha_cese">Fecha de Cese (opcional):</label>
+            {{ form.fecha_cese(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="condicion">Condición:</label>
+            {{ form.condicion(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="activo">Activo:</label>
+            {{ form.activo() }}
+        </div>
+
+        <div>
+            <label for="profesion_id">Profesión:</label>
+            {{ form.profesion_id(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="puesto_laboral_id">Puesto Laboral:</label>
+            {{ form.puesto_laboral_id(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="domicilio_id">Domicilio:</label>
+            {{ form.domicilio_id(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="contacto_emergencia_id">Contacto de Emergencia:</label>
+            {{ form.contacto_emergencia_id(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="obra_social_">Obra Social:</label>
+            {{ form.obra_social(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="nro_afiliado">Numero Afiliado:</label>
+            {{ form.nro_afiliado(class_="form-control") }}
+        </div>
+
+
+        <div>
+            <button type="submit" class="btn btn-primary">Agregar empleado</button>
+            <a href="{{ url_for('equipo.listar_empleados') }}" class="btn btn-cancel">Cancelar</a>
+        </div>
+    </form>
+{% endblock %}

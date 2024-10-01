@@ -3,16 +3,18 @@ asasdasd
 
 {% extends "layout.html" %}
 
-{% block title %}Formulario de alta de empleado{% endblock %}
+{% block title %}Formulario de edición de empleado{% endblock %}
 
 {% block head %}
     {{ super() }}
 {% endblock %}
 
 {% block content %}
-    <h1>Registro de Empleado</h1>
+    <h1>Editar/actualizar empleado</h1>
     
-    <form method="POST" action="{{ url_for('create_empleado') }}">
+    Agregar campos faltantes !!!!
+
+    <form method="POST" action="{{ url_for('equipo.update_user') }}">
         {{ form.hidden_tag() }}
         
         <div>
@@ -83,5 +85,6 @@ asasdasd
         <div>
             <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
+        
     </form>
 {% endblock %}

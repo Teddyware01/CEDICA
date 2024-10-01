@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block title %} Listado de Empleados {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='equipo_style.css') }}">
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Listado de empleados del equipo.</h1>
+
+    <div class="actions">
+        <a href="{{ url_for('equipo.add_empleado_form') }}" class="btn btn-add">Agregar Empleado</a>
+    </div>
+
+    <h2>Pantalla de búsqueda para los miembros del equipo</h2>
+    <p>Pantalla de búsqueda para los miembros del equipo</p>
+    {% if empleados %}
+        
+    <form method="GET" action="{{ url_for('equipo.listar_empleados') }}" class="mb-3">
+        <label for="sort_by">Ordenar por:</label>
+        <select name="sort_by" id="sort_by">
+            <option value="email_asc">Email (Ascendente)</option>
+            <option value="email_desc">Email (Descendente)</option>
+            <option value="created_at_asc">Fecha de Creación (Ascendente)</option>
+            <option value="created_at_desc">Fecha de Creación (Descendente)</option>
+        </select>
+        <button type="submit" class="btn btn-sort">Ordenar</button>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>DNI</th>
+                <th>Profesión</th>
+                <th>Puesto Laboral</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for emp in empleados %}
+            <tr>
+                <td>{{emp.nombre}}</td>
+                <td>{{emp.apellido}}</td>
+                <td>{{emp.email}}</td>
+                <td>{{emp.dni}}</td>
+                <td>{{emp.profesion_id}}</td>
+                <td>{{emp.puesto_laboral_id}}</td>
+                <td>
+                    <a href="{{ url_for('equipo.show_empleado') }}" class="btn btn-add">SHOW</a>
+                    <a href="{{ url_for('equipo.update_empleado_form') }}" class="btn btn-add">UPDATE</a>
+                    <a href="{{ url_for('equipo.delete_empleado') }}" class="btn btn-add">DELETE</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No hay empleados para mostrar.</p>
+    {% endif %}
+
+{% endblock %}

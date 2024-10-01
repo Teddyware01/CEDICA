@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %} Ver empleado {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='equipo_style.css') }}">
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Ver empleado.</h1>
+    <h2>Mostrando toda la informacion del empleado.</h2>
+    <p>{{emp.apellido}} {{emp.nombre}}</p>
+    <p>DNI: {{emp.dni}}</p>
+    <p>Profesion: {{emp.}}</p>
+    <p>Puesto laboral: {{emp.}}</p>
+    <h3>Archivos y documentos:</h3>
+    {% if documentos%}
+    {% for doc in documentos %}
+        <p> {{doc.nombre}}.</p>
+    {% endfor %}
+    {% else %}
+    <p>El empleado no tiene documentos para mostrar.</p>
+    {% endif}
+    <p>for </p>
+{% endblock %}
+
+
