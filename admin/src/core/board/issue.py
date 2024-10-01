@@ -20,10 +20,8 @@ class Issue(db.Model):
     user = db.relationship("Users", back_populates="issues")
     labels = db.relationship("Label", secondary=issue_labels)
 
-    inserted_at = db.Column(db.DateTime, default=datetime.now)   
-    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)  
+    inserted_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     def __repr__(self):
         return f"<Issue #{self.id} title= {self.title}  status = {self.status}>"
-    
-    

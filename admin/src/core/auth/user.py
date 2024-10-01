@@ -1,6 +1,7 @@
 from src.core.database import db
 from datetime import datetime
 
+
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
@@ -13,8 +14,6 @@ class Users(db.Model):
     roles = db.relationship("Roles", secondary="usuario_rol", back_populates="users")
 
     issues = db.relationship("Issue", back_populates="user")
-    
-  
 
     def __repr__(self):
         return f"<User #{self.id} email = {self.email}>"

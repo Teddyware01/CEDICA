@@ -23,22 +23,19 @@ def create_app(env="development", static_folder="../../static"):
     @app.route("/sobre_nosotros")
     def sobre_nosotros():
         return render_template("sobre_nosotros.html")
-    
-    
-    
 
-    @app.route('/ecuestre')
+    @app.route("/ecuestre")
     def ecuestre():
-        return render_template('ecuestre.html')
+        return render_template("ecuestre.html")
 
-    @app.route('/equipo')
+    @app.route("/equipo")
     def equipo():
-        return render_template('equipo.html')
-    
-    @app.route('/jya')
+        return render_template("equipo.html")
+
+    @app.route("/jya")
     def jya():
-        return render_template('jya.html')
-    
+        return render_template("jya.html")
+
     app.register_error_handler(404, error.error_not_found)
     app.register_error_handler(500, error.error_internal_server_error)
 

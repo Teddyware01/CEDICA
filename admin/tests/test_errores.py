@@ -6,8 +6,6 @@ from tests import client
 @pytest.fixture
 def app():
 
-
-
     # Añadir dinámicamente la ruta para las pruebas
     @app.route("/cause_500")
     def cause_500():
