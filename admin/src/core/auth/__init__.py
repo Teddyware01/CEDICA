@@ -79,3 +79,8 @@ def assign_permiso(rol, permiso):
     db.session.commit()
 
     return rol
+
+def traer_usuario(user_id):
+    user = Users.query.get(user_id)
+    return user
+

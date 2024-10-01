@@ -22,12 +22,12 @@ def add_client_form():
 
 @bp.get('/editar_cliente<int:user_id>')
 def edit_client_form(user_id):
-    user = auth.Users.query.get(user_id)
+    user = auth.traer_usuario(user_id)
     return render_template('edit_client.html', user=user)
 
 @bp.get('/eliminar_cliente<int:user_id>')
 def delete_client_form(user_id):
-    user = auth.Users.query.get(user_id)
+    user = auth.traer_usuario(user_id)
     return render_template('delete_client.html', user=user)
 
 @bp.post('/agregar_cliente')
@@ -54,7 +54,7 @@ def delete_client(user_id):
 @bp.post('/editar_cliente<int:user_id>')
 def update_user(user_id):
     email = request.form['email']
-    if auth.user_email_exists(email):
+    if auth.user_email_exists(email, user_id):
         flash('El email ya está en uso. Por favor elige otro.', 'error')
         return redirect(url_for('users.edit_client_form', user_id=user_id))
     auth.edit_user(
@@ -71,7 +71,7 @@ def update_user(user_id):
 
 @bp.post('/block/<int:user_id>')
 def block_user(user_id):
-    user = auth.Users.query.get(user_id)
+    user = auth.traer_usuario(user_id)
     if user:
         user.activo = False  
         db.session.commit()
@@ -83,7 +83,7 @@ def block_user(user_id):
 
 @bp.post('/activate/<int:user_id>')
 def activate_user(user_id):
-    user = auth.Users.query.get(user_id)
+    user = auth.traer_usuario(user_id)
     if user:
         user.activo = True  
         db.session.commit()
