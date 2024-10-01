@@ -1,17 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error {{error.code}} - {{error.message}}</title>
+{% extends "layout.html" %}
+
+{% block title %}Error {{ error.code }} - {{ error.message }}{% endblock %}
+
+{% block head %}
+    {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='errorStyle.css') }}">
-</head>
-<body>
-    <div class="error-container">
-        <h1 class="error-code">{{error.code}}</h1>
-        <p class="error-message">{{error.message}}</p>
-        <p class="error-message">{{error.description}}</p>
-        <a href="/" class="home-link">Volver a la página de inicio</a>
-    </div>
-</body>
-</html>
+{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <h1 class="error-code">{{error.code}}</h1>
+    <p class="error-message">{{error.message}}</p>
+    <p class="error-message">{{error.description}}</p>
+    <a href="/" class="home-link">Volver a la página de inicio</a>
+</div>
+{% endblock %}
+
+
