@@ -1,0 +1,220 @@
+/* Variables for common styles */
+:root {
+    --primary-color: #555;
+    --secondary-color: #fff;
+    --shadow-dark: 0 -1px 1px rgba(0,0,0,0.7);
+    --font-size-large: 22px;
+    --background-light: #ece6e6;
+    --border-radius-large: 20px;
+    --text-color-default: #333;
+    --link-hover-background: #53A7EA;
+    --input-border-color: #F1B720;
+}
+
+/* Basic Reset */
+html {
+    height: 100%;
+}
+
+*, *:before, *:after {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #dbd6d6;
+    font-size: 16px;
+    color: var(--text-color-default);
+    -webkit-font-smoothing: antialiased;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 0%;
+}
+
+h1 {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-family: 'Merriweather', serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+}
+
+header, footer {
+    width: 100%;
+    margin: 0 auto;
+    background-color: #e0f7fa;
+    padding: 0;
+}
+
+.navbar, .footer {
+    color: #333;
+}
+
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.clr {
+    clear: both;
+    padding: 0;
+    height: 0;
+    margin: 0;
+}
+
+/* Structural Layout */
+.container {
+    width: 100%;
+    background-color: #e0f7fa;
+    position: relative;
+    padding: 0;
+}
+
+.container > header {
+    margin: 10px;
+    padding: 20px 10px 10px 10px;
+    position: relative;
+    display: block;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    text-align: center;
+    font-size: 10px !important;
+}
+
+.container > header h1 {
+    font-size: 30px;
+    line-height: 38px;
+    margin: 0;
+    position: relative;
+    font-weight: 300;
+    color: var(--primary-color);
+    text-shadow: 0 1px 1px rgba(255,255,255,0.6);
+}
+
+.container > header h2 {
+    font-size: 14px;
+    font-weight: 300;
+    margin: 0;
+    padding: 15px 0 5px 0;
+    color: var(--primary-color);
+    font-family: Cambria, Georgia, serif;
+    font-style: italic;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.6);
+}
+
+footer {
+    background-color: #e0f7fa; 
+    font-family: 'Montserrat', sans-serif;
+}
+
+.main {
+    width: 90%;
+    margin: 0 auto;
+    position: relative;
+    padding: 0;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 2px; 
+    
+}
+
+.example-wrapper, .demo-wrapper {
+    width: 100%;
+    max-width: 1000px;
+    padding: 0 30px 40px 30px;
+    margin: 20px auto;
+    background: var(--background-light);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: var(--border-radius-large);
+}
+
+.example-wrapper h3 {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    text-shadow: var(--shadow-dark);
+    border-radius: 20px 20px 0 0;
+    padding: 13px 20px;
+    font-size: var(--font-size-large);
+}
+
+.inline-link-1 {
+    display: inline-block;
+    margin: 0 0.2em;
+    padding: 3px;
+    background: #97CAF2;
+    border-radius: 2px;
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    transition: all 0.3s ease-out;
+}
+
+.inline-link-1:hover {
+    background: var(--link-hover-background);
+}
+
+.inline-link-1:active {
+    background: #C4E1F8;
+}
+
+.inline-link-1:visited {
+    background: #F2BF97;
+}
+
+.nav-link {
+    font-size: 25px;
+}
+
+.nav-item {
+    display: flex;
+    justify-content: center;  
+    align-items: center;
+}
+
+#logo {
+    height: 150px;
+    width: auto;
+}
+
+.container-fluid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-nav-center {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    background-color: #e0f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-nav-right {
+    display: flex;
+    justify-content: flex-end;
+    background-color: #e0f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+#content {
+    display: grid;
+    place-items: center;
+    min-height: 60vh;
+    margin: 20px;  
+}
+
+.navbar navbar-expand-lg navbar-light bg-light {
+    background-color: #e0f7fa;
+    margin: 0;
+    padding: 0;
+}
