@@ -8,15 +8,14 @@
 {% endblock %}
 
 {% block content %}
+    {{ super() }}
     <h1 class="text-center">Listado de empleados del equipo.</h1>
 
     <div class="actions">
         <a href="{{ url_for('equipo.add_empleado_form') }}" class="btn btn-add">Agregar Empleado</a>
     </div>
+    
 
-    <h2>Pantalla de búsqueda para los miembros del equipo</h2>
-    <p>Pantalla de búsqueda para los miembros del equipo</p>
-    {% if empleados %}
         
     <form method="GET" action="{{ url_for('equipo.listar_empleados') }}" class="mb-3">
         <label for="sort_by">Ordenar por:</label>
@@ -26,8 +25,22 @@
             <option value="created_at_asc">Fecha de Creación (Ascendente)</option>
             <option value="created_at_desc">Fecha de Creación (Descendente)</option>
         </select>
-        <button type="submit" class="btn btn-sort">Ordenar</button>
+
+        <label for="id_puesto_laboral">Puesto Laboral:</label>
+        <select name="id_puesto_laboral" id="id_puesto_laboral">
+            <option value="cualquiera">Cualquiera</option>
+            {% if puestos_laborales %}
+                {% for puesto in puestos_laborales %}
+                <option value={{puesto.id}}>{{puesto.nombre}}</option>
+                {% endfor %}
+            {% endif %}
+        </select>
+        <input type="text" id="search" name="search" placeholder="Nombre, DNI o Email">
+        <button type="submit" class="btn btn-sort">Ordenar/Buscar</button>
     </form>
+
+    <p>Empleados del equipo:</p>
+    {% if empleados %}
 
     <table class="table">
         <thead>
@@ -48,12 +61,12 @@
                 <td>{{emp.apellido}}</td>
                 <td>{{emp.email}}</td>
                 <td>{{emp.dni}}</td>
-                <td>{{emp.profesion_id}}</td>
-                <td>{{emp.puesto_laboral_id}}</td>
+                <td>{{emp.profesion.nombre}}</td>
+                <td>{{emp.puesto_laboral.nombre}}</td>
                 <td>
-                    <a href="{{ url_for('equipo.show_empleado') }}" class="btn btn-add">SHOW</a>
-                    <a href="{{ url_for('equipo.update_empleado_form') }}" class="btn btn-add">UPDATE</a>
-                    <a href="{{ url_for('equipo.delete_empleado') }}" class="btn btn-add">DELETE</a>
+                    <a href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}" class="btn btn-add">SHOW</a>
+                    <a href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}" class="btn btn-edit">UPDATE</a>
+                    <a href="{{ url_for('equipo.delete_empleado', empleado_id=emp.id) }}" class="btn btn-del">DELETE</a>
                 </td>
             </tr>
             {% endfor %}

@@ -2,14 +2,57 @@
 from src.core.database import db
 from src.core.equipo.models import Empleado
 from src.core.equipo.models import Profesion, PuestoLaboral
-from src.core.equipo.extra_models import ContactoEmergencia, Domicilio
+from src.core.equipo.extra_models import (
+    ContactoEmergencia,
+    Domicilio,
+    Provincia,
+    Localidad,
+)
+
+from sqlalchemy import or_
+
+
+# Tabla Provincia
+def list_provincias():
+    return Provincia.query.all()
+
+
+def get_provincia_by_id(provincia_id):
+    return Provincia.query.get(provincia_id)
+
+
+# Tabla Localidad
+# Retorna todas las localidades, o las de una provincia si se le pasa el id_provincia.
+def list_localidades(id_provincia=None):
+    query = Localidad.query
+    if id_provincia:
+        query = query.filter(Localidad.provincia_id == id_provincia)
+    return query.all()
+
+
+def get_localidad_by_id(localidad_id):
+    return Localidad.query.get(localidad_id)
 
 
 # Tabla Empleado
 
 
-def list_empleados(sort_by=None):
+def list_empleados(sort_by=None, id_puesto_laboral=None, search=None):
     query = Empleado.query
+    if id_puesto_laboral and id_puesto_laboral != "cualquiera":
+        query = query.filter(Empleado.puesto_laboral_id == id_puesto_laboral)
+    else:
+        print("ENTRO A NONE")
+    # Filtrar por término de búsqueda
+    if search:
+        query = query.filter(
+            or_(
+                Empleado.nombre.like(f"%{search}%"),
+                Empleado.apellido.like(f"%{search}%"),
+                Empleado.dni.like(f"%{search}%"),
+                Empleado.email.like(f"%{search}%"),
+            )
+        )
     if sort_by:
         if sort_by == "nombre_asc":
             query = query.order_by(Empleado.nombre.asc())
@@ -23,6 +66,7 @@ def list_empleados(sort_by=None):
             query = query.order_by(Empleado.fecha_inicio.asc())
         elif sort_by == "created_at_desc":
             query = query.order_by(Empleado.fecha_inicio.desc())
+
     return query.all()
 
 
@@ -87,7 +131,7 @@ def add_contacto_emergencia(**kwargs):
 
 # Tabla Domiclio
 def add_domiclio(**kwargs):
-    domicilio = PuestoLaboral(**kwargs)
+    domicilio = Domicilio(**kwargs)
     db.session.add(domicilio)
     db.session.commit()
     return domicilio

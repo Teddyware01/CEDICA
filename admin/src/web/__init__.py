@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template
+from flask import render_template, redirect
 from src.web.handlers import error
 from src.web.config import config
 from src.core import database
@@ -28,10 +28,6 @@ def create_app(env="development", static_folder="../../static"):
     @app.route("/ecuestre")
     def ecuestre():
         return render_template("ecuestre.html")
-
-    @app.route("/equipo")
-    def equipo():
-        return render_template("equipo.html")
 
     @app.route("/jya")
     def jya():

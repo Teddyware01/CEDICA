@@ -1,6 +1,3 @@
-
-asasdasd
-
 {% extends "layout.html" %}
 
 {% block title %}Formulario de edición de empleado{% endblock %}
@@ -10,11 +7,10 @@ asasdasd
 {% endblock %}
 
 {% block content %}
+    {{ super() }}
     <h1>Editar/actualizar empleado</h1>
     
-    Agregar campos faltantes !!!!
-
-    <form method="POST" action="{{ url_for('equipo.update_user') }}">
+    <form method="POST" action="{{ url_for('equipo.update_empleado', empleado_id=empleado.id) }}">
         {{ form.hidden_tag() }}
         
         <div>
@@ -72,19 +68,66 @@ asasdasd
             {{ form.puesto_laboral_id(class_="form-control") }}
         </div>
 
+        
         <div>
-            <label for="domicilio_id">Domicilio:</label>
-            {{ form.domicilio_id(class_="form-control") }}
+            <label for="obra_social">Obra Social:</label>
+            {{ form.obra_social(class_="form-control") }}
         </div>
 
         <div>
-            <label for="contacto_emergencia_id">Contacto de Emergencia:</label>
-            {{ form.contacto_emergencia_id(class_="form-control") }}
+            <label for="nro_afiliado">Numero Afiliado:</label>
+            {{ form.nro_afiliado(class_="form-control") }}
         </div>
 
         <div>
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <label for="domicilio_calle">Calle:</label>
+            {{ form.domicilio_calle(class_="form-control") }}
         </div>
         
+        <div>
+            <label for="domicilio_numero">Numero:</label>
+            {{ form.domicilio_numero(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="domicilio_departamento">Departamento:</label>
+            {{ form.domicilio_departamento(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="domicilio_piso">Piso:</label>
+            {{ form.domicilio_piso(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="domicilio_provincia">Provincia:</label>
+            {{ form.domicilio_provincia(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="domicilio_localidad">Localidad:</label>
+            {{ form.domicilio_localidad(class_="form-control") }}
+        </div>
+        
+        
+        <div>
+            <label for="contacto_emergencia_nombre">Nombre contacto de Emergencia:</label>
+            {{ form.contacto_emergencia_nombre(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="contacto_emergencia_apellido">Apellido contacto de Emergencia:</label>
+            {{ form.contacto_emergencia_apellido(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="contacto_emergencia_telefono">Telefono contacto de Emergencia:</label>
+            {{ form.contacto_emergencia_telefono(class_="form-control") }}
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary">Agregar empleado</button>
+            <a href="{{ url_for('equipo.show_empleado', empleado_id=empleado.id) }}" class="btn btn-cancel">Cancelar</a>
+        </div>
     </form>
 {% endblock %}

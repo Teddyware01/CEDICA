@@ -69,18 +69,9 @@
             {{ form.puesto_laboral_id(class_="form-control") }}
         </div>
 
-        <div>
-            <label for="domicilio_id">Domicilio:</label>
-            {{ form.domicilio_id(class_="form-control") }}
-        </div>
         
         <div>
-            <label for="contacto_emergencia_id">Contacto de Emergencia:</label>
-            {{ form.contacto_emergencia_id(class_="form-control") }}
-        </div>
-
-        <div>
-            <label for="obra_social_">Obra Social:</label>
+            <label for="obra_social">Obra Social:</label>
             {{ form.obra_social(class_="form-control") }}
         </div>
 
@@ -89,6 +80,51 @@
             {{ form.nro_afiliado(class_="form-control") }}
         </div>
 
+        <div>
+            <label for="domicilio_calle">Calle:</label>
+            {{ form.domicilio_calle(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="domicilio_numero">Numero:</label>
+            {{ form.domicilio_numero(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="domicilio_departamento">Departamento:</label>
+            {{ form.domicilio_departamento(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="domicilio_piso">Piso:</label>
+            {{ form.domicilio_piso(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="domicilio_provincia">Provincia:</label>
+            {{ form.domicilio_provincia(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="domicilio_localidad">Localidad:</label>
+            {{ form.domicilio_localidad(class_="form-control") }}
+        </div>
+        
+        
+        <div>
+            <label for="contacto_emergencia_nombre">Nombre contacto de Emergencia:</label>
+            {{ form.contacto_emergencia_nombre(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="contacto_emergencia_apellido">Apellido contacto de Emergencia:</label>
+            {{ form.contacto_emergencia_apellido(class_="form-control") }}
+        </div>
+        
+        <div>
+            <label for="contacto_emergencia_telefono">Telefono contacto de Emergencia:</label>
+            {{ form.contacto_emergencia_telefono(class_="form-control") }}
+        </div>
 
         <div>
             <button type="submit" class="btn btn-primary">Agregar empleado</button>
