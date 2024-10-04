@@ -19,6 +19,18 @@ def ejecutar_sql_script(file_path):
         connection.execute(text(sql_script))
         connection.commit()
 
+from src.core import equipo
+from src.core.equipo.extra_models import Provincia 
+
+from src.core.database import db
+from sqlalchemy import text
+def ejecutar_sql_script(file_path):
+    with open(file_path, 'r',encoding='utf-8') as sql_file:
+        sql_script = sql_file.read()
+    
+    with db.engine.connect() as connection:
+        connection.execute(text(sql_script))
+        connection.commit()
 
 def run():
     issue1 = board.create_issue(
