@@ -6,7 +6,7 @@ from src.web.config import config
 from src.core import database
 from src.core import seeds
 from src.web.controllers.usuarios import bp as usuarios_bp
-
+from .controllers.jya import bp as jya_bp
 
 def create_app(env="development", static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)
@@ -32,13 +32,10 @@ def create_app(env="development", static_folder="../../static"):
     def equipo():
         return render_template("equipo.html")
 
-    @app.route("/jya")
-    def jya():
-        return render_template("jya.html")
 
     app.register_error_handler(404, error.error_not_found)
     app.register_error_handler(500, error.error_internal_server_error)
-
+    app.register_blueprint(jya_bp)
     @app.cli.command(name="reset-db")
     def reset_db():
         database.reset()
