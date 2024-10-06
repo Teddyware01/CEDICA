@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %} Ver Cliente {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='ver_usuario.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center">Detalles del Cliente</h1>
+
+        <div class="client-info">
+            <div class="client-row">
+                <label>Email:</label>
+                <span>{{ user.email }}</span>
+            </div>
+
+            <div class="client-row">
+                <label>Alias:</label>
+                <span>{{ user.alias }}</span>
+            </div>
+
+            <div class="client-row">
+                <label>Contraseña:</label>
+                <span>******</span> 
+            </div>
+
+            <div class="client-row">
+                <label>Administrador del sistema:</label>
+                <span>{{ 'Sí' if user.system_admin else 'No' }}</span>
+            </div>
+
+            <div class="client-row">
+                <label>Activo:</label>
+                <span>{{ 'Sí' if user.activo else 'No' }}</span>
+            </div>
+
+            <div class="client-row">
+                <label>Roles:</label>
+                <span>{{ roles | join(', ') }}</span> 
+            </div>            
+
+            <div class="form-actions">
+                <a href="{{ url_for('users.edit_client_form', user_id=user.id) }}" class="btn btn-edit">Editar</a>
+                <a href="{{ url_for('users.listar_usuarios') }}" class="btn btn-back">Volver</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

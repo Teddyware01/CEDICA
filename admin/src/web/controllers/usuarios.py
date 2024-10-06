@@ -13,6 +13,11 @@ def listar_usuarios():
     users = auth.list_users(sort_by=sort_by)
     return render_template("listado.html", usuarios=users)
 
+@bp.get("/cliente<int:user_id>")
+def mostrar_usuario(user_id):
+    user = auth.traer_usuario(user_id)
+    roles = auth.traer_roles(user_id)
+    return render_template("ver_cliente.html", user=user, roles=roles)
 
 @bp.get("/agregar_cliente")
 def add_client_form():
@@ -22,7 +27,8 @@ def add_client_form():
 @bp.get("/editar_cliente<int:user_id>")
 def edit_client_form(user_id):
     user = auth.traer_usuario(user_id)
-    return render_template("edit_client.html", user=user)
+    roles = auth.traer_roles(user_id)
+    return render_template("edit_client.html", user=user, roles=roles)
 
 
 @bp.get("/eliminar_cliente<int:user_id>")
@@ -66,8 +72,10 @@ def update_user(user_id):
         alias=request.form["alias"],
         password=request.form["password"],
         system_admin=request.form.get("is_admin") is not None,
-        activo=request.form.get("is_active") is not None,
+        activo=request.form.get("is_active") is not None, 
     )
+    selected_roles = request.form.getlist('roles')
+    auth.actualizar_roles(user_id,selected_roles)
 
     flash("Usuario actualizado exitosamente", "success")
     return redirect(url_for("users.listar_usuarios"))
@@ -95,3 +103,4 @@ def activate_user(user_id):
     else:
         flash("Usuario no encontrado.", "danger")
     return redirect(url_for("users.listar_usuarios"))
+
