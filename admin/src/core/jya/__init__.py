@@ -1,8 +1,9 @@
-from core.database import db
-from core.jya.models import Jinete #, Familiar
+'''
+from src.core.database import db
+from src.core.jya.models import Jinete #, Familiar
 #from src.core.equipo.extra_models import ContactoEmergencia, Domicilio, Provincia, Localidad)
 from sqlalchemy import or_
-
+'''
 '''
 def list_provincias():
     return Provincia.query.all()
@@ -24,7 +25,7 @@ def list_localidades(id_provincia=None):
 def get_localidad_by_id(localidad_id):
     return Localidad.query.get(localidad_id)
 '''
-
+'''
 # Tabla Jinete
 
 
@@ -35,8 +36,7 @@ def list_jinetes(sort_by=None, search=None):
             or_(
                 Jinete.nombre.like(f"%{search}%"),
                 Jinete.apellido.like(f"%{search}%"),
-                Jinete.dni.like(f"%{search}%"),
-                Jinete.profesional.like(f"%{search}%"),
+                Jinete.dni.like(f"%{search}%")
             )
         )
     if sort_by:
@@ -50,7 +50,7 @@ def list_jinetes(sort_by=None, search=None):
             query = query.order_by(Jinete.apellido.desc())
 
     return query.all()
-
+'''
 '''
 def create_jinete(**kwargs):
     jinete = Jinete(**kwargs)
@@ -100,3 +100,22 @@ def add_familiar(**kwargs):
     db.session.commit()
     return familiar
 '''
+
+from src.core.database import db
+from src.core.auth.user import Users
+from src.core.auth.roles import Roles
+from src.core.auth.permisos import Permisos
+from core.jya.models import Jinete 
+
+def list_jinetes(sort_by=None):
+    query = Jinete.query
+    if sort_by:
+        if sort_by == "nombre_asc":
+            query = query.order_by(Jinete.nombre.asc())
+        elif sort_by == "nombre_desc":
+            query = query.order_by(Jinete.nombre.desc())
+        elif sort_by == "apellido_asc":
+            query = query.order_by(Jinete.apellido.asc())
+        elif sort_by == "apellido_desc":
+            query = query.order_by(Jinete.apellido.desc())
+    return query.all()

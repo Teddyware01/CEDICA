@@ -9,15 +9,12 @@
 
 {% block content %}
     {{ super() }}
-    <h1 class="text-center">Listado de jinetes.</h1>
+    <h1 class="text-center">Listado de jinetes</h1>
 
-    <div class="actions">
-        <a href="{{ url_for('jinete.add_jinete_form') }}" class="btn btn-add">Agregar Jinete</a>
-    </div>
+
     
-
-        
-    <form method="GET" action="{{ url_for('jinete.listar_jinetes') }}" class="mb-3">
+    <!-- Formulario de búsqueda y ordenamiento -->
+    <form method="GET" action="{{ url_for('jya.listar_jinetes') }}" class="mb-3">
         <label for="sort_by">Ordenar por:</label>
         <select name="sort_by" id="sort_by">
             <option value="nombre_asc">Nombre (Ascendente)</option>
@@ -26,46 +23,29 @@
             <option value="apellido_desc">Apellido (Descendente)</option>
         </select>
 
-        <label for="Diagnostico">Diagnostico:</label>
-        <select name="diagnostico" id="diagnostico">
-            <option value="cualquiera">Cualquiera</option>
-        </select>
-        <input type="text" id="search" name="search" placeholder="Nombre, apellido o DNI">
-        <button type="submit" class="btn btn-sort">Ordenar/Buscar</button>
-    </form>
-
+        
+    <!-- Lista de jinetes -->
     <p>Jinetes:</p>
     {% if jinetes %}
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Email</th>
-                <th>DNI</th>
-                <th>Profesión</th>
-                <th>diagnostico</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for jin in jinetes %}
-            <tr>
-                <td>{{jin.nombre}}</td>
-                <td>{{jin.apellido}}</td>
-                <td>{{jin.email}}</td>
-                <td>{{jin.dni}}</td>
-                <td>{{jin.diagnostico}}</td>
-                <td>
-                    <a href="{{ url_for('jinete.edit_jinete_form', jinete_id=jin.id) }}" class="btn btn-edit">UPDATE</a>
-                    <a href="{{ url_for('jinete.delete_jinete', jinete_id=jin.id) }}" class="btn btn-del">DELETE</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>DNI</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for jin in jinetes %}
+                    <tr>
+                        <td>{{ jin.nombre }}</td>
+                        <td>{{ jin.apellido }}</td>
+                        <td>{{ jin.dni }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <p>No hay jinetes para mostrar.</p>
     {% endif %}
-
 {% endblock %}
