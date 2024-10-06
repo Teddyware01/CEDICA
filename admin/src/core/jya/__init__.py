@@ -1,5 +1,5 @@
 from core.database import db
-from core.jya.models import Jinete, Familiar
+from core.jya.models import Jinete #, Familiar
 #from src.core.equipo.extra_models import ContactoEmergencia, Domicilio, Provincia, Localidad)
 from sqlalchemy import or_
 
@@ -30,7 +30,6 @@ def get_localidad_by_id(localidad_id):
 
 def list_jinetes(sort_by=None, search=None):
     query = Jinete.query
-    
     if search:
         query = query.filter(
             or_(
@@ -49,10 +48,10 @@ def list_jinetes(sort_by=None, search=None):
             query = query.order_by(Jinete.apellido.asc())
         elif sort_by == "apellido_desc":
             query = query.order_by(Jinete.apellido.desc())
-        
+
     return query.all()
 
-
+'''
 def create_jinete(**kwargs):
     jinete = Jinete(**kwargs)
     db.session.add(jinete)
@@ -77,7 +76,7 @@ def edit_jinete(user_id, **kwargs):
             setattr(jinete, key, value)
     db.session.commit()
 
-
+'''
 '''
 # Tabla ContactoEmergencia
 def add_contacto_emergencia(**kwargs):
@@ -93,10 +92,11 @@ def add_domiclio(**kwargs):
     db.session.add(domicilio)
     db.session.commit()
     return domicilio
-'''
+
 # Tabla Familiar
 def add_familiar(**kwargs):
     familiar = Familiar(**kwargs)
     db.session.add(familiar)
     db.session.commit()
     return familiar
+'''
