@@ -50,34 +50,9 @@ def list_jinetes(sort_by=None, search=None):
             query = query.order_by(Jinete.apellido.desc())
 
     return query.all()
-'''
-'''
-def create_jinete(**kwargs):
-    jinete = Jinete(**kwargs)
-    db.session.add(jinete)
-    db.session.commit()
-
-    return jinete
 
 
-def delete_jinete(user_id):
-    jinete = Jinete.query.get(user_id)
-    if jinete:
-        db.session.delete(jinete)
-        db.session.commit()
-        return True
-    return False
 
-
-def edit_jinete(user_id, **kwargs):
-    jinete = Jinete.query.get(user_id)
-    for key, value in kwargs.items():
-        if hasattr(jinete, key):
-            setattr(jinete, key, value)
-    db.session.commit()
-
-'''
-'''
 # Tabla ContactoEmergencia
 def add_contacto_emergencia(**kwargs):
     contacto_emergencia = ContactoEmergencia(**kwargs)
@@ -106,9 +81,18 @@ from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
 from core.jya.models import Jinete 
+from sqlalchemy import or_
 
-def list_jinetes(sort_by=None):
+def list_jinetes(sort_by=None, search=None):
     query = Jinete.query
+    if search:
+        query = query.filter(
+            or_(
+                Jinete.nombre.like(f"%{search}%"),
+                Jinete.apellido.like(f"%{search}%"),
+                Jinete.dni.like(f"%{search}%")
+            )
+    )
     if sort_by:
         if sort_by == "nombre_asc":
             query = query.order_by(Jinete.nombre.asc())
@@ -119,3 +103,31 @@ def list_jinetes(sort_by=None):
         elif sort_by == "apellido_desc":
             query = query.order_by(Jinete.apellido.desc())
     return query.all()
+
+def create_jinete(**kwargs):
+    jinete = Jinete(**kwargs)
+    db.session.add(jinete)
+    db.session.commit()
+
+    return jinete
+
+def delete_jinete(id):
+    jinete = Jinete.query.get(id)
+    if jinete:
+        db.session.delete(jinete)
+        db.session.commit()
+        return True
+    return False
+
+
+def edit_jinete(id, **kwargs):
+    jinete = Jinete.query.get(id)
+    for key, value in kwargs.items():
+        if hasattr(jinete, key):
+            setattr(jinete, key, value)
+    db.session.commit()
+    
+
+def traer_jinete(id):
+    jinete = Jinete.query.get(id)
+    return jinete

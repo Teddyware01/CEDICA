@@ -1,6 +1,6 @@
 from src.core import board
 from src.core import auth
-
+from core import jya
 
 def run():
     issue1 = board.create_issue(
@@ -81,3 +81,9 @@ def run():
     )
     board.assign_labels(issue1, [label1])
     board.assign_labels(issue2, [label1, label2])
+
+    jya.create_jinete(
+        nombre="Martin",
+        apellido="Diaz",
+        dni="12345678",
+    )
