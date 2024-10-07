@@ -8,12 +8,13 @@ from src.core.database import db
 bp = Blueprint("jya", __name__, url_prefix="/jinetes")
 
 
-
 @bp.get("/")
 def listar_jinetes():
     sort_by = request.args.get("sort_by")
-    jinetes = jya.list_jinetes(sort_by=sort_by)
-    
+    page = request.args.get('page', 1, type=int)
+    per_page = 3  
+    jinetes = jya.list_jinetes(sort_by=sort_by).paginate(page=page, per_page=per_page)
+
     return render_template("jya/listado_jya.html", jinetes=jinetes)
 
 @bp.post("/agregar_jinete")

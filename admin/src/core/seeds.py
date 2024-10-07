@@ -87,3 +87,9 @@ def run():
         apellido="Diaz",
         dni="12345678",
     )
+    
+    jya.create_jinete(
+        nombre="Carlos",
+        apellido="Lopez",
+        dni="987654321",
+    )

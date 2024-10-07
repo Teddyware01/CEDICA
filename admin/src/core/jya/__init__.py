@@ -1,9 +1,10 @@
-'''
 from src.core.database import db
-from src.core.jya.models import Jinete #, Familiar
-#from src.core.equipo.extra_models import ContactoEmergencia, Domicilio, Provincia, Localidad)
+from src.core.auth.user import Users
+from src.core.auth.roles import Roles
+from src.core.auth.permisos import Permisos
+from src.core.jya.models import Jinete
 from sqlalchemy import or_
-'''
+
 '''
 def list_provincias():
     return Provincia.query.all()
@@ -25,63 +26,6 @@ def list_localidades(id_provincia=None):
 def get_localidad_by_id(localidad_id):
     return Localidad.query.get(localidad_id)
 '''
-'''
-# Tabla Jinete
-
-
-def list_jinetes(sort_by=None, search=None):
-    query = Jinete.query
-    if search:
-        query = query.filter(
-            or_(
-                Jinete.nombre.like(f"%{search}%"),
-                Jinete.apellido.like(f"%{search}%"),
-                Jinete.dni.like(f"%{search}%")
-            )
-        )
-    if sort_by:
-        if sort_by == "nombre_asc":
-            query = query.order_by(Jinete.nombre.asc())
-        elif sort_by == "nombre_desc":
-            query = query.order_by(Jinete.nombre.desc())
-        elif sort_by == "apellido_asc":
-            query = query.order_by(Jinete.apellido.asc())
-        elif sort_by == "apellido_desc":
-            query = query.order_by(Jinete.apellido.desc())
-
-    return query.all()
-
-
-
-# Tabla ContactoEmergencia
-def add_contacto_emergencia(**kwargs):
-    contacto_emergencia = ContactoEmergencia(**kwargs)
-    db.session.add(contacto_emergencia)
-    db.session.commit()
-    return contacto_emergencia
-
-
-# Tabla Domiclio
-def add_domiclio(**kwargs):
-    domicilio = Domicilio(**kwargs)
-    db.session.add(domicilio)
-    db.session.commit()
-    return domicilio
-
-# Tabla Familiar
-def add_familiar(**kwargs):
-    familiar = Familiar(**kwargs)
-    db.session.add(familiar)
-    db.session.commit()
-    return familiar
-'''
-
-from src.core.database import db
-from src.core.auth.user import Users
-from src.core.auth.roles import Roles
-from src.core.auth.permisos import Permisos
-from core.jya.models import Jinete 
-from sqlalchemy import or_
 
 def list_jinetes(sort_by=None, search=None):
     query = Jinete.query
@@ -102,7 +46,8 @@ def list_jinetes(sort_by=None, search=None):
             query = query.order_by(Jinete.apellido.asc())
         elif sort_by == "apellido_desc":
             query = query.order_by(Jinete.apellido.desc())
-    return query.all()
+    return query
+
 
 def create_jinete(**kwargs):
     jinete = Jinete(**kwargs)
@@ -131,3 +76,27 @@ def edit_jinete(id, **kwargs):
 def traer_jinete(id):
     jinete = Jinete.query.get(id)
     return jinete
+
+'''
+# Tabla ContactoEmergencia
+def add_contacto_emergencia(**kwargs):
+    contacto_emergencia = ContactoEmergencia(**kwargs)
+    db.session.add(contacto_emergencia)
+    db.session.commit()
+    return contacto_emergencia
+
+
+# Tabla Domiclio
+def add_domiclio(**kwargs):
+    domicilio = Domicilio(**kwargs)
+    db.session.add(domicilio)
+    db.session.commit()
+    return domicilio
+
+# Tabla Familiar
+def add_familiar(**kwargs):
+    familiar = Familiar(**kwargs)
+    db.session.add(familiar)
+    db.session.commit()
+    return familiar
+'''
