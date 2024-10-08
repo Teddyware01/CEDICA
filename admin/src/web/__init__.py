@@ -44,4 +44,11 @@ def create_app(env="development", static_folder="../../static"):
     def seeds_db():
         seeds.run()
 
+    
+   # Reset y seeds automáticos al iniciar la app
+   # Deberia sacarse la eliminacion de la base de datos a la hora de usarse en deploy.
+    with app.app_context():
+        database.reset()  # Restablece la base de datos
+        seeds.run()       # Ejecuta los seeds de la base de datos
+
     return app
