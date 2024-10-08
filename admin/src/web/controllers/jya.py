@@ -16,7 +16,7 @@ def listar_jinetes():
     jinetes = jya.list_jinetes(sort_by=sort_by).paginate(page=page, per_page=per_page)
 
     return render_template("jya/listado_jya.html", jinetes=jinetes)
-
+    
 @bp.get("/agregar_jinete")
 def add_jinete_form():
     return render_template("jya/agregar_jya.html")
@@ -52,16 +52,18 @@ def edit_jinete_form(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
     return render_template("jya/editar_jya.html", jinete=jinete)
 
-@bp.post("/editar_jinete<int:id>")
-def update_jinete(jinete_id):
+@bp.post("/editar_jinete<int:jinete_id>")
+def editar_jinete(jinete_id):
     jya.edit_jinete(
         jinete_id,
         nombre=request.form["nombre"],
+        apellido=request.form["apellido"],
+        dni=request.form["dni"],
+        telefono=request.form["telefono"],
+        fecha_nacimiento=request.form["fecha_nacimiento"],
     )
     flash("Jinete actualizado exitosamente", "success")
-    return redirect("jya/edit_jinete.html")
-
-
+    return redirect(url_for("jya.listar_jinetes"))
 
 @bp.get("/eliminar_jinete<int:id>")
 def delete_jinete_form(id):

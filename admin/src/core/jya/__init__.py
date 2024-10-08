@@ -73,8 +73,8 @@ def edit_jinete(id, **kwargs):
     db.session.commit()
     
 
-def traer_jinete(id):
-    jinete = Jinete.query.get(id)
+def traer_jinete(jinete_id):
+    jinete = Jinete.query.get(jinete_id)
     return jinete
 
 '''

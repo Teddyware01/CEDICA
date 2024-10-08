@@ -85,3 +85,41 @@ def assign_permiso(rol, permiso):
 def traer_usuario(user_id):
     user = Users.query.get(user_id)
     return user
+
+def traer_roles(user_id):
+    user = Users.query.get(user_id)
+    if not user:
+        return None
+    roles = [role.nombre for role in user.roles]
+    return roles
+
+def actualizar_roles(user_id, selected_roles):
+    user = traer_usuario(user_id)
+   
+    roles_usuario = [rol.nombre for rol in user.roles]
+    print(f"Roles actuales del usuario: {roles_usuario}")
+   
+    roles_a_agregar = [rol for rol in selected_roles if rol not in roles_usuario]
+    print(f"Roles a agregar: {roles_a_agregar}")
+    
+    roles_a_quitar = [rol for rol in roles_usuario if rol not in selected_roles]
+    print(f"Roles a quitar: {roles_a_quitar}")
+    
+    for rol_nombre in roles_a_agregar:
+        rol = Roles.query.filter_by(nombre=rol_nombre).first()  
+        if rol:
+            print(f"Agregando rol: {rol_nombre} (ID: {rol.id})")
+            user.roles.append(rol)  
+        else:
+            print(f"Error: No se encontró el rol con nombre {rol_nombre}")
+    
+    for rol_nombre in roles_a_quitar:
+        rol = Roles.query.filter_by(nombre=rol_nombre).first()  
+        if rol:
+            print(f"Eliminando rol: {rol_nombre} (ID: {rol.id})")
+            user.roles.remove(rol)  
+        else:
+            print(f"Error: No se encontró el rol con nombre {rol_nombre}")
+   
+    db.session.commit()
+        
