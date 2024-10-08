@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}Editar Jinete{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <h1 class="text-center">Editar Jinete</h1>
+    
+    <form action="{{ url_for('jya.update_jinete', jinete_id=jya.id) }}" method="POST">
+        
+        <div>
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" value="{{ jya.nombre }}" required>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-submit">Guardar Cambios</button>
+            <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
+        </div>
+    </form>
+{% endblock %}

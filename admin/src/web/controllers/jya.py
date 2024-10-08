@@ -47,22 +47,20 @@ def add_jinete():
 def view_jinete():
     return render_template("add_client.html")
 
-@bp.get("/editar_jinete<int:id>")
-def edit_jinete_form(id):
-    jinete = jya.traer_jinete(id)
-    return render_template("edit_client.html", jinete=jinete)
-
+@bp.get("/editar_jinete<int:jinete_id>")
+def edit_jinete_form(jinete_id):
+    jinete = jya.traer_jinete(jinete_id)
+    return render_template("jya/editar_jya.html", jinete=jinete)
 
 @bp.post("/editar_jinete<int:id>")
-def update_jinete(id):
+def update_jinete(jinete_id):
     jya.edit_jinete(
-        id,
+        jinete_id,
         nombre=request.form["nombre"],
-        apellido=request.form["apellido"],
-        dni=request.form["dni"],
     )
     flash("Jinete actualizado exitosamente", "success")
-    return redirect("edit_client.html")
+    return redirect("jya/edit_jinete.html")
+
 
 
 @bp.get("/eliminar_jinete<int:id>")
