@@ -8,7 +8,7 @@ def init_app(app):
     """
     Inicializa la base de datos con la aplicacion de Flask
     """
-    
+
     db.init_app(app)
     config(app)
 
@@ -19,7 +19,7 @@ def config(app):
     """
     Configuracion de hooks para la base de datos.
     """
-    
+
     @app.teardown_appcontext
     def close_session(exception=None):
         db.session.close()
@@ -28,10 +28,9 @@ def config(app):
 
 
 def reset():
-    """ Resetea la base de datos.
-    """
+    """Resetea la base de datos."""
     print("Eliminando base de datos...")
     db.drop_all()
     print(" Creando base nuevamente.. ")
     db.create_all()
-    print( "Done")
+    print("Done")

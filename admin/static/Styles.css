@@ -189,7 +189,7 @@ p {
     align-items: center;
 }
 
-.navbar-nav-center {
+.navbar-center {
     flex-grow: 1;
     display: flex;
     justify-content: center;
@@ -198,7 +198,7 @@ p {
     padding: 0;
 }
 
-.navbar-nav-right {
+.navbar-right {
     display: flex;
     justify-content: flex-end;
     background-color: #e0f7fa;
@@ -210,11 +210,128 @@ p {
     display: grid;
     place-items: center;
     min-height: 60vh;
-    margin: 20px;  
+    margin-top: 5em;
+    margin-bottom: 2em;
 }
 
-.navbar navbar-expand-lg navbar-light bg-light {
+.navbar-class {
+    position: fixed;
     background-color: #e0f7fa;
     margin: 0;
     padding: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 }
+
+.navbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+@media (max-width: 992px) {
+    .navbar-nav {
+        flex-direction: column;
+        width: 100%;
+    }
+}
+
+.navbar-light {
+    color: #555;
+}
+
+.bg-light {
+    background-color: #f8f9fa;
+}
+
+.container-fluid {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.navbar-tag {
+    display: inline-block;
+    padding-top: 0.3125rem;
+    padding-bottom: 0.3125rem;
+    margin-right: 1rem;
+    font-size: 1.25rem;
+    line-height: inherit;
+    white-space: nowrap;
+}
+
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.nav-item {
+    padding: 0.5rem 1rem;
+}
+
+.nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: inherit;
+}
+.nav-link:hover {
+    background-color: #eee;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 10rem;
+    padding: 0.5rem 0;
+    margin: 0.125rem 0 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 0.25rem;
+}
+.dropdown-menu-right {
+    right: 0;
+    left: auto;
+}
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
+
+.disabled {
+    color: #ccc;
+    pointer-events: none;
+}
+
+.text-dark {
+    color: #343a40;
+}
+
+.py-3 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
