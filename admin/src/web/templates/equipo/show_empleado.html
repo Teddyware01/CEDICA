@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %} Ver empleado {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='equipo_style.css') }}">
+{% endblock %}
+
+{% block content %}
+    <script>
+        function confirmarEliminacion(event, empleadoId) {
+            event.preventDefault();  // Detener el comportamiento predeterminado del enlace
+        
+            if (confirm("¿Estás seguro de que deseas eliminar este empleado?")) {
+                fetch(`/equipo/eliminar_empleado/${empleadoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = "{{ url_for('equipo.listar_empleados') }}";  // Redirige después de eliminar
+                    } else {
+                        alert("Error al eliminar el empleado.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Error al eliminar el empleado.");
+                });
+            }
+        }
+    </script>
+    
+    <a href="#" class="btn btn-danger" onclick="confirmarEliminacion(event, {{ empleado.id }})">Eliminar</a>
+
+
+    <h1 class="text-center">Ver empleado.</h1>
+    <h2>Mostrando toda la informacion del empleado.</h2>
+    <p>Apellido: {{empleado.apellido}}</p>
+    <p>Nombre: {{empleado.nombre}}</p>
+    <p>DNI: {{empleado.dni}}</p>
+    <p>Email: {{empleado.email}}</p>
+    <p>Telefono: {{empleado.telefono}}</p>
+    <p>Fecha de inicio: {{empleado.fecha_inicio}}</p>
+    <p>Fecha de cese: {{empleado.fecha_cese if empleado.fecha_cese else "Ninguna asignada."}}</p>
+    <p>Condicion: {{empleado.condicion}}</p>
+    <p>Activo: {{"SI" if empleado.activo else "NO" }}</p>
+    <p>Profesion: {{empleado.profesion.nombre}}</p>
+    <p>Puesto laboral: {{empleado.puesto_laboral.nombre}}</p>
+    
+    <h3>Obra Social: {{empleado.obra_social}}</h3>
+    <p>Numero de afiliado: {{empleado.nro_afiliado}}</p>
+    
+    <h3>Domicilio:</h3>
+    <p>Calle: {{empleado.domicilio.calle}}</p>
+    <p>Numero: {{empleado.domicilio.numero}}</p>
+    <p>Departamento: {{empleado.domicilio.departamento}}</p>
+    <p>Piso: {{empleado.domicilio.piso}}</p>
+    <p>Provincia: {{empleado.domicilio.provincia.nombre}}</p>
+    <p>Localidad: {{empleado.domicilio.localidad.nombre}}</p>
+    
+    <h3>Contacto de emergencia:</h3>
+    <p>Apellido: {{empleado.contacto_emergencia.apellido}}</p>
+    <p>Nombre: {{empleado.contacto_emergencia.nombre}}</p>
+    <p>Calle: {{empleado.contacto_emergencia.telefono}}</p>
+
+
+    <h3>Archivos y documentos:</h3>
+    {% if documentos %}
+        {% for doc in documentos %}
+            <p> {{doc.nombre}}.</p>
+        {% endfor %}
+    {% else %}
+    <p>El empleado no tiene documentos para mostrar.</p>
+    {% endif %}
+{% endblock %}
+
+
