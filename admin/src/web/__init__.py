@@ -23,9 +23,6 @@ def create_app(env="development", static_folder="../../static"):
     @app.route("/sobre_nosotros")
     def sobre_nosotros():
         return render_template("sobre_nosotros.html")
-    
-    
-    
 
     @app.route('/ecuestre')
     def ecuestre():
