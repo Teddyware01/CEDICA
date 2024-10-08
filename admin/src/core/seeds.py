@@ -178,15 +178,15 @@ def run():
 
     # Contactos de Emergencia
     contacto_emergencia_ej1 = equipo.add_contacto_emergencia(
-        nombre="juan", apellido="perez", telefono="11111111111"
+        nombre="juan", apellido="perez", telefono="1010101010"
     )
 
     contacto_emergencia_ej2 = equipo.add_contacto_emergencia(
-        nombre="jj", apellido="lopez", telefono="22222222222"
+        nombre="jj", apellido="lopez", telefono="1422222222222"
     )
 
     contacto_emergencia_ej3 = equipo.add_contacto_emergencia(
-        nombre="diego", apellido="marado", telefono="33333333333"
+        nombre="diego", apellido="marado", telefono="153333333333333"
     )
 
     # Empleados, efectivamente...

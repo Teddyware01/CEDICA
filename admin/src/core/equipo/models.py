@@ -21,7 +21,7 @@ class Empleado(db.Model):
     condicion = db.Column(db.Enum(CondicionEnum), nullable=False)
     activo = db.Column(db.Boolean, default=True)
     obra_social = db.Column(db.String(25), nullable=False, unique=False)
-    nro_afiliado = db.Column(db.Integer, nullable=False, unique=False)
+    nro_afiliado = db.Column(db.String(25), nullable=False, unique=False)
 
     # campos id
     profesion_id = db.Column(db.Integer, db.ForeignKey("profesion.id"), nullable=False)

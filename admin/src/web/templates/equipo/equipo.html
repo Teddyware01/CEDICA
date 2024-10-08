@@ -9,39 +9,68 @@
 
 {% block content %}
     {{ super() }}
-    <h1 class="text-center">Listado de empleados del equipo.</h1>
 
-    <div class="actions">
-        <a href="{{ url_for('equipo.add_empleado_form') }}" class="btn btn-add">Agregar Empleado</a>
+    <script>
+        function confirmarEliminacion(event, empleadoId) {
+            event.preventDefault();  // Detener el comportamiento predeterminado del enlace
+        
+            if (confirm("¿Estás seguro de que deseas eliminar este empleado?")) {
+                fetch(`/equipo/eliminar_empleado/${empleadoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = "{{ url_for('equipo.listar_empleados') }}";  // Redirige después de eliminar
+                    } else {
+                        alert("Error al eliminar el empleado.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Error al eliminar el empleado.");
+                });
+            }
+        }
+    </script>
+    
+    <body>
+
+        <h1 class="text-center">Listado de empleados del equipo.</h1>
+        
+        <div class="actions">
+        <a href="{{ url_for('equipo.agregar_empleado_form') }}" class="btn btn-add">Agregar Empleado</a>
     </div>
     
 
-        
     <form method="GET" action="{{ url_for('equipo.listar_empleados') }}" class="mb-3">
         <label for="sort_by">Ordenar por:</label>
         <select name="sort_by" id="sort_by">
-            <option value="email_asc">Email (Ascendente)</option>
-            <option value="email_desc">Email (Descendente)</option>
-            <option value="created_at_asc">Fecha de Creación (Ascendente)</option>
-            <option value="created_at_desc">Fecha de Creación (Descendente)</option>
+            <option value="email_asc" {% if request.args.get('sort_by') == 'email_asc' %}selected{% endif %}>Email (Ascendente)</option>
+            <option value="email_desc" {% if request.args.get('sort_by') == 'email_desc' %}selected{% endif %}>Email (Descendente)</option>
+            <option value="created_at_asc" {% if request.args.get('sort_by') == 'created_at_asc' %}selected{% endif %}>Fecha de Creación (Ascendente)</option>
+            <option value="created_at_desc" {% if request.args.get('sort_by') == 'created_at_desc' %}selected{% endif %}>Fecha de Creación (Descendente)</option>
         </select>
-
+    
         <label for="id_puesto_laboral">Puesto Laboral:</label>
         <select name="id_puesto_laboral" id="id_puesto_laboral">
-            <option value="cualquiera">Cualquiera</option>
+            <option value="cualquiera" {% if request.args.get('id_puesto_laboral') == 'cualquiera' %}selected{% endif %}>Cualquiera</option>
             {% if puestos_laborales %}
                 {% for puesto in puestos_laborales %}
-                <option value={{puesto.id}}>{{puesto.nombre}}</option>
+                    <option value="{{ puesto.id }}" {% if request.args.get('id_puesto_laboral') == puesto.id|string %}selected{% endif %}>{{ puesto.nombre }}</option>
                 {% endfor %}
             {% endif %}
         </select>
-        <input type="text" id="search" name="search" placeholder="Nombre, DNI o Email">
+    
+        <input type="text" id="search" name="search" placeholder="Nombre, DNI o Email" value="{{ request.args.get('search', '') }}">
         <button type="submit" class="btn btn-sort">Ordenar/Buscar</button>
     </form>
 
     <p>Empleados del equipo:</p>
     {% if empleados %}
-
+    
     <table class="table">
         <thead>
             <tr>
@@ -64,9 +93,9 @@
                 <td>{{emp.profesion.nombre}}</td>
                 <td>{{emp.puesto_laboral.nombre}}</td>
                 <td>
-                    <a href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}" class="btn btn-add">SHOW</a>
+                    <a href="{{ url_for('equipo.ver_empleado', empleado_id=emp.id) }}" class="btn btn-add">SHOW</a>
                     <a href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}" class="btn btn-edit">UPDATE</a>
-                    <a href="{{ url_for('equipo.delete_empleado', empleado_id=emp.id) }}" class="btn btn-del">DELETE</a>
+                    <a href="#" class="btn btn-danger" onclick="confirmarEliminacion(event, {{ emp.id }})">Eliminar</a>
                 </td>
             </tr>
             {% endfor %}
@@ -75,5 +104,6 @@
     {% else %}
         <p>No hay empleados para mostrar.</p>
     {% endif %}
-
-{% endblock %}
+    
+</body>
+    {% endblock %}
