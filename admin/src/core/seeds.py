@@ -5,6 +5,7 @@ from src.core import equipo
 from src.core.equipo.extra_models import Provincia, Domicilio
 from src.core.equipo.models import CondicionEnum
 from datetime import datetime
+from pathlib import Path
 
 
 from src.core.database import db
@@ -139,9 +140,15 @@ def run():
     equipo.add_puesto_laboral(nombre="Otro")
 
     # Provincias
-    ejecutar_sql_script("src\core\sql\insert_provincias.sql")
+    sql_provincias = Path(__file__).parent.joinpath("./sql/insert_provincias.sql")
+    print("Print prueba: ", sql_provincias)
+    ejecutar_sql_script(sql_provincias)
+
     # Localidades
-    ejecutar_sql_script("src\core\sql\insert_localidades.sql")
+    sql_localidades = Path(__file__).parent.joinpath("./sql/insert_localidades.sql")
+    print("Print prueba: ", sql_localidades)
+    ejecutar_sql_script(sql_localidades)
+
 
     # Empleados ejemplo (primero las tablas que deben crearse primero)
     # Domicilios
