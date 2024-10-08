@@ -11,7 +11,6 @@ from wtforms.validators import DataRequired, Email, Length, Optional, Regexp
 from wtforms.widgets import DateInput
 
 
-
 class AddJineteForm(FlaskForm):
     nombre = StringField(
         "Nombre",
@@ -48,6 +47,11 @@ class AddJineteForm(FlaskForm):
         widget=DateInput()
     )
     
+    telefono = StringField(
+        "Telefono",
+        validators=[DataRequired(message="El telefono es obligatorio"), Length(max=15)],
+    )
+    '''
     localidad_nacimiento = SelectField(
         "Localidad de Nacimiento", coerce=int, validators=[DataRequired()]
     )
@@ -87,14 +91,31 @@ class AddJineteForm(FlaskForm):
 
 ####################### PORCENTAJE DE BECAS #################
 
+    observaciones = StringField(
+        "Observaciones",
+        validators=[DataRequired(message="observaciones es obligatorio")],
+    )
+
     certificado_discapacidad = BooleanField("Posee certificado de discapacidad?")
     
+    beneficiario_pension=BooleanField("beneficiario pension")
+    
+    tipo_pension=SelectField(
+        "Tipo pension", 
+        validators=[DataRequired()])
+
+    profesionales = SelectField(
+        "Profesionales",
+        validators=[DataRequired(message="Los profesionales son obligatorios")],
+    )
+    '''
+    '''
     diagnostico_id = SelectField(
         "Diagnóstico",
         coerce=int,
         validators=[DataRequired(message="El diagnóstico es obligatorio")]
     )
-    '''
+    
     tipo_discapacidad
     
     asignacion_familiar
@@ -102,7 +123,7 @@ class AddJineteForm(FlaskForm):
     pension
     
     tipo_pension
-    '''
+    
     obra_social = StringField(
         "Obra Social",
         validators=[
@@ -117,7 +138,7 @@ class AddJineteForm(FlaskForm):
             DataRequired(message="El número de afiliado de obra social es obligatorio")
         ],
     )
-    '''
+    
     curatela
     
     observaciones
@@ -132,11 +153,7 @@ class AddJineteForm(FlaskForm):
     
     observaciones
     '''
-    profesionales = SelectField(
-        "Profesionales",
-        coerce=int,
-        validators=[DataRequired(message="Los profesionales son obligatorios")],
-    )
+    
     '''
     parentesco_familiar
     

@@ -132,14 +132,30 @@ class Jinete(db.Model):
 '''
 from src.core.database import db
 from datetime import datetime
+from enum import Enum
 
+
+class PensionEnum(Enum):
+    provincial='Provincial'
+    nacional='Nacional'
+    
+    
 class Jinete(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(50), nullable=False)
     apellido = db.Column(db.String(50), nullable=False)
     dni = db.Column(db.String(10), nullable=False, unique=True)
-    
-    
+    edad = db.Column(db.Integer, nullable=False)
+    fecha_nacimiento = db.Column(db.DateTime, nullable=False)
+    telefono = db.Column(db.String(15), nullable=False)
+    '''
+    becado = db.Column(db.Boolean)
+    observaciones = db.Column(db.String(255), nullable=True)
+    certificado_discapacidad = db.Column(db.Boolean)
+    beneficiario_pension = db.Column(db.Boolean)
+    tipo_pension = db.Column(db.Enum(PensionEnum), nullable=True)
+    profesionales = db.Column(db.String(255), nullable=False)
+    '''
     def __repr__(self):
         return f"<User #{self.id} nombre = {self.nombre}>"
     

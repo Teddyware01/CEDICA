@@ -3,7 +3,7 @@ from flask import Blueprint
 from src.core import auth
 from src.core import jya
 from src.core.database import db
-
+from src.core.jya.forms import AddJineteForm
 
 bp = Blueprint("jya", __name__, url_prefix="/jinetes")
 
@@ -17,20 +17,31 @@ def listar_jinetes():
 
     return render_template("jya/listado_jya.html", jinetes=jinetes)
 
+@bp.get("/agregar_jinete")
+def add_jinete_form():
+    return render_template("jya/agregar_jya.html")
+
+
 @bp.post("/agregar_jinete")
 def add_jinete():
+    #form = AddJineteForm(request.form)
     jya.create_jinete(
         nombre=request.form["nombre"],
         apellido=request.form["apellido"],
         dni=request.form["dni"],
+        edad=request.form["edad"],
+        fecha_nacimiento=request.form["fecha_nacimiento"],
+        telefono=request.form["telefono"],
+        #becado=form.condicion.data,
+        #observaciones=form.observaciones.data,
+        #certificado_discapacidad=form.certificado_discapacidad.data,
+        #beneficiario_pension=form.beneficiario_pension.data,
+        #tipo_pension=form.tipo_pension.data,
+        #profesionales=form.profesionales.data,
     )
-    flash("Jinete agregado exitosamente", "success")
-    return render_template("jya/listado_jya.html")
 
-@bp.get("/agregar_jinete")
-def agregar_jinete_form():
-    return render_template("add_client.html")
-
+    flash("Jinete registrado exitosamente", "success")
+    return redirect(url_for("jya.listar_jinetes"))
 
 @bp.get("/ver_jinete")
 def view_jinete():
