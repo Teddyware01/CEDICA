@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}Ver jinete{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h1 class="text-center">Legajo del jinete</h1>
+
+        <p><strong>Nombre:</strong> {{jinete.nombre}}</p>
+        <p><strong>Apellido:</strong> {{ jinete.apellido }}</p>
+        <p><strong>DNI:</strong> {{ jinete.dni }}</p>
+        <p><strong>Edad:</strong> {{ jinete.edad }}</p>
+        <p><strong>Fecha de Nacimiento:</strong> {{ jinete.fecha_nacimiento.strftime('%d/%m/%Y') }}</p>
+        <p><strong>Teléfono:</strong> {{ jinete.telefono }}</p>
+
+        <div class="form-actions">
+            <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Editar jinete</a>
+            <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-back">Lista de jinetes</a>
+        </div>
+
+    </div>
+{% endblock %}

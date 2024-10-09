@@ -43,9 +43,10 @@ def add_jinete():
     flash("Jinete registrado exitosamente", "success")
     return redirect(url_for("jya.listar_jinetes"))
 
-@bp.get("/ver_jinete")
-def view_jinete():
-    return render_template("add_client.html")
+@bp.get("/ver_jinete<int:jinete_id>")
+def view_jinete(jinete_id):
+    jinete = jya.traer_jinete(jinete_id)
+    return render_template("jya/ver_jya.html", jinete=jinete)
 
 @bp.get("/editar_jinete<int:jinete_id>")
 def edit_jinete_form(jinete_id):
@@ -65,16 +66,14 @@ def editar_jinete(jinete_id):
     flash("Jinete actualizado exitosamente", "success")
     return redirect(url_for("jya.listar_jinetes"))
 
-@bp.get("/eliminar_jinete<int:id>")
-def delete_jinete_form(id):
-    jinete = jya.traer_jinete(id)
-    return render_template("delete_client.html", jinete=jinete)
+@bp.get("/eliminar_jinete<int:jinete_id>")
+def delete_jinete_form(jinete_id):
+    jinete = jya.traer_jinete(jinete_id)
+    return render_template("jya/eliminar_jya.html", jinete=jinete)
 
-
-@bp.post("/eliminar_jinete<int:id>")
-def delete_jinete(id):
-    jya.delete_jinete(id)
-    return render_template("jya/listado_jya.html")
-
+@bp.post("/eliminar_jinete<int:jinete_id>")
+def delete_jinete(jinete_id):
+    jya.delete_jinete(jinete_id)
+    return redirect(url_for("jya.listar_jinetes"))
 
 
