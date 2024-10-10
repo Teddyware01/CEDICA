@@ -335,3 +335,59 @@ p {
     padding-bottom: 1rem;
 }
 
+.tab-container {
+    display: flex;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: 0.3s;
+}
+
+.tab.active {
+    border-bottom: 2px solid green; /* Color verde para la pestaña activa */
+    font-weight: bold;
+}
+
+/* Ocultar contenido por defecto */
+.tab-content {
+    display: none;
+}
+
+/* Mostrar el contenido activo */
+.tab-content.active {
+    display: block;
+}
+
+.form-actions {
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 8px 16px;
+    text-decoration: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.btn-edit {
+    background-color: #28a745;
+}
+
+.btn-back {
+    background-color: #6c757d;
+}
+
+.btn-enlace {
+    background-color: #17a2b8;
+}
+
+.btn-subir {
+    background-color: #ffc107;
+}

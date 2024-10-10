@@ -10,9 +10,9 @@
 {% block content %}
     {{ super() }}
     <h1 class="text-center">Listado de jinetes</h1>
-
+    
     <div class="actions">
-        <a href="{{ url_for('jya.add_jinete_form') }}" class="btn btn-add btn-primary">Agregar jinete</a>
+        <a href="{{ url_for('jya.add_jinete_form') }}" class="btn btn-add btn-primary" style="margin: 10px 0;">Agregar jinete</a>
     </div>
     
     <!-- Formulario de búsqueda y ordenamiento -->
@@ -25,6 +25,9 @@
             <option value="apellido_desc">Apellido (Descendente)</option>
         </select>
         <button type="submit" class="btn btn-sort btn-secondary">Ordenar</button>
+
+        <input type="text" id="search" name="search" placeholder="Nombre, apellido, dni o profesionales" value="{{ request.args.get('search', '') }}">
+        <button type="submit" class="btn btn-sort btn-secondary">Buscar</button>
     </form>
         
     <!-- Lista de jinetes -->

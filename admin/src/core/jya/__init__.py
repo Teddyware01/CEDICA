@@ -34,9 +34,11 @@ def list_jinetes(sort_by=None, search=None):
             or_(
                 Jinete.nombre.like(f"%{search}%"),
                 Jinete.apellido.like(f"%{search}%"),
-                Jinete.dni.like(f"%{search}%")
+                Jinete.dni.like(f"%{search}%"),
+                #Falta agregar busqueda por profesionales.
             )
     )
+        
     if sort_by:
         if sort_by == "nombre_asc":
             query = query.order_by(Jinete.nombre.asc())
