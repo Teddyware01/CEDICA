@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %} Detalles del Pago {% endblock %}
+
+{% block content %}
+    <h1>Detalles del Pago</h1>
+    <table class="table">
+        <tr>
+            <th>Beneficiario</th>
+            <td>{{ pago.beneficiario }}</td>
+        </tr>
+        <tr>
+            <th>Monto</th>
+            <td>{{ pago.monto }}</td>
+        </tr>
+        <tr>
+            <th>Fecha de Pago</th>
+            <td>{{ pago.fecha_pago.strftime('%Y-%m-%d') }}</td>
+        </tr>
+        <tr>
+            <th>Tipo de Pago</th>
+            <td>{{ pago.tipo_pago }}</td>
+        </tr>
+        <tr>
+            <th>Descripción</th>
+            <td>{{ pago.descripcion }}</td>
+        </tr>
+    </table>
+    <div class="actions">
+        <a href="{{ url_for('pagos.listar_pagos') }}" class="btn btn-back">Volver al Listado</a>
+    </div>
+{% endblock %}
