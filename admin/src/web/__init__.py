@@ -7,6 +7,7 @@ from src.core import seeds
 from src.web.controllers.equipo import bp as equipo_blueprint
 from src.web.controllers.issues import bp as issues_bp
 from src.web.controllers.usuarios import bp as usuarios_bp
+from src.web.controllers.pagos import pagos_bp
 
 
 def create_app(env="development", static_folder="../../static"):
@@ -15,7 +16,9 @@ def create_app(env="development", static_folder="../../static"):
     database.init_app(app)
 
     app.register_blueprint(usuarios_bp)
-    app.register_blueprint(issues_bp)
+    app.register_blueprint(issues_bp)      
+    app.register_blueprint(pagos_bp)
+
 
     @app.route("/")
     def home():
