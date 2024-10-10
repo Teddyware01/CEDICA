@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Pago(db.Model):
-    __tablename__ = 'pago'
+    __tablename__ = 'pagos'
     id = db.Column(db.Integer, primary_key=True)
     beneficiario = db.Column(db.String(100), nullable=False)
     monto = db.Column(db.Float, nullable=False)
@@ -12,4 +12,4 @@ class Pago(db.Model):
     descripcion = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
-        return f'<Pagos {self.id}>'
+        return f'<Pago {self.beneficiario} - {self.monto}>'

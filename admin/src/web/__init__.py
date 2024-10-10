@@ -36,6 +36,12 @@ def create_app(env="development", static_folder="../../static"):
     def jya():
         return render_template("jya.html")
 
+    @app.route('/pagos')
+    def mostrar_pagos():
+    # Lógica para obtener los pagos desde la base de datos
+        pagos = obtener_pagos()  # Función que recupera los pagos
+        return render_template('pagos.html', pagos=pagos)
+
     app.register_error_handler(404, error.error_not_found)
     app.register_error_handler(500, error.error_internal_server_error)
     app.register_blueprint(equipo_blueprint)

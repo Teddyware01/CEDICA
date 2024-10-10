@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from src.core.database import db
-from src.core.pagos import pagos
+from src.core.pagos.models import Pago as pagos
 
 # Crear el Blueprint
 pagos_bp = Blueprint("pagos", __name__, template_folder="../templates/pagos")
@@ -29,7 +29,7 @@ def registrar_pago():
         return redirect(url_for("pagos.index"))
 
     pagos_realizado = pagos.query.all()
-    return render_template("index.html", pagos_realizado=pagos)
+    return render_template("home.html", pagos_realizado=pagos)
 
 
 @pagos_bp.route("/<int:id>", methods=["GET", "PUT", "DELETE"])
@@ -60,4 +60,4 @@ def buscar_pago():
         query = query.filter(pagos.fecha_pago.between(fecha_inicio, fecha_fin))
 
     pagos = query.order_by(pagos.fecha_pago).all()
-    return render_template("index.html", pagos=pagos)
+    return render_template("home.html", pagos=pagos)
