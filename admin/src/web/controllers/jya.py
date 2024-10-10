@@ -1,4 +1,5 @@
-from flask import render_template, request, redirect, flash, url_for
+from flask import render_template, request, redirect, flash, url_for, current_app
+from os import fstat
 from flask import Blueprint
 from src.core import auth
 from src.core import jya
@@ -77,4 +78,28 @@ def delete_jinete(jinete_id):
     jya.delete_jinete(jinete_id)
     return redirect(url_for("jya.listar_jinetes"))
 
+@bp.get("/<int:jinete_id>/edit")
+def edit(jinete_id):
+    jinete = jya.traer_jinete(jinete_id)
+    
+    return render_template("jya/edit.html", jinete=jinete)
 
+@bp.post("/<int:jinete_id>/update")
+def update(jinete_id):
+    params = request.form.copy()
+    
+    if "avatar" in request.files:
+        file = request.files["avatar"]
+        client = current_app.storage.client
+        size = fstat(file.fileno()).st_size
+        #ulid = u.new()
+        
+        client.put_object(
+            "grupo15", file.filename, file, size, content_type=file.content_type
+        )           #f"avatars/{ulid}-{file.filename}",
+        params["avatar"] = file.filename #Hacer funcion para que genere nombres unicos para el archivo y guardarlo en el usuario. Libreria ULID
+                                
+    jya.update_jinete(jinete_id, **params)
+    flash("Usuario modificado correctamente", "success")
+    
+    return redirect(url_for("jya.listar_jinetes"))

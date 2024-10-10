@@ -148,6 +148,7 @@ class Jinete(db.Model):
     edad = db.Column(db.Integer, nullable=False)
     fecha_nacimiento = db.Column(db.DateTime, nullable=False)
     telefono = db.Column(db.String(15), nullable=False)
+    avatar = db.Column(db.String(255), nullable=True)
     '''
     becado = db.Column(db.Boolean)
     observaciones = db.Column(db.String(255), nullable=True)

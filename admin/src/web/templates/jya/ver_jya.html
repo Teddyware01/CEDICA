@@ -4,10 +4,11 @@
 
 {% block head %}
     {{ super() }}
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
 {% endblock %}
 
 {% block content %}
+    {{ super() }}
     <div>
         <h1 class="text-center">Legajo del jinete</h1>
 
@@ -40,7 +41,7 @@
             <!-- Botones de acción en Documentos -->
             <div class="form-actions">
                 <a href="#" class="btn btn-enlace">+ Enlace</a>
-                <a href="#" class="btn btn-subir">↑ Subir</a>
+                <a href="{{ url_for('jya.edit', jinete_id=jinete.id) }}" class="btn btn-subir">↑ Subir</a>
             </div>
         </div>
     </div>

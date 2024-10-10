@@ -21,7 +21,7 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     """Development configuration."""
     # Config de Minio
-    MINIO_SERVER="127.0.1:9000"
+    MINIO_SERVER="minio.localhost:9000"
     MINIO_ACCESS_KEY = "t72c7MVDNIvv686yDHkm"
     MINIO_SECRET_KEY = "CiYoF08qw3jB8fXcYkC9wZDj51KqSzIW2U8eg8F0"
     MINIO_SECURE = False

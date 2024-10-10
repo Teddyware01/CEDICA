@@ -75,10 +75,19 @@ def edit_jinete(id, **kwargs):
     db.session.commit()
     
 
-def traer_jinete(jinete_id):
+def traer_jinete(jinete_id): #get_jinete
     jinete = Jinete.query.get(jinete_id)
     return jinete
-
+    
+def update_jinete(jinete_id, **kwargs):
+    jinete = traer_jinete(jinete_id)
+    for key, value in kwargs.items():
+        setattr(jinete, key, value)
+    db.session.add(jinete)
+    db.session.commit()
+    
+    return jinete
+    
 '''
 # Tabla ContactoEmergencia
 def add_contacto_emergencia(**kwargs):

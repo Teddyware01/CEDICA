@@ -36,6 +36,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>Avatar</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>DNI</th>
@@ -44,6 +45,9 @@
             <tbody>
                 {% for jinete in jinetes %}
                     <tr>
+                        <td>
+                            <img src={{ avatar_url(jinete.avatar) }} alt="Avatar" width="30" height="30">
+                        </td>
                         <td>{{ jinete.nombre }}</td>
                         <td>{{ jinete.apellido }}</td>
                         <td>{{ jinete.dni }}</td>

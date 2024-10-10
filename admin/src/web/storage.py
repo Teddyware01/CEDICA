@@ -23,7 +23,7 @@ class Storage:
     @property
     def client(self):
         # Propiedad para obtener el cliente de Minio
-        self._client
+        return self._client
         
     @client.setter
     def client(self, value):

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %} Editar jinete {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <article class="form-container">
+        <div>
+            <h1 class="text-center">Edicion de jinete</h1>
+                
+            <!-- Formulario de búsqueda y ordenamiento -->
+            <form method="POST" action="{{ url_for('jya.update', jinete_id=jinete.id) }}" enctype="multipart/form-data" class="mb-3">
+                <fieldset>
+                    <legend>{{ jinete.nombre }}</legend>
+                    <label>
+                        Avatar
+                        <input type="file" name="avatar">
+                        <small>Seleccione una imagen para el avatar</small>
+                    </label>
+                    <input type="submit" value="Guardar">
+                </fieldset>
+            </form>
+        </div>
+    </article>
+
+    <a class="secondary" href="{{ url_for('home') }}">Volver al inicio</a>
+{% endblock %}

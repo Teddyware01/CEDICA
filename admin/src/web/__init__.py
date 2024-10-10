@@ -4,7 +4,8 @@ from src.web.handlers import error
 from src.web.config import config
 from src.core import database
 from src.core import seeds
-from src.web.storage import storage 
+from src.web.storage import storage
+from src.web import helpers 
 from src.web.controllers.equipo import bp as equipo_blueprint
 from src.web.controllers.issues import bp as issues_bp
 from src.web.controllers.usuarios import bp as usuarios_bp
@@ -45,6 +46,8 @@ def create_app(env="development", static_folder="../../static"):
     app.register_error_handler(500, error.error_internal_server_error)
     app.register_blueprint(equipo_blueprint)
     app.register_blueprint(jya_bp)
+    app.jinja_env.globals.update(avatar_url=helpers.avatar_url)
+    
 
     @app.cli.command(name="reset-db")
     def reset_db():
