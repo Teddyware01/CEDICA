@@ -3,6 +3,9 @@ from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
 
+def find_user_by_email_and_password(email, password):
+    user = Users.query.filter_by(email=email, password=password).first()
+    return user
 
 def list_users(sort_by=None):
     query = Users.query
