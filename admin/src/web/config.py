@@ -13,6 +13,7 @@ class ProductionConfig(Config):
     """Producton configuration."""
 
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
+    
 
 class DevelopmentConfig(Config):
     """Development configuration."""
