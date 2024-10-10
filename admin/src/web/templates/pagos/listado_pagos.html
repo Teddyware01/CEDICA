@@ -14,9 +14,9 @@
             <label for="tipo_pago">Tipo de Pago:</label>
             <select id="tipo_pago" name="tipo_pago" class="form-control">
                 <option value="">Todos</option>
-                <option value="Honorarios">Honorarios</option>
-                <option value="Proveedor">Proveedor</option>
-                <option value="Gastos Varios">Gastos Varios</option>
+                <option value="honorario">Honorarios</option>
+                <option value="proveedor">Proveedor</option>
+                <option value="gastos_varios">Gastos Varios</option>
             </select>
         </div>
         <div class="form-group">
@@ -37,6 +37,7 @@
         <button type="submit" class="btn btn-primary">Buscar</button>
     </form>
 
+
     <table class="table">
         <thead>
             <tr>
@@ -45,6 +46,7 @@
                 <th>Fecha de Pago</th>
                 <th>Tipo de Pago</th>
                 <th>Descripción</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -53,8 +55,14 @@
                 <td>{{ pago.beneficiario }}</td>
                 <td>{{ pago.monto }}</td>
                 <td>{{ pago.fecha_pago.strftime('%Y-%m-%d') }}</td>
-                <td>{{ pago.tipo_pago }}</td>
+                <td>{{ pago.tipo_pago.capitalize() }}</td> <!-- Formateado correctamente -->
                 <td>{{ pago.descripcion }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('pagos.eliminar_pago', id=pago.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que deseas eliminar este pago?');">Eliminar</button>
+                    </form>
+                    <a href="{{ url_for('pagos.editar_pago', id=pago.id) }}" class="btn btn-edit">Editar</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

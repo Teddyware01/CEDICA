@@ -6,26 +6,69 @@
 <h1>Registrar Pago</h1>
 <form method="POST" action="{{ url_for('pagos.registrar_pago') }}">
     {{ form.hidden_tag() }}
+    
+    <!-- Campo de tipo de pago -->
     <div class="form-group">
+        {{ form.tipo_pago.label(class="form-label") }}
+        {{ form.tipo_pago(class="form-control", id="tipo_pago") }}
+    </div>
+    
+    <!-- Campo de beneficiario (empleado o manual, según tipo de pago) -->
+    <div class="form-group" id="empleado_field" style="display:none;">
         {{ form.beneficiario.label(class="form-label") }}
         {{ form.beneficiario(class="form-control") }}
     </div>
+    
+    <div class="form-group" id="otro_beneficiario_field" style="display:none;">
+        {{ form.otro_beneficiario.label(class="form-label") }}
+        {{ form.otro_beneficiario(class="form-control") }}
+    </div>
+    
+    <!-- Monto -->
     <div class="form-group">
         {{ form.monto.label(class="form-label") }}
         {{ form.monto(class="form-control") }}
     </div>
+
+    <!-- Fecha de Pago -->
     <div class="form-group">
         {{ form.fecha_pago.label(class="form-label") }}
         {{ form.fecha_pago(class="form-control") }}
     </div>
-    <div class="form-group">
-        {{ form.tipo_pago.label(class="form-label") }}
-        {{ form.tipo_pago(class="form-control") }}
-    </div>
+
+    <!-- Descripción -->
     <div class="form-group">
         {{ form.descripcion.label(class="form-label") }}
         {{ form.descripcion(class="form-control") }}
     </div>
+
+    <!-- Botón de submit -->
     {{ form.submit(class="btn btn-primary") }}
 </form>
+
+<!-- Script para manejar la visibilidad de los campos según el tipo de pago -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tipoPagoField = document.getElementById('tipo_pago');
+        const empleadoField = document.getElementById('empleado_field');
+        const otroBeneficiarioField = document.getElementById('otro_beneficiario_field');
+
+        function toggleBeneficiarioFields() {
+            const tipoPago = tipoPagoField.value;
+            if (tipoPago === 'honorario') {
+                empleadoField.style.display = 'block';
+                otroBeneficiarioField.style.display = 'none';
+            } else {
+                empleadoField.style.display = 'none';
+                otroBeneficiarioField.style.display = 'block';
+            }
+        }
+
+        // Inicialización de los campos cuando se carga la página
+        toggleBeneficiarioFields();
+
+        // Escuchar cambios en el tipo de pago
+        tipoPagoField.addEventListener('change', toggleBeneficiarioFields);
+    });
+</script>
 {% endblock %}
