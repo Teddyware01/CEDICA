@@ -36,11 +36,10 @@ def create_app(env="development", static_folder="../../static"):
     def jya():
         return render_template("jya.html")
 
-    @app.route('/pagos')
-    def mostrar_pagos():
-    # Lógica para obtener los pagos desde la base de datos
-        pagos = obtener_pagos()  # Función que recupera los pagos
-        return render_template('pagos.html', pagos=pagos)
+    @app.route("/pagos", methods=["GET"])
+    def listar_pagos():
+        pagos_realizado = Pago.query.all()  # Obtener todos los pagos
+        return render_template("listado_pagos.html", pagos_realizado=pagos_realizado)
 
     app.register_error_handler(404, error.error_not_found)
     app.register_error_handler(500, error.error_internal_server_error)

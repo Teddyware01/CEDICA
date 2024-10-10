@@ -4,6 +4,7 @@ from src.core import auth
 from src.core import equipo
 from src.core.equipo.extra_models import Provincia, Domicilio
 from src.core.equipo.models import CondicionEnum
+from src.core.pagos.models import Pago
 from datetime import datetime
 
 
@@ -271,3 +272,38 @@ def run():
         domicilio_id=3,
         contacto_emergencia_id=2,
     )
+
+    pagos_datos = [
+        {
+            "beneficiario": "Juan Pérez",
+            "monto": 1000.0,
+            "fecha_pago": datetime(2024, 10, 1),
+            "tipo_pago": "Transferencia",
+            "descripcion": "Pago por servicio de asesoría",
+        },
+        {
+            "beneficiario": "María Gómez",
+            "monto": 1500.0,
+            "fecha_pago": datetime(2024, 10, 5),
+            "tipo_pago": "Efectivo",
+            "descripcion": "Pago por compra de insumos",
+        },
+        {
+            "beneficiario": "Carlos López",
+            "monto": 2000.0,
+            "fecha_pago": datetime(2024, 10, 10),
+            "tipo_pago": "Tarjeta",
+            "descripcion": "Pago por servicios de mantenimiento",
+        },
+    ]
+
+    for pago in pagos_datos:
+        nuevo_pago = Pago(
+            beneficiario=pago["beneficiario"],
+            monto=pago["monto"],
+            fecha_pago=pago["fecha_pago"],
+            tipo_pago=pago["tipo_pago"],
+            descripcion=pago["descripcion"],
+        )
+        db.session.add(nuevo_pago)  # Agregar el pago a la sesión
+    db.session.commit()  # Confirmar todos los cambios en la base de datos
