@@ -23,37 +23,11 @@ class DiasEnum(Enum):
     domingo="Domingo"
     
     
-class DiagnosticoEnum(Enum):
-    ecne='ECNE'
-    lesion_postraumatica='Lesión postraumática'
-    mielomeningocele='Mielomeningocele'
-    escoliosis_multiple='Escoliosis múltiple'
-    escoliosis_leve='Escoliosis Leve'
-    secuelas_ACV='Secuelas de ACV'
-    discapacidad_intelectual='Discapacidad Intelectual'
-    trastorno_espectro_autista='Trastorno del Espectro Autista'
-    trastorno_aprendizaje='Trastorno del Aprendizaje'
-    trastorno_deficit_Atencion='Trastorno por Déficit de Atención/Hiperactividad'
-    trastorno_comunicacion='Trastorno de la Comunicación'
-    trastorno_ansiedad='Trastorno de Ansiedad'
-    sindrome_down='Síndrome de Down'
-    retraso_madurativo='Retraso Madurativo'
-    psicosis='Psicosis'
-    trastorno_conducta='Trastorno de Conducta'
-    trastornos_animo_afectivos='Trastornos del ánimo y afectivos'
-    trastorno_alimentario='Trastorno Alimentario'
-    otro='Otro'
-    
     
 class AsignacionEnum(Enum):
     por_hijo='Asignación Universal por hijo'
     por_discapacidad='Asignación Universal por hijo con Discapacidad'
     escolar='Asignación por ayuda escolar anual'
-        
-
-class PensionEnum(Enum):
-    provincial='Provincial'
-    nacional='Nacional'
 
 
 class SituacionPrevisional(db.Model):
@@ -94,8 +68,6 @@ class TrabajoInstitucional(db.Model):
     dias = db.Column(db.String(255), nullable=False)
     jinete_id = db.Column(db.Integer, db.ForeignKey('jinete.id'))  # Agrega la clave foránea a Jinete
     jinete = db.relationship('Jinete', back_populates='trabajos_institucionales')  # Actualiza el back_populates
-'''    
-'''  
 class Jinete(db.Model):
     __tablename__ = 'jinete'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -136,9 +108,46 @@ from enum import Enum
 
 
 class PensionEnum(Enum):
-    provincial='Provincial'
-    nacional='Nacional'
-    
+    provincial="Provincial"
+    nacional="Nacional"
+''' 
+class TipoDiscapacidadEnum(Enum):
+    mental="Mental"
+    motora="Motora"
+    sensorial="Sensorial"
+    visceral="Visceral"    
+
+class DiasEnum(Enum):
+    lunes="Lunes"
+    martes="Martes"
+    miercoles="Miércoles"
+    jueves="Jueves"
+    viernes="Viernes"
+    sabado="Sábado"
+    domingo="Domingo"
+'''
+
+class DiagnosticoEnum(Enum):
+    ecne='ECNE'
+    lesion_postraumatica='Lesión postraumática'
+    mielomeningocele='Mielomeningocele'
+    escoliosis_multiple='Escoliosis múltiple'
+    escoliosis_leve='Escoliosis Leve'
+    secuelas_ACV='Secuelas de ACV'
+    discapacidad_intelectual='Discapacidad Intelectual'
+    trastorno_espectro_autista='Trastorno del Espectro Autista'
+    trastorno_aprendizaje='Trastorno del Aprendizaje'
+    trastorno_deficit_Atencion='Trastorno por Déficit de Atención/Hiperactividad'
+    trastorno_comunicacion='Trastorno de la Comunicación'
+    trastorno_ansiedad='Trastorno de Ansiedad'
+    sindrome_down='Síndrome de Down'
+    retraso_madurativo='Retraso Madurativo'
+    psicosis='Psicosis'
+    trastorno_conducta='Trastorno de Conducta'
+    trastornos_animo_afectivos='Trastornos del ánimo y afectivos'
+    trastorno_alimentario='Trastorno Alimentario'
+    otro='Otro'
+
     
 class Jinete(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -149,12 +158,17 @@ class Jinete(db.Model):
     fecha_nacimiento = db.Column(db.DateTime, nullable=False)
     telefono = db.Column(db.String(15), nullable=False)
     avatar = db.Column(db.String(255), nullable=True)
-    '''
-    becado = db.Column(db.Boolean)
+    becado = db.Column(db.Boolean, default=False)
     observaciones = db.Column(db.String(255), nullable=True)
+    certificado_discapacidad = db.Column(db.Boolean, nullable=True)
+    diagnostico = db.Column(db.Enum(DiagnosticoEnum), nullable=True)
+    pension = db.Column(db.Enum(PensionEnum), nullable=False)
+    
+    '''
+    tipo_discapacidad = db.Column(db.Enum(TipoDiscapacidadEnum), nullable=True)
     certificado_discapacidad = db.Column(db.Boolean)
     beneficiario_pension = db.Column(db.Boolean)
-    tipo_pension = db.Column(db.Enum(PensionEnum), nullable=True)
+    
     profesionales = db.Column(db.String(255), nullable=False)
     '''
     def __repr__(self):

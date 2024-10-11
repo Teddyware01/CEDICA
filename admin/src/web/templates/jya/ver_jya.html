@@ -20,13 +20,18 @@
 
         <!-- Contenido de la pestaña "Información general" -->
         <div id="general" class="tab-content active">
+            <p><strong>Avatar:</strong> {{ jinete.avatar }}</p>
             <p><strong>Nombre:</strong> {{ jinete.nombre }}</p>
             <p><strong>Apellido:</strong> {{ jinete.apellido }}</p>
             <p><strong>DNI:</strong> {{ jinete.dni }}</p>
             <p><strong>Edad:</strong> {{ jinete.edad }}</p>
             <p><strong>Fecha de Nacimiento:</strong> {{ jinete.fecha_nacimiento.strftime('%d/%m/%Y') }}</p>
             <p><strong>Teléfono:</strong> {{ jinete.telefono }}</p>
-
+            <p><strong>Becado:</strong> {{"SI" if jinete.becado else "NO" }}</p>
+            <p><strong>Posee certificado discapacidad:</strong> {{"SI" if jinete.certificado_discapacidad else "NO" }}</p>
+            <p><strong>Diagnostico:</strong> {{ jinete.diagnostico.value }}</p>
+            <p><strong>Pension:</strong> {{ jinete.pension.value }}</p>
+            
             <!-- Botones solo en Información general -->
             <div class="form-actions">
                 <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Editar jinete</a>

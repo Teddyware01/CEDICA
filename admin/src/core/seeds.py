@@ -1,13 +1,12 @@
 from datetime import datetime
 from src.core import board
 from src.core import auth
-from core import jya
+from src.core import jya
 from src.core import equipo
 from src.core.equipo.extra_models import Provincia, Domicilio
 from src.core.equipo.models import CondicionEnum
+from src.core.jya.models import PensionEnum, DiagnosticoEnum
 from datetime import datetime
-
-
 from src.core.database import db
 from sqlalchemy import text
 
@@ -280,6 +279,11 @@ def run():
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
         telefono="12345654321",
+        becado=True,
+        observaciones="Esto es el plan.",
+        certificado_discapacidad=False,
+        pension=PensionEnum.provincial,
+        diagnostico=DiagnosticoEnum.otro,
     )
     
     jya.create_jinete(
@@ -289,14 +293,15 @@ def run():
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
         telefono="12345654321",
-        
+        becado=True,
+        observaciones="Esto es el plan.",
+        certificado_discapacidad=True,
+        pension=PensionEnum.nacional,
+        diagnostico=DiagnosticoEnum.ecne,
     )
     
     '''
-        becado=True,
         observaciones="asdasdasd",
-        certificado_discapacidad=False,
         beneficiario_pension=False,
-        tipo_pension="provincial",
         profesionales="asdasdasd"
-        '''
+    '''

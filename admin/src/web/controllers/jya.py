@@ -5,6 +5,7 @@ from src.core import auth
 from src.core import jya
 from src.core.database import db
 from src.core.jya.forms import AddJineteForm
+from src.core.jya.models import PensionEnum, DiagnosticoEnum
 
 bp = Blueprint("jya", __name__, url_prefix="/jinetes")
 
@@ -21,12 +22,15 @@ def listar_jinetes():
 
 @bp.get("/agregar_jinete")
 def add_jinete_form():
-    return render_template("jya/agregar_jya.html")
+    form = AddJineteForm()
+    form.pension.choices = [(p.name, p.value) for p in PensionEnum]
+    form.diagnostico.choices = [(d.name, d.value) for d in DiagnosticoEnum]
+    return render_template("jya/agregar_jya.html", form=form)
 
 
 @bp.post("/agregar_jinete")
 def add_jinete():
-    #form = AddJineteForm(request.form)
+    form = AddJineteForm(request.form)
     jya.create_jinete(
         nombre=request.form["nombre"],
         apellido=request.form["apellido"],
@@ -34,11 +38,12 @@ def add_jinete():
         edad=request.form["edad"],
         fecha_nacimiento=request.form["fecha_nacimiento"],
         telefono=request.form["telefono"],
-        #becado=form.condicion.data,
-        #observaciones=form.observaciones.data,
-        #certificado_discapacidad=form.certificado_discapacidad.data,
+        becado=form.becado.data,
+        observaciones=form.observaciones.data,
+        certificado_discapacidad=form.certificado_discapacidad.data,
         #beneficiario_pension=form.beneficiario_pension.data,
-        #tipo_pension=form.tipo_pension.data,
+        pension=form.pension.data,
+        diagnostico=form.diagnostico.data,
         #profesionales=form.profesionales.data,
     )
 
@@ -103,3 +108,8 @@ def update(jinete_id):
     flash("Usuario modificado correctamente", "success")
     
     return redirect(url_for("jya.listar_jinetes"))
+
+def cargar_choices_form(form, jya=None):
+    # Cargar las opciones para los campos de selección
+    form.pension.choices = [(p.name, p.value) for p in PensionEnum]
+    form.diagnostico.choices = [(d.name, d.value) for d in DiagnosticoEnum]

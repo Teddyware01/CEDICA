@@ -51,6 +51,31 @@
         </div>
 
         <div>
+            <label for="becado">Becado:</label>
+            {{ form.becado() }}
+        </div>
+
+        <div>
+            <label for="observaciones">observaciones:</label>
+            <input type="text" id="observaciones" name="observaciones" required>
+        </div>
+
+        <div>
+            <label for="certificado_discapacidad">certificado de discapacidad?:</label>
+            {{ form.certificado_discapacidad() }}
+        </div>
+
+        <div>
+            <label for="pension">tipo pension:</label>
+            {{ form.pension(class_="form-control") }}
+        </div>
+
+        <div>
+            <label for="diagnostico">tipo diagnostico:</label>
+            {{ form.diagnostico(class_="form-control") }}
+        </div>
+
+        <div>
             <button type="submit" class="btn btn-primary">Agregar Jinete</button>
             <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
         </div>

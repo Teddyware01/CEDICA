@@ -9,7 +9,7 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired, Email, Length, Optional, Regexp
 from wtforms.widgets import DateInput
-
+from .models import PensionEnum, DiagnosticoEnum
 
 class AddJineteForm(FlaskForm):
     nombre = StringField(
@@ -50,6 +50,24 @@ class AddJineteForm(FlaskForm):
     telefono = StringField(
         "Telefono",
         validators=[DataRequired(message="El telefono es obligatorio"), Length(max=15)],
+    )
+    
+    becado = BooleanField("Becado")
+    
+    observaciones = StringField("Observaciones")
+    
+    certificado_discapacidad = BooleanField("Certificado de discapacidad")
+    
+    diagnostico = SelectField(
+        "Diagnostico", 
+        choices=[(diag.name, diag.value) for diag in DiagnosticoEnum],
+        validators=[DataRequired(message="El tipo de diagnostico es obligatorio")],
+    )
+    
+    pension = SelectField(
+        "Tipo pension",
+        choices=[(pens.name, pens.value) for pens in PensionEnum],
+        validators=[DataRequired(message="El tipo de pension es obligatorio")],
     )
     '''
     localidad_nacimiento = SelectField(
@@ -98,31 +116,17 @@ class AddJineteForm(FlaskForm):
 
     certificado_discapacidad = BooleanField("Posee certificado de discapacidad?")
     
-    beneficiario_pension=BooleanField("beneficiario pension")
-    
-    tipo_pension=SelectField(
-        "Tipo pension", 
-        validators=[DataRequired()])
+    #beneficiario_pension=BooleanField("beneficiario pension")
+
 
     profesionales = SelectField(
         "Profesionales",
         validators=[DataRequired(message="Los profesionales son obligatorios")],
     )
-    '''
-    '''
-    diagnostico_id = SelectField(
-        "Diagnóstico",
-        coerce=int,
-        validators=[DataRequired(message="El diagnóstico es obligatorio")]
-    )
     
     tipo_discapacidad
     
     asignacion_familiar
-    
-    pension
-    
-    tipo_pension
     
     obra_social = StringField(
         "Obra Social",
@@ -151,10 +155,6 @@ class AddJineteForm(FlaskForm):
     
     grado_institucion
     
-    observaciones
-    '''
-    
-    '''
     parentesco_familiar
     
     nombre_familiar
