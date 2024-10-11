@@ -5,19 +5,27 @@ class Config(object):
     """Base configuracion."""
 
     SECRET_KEY = "secret"
-    TESTING = False
+    TESTING = True
     SESSION_TYPE = "filesystem"
 
 
 class ProductionConfig(Config):
     """Producton configuration."""
-
+    MINIO_SERVER=environ.get("MINIO_SERVER")
+    MINIO_ACCESS_KEY = environ.get("MINIO_ACCESS_KEY")
+    MINIO_SECRET_KEY = environ.get("MINIO_SECRET_KEY")
+    MINIO_SECURE = True
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
 
 
 class DevelopmentConfig(Config):
     """Development configuration."""
-
+    # Config de Minio
+    MINIO_SERVER="minio.localhost:9000"
+    MINIO_ACCESS_KEY = "t72c7MVDNIvv686yDHkm"
+    MINIO_SECRET_KEY = "CiYoF08qw3jB8fXcYkC9wZDj51KqSzIW2U8eg8F0"
+    MINIO_SECURE = False
+    # Config de postgres
     DB_USER = "postgres"
     DB_PASSWORD = os.getenv("DB_PASSWORD")
     DB_HOST = "localhost"

@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}Editar Jinete{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <div>
+        <h1 class="text-center">Editar Jinete</h1>
+        
+        <form action="{{ url_for('jya.editar_jinete', jinete_id=jinete.id) }}" method="POST">
+            <div>
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" value="{{ jinete.nombre }}">
+            </div>
+
+            <div>
+                <label for="apellido">Apellido</label>
+                <input type="text" id="apellido" name="apellido" value="{{ jinete.apellido }}">
+            </div>
+
+            <div>
+                <label for="dni">Dni</label>
+                <input type="text" id="dni" name="dni" value="{{ jinete.dni }}">
+            </div>
+
+            <div>
+                <label for="telefono">Telefono</label>
+                <input type="text" id="telefono" name="telefono" value="{{ jinete.telefono }}">
+            </div>
+
+            <div>
+                <label for="fecha_nacimiento">Nacimiento</label>
+                <input type="datetime" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ jinete.fecha_nacimiento }}">
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-submit">Guardar Cambios</button>
+                <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

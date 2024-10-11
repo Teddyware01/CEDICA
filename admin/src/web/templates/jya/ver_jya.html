@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block title %}Ver jinete{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <div>
+        <h1 class="text-center">Legajo del jinete</h1>
+
+        <!-- Contenedor de pestañas -->
+        <div class="tab-container">
+            <div class="tab active" onclick="openTab(event, 'general')">Información general</div>
+            <div class="tab" onclick="openTab(event, 'documentos')">Documentos</div>
+        </div>
+
+        <!-- Contenido de la pestaña "Información general" -->
+        <div id="general" class="tab-content active">
+            <p><strong>Nombre:</strong> {{ jinete.nombre }}</p>
+            <p><strong>Apellido:</strong> {{ jinete.apellido }}</p>
+            <p><strong>DNI:</strong> {{ jinete.dni }}</p>
+            <p><strong>Edad:</strong> {{ jinete.edad }}</p>
+            <p><strong>Fecha de Nacimiento:</strong> {{ jinete.fecha_nacimiento.strftime('%d/%m/%Y') }}</p>
+            <p><strong>Teléfono:</strong> {{ jinete.telefono }}</p>
+
+            <!-- Botones solo en Información general -->
+            <div class="form-actions">
+                <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Editar jinete</a>
+                <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-back">Lista de jinetes</a>
+            </div>
+        </div>
+
+        <!-- Contenido de la pestaña "Documentos" -->
+        <div id="documentos" class="tab-content">
+            <p>Aquí se mostrarán los documentos del jinete.</p>
+            
+            <!-- Botones de acción en Documentos -->
+            <div class="form-actions">
+                <a href="#" class="btn btn-enlace">+ Enlace</a>
+                <a href="{{ url_for('jya.edit', jinete_id=jinete.id) }}" class="btn btn-subir">↑ Subir</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabContent, tabs;
+
+            // Ocultar todos los contenidos de las pestañas
+            tabContent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].style.display = "none";
+                tabContent[i].classList.remove("active");
+            }
+
+            // Eliminar la clase "active" de todas las pestañas
+            tabs = document.getElementsByClassName("tab");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+
+            // Mostrar el contenido actual y agregar clase "active" a la pestaña seleccionada
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block title %}Registrar Cobro{% endblock %}
+
+{% block content %}
+<h1>Registrar Cobro</h1>
+<form method="POST" action="{{ url_for('cobros.registrar_cobro') }}">
+    {{ form.hidden_tag() }}
+
+    <!-- Campo de Jinete -->
+    <div class="form-group">
+        {{ form.jinete.label(class="form-label") }}
+        {{ form.jinete(class="form-control") }}
+    </div>
+
+    <!-- Campo de Fecha de Pago -->
+    <div class="form-group">
+        {{ form.fecha_pago.label(class="form-label") }}
+        {{ form.fecha_pago(class="form-control") }}
+    </div>
+
+    <!-- Campo de Medio de Pago -->
+    <div class="form-group">
+        {{ form.medio_pago.label(class="form-label") }}
+        {{ form.medio_pago(class="form-control") }}
+    </div>
+
+    <!-- Campo de Monto -->
+    <div class="form-group">
+        {{ form.monto.label(class="form-label") }}
+        {{ form.monto(class="form-control") }}
+    </div>
+
+    <!-- Campo de Recibido por -->
+    <div class="form-group">
+        {{ form.recibido_por.label(class="form-label") }}
+        {{ form.recibido_por(class="form-control") }}
+    </div>
+
+    <!-- Campo de Observaciones -->
+    <div class="form-group">
+        {{ form.observaciones.label(class="form-label") }}
+        {{ form.observaciones(class="form-control") }}
+    </div>
+
+    <!-- Campo de Estado de Pago -->
+    <div class="form-group">
+        {{ form.estado_pago.label(class="form-label") }}
+        {{ form.estado_pago(class="form-control") }}
+    </div>
+
+    <!-- Botón de Submit -->
+    {{ form.submit(class="btn btn-primary") }}
+</form>
+{% endblock %}

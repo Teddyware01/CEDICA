@@ -1,6 +1,7 @@
+from datetime import datetime
 from src.core import board
 from src.core import auth
-
+from core import jya
 from src.core import equipo
 from src.core.equipo.extra_models import Provincia, Domicilio
 from src.core.equipo.models import CondicionEnum
@@ -278,3 +279,31 @@ def run():
         domicilio_id=3,
         contacto_emergencia_id=2,
     )
+
+    jya.create_jinete(
+        nombre="Martin",
+        apellido="Diaz",
+        dni="12345678",
+        edad=10,
+        fecha_nacimiento=datetime(2020, 5, 1),
+        telefono="12345654321",
+    )
+    
+    jya.create_jinete(
+        nombre="Carlos",
+        apellido="Lopez",
+        dni="987654321",
+        edad=10,
+        fecha_nacimiento=datetime(2020, 5, 1),
+        telefono="12345654321",
+        
+    )
+    
+    '''
+        becado=True,
+        observaciones="asdasdasd",
+        certificado_discapacidad=False,
+        beneficiario_pension=False,
+        tipo_pension="provincial",
+        profesionales="asdasdasd"
+        '''
