@@ -6,7 +6,7 @@ from src.core.equipo.extra_models import Provincia, Domicilio
 from src.core.equipo.models import CondicionEnum
 from datetime import datetime
 from pathlib import Path
-
+from src.core import ecuestre
 
 from src.core.database import db
 from sqlalchemy import text
@@ -38,6 +38,16 @@ def run():
         email="user1@example.com",
         title="Error en la página de inicio",
         description="La página de inicio no carga correctamente cuando se utiliza el navegador X.",
+    )
+
+    sede1 = ecuestre.create_sede(
+        nombre = "CASJ",
+    )
+    sede2 = ecuestre.create_sede(
+        nombre = "HLP",
+    )
+    sede3 = ecuestre.create_sede(
+        nombre = "OTRO",
     )
 
     issue2 = board.create_issue(
@@ -278,3 +288,5 @@ def run():
         domicilio_id=3,
         contacto_emergencia_id=2,
     )
+
+

@@ -2,11 +2,12 @@
 from src.core.database import db
 from datetime import datetime
 from enum import Enum
-
+from src.core.ecuestre.ecuestre import Ecuestre
 
 class CondicionEnum(Enum):
     VOLUNTARIO = "Voluntario"
     PERSONAL_RENTADO = "Personal Rentado"
+
 
 
 class Empleado(db.Model):
@@ -37,6 +38,7 @@ class Empleado(db.Model):
     profesion = db.relationship("Profesion", back_populates="empleado")
     puesto_laboral = db.relationship("PuestoLaboral", back_populates="empleado")
     domicilio = db.relationship("Domicilio", back_populates="empleado")
+    ecuestre = db.relationship("Ecuestre", secondary="empleado_ecuestre", back_populates="empleado")
     contacto_emergencia = db.relationship(
         "ContactoEmergencia",
         back_populates="empleado",
