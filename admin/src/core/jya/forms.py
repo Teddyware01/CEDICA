@@ -1,15 +1,17 @@
 from flask_wtf import FlaskForm
 from wtforms import (
+    SelectMultipleField,
     StringField,
     IntegerField,
     SelectField,
     DateTimeField,
     BooleanField,
     SubmitField,
+    widgets,
 )
 from wtforms.validators import DataRequired, Email, Length, Optional, Regexp
 from wtforms.widgets import DateInput
-from .models import PensionEnum, DiagnosticoEnum
+from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum
 
 class AddJineteForm(FlaskForm):
     nombre = StringField(
@@ -58,6 +60,8 @@ class AddJineteForm(FlaskForm):
     
     certificado_discapacidad = BooleanField("Certificado de discapacidad")
     
+    otro = StringField("Otro")
+    
     diagnostico = SelectField(
         "Diagnostico", 
         choices=[(diag.name, diag.value) for diag in DiagnosticoEnum],
@@ -68,6 +72,12 @@ class AddJineteForm(FlaskForm):
         "Tipo pension",
         choices=[(pens.name, pens.value) for pens in PensionEnum],
         validators=[DataRequired(message="El tipo de pension es obligatorio")],
+    )
+    
+    tipos_discapacidad = SelectMultipleField(
+        "Tipo de Discapacidad",
+        choices=[(disc.name, disc.value) for disc in TiposDiscapacidadEnum],
+        validators=[DataRequired(message="Seleccionar al menos un tipo de discapacidad es obligatorio")],
     )
     '''
     localidad_nacimiento = SelectField(
@@ -89,42 +99,24 @@ class AddJineteForm(FlaskForm):
         "Provincia", coerce=int, validators=[DataRequired()]
     )
     
-    telefono = StringField(
-        "Teléfono",
-        validators=[
-            DataRequired(message="El teléfono es obligatorio"),
-            Length(max=15),
-            Regexp(r"^\d+$", message="El teléfono debe contener solo números"),
-        ],
-    )
-    
     contacto_emergencia_nombre = StringField(
         "Nombre", validators=[DataRequired(), Length(max=100)]
+    )
+    contacto_emergencia_apellido = StringField(
+        "Apellido", validators=[DataRequired(), Length(max=100)]
     )
     contacto_emergencia_telefono = StringField(
         "Teléfono", validators=[DataRequired(), Length(max=15)]
     )
     
-    becado = BooleanField("Becado")
-
 ####################### PORCENTAJE DE BECAS #################
-
-    observaciones = StringField(
-        "Observaciones",
-        validators=[DataRequired(message="observaciones es obligatorio")],
-    )
-
-    certificado_discapacidad = BooleanField("Posee certificado de discapacidad?")
-    
-    #beneficiario_pension=BooleanField("beneficiario pension")
-
 
     profesionales = SelectField(
         "Profesionales",
         validators=[DataRequired(message="Los profesionales son obligatorios")],
     )
     
-    tipo_discapacidad
+    
     
     asignacion_familiar
     

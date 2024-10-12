@@ -20,7 +20,11 @@
 
         <!-- Contenido de la pestaña "Información general" -->
         <div id="general" class="tab-content active">
-            <p><strong>Avatar:</strong> {{ jinete.avatar }}</p>
+            <h2><strong> DATOS PERSONALES DEL JINETE O AMAZONA </strong></h2>
+            <div class="image-container">
+                <p><strong>Imagen:</strong></p>
+                <img src={{ avatar_url(jinete.avatar) }} alt="Avatar" width="30" height="30">
+            </div>
             <p><strong>Nombre:</strong> {{ jinete.nombre }}</p>
             <p><strong>Apellido:</strong> {{ jinete.apellido }}</p>
             <p><strong>DNI:</strong> {{ jinete.dni }}</p>
@@ -29,8 +33,14 @@
             <p><strong>Teléfono:</strong> {{ jinete.telefono }}</p>
             <p><strong>Becado:</strong> {{"SI" if jinete.becado else "NO" }}</p>
             <p><strong>Posee certificado discapacidad:</strong> {{"SI" if jinete.certificado_discapacidad else "NO" }}</p>
-            <p><strong>Diagnostico:</strong> {{ jinete.diagnostico.value }}</p>
+            <p><strong>Diagnostico:</strong> {{ jinete.diagnostico.value if jinete.diagnostico.value else '-' }}</p>
+            <p><strong>Si es otro indique cuál:</strong> {{ jinete.otro if jinete.diagnostico.value == "otro" else '-' }}</p>
             <p><strong>Pension:</strong> {{ jinete.pension.value }}</p>
+            <p><strong>Tipos de Discapacidad:</strong> {{ jinete.tipos_discapacidad.name }}
+                {% for tipo in tipos_discapacidad %}
+                    <span>{{ tipo }}</span>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
             
             <!-- Botones solo en Información general -->
             <div class="form-actions">

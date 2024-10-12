@@ -5,7 +5,7 @@ from src.core import jya
 from src.core import equipo
 from src.core.equipo.extra_models import Provincia, Domicilio
 from src.core.equipo.models import CondicionEnum
-from src.core.jya.models import PensionEnum, DiagnosticoEnum
+from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum
 from datetime import datetime
 from src.core.database import db
 from sqlalchemy import text
@@ -272,6 +272,7 @@ def run():
         contacto_emergencia_id=2,
     )
 
+
     jya.create_jinete(
         nombre="Martin",
         apellido="Diaz",
@@ -284,6 +285,7 @@ def run():
         certificado_discapacidad=False,
         pension=PensionEnum.provincial,
         diagnostico=DiagnosticoEnum.otro,
+        tipos_discapacidad=["mental","motora"],
     )
     
     jya.create_jinete(
@@ -298,10 +300,5 @@ def run():
         certificado_discapacidad=True,
         pension=PensionEnum.nacional,
         diagnostico=DiagnosticoEnum.ecne,
+        tipos_discapacidad=["mental","sensorial"],
     )
-    
-    '''
-        observaciones="asdasdasd",
-        beneficiario_pension=False,
-        profesionales="asdasdasd"
-    '''

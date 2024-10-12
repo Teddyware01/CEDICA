@@ -391,3 +391,33 @@ p {
 .btn-subir {
     background-color: #ffc107;
 }
+
+.image-container {
+    display: flex;
+    align-items: center;
+}
+
+.image-container p {
+    margin-right: 10px;
+}
+
+.form-element {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 1px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center; /* Alinea verticalmente los elementos al centro */
+    justify-content: flex-start; /* Alinea horizontalmente los elementos al inicio */
+    gap: 10px; /* Espacio entre cada checkbox y su etiqueta */
+}
+
+.checkbox-group label {
+    margin-right: 20px; /* Espacio a la derecha de cada etiqueta */
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin: 0 2px; /* Espacio alrededor de los checkboxes para no apretar las etiquetas */
+}

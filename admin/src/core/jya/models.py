@@ -1,11 +1,4 @@
 '''
-from src.core.database import db
-from datetime import datetime
-#from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Localidad, Provincia
-from enum import Enum
-from sqlalchemy.dialects.postgresql import ARRAY
-'''
-'''
 class TipoDiscapacidadEnum(Enum):
     mental="Mental"
     motora="Motora"
@@ -68,6 +61,7 @@ class TrabajoInstitucional(db.Model):
     dias = db.Column(db.String(255), nullable=False)
     jinete_id = db.Column(db.Integer, db.ForeignKey('jinete.id'))  # Agrega la clave foránea a Jinete
     jinete = db.relationship('Jinete', back_populates='trabajos_institucionales')  # Actualiza el back_populates
+    
 class Jinete(db.Model):
     __tablename__ = 'jinete'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -105,7 +99,8 @@ class Jinete(db.Model):
 from src.core.database import db
 from datetime import datetime
 from enum import Enum
-
+#from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Localidad, Provincia
+from sqlalchemy.dialects.postgresql import ARRAY
 
 class PensionEnum(Enum):
     provincial="Provincial"
@@ -148,7 +143,13 @@ class DiagnosticoEnum(Enum):
     trastorno_alimentario='Trastorno Alimentario'
     otro='Otro'
 
-    
+class TiposDiscapacidadEnum(Enum):
+    mental='Mental'
+    motora='Motora'
+    sensorial='Sensorial'
+    visceral='Visceral'
+
+
 class Jinete(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(50), nullable=False)
@@ -162,10 +163,17 @@ class Jinete(db.Model):
     observaciones = db.Column(db.String(255), nullable=True)
     certificado_discapacidad = db.Column(db.Boolean, nullable=True)
     diagnostico = db.Column(db.Enum(DiagnosticoEnum), nullable=True)
+    otro = db.Column(db.String(100), nullable=True)
     pension = db.Column(db.Enum(PensionEnum), nullable=False)
+    tipos_discapacidad =  db.Column(ARRAY(db.Enum(TiposDiscapacidadEnum)), nullable=True)
+    
+    
+    #asignacion_familiar = db.Column(db.Boolean, nullable=True)
+    #tipo_asignacion = db.Column(db.Enum(TipoAsignacionEnum), nullable=False)
+    
     
     '''
-    tipo_discapacidad = db.Column(db.Enum(TipoDiscapacidadEnum), nullable=True)
+
     certificado_discapacidad = db.Column(db.Boolean)
     beneficiario_pension = db.Column(db.Boolean)
     
@@ -173,4 +181,3 @@ class Jinete(db.Model):
     '''
     def __repr__(self):
         return f"<User #{self.id} nombre = {self.nombre}>"
-    

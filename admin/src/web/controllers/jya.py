@@ -5,7 +5,7 @@ from src.core import auth
 from src.core import jya
 from src.core.database import db
 from src.core.jya.forms import AddJineteForm
-from src.core.jya.models import PensionEnum, DiagnosticoEnum
+from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum
 
 bp = Blueprint("jya", __name__, url_prefix="/jinetes")
 
@@ -25,6 +25,7 @@ def add_jinete_form():
     form = AddJineteForm()
     form.pension.choices = [(p.name, p.value) for p in PensionEnum]
     form.diagnostico.choices = [(d.name, d.value) for d in DiagnosticoEnum]
+    form.tipos_discapacidad.choices = [(disc.name, disc.value) for disc in TiposDiscapacidadEnum]
     return render_template("jya/agregar_jya.html", form=form)
 
 
@@ -44,16 +45,20 @@ def add_jinete():
         #beneficiario_pension=form.beneficiario_pension.data,
         pension=form.pension.data,
         diagnostico=form.diagnostico.data,
+        otro=form.otro.data,
+        tipos_discapacidad = [TiposDiscapacidadEnum[tipos_discapacidad] for tipos_discapacidad in form.tipos_discapacidad.data]
         #profesionales=form.profesionales.data,
     )
-
+    
+    
     flash("Jinete registrado exitosamente", "success")
     return redirect(url_for("jya.listar_jinetes"))
 
 @bp.get("/ver_jinete<int:jinete_id>")
 def view_jinete(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
-    return render_template("jya/ver_jya.html", jinete=jinete)
+    tipos_discapacidad_nombres = [tipo.name for tipo in jinete.tipos_discapacidad] if jinete.tipos_discapacidad else []
+    return render_template("jya/ver_jya.html", jinete=jinete, tipos_discapacidad=tipos_discapacidad_nombres)
 
 @bp.get("/editar_jinete<int:jinete_id>")
 def edit_jinete_form(jinete_id):

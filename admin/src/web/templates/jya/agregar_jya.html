@@ -21,60 +21,106 @@
     <form action="{{ url_for('jya.add_jinete') }}" method="POST">
         
         <div>
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
+            <label for="nombre" class="form-element">Nombre:</label>
+            {{ form.nombre }}
         </div>
         
         <div>
-            <label for="apellido">Apellido:</label>
-            <input type="text" id="apellido" name="apellido" required>
+            <label for="apellido" class="form-element">Apellido:</label>
+            {{ form.apellido }}
         </div>
 
         <div>
-            <label for="dni">DNI:</label>
-            <input type="text" id="dni" name="dni" required>
+            <label for="dni" class="form-element">DNI:</label>
+            {{ form.dni }}
         </div>
         
         <div>
-            <label for="edad">Edad:</label>
+            <label for="edad" class="form-element">Edad:</label>
             <input type="number" id="edad" name="edad" required>
         </div>
 
         <div>
-            <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-            <input type="datetime" id="fecha_nacimiento" name="fecha_nacimiento" required>
+            <label for="fecha_nacimiento" class="form-element">Fecha de Nacimiento:</label>
+            {{ form.fecha_nacimiento }}
         </div>
 
         <div>
-            <label for="telefono">Teléfono:</label>
-            <input type="text" id="telefono" name="telefono" required>
+            <label for="telefono" class="form-element">Teléfono:</label>
+            {{ form.telefono }}
         </div>
 
         <div>
-            <label for="becado">Becado:</label>
-            {{ form.becado() }}
+            <label for="becado" class="form-element">Becado:</label>
+            <input type="radio" id="becado_si" name="becado" value="si">
+            <label for="becado_si">Sí</label>
+            <input type="radio" id="becado_no" name="becado" value="no">
+            <label for="becado_no">No</label>
         </div>
 
         <div>
-            <label for="observaciones">observaciones:</label>
-            <input type="text" id="observaciones" name="observaciones" required>
+            <label for="observaciones" class="form-element">observaciones:</label>
+            {{ form.observaciones() }}
         </div>
 
         <div>
-            <label for="certificado_discapacidad">certificado de discapacidad?:</label>
-            {{ form.certificado_discapacidad() }}
+            <label for="certificado_discapacidad" class="form-element">
+                ¿Posee certificado<br>
+                de discapacidad?
+            </label>
+            <input type="radio" id="certificado_si" name="certificado" value="si">
+            <label for="certificado_si">Sí</label>
+            <input type="radio" id="certificado_no" name="certificado" value="no">
+            <label for="certificado_no">No</label>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () { //funcion para deshabilitar el tipo de diagnostico en caso de no tener certificado.
+                const radioButtons = document.querySelectorAll('input[name="certificado"]');
+                const selectDiagnostico = document.getElementById('diagnostico');
+                const selectOtro = document.getElementById('otro');
+
+            
+                radioButtons.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        // Habilita el desplegable si la opción "Sí" está seleccionada
+                        if (document.getElementById('certificado_si').checked) {
+                            selectDiagnostico.disabled = false;
+                            selectOtro.disabled = false;
+                        } else {
+                            selectDiagnostico.disabled = true;
+                            selectOtro.disabled = true;
+                        }
+                    });
+                });
+            });
+        </script>
+        
+        <div>
+            <label for="diagnostico" class="form-element">tipo diagnostico:</label>
+            {{ form.diagnostico }}
         </div>
 
         <div>
-            <label for="pension">tipo pension:</label>
-            {{ form.pension(class_="form-control") }}
+            <label for="otro" class="form-element">Si es otro indique cuál:</label>
+            {{ form.otro }}
         </div>
 
         <div>
-            <label for="diagnostico">tipo diagnostico:</label>
-            {{ form.diagnostico(class_="form-control") }}
+            <label for="pension" class="form-element">tipo pension:</label>
+            {{ form.pension }}
         </div>
 
+        <div class="form-group">
+            <label for="tipos_discapacidad">Tipos de Discapacidad:</label>
+            <div class="checkbox-group">
+                {% for subfield in form.tipos_discapacidad %}
+                <input type="checkbox" id="tipo_{{ loop.index0 }}" name="tipos_discapacidad" value="{{ subfield.data }}">
+                <label for="tipo_{{ loop.index0 }}">{{ subfield.label.text }}</label>
+                {% endfor %}
+            </div>
+        </div>
+        
         <div>
             <button type="submit" class="btn btn-primary">Agregar Jinete</button>
             <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
