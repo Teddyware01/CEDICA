@@ -5,7 +5,7 @@ from src.core import jya
 from src.core import equipo
 from src.core.equipo.extra_models import Provincia, Domicilio
 from src.core.equipo.models import CondicionEnum
-from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum
+from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum
 from datetime import datetime
 from src.core.database import db
 from sqlalchemy import text
@@ -279,13 +279,19 @@ def run():
         dni="12345678",
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=1,
+        domicilio=domicilio_ej2,
         telefono="12345654321",
+        contacto_emergencia=contacto_emergencia_ej1,
         becado=True,
         observaciones="Esto es el plan.",
         certificado_discapacidad=False,
         pension=PensionEnum.provincial,
         diagnostico=DiagnosticoEnum.otro,
         tipos_discapacidad=["mental","motora"],
+        asignacion_familiar=False,
+        tipo_asignacion=AsignacionEnum.por_discapacidad,
     )
     
     jya.create_jinete(
@@ -294,11 +300,17 @@ def run():
         dni="987654321",
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
+        domicilio_id=3,
+        localidad_nacimiento_id=2,
+        provincia_nacimiento_id=2,
         telefono="12345654321",
+        contacto_emergencia=contacto_emergencia_ej2,
         becado=True,
         observaciones="Esto es el plan.",
         certificado_discapacidad=True,
         pension=PensionEnum.nacional,
         diagnostico=DiagnosticoEnum.ecne,
         tipos_discapacidad=["mental","sensorial"],
+        asignacion_familiar=True,
+        tipo_asignacion=AsignacionEnum.por_hijo,
     )

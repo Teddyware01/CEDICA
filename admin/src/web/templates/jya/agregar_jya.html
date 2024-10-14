@@ -41,13 +41,68 @@
         </div>
 
         <div>
+            <label for="provincia_nacimiento" class="form-element">Provincia:</label>
+            {{ form.domicilio_provincia }}
+        </div>
+
+        <div>
+            <label for="localidad_nacimiento" class="form-element">Localidad:</label>
+            {{ form.domicilio_localidad }}
+        </div>
+
+        <div>
             <label for="fecha_nacimiento" class="form-element">Fecha de Nacimiento:</label>
             {{ form.fecha_nacimiento }}
         </div>
 
         <div>
+            <label for="domicilio_calle" class="form-element">Calle:</label>
+            {{ form.domicilio_calle }}
+        </div>
+        
+        <div>
+            <label for="domicilio_numero" class="form-element">Numero:</label>
+            {{ form.domicilio_numero }}
+        </div>
+        
+        <div>
+            <label for="domicilio_departamento" class="form-element">Departamento:</label>
+            {{ form.domicilio_departamento }}
+        </div>
+        
+        <div>
+            <label for="domicilio_piso" class="form-element">Piso:</label>
+            {{ form.domicilio_piso }}
+        </div>
+        
+        <div>
+            <label for="domicilio_provincia" class="form-element">Provincia:</label>
+            {{ form.domicilio_provincia }}
+        </div>
+        
+        <div>
+            <label for="domicilio_localidad" class="form-element">Localidad:</label>
+            {{ form.domicilio_localidad }}
+        </div>
+
+        <div>
             <label for="telefono" class="form-element">Teléfono:</label>
             {{ form.telefono }}
+        </div>
+
+        <div>
+            <label for="contacto_emergencia_nombre" class="form-element">Nombre contacto de emergencia:</label>
+            {{ form.contacto_emergencia_nombre }}
+        </div>
+        
+        <div>
+            <label for="contacto_emergencia_apellido" class="form-element">Apellido contacto de emergencia:</label>
+            {{ form.contacto_emergencia_apellido }}
+        </div>
+        
+        <div>
+            <label for="contacto_emergencia_telefono" class="form-element">Telefono contacto de Emergencia:</label>
+            {{ form.contacto_emergencia_telefono }}
         </div>
 
         <div>
@@ -106,11 +161,6 @@
             {{ form.otro }}
         </div>
 
-        <div>
-            <label for="pension" class="form-element">tipo pension:</label>
-            {{ form.pension }}
-        </div>
-
         <div class="form-group">
             <label for="tipos_discapacidad">Tipos de Discapacidad:</label>
             <div class="checkbox-group">
@@ -120,7 +170,42 @@
                 {% endfor %}
             </div>
         </div>
+
+
+        <div>
+            <label for="pension" class="form-element">tipo pension:</label>
+            {{ form.pension }}
+        </div>
+
+        <div>
+            <label for="asignacion_familiar" class="form-element">¿Percibe alguna asignación familiar?</label>
+            <input type="radio" id="asignacion_si" name="asignacion" value="si">
+            <label for="asignacion_si">Sí</label>
+            <input type="radio" id="asignacion_no" name="asignacion" value="no">
+            <label for="asignacion_no">No</label>
+        </div>
+
+        <div>
+            <label for="tipo_asignacion" class="form-element">Tipo de asignación:</label>
+            {{ form.tipo_asignacion(id="tipo_asignacion") }} <!-- Añade un ID aquí -->
+        </div>
         
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const radioButtons = document.querySelectorAll('input[name="asignacion"]');
+            const selectAsignacion = document.getElementById('tipo_asignacion'); // Asegúrate de que este ID sea correcto
+        
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Habilita o deshabilita el elemento según si la opción "Sí" está seleccionada
+                    selectAsignacion.disabled = !document.getElementById('asignacion_si').checked;
+                });
+            });
+        });
+        </script>
+        
+
+
         <div>
             <button type="submit" class="btn btn-primary">Agregar Jinete</button>
             <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>

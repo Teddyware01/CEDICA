@@ -9,9 +9,10 @@ from wtforms import (
     SubmitField,
     widgets,
 )
-from wtforms.validators import DataRequired, Email, Length, Optional, Regexp
+from wtforms.validators import DataRequired, Email, Length, Optional, Regexp, ValidationError
 from wtforms.widgets import DateInput
-from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum
+from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum
+from src.core.equipo.extra_models import Localidad
 
 class AddJineteForm(FlaskForm):
     nombre = StringField(
@@ -79,7 +80,7 @@ class AddJineteForm(FlaskForm):
         choices=[(disc.name, disc.value) for disc in TiposDiscapacidadEnum],
         validators=[DataRequired(message="Seleccionar al menos un tipo de discapacidad es obligatorio")],
     )
-    '''
+    
     localidad_nacimiento = SelectField(
         "Localidad de Nacimiento", coerce=int, validators=[DataRequired()]
     )
@@ -88,15 +89,15 @@ class AddJineteForm(FlaskForm):
         "Provincia de Nacimiento", coerce=int, validators=[DataRequired()]
     )
     
-    domicilio_calle = StringField("Calle", validators=[DataRequired()])
-    domicilio_numero = IntegerField("Número", validators=[DataRequired()])
-    domicilio_departamento = IntegerField("Departamento", validators=[DataRequired()])
-    domicilio_piso = IntegerField("Piso", validators=[DataRequired()])
-    domicilio_localidad = SelectField(
-        "Localidad", coerce=int, validators=[DataRequired()]
-    )
+    domicilio_calle = StringField("Calle", validators=[DataRequired("Ingrese calle del domicilio")])
+    domicilio_numero = IntegerField("Número", validators=[DataRequired("Ingrese número del domicilio")])
+    domicilio_departamento = IntegerField("Departamento", validators=[Optional()])
+    domicilio_piso = IntegerField("Piso", validators=[Optional()])
     domicilio_provincia = SelectField(
-        "Provincia", coerce=int, validators=[DataRequired()]
+        "Provincia", coerce=int, validators=[DataRequired("Selecione una provincia")]
+    )
+    domicilio_localidad = SelectField(
+        "Localidad", coerce=int, validators=[DataRequired("Selecione una localidad.")]
     )
     
     contacto_emergencia_nombre = StringField(
@@ -109,16 +110,33 @@ class AddJineteForm(FlaskForm):
         "Teléfono", validators=[DataRequired(), Length(max=15)]
     )
     
-####################### PORCENTAJE DE BECAS #################
+    submit = SubmitField("Guardar")
 
+    # Validación personalizada, el nombre declarado sigue nomenclatura a respetar.
+    def validate_domicilio_localidad(self, field_localidad):
+        # Obtener la localidad seleccionada
+        localidad_id = field_localidad.data
+        provincia_id_seleccionada = self.domicilio_provincia.data
+
+        # Consultar la localidad en la base de datos
+        localidad = Localidad.query.get(localidad_id)
+        if localidad.provincia_id != provincia_id_seleccionada:
+            raise ValidationError("La localidad seleccionada no corresponde a la provincia elegida.")
+        
+    asignacion_familiar = BooleanField("Asignacion familiar")
+        
+    tipo_asignacion = SelectField(
+        "Asignacion familiar", 
+        choices=[(asig.name, asig.value) for asig in AsignacionEnum],
+        validators=[DataRequired(message="El tipo de asignacion es obligatorio")],
+    )
+
+####################### PORCENTAJE DE BECAS #################
+'''
     profesionales = SelectField(
         "Profesionales",
         validators=[DataRequired(message="Los profesionales son obligatorios")],
     )
-    
-    
-    
-    asignacion_familiar
     
     obra_social = StringField(
         "Obra Social",
@@ -191,5 +209,3 @@ class AddJineteForm(FlaskForm):
     
     auxiliar_institucion
 '''
-    
-    submit = SubmitField("Guardar")

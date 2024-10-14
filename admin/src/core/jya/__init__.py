@@ -3,9 +3,10 @@ from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
 from src.core.jya.models import Jinete
+from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad
 from sqlalchemy import or_
 
-'''
+
 def list_provincias():
     return Provincia.query.all()
 
@@ -25,7 +26,7 @@ def list_localidades(id_provincia=None):
 
 def get_localidad_by_id(localidad_id):
     return Localidad.query.get(localidad_id)
-'''
+
 
 def list_jinetes(sort_by=None, search=None):
     query = Jinete.query
@@ -87,8 +88,8 @@ def update_jinete(jinete_id, **kwargs):
     db.session.commit()
     
     return jinete
-    
-'''
+
+
 # Tabla ContactoEmergencia
 def add_contacto_emergencia(**kwargs):
     contacto_emergencia = ContactoEmergencia(**kwargs)
@@ -103,11 +104,3 @@ def add_domiclio(**kwargs):
     db.session.add(domicilio)
     db.session.commit()
     return domicilio
-
-# Tabla Familiar
-def add_familiar(**kwargs):
-    familiar = Familiar(**kwargs)
-    db.session.add(familiar)
-    db.session.commit()
-    return familiar
-'''
