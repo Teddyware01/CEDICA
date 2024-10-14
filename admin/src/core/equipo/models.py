@@ -2,7 +2,7 @@
 from src.core.database import db
 from datetime import datetime
 from enum import Enum
-from src.core.ecuestre.ecuestre import Ecuestre
+
 
 class CondicionEnum(Enum):
     VOLUNTARIO = "Voluntario"

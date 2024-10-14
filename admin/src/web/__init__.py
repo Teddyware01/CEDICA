@@ -7,7 +7,7 @@ from src.core import seeds
 from src.web.controllers.equipo import bp as equipo_blueprint
 from src.web.controllers.issues import bp as issues_bp
 from src.web.controllers.usuarios import bp as usuarios_bp
-
+from src.web.controllers.ecuestre import bp as ecuestre_bp
 
 def create_app(env="development", static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)
@@ -16,6 +16,8 @@ def create_app(env="development", static_folder="../../static"):
 
     app.register_blueprint(usuarios_bp)
     app.register_blueprint(issues_bp)
+    app.register_blueprint(ecuestre_bp)
+    app.register_blueprint(equipo_blueprint)
 
     @app.route("/")
     def home():
@@ -25,9 +27,7 @@ def create_app(env="development", static_folder="../../static"):
     def sobre_nosotros():
         return render_template("sobre_nosotros.html")
 
-    @app.route("/ecuestre")
-    def ecuestre():
-        return render_template("ecuestre.html")
+ 
 
     @app.route("/jya")
     def jya():
@@ -35,7 +35,7 @@ def create_app(env="development", static_folder="../../static"):
 
     app.register_error_handler(404, error.error_not_found)
     app.register_error_handler(500, error.error_internal_server_error)
-    app.register_blueprint(equipo_blueprint)
+   
     @app.cli.command(name="reset-db")
     def reset_db():
         database.reset()
@@ -47,8 +47,9 @@ def create_app(env="development", static_folder="../../static"):
     
    # Reset y seeds automáticos al iniciar la app
    # Deberia sacarse la eliminacion de la base de datos a la hora de usarse en deploy.
-    with app.app_context():
-        database.reset()  # Restablece la base de datos
-        seeds.run()       # Ejecuta los seeds de la base de datos
+   #Lo comento porque me molesta a la hora de trabajar.
+    #with app.app_context():
+        #database.reset()  # Restablece la base de datos
+        #seeds.run()       # Ejecuta los seeds de la base de datos
 
     return app

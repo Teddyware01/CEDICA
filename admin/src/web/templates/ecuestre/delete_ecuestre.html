@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}Eliminar Ecuestre{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Eliminar Ecuestre</h1>
+
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" value="{{ ecuestre.nombre }}" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="pelaje">Pelaje</label>
+        <input type="text" id="pelaje" name="pelaje" value="{{ ecuestre.pelaje }}" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="sexo">Sexo</label>
+        <input type="text" id="sexo" name="sexo" value="{% if ecuestre.sexo %}Macho{% else %}Hembra{% endif %}" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="raza">Raza</label>
+        <input type="text" id="raza" name="raza" value="{{ ecuestre.raza }}" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="sede">Sede</label>
+        <input type="text" id="sede" name="sede" value="{{ sede.nombre }}" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="fecha_ingreso">Fecha de Ingreso</label>
+        <input type="date" id="fecha_ingreso" name="fecha_ingreso" value="{{ ecuestre.fecha_ingreso.strftime('%Y-%m-%d') }}" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ ecuestre.fecha_nacimiento.strftime('%Y-%m-%d') }}" readonly>
+    </div>
+
+    <p>¿Estás seguro de que deseas eliminar este ecuestre?</p>
+
+    <div class="form-actions">
+        <form action="{{ url_for('ecuestre.delete_ecuestre', ecuestre_id=ecuestre.id) }}" method="POST">
+            <button type="submit" class="btn btn-danger">Confirmar</button>
+        </form>
+        <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
+{% endblock %}
