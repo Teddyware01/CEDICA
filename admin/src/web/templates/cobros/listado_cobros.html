@@ -64,7 +64,7 @@
                 <td>{{ cobro.fecha_pago.strftime('%Y-%m-%d') }}</td>
                 <td>{{ cobro.medio_pago.capitalize() }}</td>
                 <td>{{ cobro.monto }}</td>
-                <td>{{ cobro.empleado.nombre }} {{ cobro.empleado.apellido }}</td> <!-- Modificado aquí -->
+                <td>{{ cobro.empleado.nombre }} {{ cobro.empleado.apellido }}</td> 
                 <td>{{ 'Al día' if cobro.estado_pago == 'al_dia' else 'En deuda' }}</td>
                 <td>{{ cobro.observaciones }}</td>
                 <td>

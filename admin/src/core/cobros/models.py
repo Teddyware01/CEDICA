@@ -1,5 +1,4 @@
 from src.core.database import db
-from datetime import datetime
 
 class RegistroCobro(db.Model):
     __tablename__ = 'registro_cobros'
