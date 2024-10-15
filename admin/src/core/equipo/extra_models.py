@@ -9,6 +9,7 @@ class ContactoEmergencia(db.Model):
     telefono = db.Column(db.String(15), nullable=False, unique=False)
 
     empleado = db.relationship("Empleado", back_populates="contacto_emergencia")
+    jinete = db.relationship("Jinete", back_populates="contacto_emergencia")
 
 
 class Domicilio(db.Model):
@@ -24,15 +25,18 @@ class Domicilio(db.Model):
     localidad = db.relationship("Localidad", backref="domicilios")
 
     empleado = db.relationship("Empleado", back_populates="domicilio")
-
+    jinetes = db.relationship("Jinete", foreign_keys="Jinete.domicilio_id", back_populates="domicilio")
 
 class Localidad(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(255), nullable=False, unique=False)
     provincia_id = db.Column(db.Integer, db.ForeignKey("provincia.id"), nullable=False)
     provincia = db.relationship("Provincia", backref="localidad")
-
+    
+    jinetes = db.relationship("Jinete", back_populates="localidad_nacimiento")
 
 class Provincia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(255), nullable=False, unique=True)
+
+    jinetes = db.relationship("Jinete", back_populates="provincia_nacimiento")

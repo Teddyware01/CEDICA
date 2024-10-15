@@ -10,7 +10,7 @@ usuario_rol = db.Table(
 
 class Roles(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(200), nullable=False)
+    nombre = db.Column(db.String(200),unique=True, nullable=False)
     users = db.relationship("Users", secondary="usuario_rol", back_populates="roles")
     permisos = db.relationship(
         "Permisos", secondary="permisos_rol", back_populates="roles"
