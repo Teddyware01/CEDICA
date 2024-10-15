@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block title %}Editar Ecuestre{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <h1 class="text-center">Editar Ecuestre</h1>
+
+    <form method="POST" action="{{ url_for('ecuestre.update_ecuestre', ecuestre_id=ecuestre.id) }}">
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" value="{{ ecuestre.nombre }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ ecuestre.fecha_nacimiento.strftime('%Y-%m-%d') }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="sexo">Sexo:</label>
+            <select id="sexo" name="sexo">
+                <option value="true" {% if ecuestre.sexo %}selected{% endif %}>Macho</option>
+                <option value="false" {% if not ecuestre.sexo %}selected{% endif %}>Hembra</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="raza">Raza:</label>
+            <input type="text" id="raza" name="raza" value="{{ ecuestre.raza }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="pelaje">Pelaje:</label>
+            <input type="text" id="pelaje" name="pelaje" value="{{ ecuestre.pelaje }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="fecha_ingreso">Fecha de Ingreso:</label>
+            <input type="date" id="fecha_ingreso" name="fecha_ingreso" value="{{ ecuestre.fecha_ingreso.strftime('%Y-%m-%d') }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="sede_id">Sede:</label>
+            <select id="sede_id" name="sede_id">
+                <option value="CASJ" {% if sede.nombre == 'CASJ' %}selected{% endif %}>CASJ</option>
+                <option value="HLP" {% if sede.nombre == 'HLP' %}selected{% endif %}>HLP</option>
+                <option value="OTRO" {% if sede.nombre == 'OTRO' %}selected{% endif %}>OTRO</option>
+            </select>
+        </div>
+
+        <h3>Seleccionar Entrenadores y Conductores</h3>
+        <div class="form-group">
+            {% for empleado in empleados %}
+                <div>
+                    <input type="checkbox" id="empleado_{{ empleado.id }}" name="entrenadores_asignados" value="{{ empleado.id }}"
+                        {% if empleado.id in entrenadores|map(attribute='id') %}checked{% endif %}>
+                    <label for="empleado_{{ empleado.id }}">{{ empleado.nombre }} - DNI: {{ empleado.dni }}</label>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+    
+    
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %} Detalles del Caballo {% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <h1 class="text-center">Detalles del Caballo</h1>
+
+    <div class="caballo-detalles">
+        <table class="table">
+            <tr>
+                <th>Nombre</th>
+                <td>{{ ecuestre.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de Nacimiento</th>
+                <td>{{ ecuestre.fecha_nacimiento }}</td>
+            </tr>
+            <tr>
+                <th>Sexo</th>
+                <td>{{ "Macho" if ecuestre.sexo else "Hembra" }}</td>
+            </tr>
+            <tr>
+                <th>Raza</th>
+                <td>{{ ecuestre.raza }}</td>
+            </tr>
+            <tr>
+                <th>Pelaje</th>
+                <td>{{ ecuestre.pelaje }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de Ingreso</th>
+                <td>{{ ecuestre.fecha_ingreso }}</td>
+            </tr>
+            <tr>
+                <th>Sede</th>
+                <td>{{ sede.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Entrenadores y Conductores</th>
+                <td>
+                    <ul>
+                    {% for entrenador in entrenadores %}
+                        <li>{{ entrenador.nombre }} - DNI: {{ entrenador.dni }}</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="actions">
+        <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-back">Volver al Listado</a>
+    </div>
+
+{% endblock %}

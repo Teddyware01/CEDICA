@@ -41,8 +41,6 @@ def list_empleados(sort_by=None, id_puesto_laboral=None, search=None):
     query = Empleado.query
     if id_puesto_laboral and id_puesto_laboral != "cualquiera":
         query = query.filter(Empleado.puesto_laboral_id == id_puesto_laboral)
-    else:
-        print("ENTRO A NONE")
     # Filtrar por término de búsqueda
     if search:
         query = query.filter(

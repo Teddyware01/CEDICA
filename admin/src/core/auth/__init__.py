@@ -3,6 +3,13 @@ from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
 
+def find_user_by_email_and_password(email, password):
+    user = Users.query.filter_by(email=email, password=password).first()
+    return user
+
+def find_user_by_email(email):
+    user = Users.query.filter_by(email=email).first()
+    return user
 
 def list_users(sort_by=None):
     query = Users.query
@@ -59,13 +66,13 @@ def create_roles(**kwargs):
 
 
 def create_permisos(**kwargs):
-    Permisos = Permisos(**kwargs)
-    db.session.add(Permisos)
+    permisos = Permisos(**kwargs)
+    db.session.add(permisos)
     db.session.commit()
 
-    return Permisos
+    return permisos
 
-
+# Asigna, no agrega. (Sobreescribira los roles que tenia asignados, por los nuevos)
 def assign_rol(user, rol):
     user.roles = rol
     db.session.add(user)
@@ -74,8 +81,9 @@ def assign_rol(user, rol):
     return user
 
 
+# Agrega un permiso (se suma a los ya asignados).
 def assign_permiso(rol, permiso):
-    rol.permisos = permiso
+    rol.permisos.append(permiso)
     db.session.add(rol)
     db.session.commit()
 
@@ -85,13 +93,6 @@ def assign_permiso(rol, permiso):
 def traer_usuario(user_id):
     user = Users.query.get(user_id)
     return user
-
-def traer_roles(user_id):
-    user = Users.query.get(user_id)
-    if not user:
-        return None
-    roles = [role.nombre for role in user.roles]
-    return roles
 
 def actualizar_roles(user_id, selected_roles):
     user = traer_usuario(user_id)
@@ -123,3 +124,21 @@ def actualizar_roles(user_id, selected_roles):
    
     db.session.commit()
         
+def permisos_del_rol(rol):
+    return rol.permisos
+
+
+# Falta comprobar funcionamiento... 
+def get_permissions(user):
+    roles_usuario = user.roles
+    permisos_usuario = []
+
+    for rol in roles_usuario:
+        for permiso in permisos_del_rol(rol):
+            permisos_usuario.append(permiso.nombre)
+
+
+    print(f"Get permissions user.id= ",  user.id, "   user.email= ", user.email)
+    print(f"Get roles= ", roles_usuario)
+    print(f"Get permisos= ",permisos_usuario)
+    return permisos_usuario

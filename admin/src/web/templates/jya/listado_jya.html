@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+
+{% block title %} Listado de Jinetes {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <h1 class="text-center">Listado de jinetes</h1>
+    
+    <div class="actions">
+        <a href="{{ url_for('jya.add_jinete_form') }}" class="btn btn-add btn-primary" style="margin: 10px 0;">Agregar jinete</a>
+    </div>
+    
+    <!-- Formulario de búsqueda y ordenamiento -->
+    <form method="GET" action="{{ url_for('jya.listar_jinetes') }}" class="mb-3">
+        <label for="sort_by">Ordenar por:</label>
+        <select name="sort_by" id="sort_by">
+            <option value="nombre_asc">Nombre (Ascendente)</option>
+            <option value="nombre_desc">Nombre (Descendente)</option>
+            <option value="apellido_asc">Apellido (Ascendente)</option>
+            <option value="apellido_desc">Apellido (Descendente)</option>
+        </select>
+        <button type="submit" class="btn btn-sort btn-secondary">Ordenar</button>
+
+        <input type="text" id="search" name="search" placeholder="Nombre, apellido, dni o profesionales" value="{{ request.args.get('search', '') }}">
+        <button type="submit" class="btn btn-sort btn-secondary">Buscar</button>
+    </form>
+        
+    <!-- Lista de jinetes -->
+    <p>Jinetes:</p>
+    {% if jinetes %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Avatar</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>DNI</th>
+                    <th>profesionales</th>
+                </tr>
+            </thead>            
+            <tbody>
+                {% for jinete in jinetes %}
+                    <tr>
+                        <td>
+                            <img src={{ avatar_url(jinete.avatar) }} alt="Avatar" width="30" height="30">
+                        </td>
+                        <td>{{ jinete.nombre }}</td>
+                        <td>{{ jinete.apellido }}</td>
+                        <td>{{ jinete.dni }}</td>
+                        <td>{{ jinete.profesionales }}</td>
+                        <td>
+                            <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="btn btn-edit btn-primary">Ver jinete</a>
+                            <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit btn-secondary">Editar jinete</a>
+                            <a href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}" class="btn btn-delete btn-secondary">Eliminar jinete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if jinetes.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.prev_num) }}">Anterior</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Anterior</a>
+                    </li>
+                {% endif %}
+        
+                {% for page_num in jinetes.iter_pages() %}
+                    {% if page_num %}
+                        <li class="page-item {% if page_num == jinetes.page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=page_num) }}">{{ page_num }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                    {% endif %}
+                {% endfor %}
+        
+                {% if jinetes.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.next_num) }}">Siguiente</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Siguiente</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% else %}
+        <p>No hay jinetes para mostrar.</p>
+    {% endif %}
+{% endblock %}
