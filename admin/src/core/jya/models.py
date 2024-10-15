@@ -95,7 +95,7 @@ from sqlalchemy.dialects.postgresql import ARRAY
 class PensionEnum(Enum):
     provincial="Provincial"
     nacional="Nacional"
-''' 
+
 class DiasEnum(Enum):
     lunes="Lunes"
     martes="Martes"
@@ -104,7 +104,7 @@ class DiasEnum(Enum):
     viernes="Viernes"
     sabado="Sábado"
     domingo="Domingo"
-'''
+
 class AsignacionEnum(Enum):
     por_hijo="Asignación Universal por hijo"
     por_discapacidad="Asignación Universal por hijo con Discapacidad"
@@ -143,6 +143,20 @@ class EscolaridadEnum(Enum):
     terciario="Terciario"
     universitario="Universitario"
     
+class TrabajoEnum(Enum):
+    hipoterapia="Hipoterapia"
+    monta_terapeutica="Monta Terapéutica"
+    deporte="Deporte"
+    ecuestre_adaptado="Ecuestre Adaptado"
+    actividades_recreativas="Actividades Recreativas"
+    equitacion="Equitación"
+    
+class SedeEnum(Enum):
+    casj="CASJ"
+    hlp="HLP"
+    otro="OTRO"
+
+    
 '''class Persona(db.Model):
     __abstract__ = True
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -171,7 +185,6 @@ class Jinete(db.Model):
     domicilio = db.relationship("Domicilio", foreign_keys=[domicilio_id], back_populates="jinetes")
     fecha_nacimiento = db.Column(db.DateTime, nullable=False)
     telefono = db.Column(db.String(15), nullable=False)
-    avatar = db.Column(db.String(255), nullable=True)
     contacto_emergencia_id = db.Column(db.Integer, db.ForeignKey("contacto_emergencia.id"), nullable=False)
     contacto_emergencia = db.relationship("ContactoEmergencia", back_populates="jinete")
     becado = db.Column(db.Boolean, default=False)
@@ -196,8 +209,16 @@ class Jinete(db.Model):
     observaciones_institucion = db.Column(db.String(255), nullable=True)
     profesionales = db.Column(db.String(255), nullable=True)
     
+    trabajo_institucional=db.Column(db.Enum(TrabajoEnum), nullable=False)
+    condicion=db.Column(db.Boolean, nullable=False) # true regular, false de baja
+    sede=db.Column(db.Enum(SedeEnum), nullable=False)
+    dia=db.Column(ARRAY(db.Enum(DiasEnum)), nullable=True)
+    #profesor si puesto laboral = Terapeuta o profesion = profesor.
+    #conductor_caballo dado de alta al sistema.
+    #caballo dado de alta al sistema.
+    #auxiliar_pista dado de alta al sistema.
     
-    documentos = db.relationship("Documento", back_populates="jinete")
+    documentos = db.relationship("Documento", back_populates="jinete", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User #{self.id} nombre = {self.nombre}>"

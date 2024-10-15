@@ -11,7 +11,7 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired, Email, Length, Optional, Regexp, ValidationError
 from wtforms.widgets import DateInput
-from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum
+from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum
 from src.core.equipo.extra_models import Localidad
 
 class AddJineteForm(FlaskForm):
@@ -154,6 +154,21 @@ class AddJineteForm(FlaskForm):
         "Profesionales",
         validators=[DataRequired(message="Los profesionales son obligatorios")],
     )
+    
+    trabajo_institucional = SelectField(
+        "Trabajo institucional",
+    )
+    
+    condicion=BooleanField("Condicion")
+
+    sede=SelectField("Sede")
+    
+    dia = SelectMultipleField(
+        "DIA",
+        choices=[(dia.name, dia.value) for dia in DiasEnum],
+        validators=[DataRequired(message="Seleccionar al menos un dia")],
+    )
+    
     
 ####################### PORCENTAJE DE BECAS #################
 '''

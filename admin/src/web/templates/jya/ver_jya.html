@@ -4,7 +4,7 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -81,7 +81,7 @@
         <!-- Contenido de la pestaña "Documentos" -->
         <div id="documentos" class="tab-content">
             <!-- Formulario de búsqueda y ordenamiento -->
-            <form method="GET" action="{{ url_for('legajo.listar_documentos') }}" class="mb-3">
+            <form method="GET" action="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="mb-3">
                 <input type="hidden" name="tab" value="documentos">
                 <label for="sort_by">Ordenar por:</label>
                 <select name="sort_by" id="sort_by">
@@ -130,27 +130,50 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var activeTab = document.querySelector("input[name='tab']").value;
+            if (activeTab) {
+                openTab(null, activeTab);
+            } else {
+                openTab(null, 'general');
+            }
+        });
+        
         function openTab(evt, tabName) {
             var i, tabContent, tabs;
-
-            // Ocultar todos los contenidos de las pestañas
+        
             tabContent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabContent.length; i++) {
                 tabContent[i].style.display = "none";
                 tabContent[i].classList.remove("active");
             }
-
-            // Eliminar la clase "active" de todas las pestañas
+        
             tabs = document.getElementsByClassName("tab");
             for (i = 0; i < tabs.length; i++) {
                 tabs[i].classList.remove("active");
             }
-
-            // Mostrar el contenido actual y agregar clase "active" a la pestaña seleccionada
-            document.getElementById(tabName).style.display = "block";
-            document.getElementById(tabName).classList.add("active");
-            evt.currentTarget.classList.add("active");
+        
+            var currentTab = document.getElementById(tabName);
+            if (currentTab) {
+                currentTab.style.display = "block";
+                currentTab.classList.add("active");
+            }
+        
+            // Marcar la pestaña como activa
+            if (evt) {
+                evt.currentTarget.classList.add("active");
+            } else {
+                
+                Array.from(tabs).forEach(function(tab) {
+                    if (tab.getAttribute('onclick').includes("'" + tabName + "'")) {
+                        tab.classList.add("active");
+                    }
+                });
+            }
+        
+            document.querySelector("input[name='tab']").value = tabName;
         }
-    </script>
+        </script>
+        
 
 {% endblock %}

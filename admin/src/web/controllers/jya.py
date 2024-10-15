@@ -5,9 +5,10 @@ from src.core import auth
 from src.core import jya
 from src.core.database import db
 from src.core.jya.forms import AddJineteForm
-from src.core.jya.models import Jinete, PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum
+from src.core.jya.models import Jinete, PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia
 import src.web.controllers.jya
+from src.core.jya.legajo import list_documentos
 
 bp = Blueprint("jya", __name__, url_prefix="/jinetes")
 
@@ -35,6 +36,8 @@ def add_jinete_form():
         (p.id, p.nombre) for p in jya.list_localidades()
     ]
     form.tipo_asignacion.choices = [(asig.name, asig.value) for asig in AsignacionEnum]
+    
+    form.dia.choices = [(dia.name, dia.value) for dia in DiasEnum]
 
     return render_template("jya/agregar_jya.html", form=form)
 
@@ -85,6 +88,8 @@ def add_jinete():
         observaciones_institucion=form.observaciones_institucion.data,
         profesionales=form.profesionales.data,
         
+        dia = [DiasEnum[dia] for dia in form.dia.data],
+        
     )
     
     flash("Jinete registrado exitosamente", "success")
@@ -93,8 +98,10 @@ def add_jinete():
 @bp.get("/ver_jinete<int:jinete_id>")
 def view_jinete(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
+    documentos = list_documentos()
     tipos_discapacidad_nombres = [tipo.name for tipo in jinete.tipos_discapacidad] if jinete.tipos_discapacidad else []
-    return render_template("jya/ver_jya.html", jinete=jinete, tipos_discapacidad=tipos_discapacidad_nombres)
+    dias_nombres = [dia.name for dia in jinete.dia] if jinete.dia else []
+    return render_template("jya/ver_jya.html", jinete=jinete, tipos_discapacidad=tipos_discapacidad_nombres, dia=dias_nombres, documentos=documentos)
 
 '''@bp.get("/editar_jinete<int:jinete_id>")
 def edit_jinete_form(jinete_id):
@@ -203,10 +210,14 @@ def delete_jinete_form(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
     return render_template("jya/eliminar_jya.html", jinete=jinete)
 
+
 @bp.post("/eliminar_jinete<int:jinete_id>")
 def delete_jinete(jinete_id):
+    jinete = jya.traer_jinete(jinete_id)
     jya.delete_jinete(jinete_id)
+    
     return redirect(url_for("jya.listar_jinetes"))
+
 
 @bp.get("/<int:jinete_id>/edit")
 def edit(jinete_id):

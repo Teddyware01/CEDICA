@@ -6,7 +6,7 @@ from src.core import equipo
 from src.core.equipo.extra_models import Provincia, Domicilio
 from src.core.equipo.models import CondicionEnum
 from src.core.auth import Permisos
-from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum
+from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum
 from datetime import datetime
 from pathlib import Path
 from src.core.database import db
@@ -438,6 +438,10 @@ def run():
         grado = "2024",
         observaciones_institucion = "Nada.",
         profesionales = "Psicologa y maestra",
+        trabajo_institucional=TrabajoEnum.deporte,
+        condicion=False,
+        sede=SedeEnum.casj,
+        dia=["jueves"],
     )
     
     jya.create_jinete(
@@ -469,6 +473,10 @@ def run():
         grado = "2020",
         observaciones_institucion = "ASDF.",
         profesionales = "Terapeuta y docente",
+        trabajo_institucional=TrabajoEnum.hipoterapia,
+        condicion=True,
+        sede=SedeEnum.hlp,
+        dia=["lunes"],
     )
     
     legajo.create_documento(

@@ -4,7 +4,7 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 {% block navbar %}
@@ -294,6 +294,16 @@
         <div>
             <label for="profesionales" class="form-element">PROFESIONALES que lo ATIENDEN:</label>
             {{ form.profesionales }}
+        </div>
+
+        <div class="form-group">
+            <label for="dia">DIA:</label>
+            <div class="checkbox-group">
+                {% for subfield in form.dia %}
+                <input type="checkbox" id="dia_{{ loop.index0 }}" name="dia" value="{{ subfield.data }}">
+                <label for="dia_{{ loop.index0 }}">{{ subfield.label.text }}</label>
+                {% endfor %}
+            </div>
         </div>
 
         <div>
