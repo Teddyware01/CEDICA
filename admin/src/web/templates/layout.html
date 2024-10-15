@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Styles.css') }}">
     <title>{% block title %}{% endblock %} - CEDICA</title>
     {% endblock %}
 </head>
-<body>
+<body>    
     <!-- Barra de navegación superior -->
     <header>
         <nav class="navbar-class navbar-expand-lg">
@@ -41,9 +41,12 @@
                                 <i class="fas fa-user-circle"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                                <a class="dropdown-item" href="#" role="button">Iniciar sesión</a>
-                                <a class="dropdown-item" href="#" role="button">Perfil</a>
-                                <a class="dropdown-item" href="#" role="button">Cerrar Sesión</a>
+                                {% if is_authenticated(session) %}
+                                    <a class="dropdown-item" href="#" role="button">Perfil</a>
+                                    <a class="dropdown-item" href="{{ url_for("auth.logout") }}" role="button">Cerrar Sesión</a>
+                                {% else %}
+                                    <a class="dropdown-item" href="{{ url_for("auth.login") }}" role="button">Inciar sesion</a>
+                                {% endif%}
                             </div>
                         </li>
                     </ul>

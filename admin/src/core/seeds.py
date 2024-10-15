@@ -5,8 +5,10 @@ from src.core import jya
 from src.core import equipo
 from src.core.equipo.extra_models import Provincia, Domicilio
 from src.core.equipo.models import CondicionEnum
+from src.core.auth import Permisos
 from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum
 from datetime import datetime
+from pathlib import Path
 from src.core.database import db
 from sqlalchemy import text
 from src.core.jya import legajo
@@ -22,6 +24,7 @@ def ejecutar_sql_script(file_path):
         connection.commit()
 
 from src.core import equipo
+from src.core import auth
 from src.core.equipo.extra_models import Provincia 
 
 from src.core.database import db
@@ -91,12 +94,13 @@ def run():
         description="is 19hs how",
     )
 
+    # Roles
     rol_tecnica = auth.create_roles(
         nombre="Tecnica",
     )
 
-    rol_encuestre = auth.create_roles(
-        nombre="Encuestre",
+    rol_ecuestre = auth.create_roles(
+        nombre="ecuestre",
     )
 
     rol_voluntariado = auth.create_roles(
@@ -107,9 +111,14 @@ def run():
         nombre="Administracion",
     )
 
+    
+    rol_system_admin = auth.create_roles(
+        nombre="System Admin",
+    )
+
     auth.assign_rol(user1, [rol_administracion, rol_voluntariado])
     auth.assign_rol(
-        user2, [rol_administracion, rol_voluntariado, rol_tecnica, rol_encuestre]
+        user2, [rol_administracion, rol_voluntariado, rol_tecnica, rol_ecuestre]
     )
     board.assign_labels(issue1, [label1])
     board.assign_labels(issue2, [label1, label2])
@@ -141,9 +150,13 @@ def run():
     equipo.add_puesto_laboral(nombre="Otro")
 
     # Provincias
-    ejecutar_sql_script("src\core\sql\insert_provincias.sql")
+    sql_provincias = Path(__file__).parent.joinpath("./sql/insert_provincias.sql")
+    ejecutar_sql_script(sql_provincias)
+
     # Localidades
-    ejecutar_sql_script("src\core\sql\insert_localidades.sql")
+    sql_localidades = Path(__file__).parent.joinpath("./sql/insert_localidades.sql")
+    ejecutar_sql_script(sql_localidades)
+
 
     # Empleados ejemplo (primero las tablas que deben crearse primero)
     # Domicilios
@@ -274,6 +287,114 @@ def run():
         contacto_emergencia_id=2,
     )
 
+    # Tema permisos y roles (esto debe quedar definido. No se borra.)
+    # Permisos
+    # Modulo 2
+    user_index = auth.create_permisos(nombre="user_index")
+    user_new = auth.create_permisos(nombre="user_new")
+    user_destroy =  auth.create_permisos(nombre="user_destroy")
+    user_update = auth.create_permisos(nombre="user_update")
+    user_show = auth.create_permisos(nombre="user_show")
+
+    # Modulo 4
+    empleado_index = auth.create_permisos(nombre="empleado_index")
+    empleado_show =  auth.create_permisos(nombre="empleado_show")
+    empleado_update =  auth.create_permisos(nombre="empleado_update")
+    empleado_create =   auth.create_permisos(nombre="empleado_create")
+    empleado_destroy =   auth.create_permisos(nombre="empleado_destroy")
+
+    # Modulo 5
+    pago_index =  auth.create_permisos(nombre="pago_index")
+    pago_show =   auth.create_permisos(nombre="pago_show")
+    pago_update = auth.create_permisos(nombre="pago_update")
+    pago_create = auth.create_permisos(nombre="pago_create")
+    pago_destroy = auth.create_permisos(nombre="pago_destroy")
+
+    # Modulo 6
+    jya_index =  auth.create_permisos(nombre="jya_index")
+    jya_show =    auth.create_permisos(nombre="jya_show")
+    jya_update =  auth.create_permisos(nombre="jya_update")
+    jya_create =    auth.create_permisos(nombre="jya_create")
+    jya_destroy =     auth.create_permisos(nombre="jya_destroy")
+
+
+    # Modulo 7
+    cobro_index =   auth.create_permisos(nombre="cobro_index")
+    cobro_show =  auth.create_permisos(nombre="cobro_show")
+    cobro_update =  auth.create_permisos(nombre="cobro_update")
+    cobro_create =   auth.create_permisos(nombre="cobro_create")
+    cobro_destroy =    auth.create_permisos(nombre="cobro_destroy")
+
+
+    # Modulo 8
+    ecuestre_index =  auth.create_permisos(nombre="ecuestre_index")
+    ecuestre_show = auth.create_permisos(nombre="ecuestre_show")
+    ecuestre_update = auth.create_permisos(nombre="ecuestre_update")
+    ecuestre_create = auth.create_permisos(nombre="ecuestre_create")
+    ecuestre_destroy = auth.create_permisos(nombre="ecuestre_destroy")
+
+
+
+    # Asignacion a roles
+    # rol sys_admin
+    for permiso in Permisos.query.all():
+        auth.assign_permiso(rol_system_admin, permiso)
+        
+    # rol administracion
+    auth.assign_permiso(rol_administracion, empleado_index)
+    auth.assign_permiso(rol_administracion, empleado_show)
+    auth.assign_permiso(rol_administracion, empleado_update)
+    auth.assign_permiso(rol_administracion, empleado_create )
+    auth.assign_permiso(rol_administracion, empleado_destroy)
+
+    auth.assign_permiso(rol_administracion, pago_index )
+    auth.assign_permiso(rol_administracion, pago_show )
+    auth.assign_permiso(rol_administracion, pago_update )
+    auth.assign_permiso(rol_administracion, pago_create )
+    auth.assign_permiso(rol_administracion, pago_destroy )
+
+    auth.assign_permiso(rol_administracion, jya_index)
+    auth.assign_permiso(rol_administracion, jya_update)
+    auth.assign_permiso(rol_administracion, jya_show)
+    auth.assign_permiso(rol_administracion, jya_create)
+    auth.assign_permiso(rol_administracion, jya_destroy)
+
+    auth.assign_permiso(rol_administracion, cobro_index)
+    auth.assign_permiso(rol_administracion, cobro_show)
+    auth.assign_permiso(rol_administracion, cobro_create)
+    auth.assign_permiso(rol_administracion, cobro_update)
+    auth.assign_permiso(rol_administracion, cobro_destroy)
+
+    auth.assign_permiso(rol_administracion, ecuestre_index)
+    auth.assign_permiso(rol_administracion, ecuestre_show)
+
+    
+    # rol tecnica
+    auth.assign_permiso(rol_tecnica,jya_index)
+    auth.assign_permiso(rol_tecnica,jya_update)
+    auth.assign_permiso(rol_tecnica,jya_show)
+    auth.assign_permiso(rol_tecnica,jya_create)
+    auth.assign_permiso(rol_tecnica,jya_destroy)
+    
+    auth.assign_permiso(rol_tecnica, cobro_index)
+    auth.assign_permiso(rol_tecnica, cobro_show)
+
+
+    auth.assign_permiso(rol_tecnica, ecuestre_index)
+    auth.assign_permiso(rol_tecnica, ecuestre_show)
+
+
+    # rol voluntariado
+    auth.assign_permiso(rol_voluntariado,jya_index )
+    auth.assign_permiso(rol_voluntariado, jya_show)
+
+
+    # rol ecuestre
+    auth.assign_permiso(rol_ecuestre, ecuestre_index)
+    auth.assign_permiso(rol_ecuestre, ecuestre_show)
+    auth.assign_permiso(rol_ecuestre, ecuestre_update)
+    auth.assign_permiso(rol_ecuestre, ecuestre_create)
+    auth.assign_permiso(rol_ecuestre, ecuestre_destroy)
     direccion_1 = jya.add_direccion(
         calle="Olazabal",
         numero=4321,
