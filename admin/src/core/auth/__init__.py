@@ -81,7 +81,7 @@ def assign_rol(user, rol):
     return user
 
 
-# Agrega un permiso
+# Agrega un permiso (se suma a los ya asignados).
 def assign_permiso(rol, permiso):
     rol.permisos.append(permiso)
     db.session.add(rol)
