@@ -10,6 +10,19 @@
     {{ super() }}
     <h1 class="text-center">Listado de Caballos</h1>
 
+    <form method="GET" action="{{ url_for('ecuestre.listar_ecuestre') }}" class="mb-3">
+        <label for="sort_by">Ordenar por:</label>
+        <select name="sort_by" id="sort_by">
+            <option value="nombre_asc">Nombre (Ascendente)</option>
+            <option value="nombre_desc">Nombre (Descendente)</option>
+            <option value="fecha_nacimiento_asc">Fecha de Nacimiento (Ascendente)</option>
+            <option value="fecha_nacimiento_desc">Fecha de Nacimiento (Descendente)</option>
+            <option value="fecha_ingreso_asc">Fecha de Ingreso (Ascendente)</option>
+            <option value="fecha_ingreso_desc">Fecha de Ingreso (Descendente)</option>
+        </select>
+        <input type="text" id="search" name="search" placeholder="Nombre">
+        <button type="submit" class="btn btn-sort">Ordenar</button>
+    </form>
     
     {% if ecuestre %}
 
@@ -18,6 +31,7 @@
             <tr>
                 <th>Nombre</th>
                 <th>Fecha de Nacimiento</th>
+                <th>Fecha de Ingreso</th>
                 <th>Sexo</th>
                 <th>Raza</th>
                 <th>Pelaje</th>
@@ -29,6 +43,7 @@
             <tr>
                 <td>{{ ecuestre.nombre }}</td>
                 <td>{{ ecuestre.fecha_nacimiento }}</td>
+                <td>{{ ecuestre.fecha_ingreso }}</td>
                 <td>{{ "Macho" if ecuestre.sexo else "Hembra" }}</td>
                 <td>{{ ecuestre.raza }}</td>
                 <td>{{ ecuestre.pelaje }}</td>

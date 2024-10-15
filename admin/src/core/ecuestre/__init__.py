@@ -18,10 +18,26 @@ def create_ecuestre(**kwargs):
 
     return ecuestre
 
-def list_ecuestre(sort_by=None):
+def list_ecuestre(sort_by=None, search=None):
     query = Ecuestre.query
+    if search:
+        query = query.filter(
+                Ecuestre.nombre.like(f"%{search}%"),   
+        )
+    if sort_by:
+        if sort_by == "nombre_asc":
+            query = query.order_by(Ecuestre.nombre.asc())
+        elif sort_by == "nombre_desc":
+            query = query.order_by(Ecuestre.nombre.desc())
+        elif sort_by == "fecha_nacimiento_asc":
+            query = query.order_by(Ecuestre.fecha_nacimiento.asc())
+        elif sort_by == "fecha_nacimiento_desc":
+            query = query.order_by(Ecuestre.fecha_nacimiento.desc())
+        elif sort_by == "fecha_ingreso_asc":
+            query = query.order_by(Ecuestre.fecha_ingreso.asc())
+        elif sort_by == "fecha_ingreso_desc":
+            query = query.order_by(Ecuestre.fecha_ingreso.desc())
     return query.all()
-
 
 def traer_ecuestre(ecuestre_id):
     ecuestre = Ecuestre.query.get(ecuestre_id)
