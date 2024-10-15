@@ -10,15 +10,6 @@ class DiasEnum(Enum):
     sabado="Sábado"
     domingo="Domingo"
 
-class SituacionPrevisional(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    obra_social = db.Column(db.String(100), nullable=False)
-    numero_afiliado = db.Column(db.String(50), nullable=True)
-    tiene_curatela = db.Column(db.Boolean, default=False)
-    observaciones = db.Column(db.String(255), nullable=True)
-    jinete_id = db.Column(db.Integer, db.ForeignKey('jinete.id'))
-    jinete = db.relationship('Jinete', back_populates='situacion_previsional')
-
 class Persona(Base):
     __abstract__ = True
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -204,6 +195,9 @@ class Jinete(db.Model):
     grado = db.Column(db.Integer, nullable=False)
     observaciones_institucion = db.Column(db.String(255), nullable=True)
     profesionales = db.Column(db.String(255), nullable=True)
+    
+    
+    documentos = db.relationship("Documento", back_populates="jinete")
 
     def __repr__(self):
         return f"<User #{self.id} nombre = {self.nombre}>"

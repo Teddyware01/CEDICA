@@ -10,6 +10,7 @@ from src.web.controllers.equipo import bp as equipo_blueprint
 from src.web.controllers.issues import bp as issues_bp
 from src.web.controllers.usuarios import bp as usuarios_bp
 from src.web.controllers.jya import bp as jya_bp
+from src.web.controllers.legajo import bp as legajo_bp
 
 def create_app(env="development", static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)
@@ -46,6 +47,8 @@ def create_app(env="development", static_folder="../../static"):
     app.register_error_handler(500, error.error_internal_server_error)
     app.register_blueprint(equipo_blueprint)
     app.register_blueprint(jya_bp)
+    app.register_blueprint(legajo_bp)
+
     app.jinja_env.globals.update(avatar_url=helpers.avatar_url)
     
 

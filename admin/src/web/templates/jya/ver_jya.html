@@ -80,7 +80,46 @@
 
         <!-- Contenido de la pestaña "Documentos" -->
         <div id="documentos" class="tab-content">
-            <p>Aquí se mostrarán los documentos del jinete.</p>
+            <!-- Formulario de búsqueda y ordenamiento -->
+            <form method="GET" action="{{ url_for('legajo.listar_documentos') }}" class="mb-3">
+                <input type="hidden" name="tab" value="documentos">
+                <label for="sort_by">Ordenar por:</label>
+                <select name="sort_by" id="sort_by">
+                    <option value="titulo_asc">Titulo (Ascendente)</option>
+                    <option value="titulo_desc">Titulo (Descendente)</option>
+                    <option value="fecha_asc">Fecha de subida (Ascendente)</option>
+                    <option value="fecha_desc">Fecha de subida (Descendente)</option>
+                </select>
+                <button type="submit" class="btn btn-sort btn-secondary">Ordenar</button>
+        
+                <input type="text" id="search" name="search" placeholder="Titulo, o tipo" value="{{ request.args.get('search', '') }}">
+                <button type="submit" class="btn btn-sort btn-secondary">Buscar</button>
+            </form>
+                
+            <!-- Lista de documentos -->
+            <h2>Documentos:</h2>
+            {% if documentos %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Titulo</th>
+                            <th>Fecha subida</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>            
+                    <tbody>
+                        {% for doc in documentos %}
+                            <tr>
+                                <td>{{ doc.titulo }}</td>
+                                <td>{{ doc.fecha_subida }}</td>
+                                <td>{{ doc.tipo.value }}</td>
+                                
+                            </tr>
+                        {% endfor %}
+                </table>
+            {% else %}
+                <p>No hay documentos para mostrar.</p>
+            {% endif %}
             
             <!-- Botones de acción en Documentos -->
             <div class="form-actions">

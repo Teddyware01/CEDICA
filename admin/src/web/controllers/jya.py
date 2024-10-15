@@ -240,8 +240,8 @@ def cargar_choices_form(form, jya=None):
     form.diagnostico.choices = [(d.name, d.value) for d in DiagnosticoEnum]
     form.tipos_discapacidad.choices = [(disc.name, disc.value) for disc in TiposDiscapacidadEnum]
     form.tipo_asignacion.choices = [(asig.name, asig.value) for asig in AsignacionEnum]
-    form.domicilio_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
-    form.domicilio_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]
+    #form.domicilio_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
+    #form.domicilio_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]
     
     
 '''provincia_nacimiento = db.relationship("Provincia", back_populates="jinetes")

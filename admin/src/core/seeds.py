@@ -9,6 +9,8 @@ from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadE
 from datetime import datetime
 from src.core.database import db
 from sqlalchemy import text
+from src.core.jya import legajo
+from src.core.jya.legajo.models import TipoDocumentoEnum
 
 
 def ejecutar_sql_script(file_path):
@@ -346,4 +348,10 @@ def run():
         grado = "2020",
         observaciones_institucion = "ASDF.",
         profesionales = "Terapeuta y docente",
+    )
+    
+    legajo.create_documento(
+        titulo="Curriculum Vitae",
+        tipo=TipoDocumentoEnum.evaluacion,
+        jinete_id=1,
     )
