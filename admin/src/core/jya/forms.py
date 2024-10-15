@@ -131,40 +131,32 @@ class AddJineteForm(FlaskForm):
         validators=[DataRequired(message="El tipo de asignacion es obligatorio")],
     )
 
-####################### PORCENTAJE DE BECAS #################
-'''
+    obra_social = StringField(
+        "Obra Social",
+        validators=[
+            DataRequired(message="El nombre de obra social es obligatorio"),
+            Length(max=25),
+        ],
+    )
+    nro_afiliado = StringField(
+        "Número Afiliado",
+        validators=[
+            Length(max=25),
+            DataRequired(message="El número de afiliado de obra social es obligatorio")
+        ],
+    )
+    
+    curatela = BooleanField("Curatela", validators=[DataRequired("Indique si posee curatela")])
+    
+    grado = IntegerField("Grado", validators=[DataRequired("Ingrese el grado / año actual")])
+    
     profesionales = SelectField(
         "Profesionales",
         validators=[DataRequired(message="Los profesionales son obligatorios")],
     )
     
-    obra_social = StringField(
-        "Obra Social",
-        validators=[
-            DataRequired(message="El nombre de obra social es obligatorio"),
-            Length(max=100),  # Cambiado a 100 por consistencia
-        ],
-    )
-    
-    nro_afiliado = IntegerField(
-        "Número Afiliado",
-        validators=[
-            DataRequired(message="El número de afiliado de obra social es obligatorio")
-        ],
-    )
-    
-    curatela
-    
-    observaciones
-    
-    nombre_institucion
-    
-    direccion_institucion
-    
-    telefono_institucion
-    
-    grado_institucion
-    
+####################### PORCENTAJE DE BECAS #################
+'''
     parentesco_familiar
     
     nombre_familiar

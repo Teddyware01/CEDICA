@@ -25,7 +25,7 @@ class Domicilio(db.Model):
     localidad = db.relationship("Localidad", backref="domicilios")
 
     empleado = db.relationship("Empleado", back_populates="domicilio")
-    jinete = db.relationship("Jinete", back_populates="domicilio")
+    jinetes = db.relationship("Jinete", foreign_keys="Jinete.domicilio_id", back_populates="domicilio")
 
 class Localidad(db.Model):
     id = db.Column(db.Integer, primary_key=True)

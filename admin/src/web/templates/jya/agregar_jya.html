@@ -20,13 +20,15 @@
     
     <form action="{{ url_for('jya.add_jinete') }}" method="POST">
         
+        <h2><strong> DATOS PERSONALES DEL JINETE O AMAZONA </strong></h2>
+                
         <div>
-            <label for="nombre" class="form-element">Nombre:</label>
+            <label for="nombre" class="form-element">Nombre/s:</label>
             {{ form.nombre }}
         </div>
         
         <div>
-            <label for="apellido" class="form-element">Apellido:</label>
+            <label for="apellido" class="form-element">Apellido/s:</label>
             {{ form.apellido }}
         </div>
 
@@ -41,6 +43,12 @@
         </div>
 
         <div>
+            <label for="fecha_nacimiento" class="form-element">Fecha de Nacimiento:</label>
+            {{ form.fecha_nacimiento }}
+        </div>
+        
+        <div><strong> Lugar de nacimiento: </strong></div>
+        <div>
             <label for="provincia_nacimiento" class="form-element">Provincia:</label>
             {{ form.domicilio_provincia }}
         </div>
@@ -50,11 +58,7 @@
             {{ form.domicilio_localidad }}
         </div>
 
-        <div>
-            <label for="fecha_nacimiento" class="form-element">Fecha de Nacimiento:</label>
-            {{ form.fecha_nacimiento }}
-        </div>
-
+        <div><strong> Domicilio actual: </strong></div>
         <div>
             <label for="domicilio_calle" class="form-element">Calle:</label>
             {{ form.domicilio_calle }}
@@ -86,7 +90,7 @@
         </div>
 
         <div>
-            <label for="telefono" class="form-element">Teléfono:</label>
+            <label for="telefono" class="form-element">Teléfono actual:</label>
             {{ form.telefono }}
         </div>
 
@@ -171,12 +175,6 @@
             </div>
         </div>
 
-
-        <div>
-            <label for="pension" class="form-element">tipo pension:</label>
-            {{ form.pension }}
-        </div>
-
         <div>
             <label for="asignacion_familiar" class="form-element">¿Percibe alguna asignación familiar?</label>
             <input type="radio" id="asignacion_si" name="asignacion" value="si">
@@ -187,24 +185,116 @@
 
         <div>
             <label for="tipo_asignacion" class="form-element">Tipo de asignación:</label>
-            {{ form.tipo_asignacion(id="tipo_asignacion") }} <!-- Añade un ID aquí -->
+            {{ form.tipo_asignacion(id="tipo_asignacion") }}
         </div>
-        
+
         <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const radioButtons = document.querySelectorAll('input[name="asignacion"]');
-            const selectAsignacion = document.getElementById('tipo_asignacion'); // Asegúrate de que este ID sea correcto
-        
-            radioButtons.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    // Habilita o deshabilita el elemento según si la opción "Sí" está seleccionada
-                    selectAsignacion.disabled = !document.getElementById('asignacion_si').checked;
+            document.addEventListener('DOMContentLoaded', function () {
+                const radioButtons = document.querySelectorAll('input[name="asignacion"]');
+                const selectAsignacion = document.getElementById('tipo_asignacion'); // Asegúrate de que este ID sea correcto
+            
+                radioButtons.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        // Habilita o deshabilita el elemento según si la opción "Sí" está seleccionada
+                        selectAsignacion.disabled = !document.getElementById('asignacion_si').checked;
+                    });
                 });
             });
-        });
         </script>
-        
 
+        <div>
+            <label for="beneficiario_pension" class="form-element">¿Es beneficiario de alguna pensión?</label>
+            <input type="radio" id="pension_si" name="pension" value="si">
+            <label for="pension_si">Sí</label>
+            <input type="radio" id="pension_no" name="pension" value="no">
+            <label for="pension_no">No</label>
+        </div>
+
+        <div>
+            <label for="pension" class="form-element">tipo pension:</label>
+            {{ form.pension }}
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const radioButtons = document.querySelectorAll('input[name="pension"]');
+                const selectAsignacion = document.getElementById('pension');
+            
+                radioButtons.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        // Habilita o deshabilita el elemento según si la opción "Sí" está seleccionada
+                        selectAsignacion.disabled = !document.getElementById('pension_si').checked;
+                    });
+                });
+            });
+        </script>
+
+        <h2><strong> SITUACIÓN PREVISIONAL </strong></h2>
+
+        <div>
+            <label for="obra_social" class="form-element">Obra Social:</label>
+            {{ form.obra_social }}
+        </div>
+
+        <div>
+            <label for="curatela" class="form-element"> ¿Posee curatela? </label>
+            <input type="radio" id="curatela_si" name="curatela" value="si">
+            <label for="curatela_si">Sí</label>
+            <input type="radio" id="curatela_no" name="curatela" value="no">
+            <label for="curatela_no">No</label>
+        </div>
+        
+        <div>
+            <label for="observaciones" class="form-element">observaciones:</label>
+            {{ form.observaciones }}
+        </div>
+
+        <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
+
+        <div>
+            <label for="nombre_institucion" class="form-element">Nombre de la Institución:</label>
+            {{ form.nombre }}
+        </div>
+
+        <div>
+            <label for="telefono_institucion" class="form-element">Teléfono:</label>
+            {{ form.telefono }}
+        </div>
+
+        <div>
+            <label for="domicilio_calle" class="form-element">Calle:</label>
+            {{ form.domicilio_calle }}
+        </div>
+        
+        <div>
+            <label for="domicilio_numero" class="form-element">Numero:</label>
+            {{ form.domicilio_numero }}
+        </div>
+        
+        <div>
+            <label for="domicilio_provincia" class="form-element">Provincia:</label>
+            {{ form.domicilio_provincia }}
+        </div>
+        
+        <div>
+            <label for="domicilio_localidad" class="form-element">Localidad:</label>
+            {{ form.domicilio_localidad }}
+        </div>
+
+        <div>
+            <label for="grado" class="form-element">Grado / año actual:</label>
+            {{ form.grado }}
+        </div>
+
+        <div>
+            <label for="observaciones_institucion" class="form-element">Observaciones:</label>
+            {{ form.observaciones }}
+        </div>
+
+        <div>
+            <label for="profesionales" class="form-element">PROFESIONALES que lo ATIENDEN:</label>
+            {{ form.profesionales }}
+        </div>
 
         <div>
             <button type="submit" class="btn btn-primary">Agregar Jinete</button>

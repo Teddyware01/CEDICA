@@ -2,31 +2,9 @@ from src.core.database import db
 from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
-from src.core.jya.models import Jinete
+from src.core.jya.models import Jinete, PensionEnum
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad
 from sqlalchemy import or_
-
-
-def list_provincias():
-    return Provincia.query.all()
-
-
-def get_provincia_by_id(provincia_id):
-    return Provincia.query.get(provincia_id)
-
-
-# Tabla Localidad
-# Retorna todas las localidades, o las de una provincia si se le pasa el id_provincia.
-def list_localidades(id_provincia=None):
-    query = Localidad.query
-    if id_provincia:
-        query = query.filter(Localidad.provincia_id == id_provincia)
-    return query.all()
-
-
-def get_localidad_by_id(localidad_id):
-    return Localidad.query.get(localidad_id)
-
 
 def list_jinetes(sort_by=None, search=None):
     query = Jinete.query
@@ -36,7 +14,7 @@ def list_jinetes(sort_by=None, search=None):
                 Jinete.nombre.like(f"%{search}%"),
                 Jinete.apellido.like(f"%{search}%"),
                 Jinete.dni.like(f"%{search}%"),
-                #Falta agregar busqueda por profesionales.
+                Jinete.profesionales.like(f"%{search}%"),
             )
     )
         
@@ -104,3 +82,30 @@ def add_domiclio(**kwargs):
     db.session.add(domicilio)
     db.session.commit()
     return domicilio
+
+def add_direccion(**kwargs):
+    direccion = Domicilio(**kwargs)
+    db.session.add(direccion)
+    db.session.commit()
+    return direccion
+
+# Tabla Provincia
+def list_provincias():
+    return Provincia.query.all()
+
+
+def get_provincia_by_id(provincia_id):
+    return Provincia.query.get(provincia_id)
+
+
+# Tabla Localidad
+# Retorna todas las localidades, o las de una provincia si se le pasa el id_provincia.
+def list_localidades(id_provincia=None):
+    query = Localidad.query
+    if id_provincia:
+        query = query.filter(Localidad.provincia_id == id_provincia)
+    return query.all()
+
+
+def get_localidad_by_id(localidad_id):
+    return Localidad.query.get(localidad_id)

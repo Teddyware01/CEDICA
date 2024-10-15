@@ -272,7 +272,20 @@ def run():
         contacto_emergencia_id=2,
     )
 
-
+    direccion_1 = jya.add_direccion(
+        calle="Olazabal",
+        numero=4321,
+        localidad_id=9,
+        provincia_id=4,
+    )
+    
+    direccion_2 = jya.add_direccion(
+        calle="Diagonal 73",
+        numero=1234,
+        localidad_id=5,
+        provincia_id=5,
+    )
+        
     jya.create_jinete(
         nombre="Martin",
         apellido="Diaz",
@@ -281,17 +294,27 @@ def run():
         fecha_nacimiento=datetime(2020, 5, 1),
         localidad_nacimiento_id=1,
         provincia_nacimiento_id=1,
-        domicilio=domicilio_ej2,
+        domicilio_id=1,
         telefono="12345654321",
         contacto_emergencia=contacto_emergencia_ej1,
         becado=True,
-        observaciones="Esto es el plan.",
+        observaciones_becado="Esto es el plan.",
         certificado_discapacidad=False,
         pension=PensionEnum.provincial,
         diagnostico=DiagnosticoEnum.otro,
         tipos_discapacidad=["mental","motora"],
         asignacion_familiar=False,
         tipo_asignacion=AsignacionEnum.por_discapacidad,
+        obra_social="OSDE",
+        nro_afiliado=123456,
+        curatela=False,
+        observaciones_curatela="Hace 1 mes.",
+        nombre_institucion = "Anexa",
+        direccion_id =1,
+        telefono_institucion = "1234567890",
+        grado = "2024",
+        observaciones_institucion = "Nada.",
+        profesionales = "Psicologa y maestra",
     )
     
     jya.create_jinete(
@@ -306,11 +329,21 @@ def run():
         telefono="12345654321",
         contacto_emergencia=contacto_emergencia_ej2,
         becado=True,
-        observaciones="Esto es el plan.",
+        observaciones_becado="Esto es el plan.",
         certificado_discapacidad=True,
         pension=PensionEnum.nacional,
         diagnostico=DiagnosticoEnum.ecne,
         tipos_discapacidad=["mental","sensorial"],
         asignacion_familiar=True,
         tipo_asignacion=AsignacionEnum.por_hijo,
+        obra_social="IOMA",
+        nro_afiliado=112233,
+        curatela=True,
+        observaciones_curatela="Ninguna.",
+        nombre_institucion = "Liceo Victor Mercante",
+        direccion_id = 2,
+        telefono_institucion = "0987654321",
+        grado = "2020",
+        observaciones_institucion = "ASDF.",
+        profesionales = "Terapeuta y docente",
     )

@@ -40,6 +40,7 @@
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>DNI</th>
+                    <th>profesionales</th>
                 </tr>
             </thead>            
             <tbody>
@@ -51,6 +52,7 @@
                         <td>{{ jinete.nombre }}</td>
                         <td>{{ jinete.apellido }}</td>
                         <td>{{ jinete.dni }}</td>
+                        <td>{{ jinete.profesionales }}</td>
                         <td>
                             <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="btn btn-edit btn-primary">Ver jinete</a>
                             <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit btn-secondary">Editar jinete</a>

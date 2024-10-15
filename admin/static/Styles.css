@@ -122,7 +122,6 @@ footer {
 p {
     margin-top: 0;
     margin-bottom: 2px; 
-    
 }
 
 .example-wrapper, .demo-wrapper {
@@ -288,7 +287,7 @@ p {
 }
 
 .dropdown-menu {
-    position: absolute;
+    position:absolute;
     top: 100%;
     left: 0;
     z-index: 1000;
@@ -409,15 +408,122 @@ p {
 
 .checkbox-group {
     display: flex;
-    align-items: center; /* Alinea verticalmente los elementos al centro */
-    justify-content: flex-start; /* Alinea horizontalmente los elementos al inicio */
-    gap: 10px; /* Espacio entre cada checkbox y su etiqueta */
+    align-items: center; 
+    justify-content: flex-start; 
+    gap: 10px; 
 }
 
 .checkbox-group label {
-    margin-right: 20px; /* Espacio a la derecha de cada etiqueta */
+    margin-right: 20px; 
 }
 
 .checkbox-group input[type="checkbox"] {
-    margin: 0 2px; /* Espacio alrededor de los checkboxes para no apretar las etiquetas */
+    margin: 0 2px; 
+}
+
+/* Móviles: Menos de 767px */
+@media (max-width: 767px) {
+    .container, .example-wrapper, .demo-wrapper {
+        padding: 10px;
+        width: auto;
+    }
+
+    .nav-item, .navbar-nav {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .main, .footer, header {
+        padding: 10px;
+    }
+
+    .navbar {
+        flex-direction: column;
+    }
+
+    h1, h2 {
+        font-size: smaller; 
+    }
+
+    .tab {
+        padding: 5px 10px; 
+    }
+}
+
+/* Tablets: Entre 768px y 1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .container, .example-wrapper, .demo-wrapper {
+        padding: 20px;
+        width: 80%;
+    }
+
+    .nav-item, .navbar-nav {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .main, .footer, header {
+        padding: 20px;
+    }
+
+    .navbar {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    h1, h2 {
+        font-size: larger; 
+    }
+
+    .tab {
+        padding: 10px 15px;
+    }
+}
+
+/* portátiles y escritorio: Mas de 1025px */
+@media (min-width: 1025px) {
+    .container, .example-wrapper, .demo-wrapper {
+        padding: 30px;
+        width: 70%;
+    }
+
+    .nav-item, .navbar-nav {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .main, .footer, header {
+        padding: 30px;
+    }
+
+    .navbar {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .tab {
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .navbar-center {
+        display: none; 
+        flex-direction: column;
+        width: 100%;
+        background-color: #e0f7fa; 
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        z-index: 1001; 
+    }
 }

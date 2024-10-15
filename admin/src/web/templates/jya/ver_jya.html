@@ -39,7 +39,7 @@
             <p><strong>Contacto de emergencia: </strong>  {{ jinete.contacto_emergencia.nombre }}, {{ jinete.contacto_emergencia.apellido }}. 
                 <strong>Teléfono:</strong> {{ jinete.contacto_emergencia.telefono }}</p>
             <p><strong>BECADO:</strong> {{"SI" if jinete.becado else "NO" }}</p>
-            <p><strong>Observaciones:</strong> {{ jinete.observaciones }}</p>
+            <p><strong>Observaciones:</strong> {{ jinete.observaciones_becado }}</p>
             <p><strong>Posee certificado discapacidad:</strong> {{"SI" if jinete.certificado_discapacidad else "NO" }}</p>
             <p><strong>¿Con qué diagnóstico?</strong> {{ jinete.diagnostico.value if jinete.diagnostico.value else '-' }}</p>
             <p><strong>Si es OTRO indique cuál:</strong> {{ jinete.otro if jinete.diagnostico.value == "otro" else '-' }}</p>
@@ -57,8 +57,20 @@
             <p><strong>¿Es beneficiario de alguna pensión?</strong>  {{"SI" if jinete.pension else "NO" }}</p>
             <p><strong>¿Cuál? </strong> {{ jinete.pension.value }}</p>
             <h2><strong> SITUACIÓN PREVISIONAL </strong></h2>
+            <p><strong>Obra social del alumno:</strong> {{ jinete.obra_social }}</p>
+            <p><strong>N° afiliado:</strong> {{ jinete.nro_afiliado }}</p>
+            <p><strong>¿Posee curatela?</strong> {{"SI" if jinete.curatela else "NO" }}</p>
+            <p><strong>Observaciones:</strong> {{ jinete.observaciones_curatela }}</p>
+
+            <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
+            <p><strong>Nombre de la Institución: </strong> {{ jinete.nombre_institucion }}</p>
+            <p><strong>Dirección: </strong> <strong>Calle: </strong>{{ jinete.domicilio.calle }}, <strong>numero: </strong>{{ jinete.domicilio.numero }}, {{ jinete.domicilio.localidad.nombre }}, {{ jinete.domicilio.provincia.nombre }}</p>
+            <p><strong>Teléfono: </strong> {{ jinete.telefono_institucion }}</p>
+            <p><strong>Grado / año actual: </strong> {{ jinete.grado }}</p>           
+            <p><strong>Observaciones:</strong> {{ jinete.observaciones_institucion }}</p>
+            <p><strong>PROFESIONALES que lo ATIENDEN: </strong> {{ jinete.profesionales }}</p>
             
-            
+
             <!-- Botones solo en Información general -->
             <div class="form-actions">
                 <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Editar jinete</a>
