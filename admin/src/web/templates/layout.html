@@ -25,11 +25,21 @@
                 <div class="navbar-center">
                     <ul class="navbar-nav">
                         <li class="nav-item">
+                            
                             <a class="nav-link" href="{{ url_for('home') }}">Inicio</a>
-                            <a class="nav-link" href="{{ url_for('ecuestre.listar_ecuestre') }}">Ecuestre</a>
-                            <a class="nav-link" href="{{ url_for('jya.listar_jinetes') }}">J&A</a>
-                            <a class="nav-link" href="{{ url_for('equipo.listar_empleados') }}">Equipo</a>
-                            <a class="nav-link" href="{{ url_for('users.listar_usuarios') }}">Usuarios</a>
+                            {% if is_authenticated(session) and check_permission(session,"ecuestre_index") %}
+                                <a class="nav-link" href="{{ url_for('ecuestre.listar_ecuestre') }}">Ecuestre</a>
+                            {% endif %}
+                            {% if is_authenticated(session) and check_permission(session,"jya_index") %}
+                                <a class="nav-link" href="{{ url_for('jya.listar_jinetes') }}">J&A</a>
+                            {% endif %}
+                            {% if is_authenticated(session) and check_permission(session,"equipo_index") %}
+                                <a class="nav-link" href="{{ url_for('equipo.listar_empleados') }}">Equipo</a>
+                            {% endif %}
+                            {% if is_authenticated(session) and check_permission(session,"user_index") %}
+                                <a class="nav-link" href="{{ url_for('users.listar_usuarios') }}">Usuarios</a>
+                            {% endif %}
+                            
                         </li>
                     </ul>
                 </div>
