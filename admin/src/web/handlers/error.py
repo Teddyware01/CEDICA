@@ -21,3 +21,17 @@ def error_internal_server_error(e):
         500, "Error Interno del Servidor", "Ocurrió un error inesperado en el servidor."
     )
     return render_template("error.html", error=error), error.code
+
+
+def unauthorized(e):
+    error = Error(
+        401, "Unauthorized", "You are not allowed to access this page."
+    )
+    return render_template("error.html", error=error), error.code
+
+
+def forbidden(e):
+    error = Error(
+        403, "Prohibido", "No tienes permiso para acceder a esta pagina."
+    )
+    return render_template("error.html", error=error), error.code

@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %} Listado de documentos del jinete {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <h1 class="text-center">Listado de documentos del jinete</h1>
+    
+    <div class="actions">
+        <a href="{{ url_for('legajo.add_documento_form') }}" class="btn btn-add btn-primary" style="margin: 10px 0;">Agregar documento</a>
+    </div>
+    
+    <!-- Formulario de búsqueda y ordenamiento -->
+    <form method="GET" action="{{ url_for('legajo.listar_documentos') }}" class="mb-3">
+        <label for="sort_by">Ordenar por:</label>
+        <select name="sort_by" id="sort_by">
+            <option value="titulo_asc">Titulo (Ascendente)</option>
+            <option value="titulo_desc">Titulo (Descendente)</option>
+            <option value="fecha_asc">Fecha de subida (Ascendente)</option>
+            <option value="fecha_desc">Fecha de subida (Descendente)</option>
+        </select>
+        <button type="submit" class="btn btn-sort btn-secondary">Ordenar</button>
+
+        <input type="text" id="search" name="search" placeholder="Titulo, o tipo" value="{{ request.args.get('search', '') }}">
+        <button type="submit" class="btn btn-sort btn-secondary">Buscar</button>
+    </form>
+        
+    <!-- Lista de documentos -->
+    <h2>Documentos:</h2>
+    {% if documentos %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Titulo</th>
+                    <th>Fecha subida</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>            
+            <tbody>
+                {% for doc in documentos %}
+                    <tr>
+                        <td>{{ doc.titulo }}</td>
+                        <td>{{ doc.fecha_subida }}</td>
+                        <td>{{ doc.tipo.value }}</td>
+                        
+                    </tr>
+                {% endfor %}
+        </table>
+    {% else %}
+        <p>No hay jinetes para mostrar.</p>
+    {% endif %}
+{% endblock %}

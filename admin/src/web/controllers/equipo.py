@@ -1,9 +1,12 @@
 # src/web/controllers/equipo.py
 from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import session
 from src.core.equipo.models import Empleado, Profesion, PuestoLaboral, CondicionEnum
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia
 from src.core.equipo.forms import AddEmpleadoForm
 from src.core import equipo
+
+from src.web.handlers.auth import check,login_required
 
 from src.core.database import db
 
@@ -11,6 +14,8 @@ bp = Blueprint("equipo", __name__, url_prefix="/equipo")
 
 
 @bp.get("/")
+@login_required
+@check("empleado_index")
 def listar_empleados():
     sort_by = request.args.get("sort_by")
     id_puesto_laboral = request.args.get("id_puesto_laboral")
@@ -25,9 +30,10 @@ def listar_empleados():
         "equipo/equipo.html", empleados=empleados, puestos_laborales=puestos_laborales
     )
 
-
 @bp.get("/agregar_empleado")
-def agregar_empleado_form():
+@login_required
+@check("empleado_create")
+def add_empleado_form():
 
     form = AddEmpleadoForm()
 
@@ -50,8 +56,10 @@ def agregar_empleado_form():
     return render_template("equipo/agregar_empleado.html", form=form)
 
 
-@bp.get("/ver_empleado/<int:empleado_id>")
-def ver_empleado(empleado_id):
+@bp.get("/ver_empleado<int:empleado_id>")
+@login_required
+@check("empleado_show")
+def show_empleado(empleado_id):
     empleado = equipo.Empleado.query.get(empleado_id)
 
     # Luego se cargaran los documentos adjuntos.
@@ -62,6 +70,8 @@ def ver_empleado(empleado_id):
 
 
 @bp.post("/eliminar_empleado/<int:empleado_id>")
+@login_required
+@check("empleado_destroy")
 def delete_empleado(empleado_id):
     empleado = Empleado.query.get_or_404(empleado_id)
     try:
@@ -76,7 +86,9 @@ def delete_empleado(empleado_id):
 
 # probar si esta bien asi o si va "request.form.campo" en lugar de "form.campo"
 @bp.post("/agregar_empleado")
-def agregar_empleado():
+@login_required
+@check("empleado_create")
+def add_empleado():
 
     form = AddEmpleadoForm(request.form)
     cargar_choices_form(form)
@@ -145,7 +157,9 @@ def cargar_choices_form(form, empleado=None):
     form.condicion.choices = [(e.name, e.value) for e in CondicionEnum]
 
 
-@bp.get("/editar_empleado/<int:empleado_id>")
+@bp.get("/editar_empleado<int:empleado_id>")
+@login_required
+@check("empleado_update")
 def edit_empleado_form(empleado_id):
     empleado = Empleado.query.get_or_404(empleado_id)  # Obtener el empleado
     form = AddEmpleadoForm(
@@ -172,6 +186,8 @@ def edit_empleado_form(empleado_id):
 
 
 @bp.post("/editar_empleado/<int:empleado_id>")
+@login_required
+@check("empleado_update")
 def update_empleado(empleado_id):
     empleado = Empleado.query.get_or_404(empleado_id)  # Obtener el empleado
     form = AddEmpleadoForm(
