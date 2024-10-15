@@ -94,6 +94,10 @@ def traer_usuario(user_id):
     user = Users.query.get(user_id)
     return user
 
+def traer_roles(user_id):
+    user = traer_usuario(user_id)
+    return user.roles
+
 def actualizar_roles(user_id, selected_roles):
     user = traer_usuario(user_id)
    

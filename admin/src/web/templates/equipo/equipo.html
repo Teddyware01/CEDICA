@@ -41,7 +41,7 @@
         <h1 class="text-center">Listado de empleados del equipo.</h1>
         
         <div class="actions">
-        <a href="{{ url_for('equipo.agregar_empleado_form') }}" class="btn btn-add">Agregar Empleado</a>
+        <a href="{{ url_for('equipo.add_empleado_form') }}" class="btn btn-add">Agregar Empleado</a>
     </div>
     
 
@@ -93,7 +93,7 @@
                 <td>{{emp.profesion.nombre}}</td>
                 <td>{{emp.puesto_laboral.nombre}}</td>
                 <td>
-                    <a href="{{ url_for('equipo.ver_empleado', empleado_id=emp.id) }}" class="btn btn-add">SHOW</a>
+                    <a href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}" class="btn btn-add">SHOW</a>
                     <a href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}" class="btn btn-edit">UPDATE</a>
                     <a href="#" class="btn btn-danger" onclick="confirmarEliminacion(event, {{ emp.id }})">Eliminar</a>
                 </td>

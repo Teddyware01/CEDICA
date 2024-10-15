@@ -56,7 +56,7 @@ def add_empleado_form():
     return render_template("equipo/agregar_empleado.html", form=form)
 
 
-@bp.get("/ver_empleado<int:empleado_id>")
+@bp.get("/ver_empleado/<int:empleado_id>")
 @login_required
 @check("empleado_show")
 def show_empleado(empleado_id):
@@ -157,7 +157,7 @@ def cargar_choices_form(form, empleado=None):
     form.condicion.choices = [(e.name, e.value) for e in CondicionEnum]
 
 
-@bp.get("/editar_empleado<int:empleado_id>")
+@bp.get("/editar_empleado/<int:empleado_id>")
 @login_required
 @check("empleado_update")
 def edit_empleado_form(empleado_id):
