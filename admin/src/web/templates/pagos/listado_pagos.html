@@ -7,9 +7,8 @@
     <div class="actions">
         <a href="{{ url_for('pagos.registrar_pago') }}" class="btn btn-add">Registrar Pago</a>
     </div>
-    
-    <!-- Formulario de búsqueda -->
-    <form method="GET" action="{{ url_for('pagos.buscar_pagos') }}" class="mb-3">
+
+    <form method="GET" action="{{ url_for('pagos.buscar_pagos') }}" class="mb-3 search-form">
         <div class="form-group">
             <label for="tipo_pago">Tipo de Pago:</label>
             <select id="tipo_pago" name="tipo_pago" class="form-control">
@@ -19,14 +18,17 @@
                 <option value="gastos_varios">Gastos Varios</option>
             </select>
         </div>
+
         <div class="form-group">
             <label for="fecha_inicio">Fecha Inicio:</label>
             <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control">
         </div>
+
         <div class="form-group">
             <label for="fecha_fin">Fecha Fin:</label>
             <input type="date" id="fecha_fin" name="fecha_fin" class="form-control">
         </div>
+
         <div class="form-group">
             <label for="orden">Ordenar por Fecha:</label>
             <select id="orden" name="orden" class="form-control">
@@ -34,9 +36,11 @@
                 <option value="desc">Descendente</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Buscar</button>
-    </form>
 
+        <div class="form-group full-width">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
 
     <table class="table">
         <thead>
@@ -55,7 +59,7 @@
                 <td>{{ pago.beneficiario }}</td>
                 <td>{{ pago.monto }}</td>
                 <td>{{ pago.fecha_pago.strftime('%Y-%m-%d') }}</td>
-                <td>{{ pago.tipo_pago.capitalize() }}</td> <!-- Formateado correctamente -->
+                <td>{{ pago.tipo_pago.capitalize() }}</td>
                 <td>{{ pago.descripcion }}</td>
                 <td>
                     <form method="POST" action="{{ url_for('pagos.eliminar_pago', id=pago.id) }}" style="display:inline;">
