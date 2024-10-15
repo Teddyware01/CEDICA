@@ -10,6 +10,8 @@ from src.web.controllers.usuarios import bp as usuarios_bp
 from src.web.controllers.auth import bp as auth_blueprint
 from flask_session import Session
 
+from src.web.handlers.auth import is_authenticated, check_permission
+
 session= Session()
 
 def create_app(env="development", static_folder="../../static"):
@@ -40,8 +42,16 @@ def create_app(env="development", static_folder="../../static"):
 
     app.register_error_handler(404, error.error_not_found)
     app.register_error_handler(500, error.error_internal_server_error)
+    app.register_error_handler(401, error.unauthorized)
+
     app.register_blueprint(equipo_blueprint)
     app.register_blueprint(auth_blueprint)
+
+    #registrar functions en jinja
+    app.jinja_env.globals.update(is_authenticated=is_authenticated)
+    app.jinja_env.globals.update(check_permission=check_permission)
+
+
     @app.cli.command(name="reset-db")
     def reset_db():
         database.reset()
@@ -49,6 +59,8 @@ def create_app(env="development", static_folder="../../static"):
     @app.cli.command(name="seeds-db")
     def seeds_db():
         seeds.run()
+
+
 
     
    # Reset y seeds automáticos al iniciar la app
