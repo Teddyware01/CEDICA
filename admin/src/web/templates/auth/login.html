@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %} Inicio de sesion {% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+    
+    
+{% block content %}
+<section>
+    
+    {{ super() }}
+    
+    
+    <h1 class="text-center">Iniciar sesión</h1>
+    
+    <form action="{{ url_for('auth.authenticate') }}" method="POST" class="client-form">
+        <input type="email" name="email" placeholder="Correo" required />
+        <input type="password" name="password" placeholder="Correo" required />
+        <input type="submit" value="Login" />
+    </form>
+</section>    
+{% endblock %}
+

@@ -9,21 +9,25 @@
     <title>{% block title %}{% endblock %} - CEDICA</title>
     {% endblock %}
 </head>
-<body>
+<body>    
     <!-- Barra de navegación superior -->
     <header>
         <nav class="navbar-class navbar-expand-lg">
-            <div class="container-fluid justify-content-center">
+            <div class="container-fluid justify-content-between">
                 <a class="navbar-tag" href="{{ url_for('home') }}">
                     <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" title="Logo" style="height: 40px;">
                 </a>
-                <!-- Contenedor central para elementos de navegación -->
+    
+                <!-- Boton que sera visible solo en pantallas chicas y medianas) -->
+                <button class="hamburger" aria-label="Toggle navigation">&#9776;</button>
+    
+                <!-- barra central para elementos de navegacion -->
                 <div class="navbar-center">
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('home') }}">Inicio</a>
-                            <a class="nav-link" href="{{ url_for('jya') }}">J&A</a>
-                            <a class="nav-link" href="{{ url_for('ecuestre') }}">Ecuestre</a>
+                            <a class="nav-link" href="{{ url_for('ecuestre.listar_ecuestre') }}">Ecuestre</a>
+                            <a class="nav-link" href="{{ url_for('jya.listar_jinetes') }}">J&A</a>
                             <a class="nav-link" href="{{ url_for('equipo.listar_empleados') }}">Equipo</a>
                             <a class="nav-link" href="{{ url_for('users.listar_usuarios') }}">Usuarios</a>
                             <!-- Agrega un enlace al módulo de pagos -->
@@ -39,40 +43,65 @@
                                 <i class="fas fa-user-circle"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                                <a class="dropdown-item" href="#" role="button">Inciar sesion</a>
-                                <a class="dropdown-item" href="#" role="button">Perfil</a>
-                                <a class="dropdown-item" href="#" role="button">Cerrar Sesión</a>
+                                {% if is_authenticated(session) %}
+                                    <a class="dropdown-item" href="#" role="button">Perfil</a>
+                                    <a class="dropdown-item" href="{{ url_for("auth.logout") }}" role="button">Cerrar Sesión</a>
+                                {% else %}
+                                    <a class="dropdown-item" href="{{ url_for("auth.login") }}" role="button">Inciar sesion</a>
+                                {% endif%}
                             </div>
                         </li>
                     </ul>
                 </div>
             </div>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    var dropdown = document.querySelector('.dropdown-toggle');
-                    var dropdownMenu = document.querySelector('.dropdown-menu');
-        
-                    dropdown.onclick = function(event) {
-                        event.preventDefault();
-                        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-                    };
-        
-                    // Opcional: Cerrar el dropdown si se hace clic fuera de él
-                    window.onclick = function(event) {
-                        if (!event.target.matches('.dropdown-toggle')) {
-                            var dropdowns = document.querySelectorAll(".dropdown-menu");
-                            for (var i = 0; i < dropdowns.length; i++) {
-                                var openDropdown = dropdowns[i];
-                                if (openDropdown.style.display === 'block') {
-                                    openDropdown.style.display = 'none';
-                                }
-                            }
-                        }
-                    };
-                });
-            </script>
         </nav>
     </header>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var dropdown = document.querySelector('.dropdown-toggle');
+                var dropdownMenu = document.querySelector('.dropdown-menu');
+    
+                dropdown.onclick = function(event) {
+                    event.preventDefault();
+                    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+                };
+    
+                // Opcional: Cerrar el dropdown si se hace clic fuera de él
+                window.onclick = function(event) {
+                    if (!event.target.matches('.dropdown-toggle')) {
+                        var dropdowns = document.querySelectorAll(".dropdown-menu");
+                        for (var i = 0; i < dropdowns.length; i++) {
+                            var openDropdown = dropdowns[i];
+                            if (openDropdown.style.display === 'block') {
+                                openDropdown.style.display = 'none';
+                            }
+                        }
+                    }
+                };
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var hamburger = document.querySelector('.hamburger');
+                var navMenu = document.querySelector('.navbar-center');
+            
+                hamburger.addEventListener('click', function() {
+                    navMenu.style.display = navMenu.style.display === 'block' ? 'none' : 'block';
+                });
+            
+                window.onclick = function(event) {
+                    if (!event.target.matches('.hamburger') && !event.target.matches('.nav-link')) {
+                        var dropdowns = document.querySelectorAll(".navbar-nav");
+                        for (var i = 0; i < dropdowns.length; i++) {
+                            var openDropdown = dropdowns[i];
+                            if (openDropdown.style.display === 'block') {
+                                openDropdown.style.display = 'none';
+                            }
+                        }
+                    }
+                };
+            });
+        </script>
     <!-- Contenido principal -->
     <div id="content">
     {% block content %}

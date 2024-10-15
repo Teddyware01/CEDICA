@@ -9,6 +9,7 @@ class CondicionEnum(Enum):
     PERSONAL_RENTADO = "Personal Rentado"
 
 
+
 class Empleado(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(100), nullable=False, unique=False)
@@ -37,6 +38,7 @@ class Empleado(db.Model):
     profesion = db.relationship("Profesion", back_populates="empleado")
     puesto_laboral = db.relationship("PuestoLaboral", back_populates="empleado")
     domicilio = db.relationship("Domicilio", back_populates="empleado")
+    ecuestre = db.relationship("Ecuestre", secondary="empleado_ecuestre", back_populates="empleado")
     contacto_emergencia = db.relationship(
         "ContactoEmergencia",
         back_populates="empleado",
