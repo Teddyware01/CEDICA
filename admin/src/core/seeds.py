@@ -8,7 +8,6 @@ from src.core.equipo.models import CondicionEnum
 from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum
 from datetime import datetime
 
-
 from src.core.auth import Permisos
 from datetime import datetime
 from pathlib import Path
@@ -20,6 +19,7 @@ from src.core.jya import legajo
 from src.core.jya.legajo.models import TipoDocumentoEnum
 
 from src.core import ecuestre
+from src.core.auth import Roles
 
 def ejecutar_sql_script(file_path):
     with open(file_path, "r", encoding="utf-8") as sql_file:
@@ -118,9 +118,6 @@ def run():
     )
 
     
-    rol_system_admin = auth.create_roles(
-        nombre="System Admin",
-    )
 
     auth.assign_rol(user1, [rol_administracion, rol_voluntariado])
     auth.assign_rol(
@@ -357,10 +354,6 @@ def run():
 
 
     # Asignacion a roles
-    # rol sys_admin
-    for permiso in Permisos.query.all():
-        auth.assign_permiso(rol_system_admin, permiso)
-        
     # rol administracion
     auth.assign_permiso(rol_administracion, empleado_index)
     auth.assign_permiso(rol_administracion, empleado_show)
@@ -621,3 +614,20 @@ def run():
     ecuestre.asignar_empleado(caballo9, [empleado5,empleado2]) 
     ecuestre.asignar_empleado(caballo10, [empleado1,empleado2, empleado4]) 
 
+
+    # Super_user que tiene todos los permisos. Utililizable para probar la pagina comodamente
+    super_user = auth.create_user(
+        email="super_user@hotmail.com",
+        alias="super_user",
+        password="super_user",
+        system_admin=True,
+        activo=True,
+    )
+    
+    rol_system_admin = auth.create_roles(
+        nombre="System Admin",
+    )
+    for perm in Permisos.query.all():
+        auth.assign_permiso(rol_system_admin, perm)
+
+    auth.assign_rol(super_user, [rol_system_admin])
