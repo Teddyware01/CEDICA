@@ -5,15 +5,21 @@ from src.core import jya
 from src.core import equipo
 from src.core.equipo.extra_models import Provincia, Domicilio
 from src.core.equipo.models import CondicionEnum
-from src.core.auth import Permisos
 from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum
 from datetime import datetime
+
+from src.core.auth import Permisos
+from datetime import datetime
 from pathlib import Path
+
+
 from src.core.database import db
 from sqlalchemy import text
 from src.core.jya import legajo
 from src.core.jya.legajo.models import TipoDocumentoEnum
 
+from src.core import ecuestre
+from src.core.auth import Roles
 
 def ejecutar_sql_script(file_path):
     with open(file_path, "r", encoding="utf-8") as sql_file:
@@ -112,9 +118,6 @@ def run():
     )
 
     
-    rol_system_admin = auth.create_roles(
-        nombre="System Admin",
-    )
 
     auth.assign_rol(user1, [rol_administracion, rol_voluntariado])
     auth.assign_rol(
@@ -186,19 +189,18 @@ def run():
 
     # Contactos de Emergencia
     contacto_emergencia_ej1 = equipo.add_contacto_emergencia(
-        nombre="juan", apellido="perez", telefono="11111111111"
+        nombre="juan", apellido="perez", telefono="1010101010"
     )
 
     contacto_emergencia_ej2 = equipo.add_contacto_emergencia(
-        nombre="jj", apellido="lopez", telefono="22222222222"
+        nombre="jj", apellido="lopez", telefono="1422222222222"
     )
 
     contacto_emergencia_ej3 = equipo.add_contacto_emergencia(
-        nombre="diego", apellido="marado", telefono="33333333333"
+        nombre="diego", apellido="marado", telefono="153333333333333"
     )
 
-    # Empleados, efectivamente...
-    equipo.create_empleado(
+    empleado1 = equipo.create_empleado(
         nombre="Juan",
         apellido="Pérez",
         dni="12345678901",
@@ -213,10 +215,10 @@ def run():
         profesion_id=1,
         puesto_laboral_id=2,
         domicilio=domicilio_ej1,
-        contacto_emergencia=contacto_emergencia_ej1,
+        contacto_emergencia=contacto_emergencia_ej1
     )
 
-    equipo.create_empleado(
+    empleado2 = equipo.create_empleado(
         nombre="María",
         apellido="Gómez",
         dni="10987654321",
@@ -234,7 +236,7 @@ def run():
         contacto_emergencia=contacto_emergencia_ej2,
     )
 
-    equipo.create_empleado(
+    empleado3 = equipo.create_empleado(
         nombre="Carlos",
         apellido="López",
         dni="12121212121",
@@ -252,7 +254,7 @@ def run():
         contacto_emergencia=contacto_emergencia_ej3,
     )
 
-    equipo.create_empleado(
+    empleado4 = equipo.create_empleado(
         nombre="Ana",
         apellido="Martínez",
         dni="23456789012",
@@ -270,7 +272,7 @@ def run():
         contacto_emergencia_id=1,
     )
 
-    equipo.create_empleado(
+    empleado5 = equipo.create_empleado(
         nombre="Lucía",
         apellido="Fernández",
         dni="34567890123",
@@ -286,6 +288,22 @@ def run():
         domicilio_id=3,
         contacto_emergencia_id=2,
     )
+
+
+    direccion_1 = jya.add_direccion(
+        calle="Olazabal",
+        numero=4321,
+        localidad_id=9,
+        provincia_id=4,
+    )
+    
+    direccion_2 = jya.add_direccion(
+        calle="Diagonal 73",
+        numero=1234,
+        localidad_id=5,
+        provincia_id=5,
+    )
+    
 
     # Tema permisos y roles (esto debe quedar definido. No se borra.)
     # Permisos
@@ -336,10 +354,6 @@ def run():
 
 
     # Asignacion a roles
-    # rol sys_admin
-    for permiso in Permisos.query.all():
-        auth.assign_permiso(rol_system_admin, permiso)
-        
     # rol administracion
     auth.assign_permiso(rol_administracion, empleado_index)
     auth.assign_permiso(rol_administracion, empleado_show)
@@ -395,6 +409,7 @@ def run():
     auth.assign_permiso(rol_ecuestre, ecuestre_update)
     auth.assign_permiso(rol_ecuestre, ecuestre_create)
     auth.assign_permiso(rol_ecuestre, ecuestre_destroy)
+    
     direccion_1 = jya.add_direccion(
         calle="Olazabal",
         numero=4321,
@@ -484,3 +499,143 @@ def run():
         tipo=TipoDocumentoEnum.evaluacion,
         jinete_id=1,
     )
+
+
+    # Modulo ecuestre
+    sede1 = ecuestre.create_sede(
+        nombre = "CASJ",
+    )
+    sede2 = ecuestre.create_sede(
+        nombre = "HLP",
+    )
+    sede3 = ecuestre.create_sede(
+        nombre = "OTRO",
+    )
+    caballo1 = ecuestre.create_ecuestre(
+        nombre="Relámpago",
+        fecha_nacimiento="2015-04-10",
+        sexo=True,
+        raza="Pura Sangre",
+        pelaje="Negro",
+        fecha_ingreso="2020-06-15",
+        sede_id=3
+    )
+
+    caballo2 = ecuestre.create_ecuestre(
+        nombre="Luna",
+        fecha_nacimiento="2017-09-25",
+        sexo=False,
+        raza="Andaluz",
+        pelaje="Blanco",
+        fecha_ingreso="2021-03-10",
+        sede_id=2
+    )
+
+    caballo3 = ecuestre.create_ecuestre(
+        nombre="Tormenta",
+        fecha_nacimiento="2016-11-14",
+        sexo=True,
+        raza="Árabe",
+        pelaje="Gris",
+        fecha_ingreso="2021-07-20",
+        sede_id=1
+    )
+
+    caballo4 = ecuestre.create_ecuestre(
+        nombre="Estrella",
+        fecha_nacimiento="2018-05-30",
+        sexo=False,
+        raza="Cuarto de Milla",
+        pelaje="Castaño",
+        fecha_ingreso="2022-01-05",
+        sede_id=1
+    )
+
+    caballo5 = ecuestre.create_ecuestre(
+        nombre="Sombra",
+        fecha_nacimiento="2014-02-18",
+        sexo=True,
+        raza="Frisón",
+        pelaje="Negro",
+        fecha_ingreso="2019-11-11",
+        sede_id=2
+    )
+
+    caballo6 = ecuestre.create_ecuestre(
+        nombre="Brisa",
+        fecha_nacimiento="2019-08-21",
+        sexo=False,
+        raza="Mustang",
+        pelaje="Palomino",
+        fecha_ingreso="2022-09-09",
+        sede_id=1
+    )
+
+    caballo7 = ecuestre.create_ecuestre(
+        nombre="Fénix",
+        fecha_nacimiento="2015-12-02",
+        sexo=True,
+        raza="Criollo",
+        pelaje="Bayo",
+        fecha_ingreso="2021-04-22",
+        sede_id=3
+    )
+
+    caballo8 = ecuestre.create_ecuestre(
+        nombre="Aurora",
+        fecha_nacimiento="2017-03-11",
+        sexo=False,
+        raza="Lusitano",
+        pelaje="Alazán",
+        fecha_ingreso="2021-10-15",
+        sede_id=2
+    )
+
+    caballo9 = ecuestre.create_ecuestre(
+        nombre="Centella",
+        fecha_nacimiento="2016-07-19",
+        sexo=True,
+        raza="Hannoveriano",
+        pelaje="Castaño Oscuro",
+        fecha_ingreso="2020-08-01",
+        sede_id=3
+    )
+
+    caballo10 = ecuestre.create_ecuestre(
+        nombre="Nube",
+        fecha_nacimiento="2018-10-05",
+        sexo=False,
+        raza="Percherón",
+        pelaje="Gris Claro",
+        fecha_ingreso="2022-03-30",
+        sede_id=1
+    )
+
+    ecuestre.asignar_empleado(caballo1, [empleado1,empleado2])
+    ecuestre.asignar_empleado(caballo2, [empleado3,empleado1]) 
+    ecuestre.asignar_empleado(caballo3, [empleado4,empleado2]) 
+    ecuestre.asignar_empleado(caballo4, [empleado5,empleado3]) 
+    ecuestre.asignar_empleado(caballo5, [empleado1,empleado5]) 
+    ecuestre.asignar_empleado(caballo6, [empleado2,empleado4]) 
+    ecuestre.asignar_empleado(caballo7, [empleado3,empleado2, empleado5])     
+    ecuestre.asignar_empleado(caballo8, [empleado4,empleado2]) 
+    ecuestre.asignar_empleado(caballo9, [empleado5,empleado2]) 
+    ecuestre.asignar_empleado(caballo10, [empleado1,empleado2, empleado4]) 
+
+
+    # Super_user que tiene todos los permisos. Utililizable para probar la pagina comodamente
+    super_user = auth.create_user(
+        email="super_user@hotmail.com",
+        alias="super_user",
+        password="super_user",
+        system_admin=True,
+        activo=True,
+    )
+    
+    rol_system_admin = auth.create_roles(
+        nombre="System Admin",
+    )
+    for perm in Permisos.query.all():
+        auth.assign_permiso(rol_system_admin, perm)
+
+    auth.assign_rol(super_user, [rol_system_admin])

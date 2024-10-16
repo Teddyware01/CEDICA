@@ -16,13 +16,15 @@ def listar_usuarios():
     users = auth.list_users(sort_by=sort_by)
     return render_template("listado.html", usuarios=users)
 
-@bp.get("/cliente<int:user_id>")
+@bp.get("/cliente/<int:user_id>")
 @login_required
 @check("user_show")
 def mostrar_usuario(user_id):
     user = auth.traer_usuario(user_id)
     roles = auth.traer_roles(user_id)
-    return render_template("ver_cliente.html", user=user, roles=roles)
+    roles_nombres = [rol.nombre for rol in roles]
+
+    return render_template("ver_cliente.html", user=user, roles_nombres=roles_nombres)
 
 @bp.get("/agregar_cliente")
 @login_required
@@ -31,7 +33,7 @@ def add_client_form():
     return render_template("add_client.html")
 
 
-@bp.get("/editar_cliente<int:user_id>")
+@bp.get("/editar_cliente/<int:user_id>")
 @login_required
 @check("user_update")
 def edit_client_form(user_id):
@@ -40,7 +42,7 @@ def edit_client_form(user_id):
     return render_template("edit_client.html", user=user, roles=roles)
 
 
-@bp.get("/eliminar_cliente<int:user_id>")
+@bp.get("/eliminar_cliente/<int:user_id>")
 @login_required
 @check("user_destroy")
 def delete_client_form(user_id):
@@ -67,7 +69,7 @@ def add_client():
     return redirect(url_for("users.listar_usuarios"))
 
 
-@bp.post("/eliminar_cliente<int:user_id>")
+@bp.post("/eliminar_cliente/<int:user_id>")
 @login_required
 @check("user_destroy")
 def delete_client(user_id):
@@ -75,7 +77,7 @@ def delete_client(user_id):
     return redirect(url_for("users.listar_usuarios"))
 
 
-@bp.post("/editar_cliente<int:user_id>")
+@bp.post("/editar_cliente/<int:user_id>")
 @login_required
 @check("user_update")
 def update_user(user_id):

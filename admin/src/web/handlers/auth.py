@@ -9,7 +9,7 @@ from src.core import auth
 def login_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        if not is_authenticated:
+        if not is_authenticated(session):
             return redirect(url_for("auth.login"))
         return f(*args, **kwargs)
     return wrapper

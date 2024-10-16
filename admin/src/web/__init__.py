@@ -9,6 +9,7 @@ from src.web import helpers
 from src.web.controllers.equipo import bp as equipo_blueprint
 from src.web.controllers.issues import bp as issues_bp
 from src.web.controllers.usuarios import bp as usuarios_bp
+from src.web.controllers.ecuestre import bp as ecuestre_bp
 from src.web.controllers.auth import bp as auth_blueprint
 from flask_session import Session
 
@@ -26,7 +27,10 @@ def create_app(env="development", static_folder="../../static"):
 
     app.register_blueprint(usuarios_bp)
     app.register_blueprint(issues_bp)
-
+    app.register_blueprint(ecuestre_bp)
+    app.register_blueprint(equipo_blueprint)
+    app.register_blueprint(auth_blueprint)
+    
     @app.route("/")
     def home():
         return redirect(url_for("auth.login"))
@@ -34,28 +38,13 @@ def create_app(env="development", static_folder="../../static"):
     @app.route("/sobre_nosotros")
     def sobre_nosotros():
         return render_template("sobre_nosotros.html")
-
-    @app.route("/ecuestre")
-    def ecuestre():
-        return render_template("ecuestre.html")
-    
-    @app.route("/equipo")
-    def equipo():
-        return render_template("equipo.html")
-    
-    @app.route("/jya")
-    def jya():
-        return render_template("jya.html")
     
     # Register object storage
     storage.init_app(app)
-    
+
     app.register_error_handler(404, error.error_not_found)
     app.register_error_handler(500, error.error_internal_server_error)
     app.register_error_handler(401, error.unauthorized)
-
-    app.register_blueprint(equipo_blueprint)
-    app.register_blueprint(auth_blueprint)
 
     #registrar functions en jinja
     app.jinja_env.globals.update(is_authenticated=is_authenticated)
@@ -79,8 +68,9 @@ def create_app(env="development", static_folder="../../static"):
 
 
     
-   # Reset y seeds automáticos al iniciar la app
-   # Deberia sacarse la eliminacion de la base de datos a la hora de usarse en deploy.
+    # Reset y seeds automáticos al iniciar la app
+    # Deberia sacarse la eliminacion de la base de datos a la hora de usarse en deploy.
+    #Lo comento porque me molesta a la hora de trabajar.
     with app.app_context():
         database.reset()  # Restablece la base de datos
         seeds.run()       # Ejecuta los seeds de la base de datos
