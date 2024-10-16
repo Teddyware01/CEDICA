@@ -22,6 +22,7 @@
         </select>
         <input type="text" id="search" name="search" placeholder="Nombre">
         <button type="submit" class="btn btn-sort">Ordenar</button>
+        <a href="{{ url_for('ecuestre.add_ecuestre_form') }}" class="btn btn-edit">Agregar</a>
     </form>
     
     {% if ecuestre %}

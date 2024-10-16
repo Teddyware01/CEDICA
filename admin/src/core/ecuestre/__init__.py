@@ -109,6 +109,14 @@ def actualizar_asignados(caballo_id, lista_id):
             ecuestre.empleado.remove(empleado_a_eliminar)
     db.session.commit()
 
+def agregar_empleados(caballo_id, lista_id):
+    ecuestre = Ecuestre.query.get(caballo_id)
+    empleados_asignados_ids = {int(empleado_id) for empleado_id in lista_id}
+    for nuevo_id in empleados_asignados_ids:
+        nuevo_empleado = Empleado.query.get(nuevo_id)
+        if nuevo_empleado:
+            ecuestre.empleado.append(nuevo_empleado)
+    db.session.commit()
 
 def delete_ecuestre(ecuestre_id):
     ecuestre = traer_ecuestre(ecuestre_id)
@@ -117,3 +125,5 @@ def delete_ecuestre(ecuestre_id):
         db.session.commit()
         return True
     return False
+
+

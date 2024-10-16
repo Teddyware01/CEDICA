@@ -78,3 +78,31 @@ def delete_ecuestre_form(ecuestre_id):
 def delete_ecuestre(ecuestre_id):
     ecuestre.delete_ecuestre(ecuestre_id)
     return redirect(url_for("ecuestre.listar_ecuestre"))
+
+
+@bp.get("/add_ecuestre")
+def add_ecuestre_form():
+    todos_empleados = ecuestre.traer_todosempleados()
+    return render_template("ecuestre/add_ecuestre.html", empleados=todos_empleados)
+
+@bp.post("/add_ecuestre")
+def add_ecuestre():
+    sexo = request.form["sexo"],
+    if(sexo == "MACHO"):
+        sexo = True
+    else:
+        sexo = False
+    nuevo_ecuestre = ecuestre.create_ecuestre(
+        nombre = request.form["nombre"],
+        fecha_nacimiento = request.form["fecha_nacimiento"],
+        sexo = sexo,
+        raza = request.form["raza"],
+        pelaje = request.form["pelaje"],
+        fecha_ingreso = request.form["fecha_ingreso"],
+        sede_id = int(request.form["sede"])
+    )
+    ecuestre_id = nuevo_ecuestre.id
+    entrenadores_asignados = request.form.getlist("entrenadores_asignados")
+    ecuestre.agregar_empleados(ecuestre_id,entrenadores_asignados)
+    flash("Ecuestre agregado exitosamente", "success")
+    return redirect(url_for("ecuestre.listar_ecuestre"))
