@@ -35,6 +35,11 @@ def add_jinete_form():
     form.domicilio_localidad.choices = [
         (p.id, p.nombre) for p in jya.list_localidades()
     ]
+    
+    form.localidad_nacimiento.choices = [
+        (l.id, l.nombre) for l in jya.list_localidades()
+    ]
+    
     form.tipo_asignacion.choices = [(asig.name, asig.value) for asig in AsignacionEnum]
     
     form.dia.choices = [(dia.name, dia.value) for dia in DiasEnum]
@@ -69,25 +74,34 @@ def add_jinete():
         dni=request.form["dni"],
         edad=request.form["edad"],
         fecha_nacimiento=request.form["fecha_nacimiento"],
+        localidad_nacimiento=jya.get_localidad_by_id(form.domicilio_localidad.data),
+        provincia_nacimiento=jya.get_provincia_by_id(form.domicilio_provincia.data),
         domicilio=nuevo_domicilio,
         telefono=request.form["telefono"],
         contacto_emergencia_id=nuevo_contacto_emergencia.id,
         becado=form.becado.data,
-        observaciones=form.observaciones.data,
+        observaciones_becado=form.observaciones_becado.data,
         certificado_discapacidad=form.certificado_discapacidad.data,
-        #beneficiario_pension=form.beneficiario_pension.data,
-        pension=form.pension.data,
         diagnostico=form.diagnostico.data,
         otro=form.otro.data,
+        beneficiario_pension=form.beneficiario_pension.data,
+        pension = form.pension.data,
         tipos_discapacidad = [TiposDiscapacidadEnum[tipos_discapacidad] for tipos_discapacidad in form.tipos_discapacidad.data],
-        asignacion_familiar=form.asignacion.data,
-        tipo_asignacion=[AsignacionEnum[tipo_asignacion] for tipo_asignacion in form.tipo_asignacion.data],
+        asignacion_familiar=form.asignacion_familiar.data,
+        tipo_asignacion=AsignacionEnum[form.tipo_asignacion.data] if form.asignacion_familiar.data and form.tipo_asignacion.data else None,
         obra_social=form.obra_social.data,
         nro_afiliado=form.nro_afiliado.data,
         curatela=form.curatela.data,
+        observaciones_curatela=form.observaciones_curatela.data,
+        nombre_institucion=form.nombre_institucion.data,
+        direccion=nuevo_domicilio,
+        telefono_institucion=form.telefono_institucion.data,
+        grado=form.grado.data,
         observaciones_institucion=form.observaciones_institucion.data,
         profesionales=form.profesionales.data,
-        
+        trabajo_institucional=form.trabajo_institucional.data,
+        condicion=form.condicion.data,
+        sede=form.sede.data,
         dia = [DiasEnum[dia] for dia in form.dia.data],
         
     )

@@ -119,7 +119,7 @@
 
         <div>
             <label for="observaciones" class="form-element">observaciones:</label>
-            {{ form.observaciones() }}
+            {{ form.observaciones_becado() }}
         </div>
 
         <div>
@@ -204,26 +204,26 @@
 
         <div>
             <label for="beneficiario_pension" class="form-element">¿Es beneficiario de alguna pensión?</label>
-            <input type="radio" id="pension_si" name="pension" value="si">
+            <input type="radio" id="pension_si" name="beneficiario_pension" value="si">
             <label for="pension_si">Sí</label>
-            <input type="radio" id="pension_no" name="pension" value="no">
+            <input type="radio" id="pension_no" name="beneficiario_pension" value="no">
             <label for="pension_no">No</label>
         </div>
 
         <div>
             <label for="pension" class="form-element">tipo pension:</label>
-            {{ form.pension }}
+            {{ form.pension(id="tipo_pension") }}
         </div>
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                const radioButtons = document.querySelectorAll('input[name="pension"]');
-                const selectAsignacion = document.getElementById('pension');
+                const radioButtons = document.querySelectorAll('input[name="beneficiario_pension"]');
+                const selectPension = document.getElementById('tipo_pension');
             
                 radioButtons.forEach(radio => {
                     radio.addEventListener('change', function() {
                         // Habilita o deshabilita el elemento según si la opción "Sí" está seleccionada
-                        selectAsignacion.disabled = !document.getElementById('pension_si').checked;
+                        selectPension.disabled = !document.getElementById('pension_si').checked;
                     });
                 });
             });
@@ -234,6 +234,11 @@
         <div>
             <label for="obra_social" class="form-element">Obra Social:</label>
             {{ form.obra_social }}
+        </div>
+        
+        <div>
+            <label for="nro_afiliado" class="form-element">Numero afiliado:</label>
+            {{ form.nro_afiliado }}
         </div>
 
         <div>
@@ -253,7 +258,7 @@
 
         <div>
             <label for="nombre_institucion" class="form-element">Nombre de la Institución:</label>
-            {{ form.nombre }}
+            {{ form.nombre_institucion }}
         </div>
 
         <div>

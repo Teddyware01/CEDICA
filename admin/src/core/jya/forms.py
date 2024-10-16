@@ -57,7 +57,7 @@ class AddJineteForm(FlaskForm):
     
     becado = BooleanField("Becado")
     
-    observaciones = StringField("Observaciones")
+    observaciones_becado = StringField("Observaciones becado")
     
     certificado_discapacidad = BooleanField("Certificado de discapacidad")
     
@@ -69,8 +69,11 @@ class AddJineteForm(FlaskForm):
         validators=[DataRequired(message="El tipo de diagnostico es obligatorio")],
     )
     
+    beneficiario_pension = BooleanField("Es beneficiario de una pension?")
+    
     pension = SelectField(
         "Tipo pension",
+        coerce=str,
         choices=[(pens.name, pens.value) for pens in PensionEnum],
         validators=[DataRequired(message="El tipo de pension es obligatorio")],
     )
@@ -140,17 +143,23 @@ class AddJineteForm(FlaskForm):
     )
     nro_afiliado = StringField(
         "Número Afiliado",
-        validators=[
-            Length(max=25),
-            DataRequired(message="El número de afiliado de obra social es obligatorio")
+        validators=[DataRequired(message="El número de afiliado de obra social es obligatorio")
         ],
     )
     
     curatela = BooleanField("Curatela", validators=[DataRequired("Indique si posee curatela")])
     
+    observaciones_curatela = StringField("Observaciones curatela")
+    
+    nombre_institucion = StringField("Nombre institucion")
+    
+    telefono_institucion = StringField("Telefono institucion")
+    
     grado = IntegerField("Grado", validators=[DataRequired("Ingrese el grado / año actual")])
     
-    profesionales = SelectField(
+    observaciones_institucion = StringField("Observaciones institucion")
+    
+    profesionales = StringField(
         "Profesionales",
         validators=[DataRequired(message="Los profesionales son obligatorios")],
     )

@@ -106,9 +106,9 @@ class DiasEnum(Enum):
     domingo="Domingo"
 
 class AsignacionEnum(Enum):
-    por_hijo="Asignación Universal por hijo"
-    por_discapacidad="Asignación Universal por hijo con Discapacidad"
-    escolar="Asignación por ayuda escolar anual"
+    por_hijo='Asignación Universal por hijo'
+    por_discapacidad='Asignación Universal por hijo con Discapacidad'
+    escolar='Asignación por ayuda escolar anual'
     
 class DiagnosticoEnum(Enum):
     ecne="ECNE"
@@ -183,7 +183,6 @@ class Jinete(db.Model):
     provincia_nacimiento = db.relationship("Provincia", back_populates="jinetes")
     domicilio_id = db.Column(db.Integer, db.ForeignKey("domicilio.id"), nullable=False)
     domicilio = db.relationship("Domicilio", foreign_keys=[domicilio_id], back_populates="jinetes")
-    fecha_nacimiento = db.Column(db.DateTime, nullable=False)
     telefono = db.Column(db.String(15), nullable=False)
     contacto_emergencia_id = db.Column(db.Integer, db.ForeignKey("contacto_emergencia.id"), nullable=False)
     contacto_emergencia = db.relationship("ContactoEmergencia", back_populates="jinete")
@@ -201,17 +200,17 @@ class Jinete(db.Model):
     nro_afiliado = db.Column(db.String(25), nullable=False, unique=False)
     curatela = db.Column(db.Boolean, nullable=False)
     observaciones_curatela = db.Column(db.String(255), nullable=True)
-    nombre_institucion = db.Column(db.String(50), nullable=False)
+    nombre_institucion = db.Column(db.String(50), nullable=True) #camb a F
     direccion_id = db.Column(db.Integer, db.ForeignKey("domicilio.id"))
     direccion = db.relationship("Domicilio", foreign_keys=[direccion_id], backref="direccion_jinetes")
-    telefono_institucion = db.Column(db.String(15), nullable=False)
+    telefono_institucion = db.Column(db.String(15), nullable=True) #camb a F
     grado = db.Column(db.Integer, nullable=False)
     observaciones_institucion = db.Column(db.String(255), nullable=True)
     profesionales = db.Column(db.String(255), nullable=True)
     
-    trabajo_institucional=db.Column(db.Enum(TrabajoEnum), nullable=False)
+    trabajo_institucional=db.Column(db.Enum(TrabajoEnum), nullable=True) #camb a F
     condicion=db.Column(db.Boolean, nullable=False) # true regular, false de baja
-    sede=db.Column(db.Enum(SedeEnum), nullable=False)
+    sede=db.Column(db.Enum(SedeEnum), nullable=True) #camb a F
     dia=db.Column(ARRAY(db.Enum(DiasEnum)), nullable=True)
     #profesor si puesto laboral = Terapeuta o profesion = profesor.
     #conductor_caballo dado de alta al sistema.
