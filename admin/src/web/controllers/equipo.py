@@ -53,10 +53,10 @@ def add_empleado_form():
     ]
     form.condicion.choices = [(e.name, e.value) for e in CondicionEnum]
 
-    return render_template("equipo/add_empleado.html", form=form)
+    return render_template("equipo/agregar_empleado.html", form=form)
 
 
-@bp.get("/ver_empleado<int:empleado_id>")
+@bp.get("/ver_empleado/<int:empleado_id>")
 @login_required
 @check("empleado_show")
 def show_empleado(empleado_id):
@@ -65,7 +65,7 @@ def show_empleado(empleado_id):
     # Luego se cargaran los documentos adjuntos.
     documentos = None
     return render_template(
-        "equipo/show_empleado.html", empleado=empleado, documentos=documentos
+        "equipo/ver_empleado.html", empleado=empleado, documentos=documentos
     )
 
 
@@ -132,7 +132,6 @@ def add_empleado():
         flash("Empleado registrado exitosamente", "success")
         return redirect(url_for("equipo.listar_empleados"))
     else:
-        flash("Por favor corrija los errores en el formulario:", "error")
         for field, errors in form.errors.items():
             for error in errors:
                 flash(
@@ -140,7 +139,7 @@ def add_empleado():
                     "danger",
                 )
 
-        return redirect(url_for("equipo.add_empleado_form"))
+        return redirect(url_for("equipo.agregar_empleado"))
 
 
 def cargar_choices_form(form, empleado=None):
@@ -158,7 +157,7 @@ def cargar_choices_form(form, empleado=None):
     form.condicion.choices = [(e.name, e.value) for e in CondicionEnum]
 
 
-@bp.get("/editar_empleado<int:empleado_id>")
+@bp.get("/editar_empleado/<int:empleado_id>")
 @login_required
 @check("empleado_update")
 def edit_empleado_form(empleado_id):
@@ -231,11 +230,11 @@ def update_empleado(empleado_id):
         # Guardar los cambios en la base de datos
         flash("Empleado registrado  exitosamente", "success")
         db.session.commit()
-        return show_empleado(empleado_id=empleado.id)
+        return redirect(url_for("equipo.ver_empleado", empleado_id=empleado.id))
+
     else:
         flash("Por favor corrija los errores en el formulario:", "error")
         for field, errors in form.errors.items():
             for error in errors:
                 flash(f"Error en el campo {field}: {error}", "danger")
-
-    return render_template("equipo/edit_empleado.html", form=form, empleado=empleado)
+        return render_template("equipo/edit_empleado.html", form=form, empleado=empleado)

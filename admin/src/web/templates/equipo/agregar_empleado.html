@@ -7,11 +7,11 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Registro de Empleado</h1>
-        
-    Agregar campos faltantes !!!!
+    {{ super() }}
     
-    <form method="POST" action="{{ url_for('equipo.add_empleado') }}">
+    <h1>Registro de Empleado</h1>
+    
+    <form method="POST" action="{{ url_for('equipo.agregar_empleado') }}">
         {{ form.hidden_tag() }}
         
         <div>

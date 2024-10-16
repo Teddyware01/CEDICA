@@ -8,6 +8,8 @@
 {% endblock %}
 
 {% block content %}
+    {{ super() }}
+
     <script>
         function confirmarEliminacion(event, empleadoId) {
             event.preventDefault();  // Detener el comportamiento predeterminado del enlace
@@ -57,8 +59,8 @@
     <h3>Domicilio:</h3>
     <p>Calle: {{empleado.domicilio.calle}}</p>
     <p>Numero: {{empleado.domicilio.numero}}</p>
-    <p>Departamento: {{empleado.domicilio.departamento}}</p>
-    <p>Piso: {{empleado.domicilio.piso}}</p>
+    <p>Departamento: {{empleado.domicilio.departamento if empleado.domicilio.departamento else "Ninguno."}}</p>
+    <p>Piso: {{empleado.domicilio.Piso if empleado.domicilio.Piso else "Ninguno."}}</p>
     <p>Provincia: {{empleado.domicilio.provincia.nombre}}</p>
     <p>Localidad: {{empleado.domicilio.localidad.nombre}}</p>
     
@@ -74,7 +76,7 @@
             <p> {{doc.nombre}}.</p>
         {% endfor %}
     {% else %}
-    <p>El empleado no tiene documentos para mostrar.</p>
+         <p>El empleado no tiene documentos para mostrar.</p>
     {% endif %}
 {% endblock %}
 
