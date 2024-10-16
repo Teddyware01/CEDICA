@@ -10,7 +10,8 @@ bp = Blueprint("ecuestre", __name__, url_prefix="/ecuestre")
 def listar_ecuestre():
     sort_by = request.args.get("sort_by")
     search = request.args.get("search")
-    ecuestres = ecuestre.list_ecuestre(sort_by=sort_by, search=search)
+    page = request.args.get("page", type=int, default=1) 
+    ecuestres = ecuestre.list_ecuestre(sort_by=sort_by, search=search, page=page)
     return render_template("ecuestre/listado.html", ecuestre=ecuestres)
 
 @bp.get("/ecuestre<int:ecuestre_id>")

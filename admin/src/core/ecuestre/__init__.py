@@ -18,7 +18,7 @@ def create_ecuestre(**kwargs):
 
     return ecuestre
 
-def list_ecuestre(sort_by=None, search=None):
+def list_ecuestre(sort_by=None, search=None, page=1, per_page=5):
     query = Ecuestre.query
     if search:
         query = query.filter(
@@ -37,7 +37,9 @@ def list_ecuestre(sort_by=None, search=None):
             query = query.order_by(Ecuestre.fecha_ingreso.asc())
         elif sort_by == "fecha_ingreso_desc":
             query = query.order_by(Ecuestre.fecha_ingreso.desc())
-    return query.all()
+
+    paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
+    return paginated_query
 
 def traer_ecuestre(ecuestre_id):
     ecuestre = Ecuestre.query.get(ecuestre_id)

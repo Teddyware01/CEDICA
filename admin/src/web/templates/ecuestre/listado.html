@@ -56,6 +56,50 @@
         {% endfor %}
         </tbody>
     </table>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+          
+          {% if ecuestre.has_prev %}
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for('ecuestre.listar_ecuestre', page=ecuestre.prev_num, sort_by=sort_by, search=search) }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+          {% endif %}
+      
+          
+          {% if ecuestre.page > 1 %}
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for('ecuestre.listar_ecuestre', page=ecuestre.page - 1, sort_by=sort_by, search=search) }}">
+                {{ ecuestre.page - 1 }}
+              </a>
+            </li>
+          {% endif %}
+      
+         
+          <li class="page-item active">
+            <a class="page-link">{{ ecuestre.page }}</a>
+          </li>
+      
+          
+          {% if ecuestre.page < ecuestre.pages %}
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for('ecuestre.listar_ecuestre', page=ecuestre.page + 1, sort_by=sort_by, search=search) }}">
+                {{ ecuestre.page + 1 }}
+              </a>
+            </li>
+          {% endif %}
+      
+          
+          {% if ecuestre.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for('ecuestre.listar_ecuestre', page=ecuestre.next_num, sort_by=sort_by, search=search) }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>      
     {% else %}
         <p>No hay caballos para mostrar.</p>
     {% endif %}
