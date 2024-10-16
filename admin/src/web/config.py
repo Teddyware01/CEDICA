@@ -5,7 +5,7 @@ class Config(object):
     """Base configuracion."""
 
     SECRET_KEY = "secret"
-    TESTING = True ## luego cambiar, puede ser un error al levantar el programa
+    TESTING = True
     SESSION_TYPE = "filesystem"
 
 
@@ -46,6 +46,8 @@ class DevelopmentConfig(Config):
             'client_encoding': 'utf8'
         }
     }
+    
+    
     
 
 
