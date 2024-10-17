@@ -13,7 +13,8 @@
         <h1 class="text-center">Editar Jinete</h1>
         
         <form action="{{ url_for('jya.editar_jinete', jinete_id=jinete.id) }}" method="POST">
-
+            {{ form.hidden_tag() }}
+            
             <h2><strong> DATOS PERSONALES DEL JINETE O AMAZONA </strong></h2>
                 
             <div>
@@ -45,12 +46,12 @@
 
             <div>
                 <label for="provincia_nacimiento" class="form-element">Provincia:</label>
-                {{ form.domicilio_provincia }}
+                {{ form.provincia_nacimiento }}
             </div>
 
             <div>
                 <label for="localidad_nacimiento" class="form-element">Localidad:</label>
-                {{ form.domicilio_localidad }}
+                {{ form.localidad_nacimiento }}
             </div>
 
     
@@ -161,17 +162,24 @@
                 {{ form.otro }}
             </div>
     
+                
             <div class="form-group">
                 <label for="tipos_discapacidad">Tipos de Discapacidad:</label>
-                <div class="checkbox-group">
-                    {% for subfield in form.tipos_discapacidad %}
-                    <input type="checkbox" id="tipo_{{ loop.index0 }}" name="tipos_discapacidad"
-                        value="{{ subfield.data }}" {% if subfield.data in form.tipos_discapacidad.data %} checked {% endif %}>
-                    <label for="tipo_{{ loop.index0 }}">{{ subfield.label.text }}</label>
-                    {% endfor %}
-                </div>
+                {% for value, label in form.tipos_discapacidad.choices %}
+                <input type="checkbox" id="tipo_{{ loop.index0 }}" name="tipos_discapacidad[]"
+                    value="{{ value }}" 
+                    {% if label in form.tipos_discapacidad.data %} checked {% endif %}>
+                <label for="tipo_{{ loop.index0 }}">{{ label }}</label>
+                {% endfor %}
             </div>
-    
+            
+            <label for="becado" class="form-element">Becado:</label>
+            <input type="radio" id="becado_si" name="becado" value="si" {{ 'checked' if form.becado.data else '' }}>
+
+
+            
+            
+
             <div>
                 <label for="asignacion_familiar" class="form-element">¿Percibe alguna asignación familiar?</label>
                 <input type="radio" id="asignacion_si" name="asignacion" value="si" {{ 'checked' if form.asignacion_familiar.data else '' }}>
@@ -263,24 +271,35 @@
                 {{ form.telefono_institucion }}
             </div>
     
+            
             <div>
-                <label for="domicilio_calle" class="form-element">Calle:</label>
-                {{ form.domicilio_calle }}
+                <label for="institucion_direccion_calle" class="form-element">Calle:</label>
+                {{ form.institucion_direccion_calle }}
             </div>
             
             <div>
-                <label for="domicilio_numero" class="form-element">Numero:</label>
-                {{ form.domicilio_numero }}
+                <label for="institucion_direccion_numero" class="form-element">Numero:</label>
+                {{ form.institucion_direccion_numero }}
+            </div>
+             
+            <div>
+                <label for="institucion_direccion_departamento" class="form-element">Calle:</label>
+                {{ form.institucion_direccion_departamento }}
             </div>
             
             <div>
-                <label for="domicilio_provincia" class="form-element">Provincia:</label>
-                {{ form.domicilio_provincia }}
+                <label for="institucion_direccion_piso" class="form-element">Numero:</label>
+                {{ form.institucion_direccion_piso }}
             </div>
             
             <div>
-                <label for="domicilio_localidad" class="form-element">Localidad:</label>
-                {{ form.domicilio_localidad }}
+                <label for="institucion_direccion_provincia" class="form-element">Provincia:</label>
+                {{ form.institucion_direccion_provincia }}
+            </div>
+            
+            <div>
+                <label for="institucion_direccion_localidad" class="form-element">Localidad:</label>
+                {{ form.institucion_direccion_localidad }}
             </div>
     
             <div>

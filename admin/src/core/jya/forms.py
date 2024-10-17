@@ -9,7 +9,8 @@ from wtforms import (
     SubmitField,
     widgets,
 )
-from wtforms.validators import DataRequired, Email, Length, Optional, Regexp, ValidationError
+from src.core.equipo.extra_models import Localidad
+from wtforms.validators import DataRequired, Email, Length, Optional, Regexp, ValidationError, NumberRange
 from wtforms.widgets import DateInput
 from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum
 
@@ -39,8 +40,7 @@ class AddJineteForm(FlaskForm):
         "Edad",
         validators=[
             DataRequired(message="La edad es obligatoria"),
-            Length(max=3),
-            Regexp(r"^\d+$", message="La edad debe contener solo números"),
+            NumberRange(min=0, max=120, message="La edad debe estar entre 0 y 120 años"),
         ],
     )
         
@@ -50,11 +50,7 @@ class AddJineteForm(FlaskForm):
         validators=[DataRequired(message="La fecha de nacimiento es obligatoria")],
         widget=DateInput()
     )
-    
-    telefono = StringField(
-        "Teléfono",
-        validators=[DataRequired(message="El teléfono es obligatorio"), Length(max=15)],
-    )
+
     
     becado = BooleanField("Becado")
     
@@ -84,15 +80,16 @@ class AddJineteForm(FlaskForm):
         coerce=str,
         validators=[DataRequired(message="Seleccionar al menos un tipo de discapacidad es obligatorio")],
     )
-    
-    localidad_nacimiento = SelectField(
-        "Localidad de Nacimiento", coerce=int, validators=[DataRequired()]
-    )
-    
+    # LUGAR NACIMIENTO
     provincia_nacimiento = SelectField(
         "Provincia de Nacimiento", coerce=int, validators=[DataRequired()]
     )
     
+    localidad_nacimiento = SelectField(
+        "Localidad de Nacimiento", coerce=int, validators=[DataRequired()]
+    )
+
+    # domicilio actual
     domicilio_calle = StringField("Calle", validators=[DataRequired("Ingrese calle del domicilio")])
     domicilio_numero = IntegerField("Número", validators=[DataRequired("Ingrese número del domicilio")])
     domicilio_departamento = IntegerField("Departamento", validators=[Optional()])
@@ -104,6 +101,13 @@ class AddJineteForm(FlaskForm):
         "Localidad", coerce=int, validators=[DataRequired()]
     )
     
+    telefono = StringField(
+        "Teléfono",
+        validators=[DataRequired(message="El teléfono es obligatorio"), Length(max=15),
+            Regexp(r"^\d+$", message="El telefono debe contener solo números")]
+    )
+    
+    #Contacto emergencia
     contacto_emergencia_nombre = StringField(
         "Nombre", validators=[DataRequired(), Length(max=100)]
     )
@@ -160,7 +164,18 @@ class AddJineteForm(FlaskForm):
         "Teléfono institucion", 
         validators=[DataRequired(message="El teléfono es obligatorio"), Length(max=15)],
     )
+    # direccion de la institucion
     
+    # domicilio actual
+    institucion_direccion_calle = StringField("Calle", validators=[DataRequired("Ingrese calle del domicilio")])
+    institucion_direccion_numero = IntegerField("Número", validators=[DataRequired("Ingrese número del domicilio")])
+    institucion_direccion_departamento = IntegerField("Departamento", validators=[Optional()])
+    institucion_direccion_piso = IntegerField("Piso", validators=[Optional()])
+    institucion_direccion_provincia = SelectField("Provincia", coerce=int, validators=[DataRequired()])
+    institucion_direccion_localidad = SelectField("Localidad", coerce=int, validators=[DataRequired()])
+    
+
+
     grado = IntegerField("Grado", validators=[DataRequired("Ingrese el grado / año actual")])
     
     observaciones_institucion = StringField("Observaciones institucion")

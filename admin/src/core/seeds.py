@@ -3,7 +3,7 @@ from src.core import board
 from src.core import auth
 from src.core import jya
 from src.core import equipo
-from src.core.equipo.extra_models import Provincia, Domicilio
+from src.core.equipo.extra_models import Provincia,Localidad, Domicilio
 from src.core.equipo.models import CondicionEnum
 from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum
 from datetime import datetime
@@ -21,6 +21,14 @@ from src.core.jya.legajo.models import TipoDocumentoEnum
 from src.core import ecuestre
 from src.core.auth import Roles
 
+
+from src.core import equipo
+from src.core import auth
+from src.core.equipo.extra_models import Provincia 
+
+from src.core.database import db
+from sqlalchemy import text
+
 def ejecutar_sql_script(file_path):
     with open(file_path, "r", encoding="utf-8") as sql_file:
         sql_script = sql_file.read()
@@ -29,12 +37,6 @@ def ejecutar_sql_script(file_path):
         connection.execute(text(sql_script))
         connection.commit()
 
-from src.core import equipo
-from src.core import auth
-from src.core.equipo.extra_models import Provincia 
-
-from src.core.database import db
-from sqlalchemy import text
 def ejecutar_sql_script(file_path):
     with open(file_path, 'r',encoding='utf-8') as sql_file:
         sql_script = sql_file.read()
@@ -424,7 +426,9 @@ def run():
         dni="12345678",
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
-        nacimiento=nacimiento_1,
+        #nacimiento=nacimiento_1,
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=1,
         domicilio_id=1,
         telefono="12345654321",
         contacto_emergencia=contacto_emergencia_ej1,
@@ -459,7 +463,9 @@ def run():
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
         domicilio_id=3,
-        nacimiento=nacimiento_2,
+        #nacimiento=nacimiento_2,
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=1,
         telefono="12345654321",
         contacto_emergencia=contacto_emergencia_ej2,
         becado=True,

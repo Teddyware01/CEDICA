@@ -40,9 +40,9 @@
             <p><strong>Posee certificado discapacidad:</strong> {{"SI" if jinete.certificado_discapacidad else "NO" }}</p>
             <p><strong>¿Con qué diagnóstico?</strong> {{ jinete.diagnostico.value if jinete.diagnostico.value else '-' }}</p>
             <p><strong>Si es OTRO indique cuál:</strong> {{ jinete.otro if jinete.diagnostico.value == "otro" else '-' }}</p>
-            <p><strong>Tipo de Discapacidad:</strong> {{ jinete.tipos_discapacidad.name }}
-                {% for tipo in tipos_discapacidad %}
-                    <span>{{ tipo }}</span>{% if not loop.last %}, {% endif %}
+            <p><strong>Tipo de Discapacidad:</strong> 
+                {% for tipo in jinete.tipos_discapacidad %}
+                    <span>{{ tipo.value }}</span>{% if not loop.last %}, {% endif %}
                 {% endfor %}
             </p>
             <p><strong>¿Percibe alguna Asignación Familiar?</strong> {{"SI" if jinete.asignacion_familiar else "NO" }}</p>

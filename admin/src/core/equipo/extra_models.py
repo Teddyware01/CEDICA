@@ -33,18 +33,16 @@ class Localidad(db.Model):
     provincia_id = db.Column(db.Integer, db.ForeignKey("provincia.id"), nullable=False)
     provincia = db.relationship("Provincia", backref="localidad")
     
-
+    jinetes = db.relationship("Jinete", foreign_keys="Jinete.localidad_nacimiento_id", back_populates="localidad_nacimiento")
 
 class Provincia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(255), nullable=False, unique=True)
 
+    jinetes = db.relationship("Jinete", foreign_keys="Jinete.provincia_nacimiento_id", back_populates="provincia_nacimiento")
 
-
+    
 class Nacimiento(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     localidad_id = db.Column(db.Integer, db.ForeignKey("localidad.id"), nullable=False)
     provincia_id = db.Column(db.Integer, db.ForeignKey("provincia.id"), nullable=False)
-    localidad = db.relationship("Localidad", backref="nacimientos")
-    provincia = db.relationship("Provincia", backref="nacimientos")
-    jinetes = db.relationship("Jinete", back_populates="nacimiento")
