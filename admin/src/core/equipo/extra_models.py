@@ -16,7 +16,7 @@ class Domicilio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     calle = db.Column(db.String(100), nullable=False, unique=False)
     numero = db.Column(db.Integer, nullable=False, unique=False)
-    departamento = db.Column(db.Integer, nullable=True, unique=False)
+    departamento = db.Column(db.String(10), nullable=True, unique=False) # !!!!! cambie a string
     piso = db.Column(db.Integer, nullable=True, unique=False)
     localidad_id = db.Column(db.Integer, db.ForeignKey("localidad.id"), nullable=False)
     provincia_id = db.Column(db.Integer, db.ForeignKey("provincia.id"), nullable=False)
@@ -40,9 +40,3 @@ class Provincia(db.Model):
     nombre = db.Column(db.String(255), nullable=False, unique=True)
 
     jinetes = db.relationship("Jinete", foreign_keys="Jinete.provincia_nacimiento_id", back_populates="provincia_nacimiento")
-
-    
-class Nacimiento(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    localidad_id = db.Column(db.Integer, db.ForeignKey("localidad.id"), nullable=False)
-    provincia_id = db.Column(db.Integer, db.ForeignKey("provincia.id"), nullable=False)

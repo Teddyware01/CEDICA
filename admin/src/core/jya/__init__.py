@@ -2,7 +2,7 @@ from src.core.database import db
 from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
-from src.core.jya.models import Jinete, PensionEnum
+from src.core.jya.models import Jinete, Familiar
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad
 from sqlalchemy import or_
 
@@ -103,3 +103,9 @@ def list_localidades(id_provincia=None):
 
 def get_localidad_by_id(localidad_id):
     return Localidad.query.get(localidad_id)
+
+def add_familiar(**kwargs):
+    familiar = Familiar(**kwargs)
+    db.session.add(familiar)
+    db.session.commit()
+    return familiar

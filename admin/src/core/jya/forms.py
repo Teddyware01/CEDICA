@@ -14,6 +14,21 @@ from wtforms.validators import DataRequired, Email, Length, Optional, Regexp, Va
 from wtforms.widgets import DateInput
 from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum
 
+
+class FamiliarForm(FlaskForm):
+    parentesco_familiar = StringField('Parentesco', validators=[DataRequired()])
+    nombre_familiar = StringField('Nombre', validators=[DataRequired()])
+    apellido_familiar = StringField('Apellido', validators=[DataRequired()])
+    dni_familiar = StringField('DNI', validators=[DataRequired()])
+    direccion_familiar = StringField('Domicilio actual', validators=[DataRequired()])
+    localidad_familiar = StringField('Localidad', validators=[DataRequired()])
+    provincia_familiar = StringField('Provincia', validators=[DataRequired()])
+    celular_familiar = StringField('Celular actual', validators=[DataRequired()])
+    email_familiar = StringField('e-mail', validators=[DataRequired()])
+    nivel_escolaridad_familiar = SelectField('Nivel de escolaridad', choices=[('Primario', 'Primario'), ('Secundario', 'Secundario'), ('Terciario', 'Terciario'), ('Universitario', 'Universitario')], validators=[DataRequired()])
+    actividad_ocupacion_familiar = StringField('Actividad u ocupación', validators=[DataRequired()])
+
+
 class AddJineteForm(FlaskForm):
     
     nombre = StringField(

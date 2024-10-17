@@ -63,6 +63,21 @@
             <p><strong>Observaciones:</strong> {{ jinete.observaciones_institucion }}</p>
             <p><strong>PROFESIONALES que lo ATIENDEN: </strong> {{ jinete.profesionales }}</p>
             
+            <h2><strong> DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
+            <p><strong>Parentesco: </strong> {{ jinete.parentesco_familiar }}</p>
+            <p><strong>Nombre: </strong> {{ jinete.nombre_familiar }}</p>
+            <p><strong>Apellido: </strong> {{ jinete.apellido_familiar }}</p>
+            <p><strong>DNI / año actual: </strong>{{ jinete.dni_familiar }}</p>           
+            <p><strong>Domicilio:</strong> {{ jinete.direccion_familiar }}</p>
+            <p><strong>Provinicia:</strong> {{ jinete.provincia_familiar }}</p>
+            <p><strong>Localidad:</strong> {{ jinete.localidad_familiar }}</p>
+            <p><strong>Celular: </strong> {{ jinete.celular_familiar }}</p>
+            <p><strong>Parentesco: </strong> {{ jinete.nombre_familiar }}</p>
+            mail
+            <p><strong>escolaridad: </strong> {{ jinete.nivel_escolaridad_familiar }}</p>
+            <p><strong>Actividad / año actual: </strong> {{ jinete.actividad_ocupacion_familiar }}</p>           
+
+
             <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN </strong></h2>
             <p><strong>Propuesta de trabajo institucional:</strong> {{ jinete.trabajo_institucional.value }}</p>
             <p><strong>Condición:</strong> {{ "REGULAR" if jinete.condicion else "DE BAJA" }}</p>

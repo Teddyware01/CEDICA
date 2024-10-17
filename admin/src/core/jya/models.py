@@ -68,6 +68,21 @@ class SedeEnum(Enum):
     otro="OTRO"
 
     
+class Familiar(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    jinete_id = db.Column(db.Integer, db.ForeignKey('jinete.id'), nullable=False)
+    parentesco_familiar = db.Column(db.String(255), nullable=False)
+    nombre_familiar = db.Column(db.String(255), nullable=False)
+    apellido_familiar = db.Column(db.String(255), nullable=False)
+    dni_familiar = db.Column(db.String(10), nullable=False, unique=True)
+    direccion_familiar = db.Column(db.String(255), nullable=False)  # Calle, nº, piso, depto.
+    localidad_familiar = db.Column(db.String(255), nullable=False)
+    provincia_familiar = db.Column(db.String(255), nullable=False)
+    celular_familiar = db.Column(db.String(15), nullable=False)
+    email_familiar = db.Column(db.String(255), nullable=False)
+    nivel_escolaridad_familiar = db.Column(db.String(255), nullable=False)  # Podría ser Enum si prefieres
+    actividad_ocupacion_familiar = db.Column(db.String(255), nullable=False)
+    
 class Jinete(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(50), nullable=False)
@@ -117,7 +132,7 @@ class Jinete(db.Model):
     #conductor_caballo dado de alta al sistema.
     #caballo dado de alta al sistema.
     #auxiliar_pista dado de alta al sistema.
-    
+    familiares = db.relationship('Familiar', backref='jinete')
     documentos = db.relationship("Documento", back_populates="jinete", cascade="all, delete-orphan")
 
     def __repr__(self):

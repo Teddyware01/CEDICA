@@ -24,7 +24,7 @@ def listar_jinetes():
 @bp.get("/agregar_jinete")
 def add_jinete_form():
     form = AddJineteForm()
-
+    cargar_choices_form(form)
 
     return render_template("jya/agregar_jya.html", form=form)
 

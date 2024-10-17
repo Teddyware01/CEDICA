@@ -411,7 +411,7 @@ def run():
     )
     
         
-    jya.create_jinete(
+    nuevo_jinete = jya.create_jinete(
         nombre="Martin",
         apellido="Diaz",
         dni="12345678",
@@ -441,6 +441,7 @@ def run():
         grado = "2024",
         observaciones_institucion = "Nada.",
         profesionales = "Psicologa y maestra",
+                
         trabajo_institucional=TrabajoEnum.deporte,
         condicion=False,
         sede=SedeEnum.casj,
@@ -482,11 +483,31 @@ def run():
         sede=SedeEnum.hlp,
         dia=[DiasEnum.lunes],
     )
+    if nuevo_jinete and nuevo_jinete.id:
+        familiar = jya.add_familiar(
+        jinete_id=nuevo_jinete.id,  # Usamos el ID del jinete que acabamos de crear
+        parentesco_familiar="Tio",
+        nombre_familiar="Juan",
+        apellido_familiar="Diaz",
+        dni_familiar="654321",
+        direccion_familiar="sddsa",
+        provincia_familiar="asdf",
+        localidad_familiar="asdf",
+        celular_familiar="0987654321",
+        email_familiar="juan@diaz",
+        nivel_escolaridad_familiar='Primario',
+        actividad_ocupacion_familiar="Ingeniero."
+    )
+    else:
+        # Manejo del error, por ejemplo, lanzar una excepción o registrar un error
+        print("Error al crear el jinete, no se ha generado ID.")
+        # Ahora crea el familiar asociado a ese jinete
+    
     
     legajo.create_documento(
         titulo="Curriculum Vitae",
         tipo=TipoDocumentoEnum.evaluacion,
-        jinete_id=1,
+        jinete_id=nuevo_jinete.id,
     )
 
 
