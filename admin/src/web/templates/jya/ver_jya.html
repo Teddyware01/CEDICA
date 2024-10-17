@@ -27,7 +27,7 @@
             <p><strong>DNI:</strong> {{ jinete.dni }}</p>
             <p><strong>Edad:</strong> {{ jinete.edad }}</p>
             <p><strong>Fecha de nacimiento:</strong> {{ jinete.fecha_nacimiento.strftime('%d/%m/%Y') }}</p>
-            <p><strong>Lugar de nacimiento:</strong> {{ jinete.provincia_nacimiento.nombre }}, {{ jinete.localidad_nacimiento.nombre }}</p> 
+            <p><strong>Lugar de nacimiento:</strong> {{ jinete.nacimiento.provincia.nombre }}, {{ jinete.nacimiento.localidad.nombre }}</p> 
             <!-- Domicilio actual (calle, nro, depto, localidad, provincia) -->
             <p><strong>Domicilio actual:</strong> Calle: {{ jinete.domicilio.calle }}, numero: {{ jinete.domicilio.numero }}, piso: {{ jinete.domicilio.piso | default('-', true) }}, departamento: 
                 {{ jinete.domicilio.departamento | default('-', true) }}, {{ jinete.domicilio.localidad.nombre }}, {{ jinete.domicilio.provincia.nombre }}</p>
@@ -46,11 +46,7 @@
                 {% endfor %}
             </p>
             <p><strong>¿Percibe alguna Asignación Familiar?</strong> {{"SI" if jinete.asignacion_familiar else "NO" }}</p>
-            <p><strong>Asignaciones:</strong> {{ jinete.tipo_asignacion.value }}
-                {% for tipo in tipo_asignacion %}
-                    <span>{{ tipo_asignacion }}</span>{% if not loop.last %}, {% endif %}
-                {% endfor %}
-            </p>
+            <p><strong>Asignaciones:</strong> {{ jinete.tipo_asignacion.value }}</p>
             <p><strong>¿Es beneficiario de alguna pensión?</strong>  {{"SI" if jinete.pension else "NO" }}</p>
             <p><strong>¿Cuál? </strong> {{ jinete.pension.value }}</p>
             <h2><strong> SITUACIÓN PREVISIONAL </strong></h2>
@@ -67,6 +63,15 @@
             <p><strong>Observaciones:</strong> {{ jinete.observaciones_institucion }}</p>
             <p><strong>PROFESIONALES que lo ATIENDEN: </strong> {{ jinete.profesionales }}</p>
             
+            <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN </strong></h2>
+            <p><strong>Propuesta de trabajo institucional:</strong> {{ jinete.trabajo_institucional.value }}</p>
+            <p><strong>Condición:</strong> {{ "REGULAR" if jinete.condicion else "DE BAJA" }}</p>
+            <p><strong>SEDE:</strong> {{ jinete.sede.value }}</p>
+            <p><strong>DÍAS:</strong> {{ jinete.dia.value }}
+                {% for d in dia %}
+                <span>{{ d }}</span>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+            </p>
 
             <!-- Botones solo en Información general -->
             <div class="form-actions">

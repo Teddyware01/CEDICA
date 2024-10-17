@@ -42,16 +42,18 @@
             </div>
             
             <div><strong> Lugar de nacimiento: </strong></div>
+
             <div>
                 <label for="provincia_nacimiento" class="form-element">Provincia:</label>
                 {{ form.domicilio_provincia }}
             </div>
-    
+
             <div>
                 <label for="localidad_nacimiento" class="form-element">Localidad:</label>
                 {{ form.domicilio_localidad }}
             </div>
 
+    
             <div><strong> Domicilio actual: </strong></div>
             <div>
                 <label for="domicilio_calle" class="form-element">Calle:</label>
@@ -83,7 +85,6 @@
                 {{ form.domicilio_localidad }}
             </div>
     
-    
             <div>
                 <label for="telefono" class="form-element">Teléfono actual:</label>
                 {{ form.telefono }}
@@ -100,15 +101,15 @@
             </div>
             
             <div>
-                <label for="contacto_emergencia_telefono" class="form-element">Telefono contacto de Emergencia:</label>
+                <label for="contacto_emergencia_telefono" class="form-element">Teléfono contacto de Emergencia:</label>
                 {{ form.contacto_emergencia_telefono }}
             </div>
     
             <div>
                 <label for="becado" class="form-element">Becado:</label>
-                <input type="radio" id="becado_si" name="becado" value="si">
+                <input type="radio" id="becado_si" name="becado" value="si" {{ 'checked' if form.becado.data else '' }}>
                 <label for="becado_si">Sí</label>
-                <input type="radio" id="becado_no" name="becado" value="no">
+                <input type="radio" id="becado_no" name="becado" value="no" {{ 'checked' if not form.becado.data else '' }}>
                 <label for="becado_no">No</label>
             </div>
     
@@ -122,9 +123,9 @@
                     ¿Posee certificado<br>
                     de discapacidad?
                 </label>
-                <input type="radio" id="certificado_si" name="certificado" value="si">
+                <input type="radio" id="certificado_si" name="certificado" value="si" {{ 'checked' if form.certificado_discapacidad.data else '' }}>
                 <label for="certificado_si">Sí</label>
-                <input type="radio" id="certificado_no" name="certificado" value="no">
+                <input type="radio" id="certificado_no" name="certificado" value="no" {{ 'checked' if not form.certificado_discapacidad.data else '' }}>
                 <label for="certificado_no">No</label>
             </div>
     
@@ -164,7 +165,8 @@
                 <label for="tipos_discapacidad">Tipos de Discapacidad:</label>
                 <div class="checkbox-group">
                     {% for subfield in form.tipos_discapacidad %}
-                    <input type="checkbox" id="tipo_{{ loop.index0 }}" name="tipos_discapacidad" value="{{ subfield.data }}">
+                    <input type="checkbox" id="tipo_{{ loop.index0 }}" name="tipos_discapacidad"
+                        value="{{ subfield.data }}" {% if subfield.data in form.tipos_discapacidad.data %} checked {% endif %}>
                     <label for="tipo_{{ loop.index0 }}">{{ subfield.label.text }}</label>
                     {% endfor %}
                 </div>
@@ -172,9 +174,9 @@
     
             <div>
                 <label for="asignacion_familiar" class="form-element">¿Percibe alguna asignación familiar?</label>
-                <input type="radio" id="asignacion_si" name="asignacion" value="si">
+                <input type="radio" id="asignacion_si" name="asignacion" value="si" {{ 'checked' if form.asignacion_familiar.data else '' }}>
                 <label for="asignacion_si">Sí</label>
-                <input type="radio" id="asignacion_no" name="asignacion" value="no">
+                <input type="radio" id="asignacion_no" name="asignacion" value="no" {{ 'checked' if not form.asignacion_familiar.data else '' }}>
                 <label for="asignacion_no">No</label>
             </div>
     
@@ -199,26 +201,26 @@
     
             <div>
                 <label for="beneficiario_pension" class="form-element">¿Es beneficiario de alguna pensión?</label>
-                <input type="radio" id="pension_si" name="pension" value="si">
+                <input type="radio" id="pension_si" name="beneficiario_pension" value="si" {{ 'checked' if form.beneficiario_pension.data else '' }}>
                 <label for="pension_si">Sí</label>
-                <input type="radio" id="pension_no" name="pension" value="no">
+                <input type="radio" id="pension_no" name="beneficiario_pension" value="no" {{ 'checked' if not form.beneficiario_pension.data else '' }}>
                 <label for="pension_no">No</label>
             </div>
     
             <div>
                 <label for="pension" class="form-element">tipo pension:</label>
-                {{ form.pension }}
+                {{ form.pension(id="tipo_pension") }}
             </div>
     
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
-                    const radioButtons = document.querySelectorAll('input[name="pension"]');
-                    const selectAsignacion = document.getElementById('pension');
+                    const radioButtons = document.querySelectorAll('input[name="beneficiario_pension"]');
+                    const selectPension = document.getElementById('tipo_pension');
                 
                     radioButtons.forEach(radio => {
                         radio.addEventListener('change', function() {
                             // Habilita o deshabilita el elemento según si la opción "Sí" está seleccionada
-                            selectAsignacion.disabled = !document.getElementById('pension_si').checked;
+                            selectPension.disabled = !document.getElementById('pension_si').checked;
                         });
                     });
                 });
@@ -230,12 +232,17 @@
                 <label for="obra_social" class="form-element">Obra Social:</label>
                 {{ form.obra_social }}
             </div>
+            
+            <div>
+                <label for="nro_afiliado" class="form-element">Numero afiliado:</label>
+                {{ form.nro_afiliado }}
+            </div>
     
             <div>
                 <label for="curatela" class="form-element"> ¿Posee curatela? </label>
-                <input type="radio" id="curatela_si" name="curatela" value="si">
+                <input type="radio" id="curatela_si" name="curatela" value="si" {{ 'checked' if form.curatela.data else '' }}>
                 <label for="curatela_si">Sí</label>
-                <input type="radio" id="curatela_no" name="curatela" value="no">
+                <input type="radio" id="curatela_no" name="curatela" value="no" {{ 'checked' if not form.curatela.data else '' }}>
                 <label for="curatela_no">No</label>
             </div>
             
@@ -248,12 +255,12 @@
     
             <div>
                 <label for="nombre_institucion" class="form-element">Nombre de la Institución:</label>
-                {{ form.nombre }}
+                {{ form.nombre_institucion }}
             </div>
     
             <div>
                 <label for="telefono_institucion" class="form-element">Teléfono:</label>
-                {{ form.telefono }}
+                {{ form.telefono_institucion }}
             </div>
     
             <div>
@@ -289,6 +296,37 @@
             <div>
                 <label for="profesionales" class="form-element">PROFESIONALES que lo ATIENDEN:</label>
                 {{ form.profesionales }}
+            </div>
+
+            <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN: </strong></h2>
+
+            <div>
+                <label for="trabajo_institucional" class="form-element">Propuesta de trabajo Institucional:</label>
+                {{ form.trabajo_institucional(id="trabajo_institucional") }}
+            </div>
+    
+            <div>
+                <label for="condicion" class="form-element">Condición:</label>
+                <input type="radio" id="condicion_si" name="condicion" value="si" {{ 'checked' if form.condicion.data else '' }}>
+                <label for="condicion_si">Regular</label>
+                <input type="radio" id="condicion_no" name="condicion" value="no" {{ 'checked' if not form.condicion.data else '' }}>
+                <label for="condicion_no">De baja</label>
+            </div>
+    
+            <div>
+                <label for="sede" class="form-element">SEDE:</label>
+                {{ form.sede }}
+            </div>
+    
+            <div class="form-group">
+                <label for="dia">DÍA:</label>
+                <div class="checkbox-group">
+                    {% for d in form.dia %}
+                        <input type="checkbox" id="dia_{{ loop.index0 }}" name="{{ d.name }}" value="{{ d.data }}"
+                            {{ 'checked' if d.data in form.dia.data else '' }}>
+                        <label for="dia_{{ loop.index0 }}">{{ d.label.text }}</label>
+                    {% endfor %}
+                </div>
             </div>
     
             <div>

@@ -11,8 +11,7 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired, Email, Length, Optional, Regexp, ValidationError
 from wtforms.widgets import DateInput
-from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum
-from src.core.equipo.extra_models import Localidad
+from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum
 
 class AddJineteForm(FlaskForm):
     nombre = StringField(
@@ -26,6 +25,7 @@ class AddJineteForm(FlaskForm):
             Length(max=100),
         ],
     )
+    
     dni = StringField(
         "DNI",
         validators=[
@@ -34,7 +34,8 @@ class AddJineteForm(FlaskForm):
             Regexp(r"^\d+$", message="El DNI debe contener solo números"),
         ],
     )
-    edad = StringField(
+    
+    edad = IntegerField(
         "Edad",
         validators=[
             DataRequired(message="La edad es obligatoria"),
@@ -42,7 +43,7 @@ class AddJineteForm(FlaskForm):
             Regexp(r"^\d+$", message="La edad debe contener solo números"),
         ],
     )
-    
+        
     fecha_nacimiento = DateTimeField(
         "Fecha de Nacimiento",
         format="%Y-%m-%d",
@@ -51,8 +52,8 @@ class AddJineteForm(FlaskForm):
     )
     
     telefono = StringField(
-        "Telefono",
-        validators=[DataRequired(message="El telefono es obligatorio"), Length(max=15)],
+        "Teléfono",
+        validators=[DataRequired(message="El teléfono es obligatorio"), Length(max=15)],
     )
     
     becado = BooleanField("Becado")
@@ -73,7 +74,6 @@ class AddJineteForm(FlaskForm):
     
     pension = SelectField(
         "Tipo pension",
-        coerce=str,
         choices=[(pens.name, pens.value) for pens in PensionEnum],
         validators=[DataRequired(message="El tipo de pension es obligatorio")],
     )
@@ -81,6 +81,7 @@ class AddJineteForm(FlaskForm):
     tipos_discapacidad = SelectMultipleField(
         "Tipo de Discapacidad",
         choices=[(disc.name, disc.value) for disc in TiposDiscapacidadEnum],
+        coerce=str,
         validators=[DataRequired(message="Seleccionar al menos un tipo de discapacidad es obligatorio")],
     )
     
@@ -97,10 +98,10 @@ class AddJineteForm(FlaskForm):
     domicilio_departamento = IntegerField("Departamento", validators=[Optional()])
     domicilio_piso = IntegerField("Piso", validators=[Optional()])
     domicilio_provincia = SelectField(
-        "Provincia", coerce=int, validators=[DataRequired("Selecione una provincia")]
+        "Provincia", coerce=int, validators=[DataRequired()]
     )
     domicilio_localidad = SelectField(
-        "Localidad", coerce=int, validators=[DataRequired("Selecione una localidad.")]
+        "Localidad", coerce=int, validators=[DataRequired()]
     )
     
     contacto_emergencia_nombre = StringField(
@@ -110,11 +111,10 @@ class AddJineteForm(FlaskForm):
         "Apellido", validators=[DataRequired(), Length(max=100)]
     )
     contacto_emergencia_telefono = StringField(
-        "Teléfono", validators=[DataRequired(), Length(max=15)]
+        "Teléfono", 
+        validators=[DataRequired(message="El teléfono es obligatorio"), Length(max=15)],
     )
     
-    submit = SubmitField("Guardar")
-
     # Validación personalizada, el nombre declarado sigue nomenclatura a respetar.
     def validate_domicilio_localidad(self, field_localidad):
         # Obtener la localidad seleccionada
@@ -151,9 +151,15 @@ class AddJineteForm(FlaskForm):
     
     observaciones_curatela = StringField("Observaciones curatela")
     
-    nombre_institucion = StringField("Nombre institucion")
+    nombre_institucion = StringField(
+        "Nombre institucion",
+        validators=[DataRequired(message="El número de afiliado de obra social es obligatorio")],
+    )
     
-    telefono_institucion = StringField("Telefono institucion")
+    telefono_institucion = StringField(
+        "Teléfono institucion", 
+        validators=[DataRequired(message="El teléfono es obligatorio"), Length(max=15)],
+    )
     
     grado = IntegerField("Grado", validators=[DataRequired("Ingrese el grado / año actual")])
     
@@ -166,11 +172,16 @@ class AddJineteForm(FlaskForm):
     
     trabajo_institucional = SelectField(
         "Trabajo institucional",
+        choices=[(trab.name, trab.value) for trab in TrabajoEnum],
+        validators=[DataRequired(message="Los profesionales son obligatorios")],
     )
     
     condicion=BooleanField("Condicion")
 
-    sede=SelectField("Sede")
+    sede=SelectField("Sede",
+        choices=[(sede.name, sede.value) for sede in SedeEnum],
+        validators=[DataRequired(message="La sede es obligatoria")],
+    )
     
     dia = SelectMultipleField(
         "DIA",
@@ -179,7 +190,8 @@ class AddJineteForm(FlaskForm):
     )
     
     
-####################### PORCENTAJE DE BECAS #################
+    submit = SubmitField("Guardar")
+    
 '''
     parentesco_familiar
     
@@ -208,15 +220,7 @@ class AddJineteForm(FlaskForm):
     escolaridad_familiar #desplegable
     
     ocupacion_familiar
-    
-    trabajo_institucion
-    
-    condicion_institucion
-    
-    sede_institucion
-    
-    dia_institucion
-    
+        
     profesor_institucion
     
     conductor_caballo_institucion

@@ -6,8 +6,6 @@ from src.core import jya
 from src.core.database import db
 from src.core.jya.forms import AddJineteForm
 from src.core.jya.models import Jinete, PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum
-from src.core.equipo.extra_models import Domicilio, ContactoEmergencia
-import src.web.controllers.jya
 from src.core.jya.legajo import list_documentos
 
 bp = Blueprint("jya", __name__, url_prefix="/jinetes")
@@ -117,107 +115,7 @@ def view_jinete(jinete_id):
     dias_nombres = [dia.name for dia in jinete.dia] if jinete.dia else []
     return render_template("jya/ver_jya.html", jinete=jinete, tipos_discapacidad=tipos_discapacidad_nombres, dia=dias_nombres, documentos=documentos)
 
-'''@bp.get("/editar_jinete<int:jinete_id>")
-def edit_jinete_form(jinete_id):
-    jinete = jya.traer_jinete(jinete_id)
-    form = AddJineteForm(obj=jinete)
-    cargar_choices_form(form)
-    # Asignar los valores del domicilio
-    form.domicilio_calle.data = jinete.domicilio.calle
-    form.domicilio_numero.data = jinete.domicilio.numero
-    form.domicilio_piso.data = jinete.domicilio.piso
-    form.domicilio_departamento.data = jinete.domicilio.departamento
-    form.domicilio_localidad.data = jinete.domicilio.localidad
-    form.domicilio_provincia.data = jinete.domicilio.provincia
 
-    # Asignar los valores del contacto de emergencia
-    form.contacto_emergencia_nombre.data = jinete.contacto_emergencia.nombre
-    form.contacto_emergencia_apellido.data = jinete.contacto_emergencia.apellido
-    form.contacto_emergencia_telefono.data = jinete.contacto_emergencia.telefono
-    
-    return render_template("jya/editar_jya.html", jinete=jinete, form=form)
-
-@bp.post("/editar_jinete<int:jinete_id>")
-def editar_jinete(jinete_id):
-    jinete = jya.traer_jinete(jinete_id)
-    form = AddJineteForm(obj=jinete)
-    jya.edit_jinete(
-        jinete_id,
-        nombre=request.form["nombre"],
-        apellido=request.form["apellido"],
-        dni=request.form["dni"],
-        telefono=request.form["telefono"],
-        fecha_nacimiento=request.form["fecha_nacimiento"],
-        domicilio_provincia = request.form["domicilio_provincia"],
-        domicilio_localidad = request.form["domicilio_localidad"],
-    )
-    
-    flash("Jinete actualizado exitosamente", "success")
-    return redirect(url_for("jya.listar_jinetes"))'''
-    
-@bp.get("/editar_jinete<int:jinete_id>")
-def edit_jinete_form(jinete_id):
-    jinete = jya.traer_jinete(jinete_id)
-    form = AddJineteForm(obj=jinete)
-    cargar_choices_form(form)
-    # Asignar los valores del domicilio
-    form.domicilio_calle.data = jinete.domicilio.calle
-    form.domicilio_numero.data = jinete.domicilio.numero
-    form.domicilio_piso.data = jinete.domicilio.piso
-    form.domicilio_departamento.data = jinete.domicilio.departamento
-    form.domicilio_localidad.data = jinete.domicilio.localidad
-    form.domicilio_provincia.data = jinete.domicilio.provincia
-
-    # Asignar los valores del contacto de emergencia
-    form.contacto_emergencia_nombre.data = jinete.contacto_emergencia.nombre
-    form.contacto_emergencia_apellido.data = jinete.contacto_emergencia.apellido
-    form.contacto_emergencia_telefono.data = jinete.contacto_emergencia.telefono
-    
-    return render_template("jya/editar_jya.html", jinete=jinete, form=form)
-
-'''@bp.post("/editar_jinete<int:jinete_id>")
-def editar_jinete(jinete_id):
-    jinete = jya.traer_jinete(jinete_id)
-    form = AddJineteForm(request.form, obj=jinete)
-    cargar_choices_form(form, jinete=jinete)  # Asegurarse de recargar las opciones para validación
-
-    form.populate_obj(jinete)  # Asignar todos los campos del formulario al modelo
-
-    # Manejar manualmente los campos relacionales si necesario, ejemplo:
-    # jinete.domicilio.localidad_id = form.domicilio_localidad.data
-    # jinete.domicilio.provincia_id = form.domicilio_provincia.data
-    # No olvides manejar otras relaciones si están presentes...
-
-    db.session.commit()  # Guardar los cambios en la base de datos
-    flash("Jinete actualizado exitosamente", "success")
-    return redirect(url_for("jya.ver_jinete", jinete_id=jinete.id))'''
-
-
-@bp.post("/editar_jinete<int:jinete_id>")
-def editar_jinete(jinete_id):
-    jinete = jya.traer_jinete(jinete_id)
-    form = AddJineteForm(obj=jinete)
-    cargar_choices_form(form, jinete=jinete)
-    #form.populate_obj(jinete)
-    jya.edit_jinete(
-        jinete_id,
-        nombre=request.form["nombre"],
-        apellido=request.form["apellido"],
-        dni=request.form["dni"],
-        edad=request.form["edad"],
-        fecha_nacimiento=request.form["fecha_nacimiento"],
-        #localidad_nacimiento
-        #provincia_nacimiento
-        telefono=request.form["telefono"],
-        domicilio_provincia = request.form["domicilio_provincia"],
-        domicilio_localidad = request.form["domicilio_localidad"],
-        
-        
-
-    )
-    
-    flash("Jinete actualizado exitosamente", "success")
-    return redirect(url_for("jya.listar_jinetes"))
 
 @bp.get("/eliminar_jinete<int:jinete_id>")
 def delete_jinete_form(jinete_id):
@@ -259,42 +157,98 @@ def update(jinete_id):
     
     return redirect(url_for("jya.listar_jinetes"))
 
-def cargar_choices_form(form, jya=None):
+def cargar_choices_form(form):
     # Cargar las opciones para los campos de selección
     form.pension.choices = [(p.name, p.value) for p in PensionEnum]
     form.diagnostico.choices = [(d.name, d.value) for d in DiagnosticoEnum]
     form.tipos_discapacidad.choices = [(disc.name, disc.value) for disc in TiposDiscapacidadEnum]
     form.tipo_asignacion.choices = [(asig.name, asig.value) for asig in AsignacionEnum]
-    #form.domicilio_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
-    #form.domicilio_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]
+    form.domicilio_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
+    form.domicilio_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]
     
     
 '''provincia_nacimiento = db.relationship("Provincia", back_populates="jinetes")
 domicilio_id = db.Column(db.Integer, db.ForeignKey("domicilio.id"), nullable=False)
 domicilio = db.relationship("Domicilio", foreign_keys=[domicilio_id], back_populates="jinetes")
-fecha_nacimiento = db.Column(db.DateTime, nullable=False)
-telefono = db.Column(db.String(15), nullable=False)
-avatar = db.Column(db.String(255), nullable=True)
-contacto_emergencia_id = db.Column(db.Integer, db.ForeignKey("contacto_emergencia.id"), nullable=False)
-contacto_emergencia = db.relationship("ContactoEmergencia", back_populates="jinete")
-becado = db.Column(db.Boolean, default=False)
-observaciones_becado = db.Column(db.String(255), nullable=True)
-certificado_discapacidad = db.Column(db.Boolean, nullable=True)
-diagnostico = db.Column(db.Enum(DiagnosticoEnum), nullable=True)
-otro = db.Column(db.String(100), nullable=True)
-beneficiario_pension = db.Column(db.Boolean)
-pension = db.Column(db.Enum(PensionEnum), nullable=False)
-tipos_discapacidad =  db.Column(ARRAY(db.Enum(TiposDiscapacidadEnum)), nullable=True)
-asignacion_familiar = db.Column(db.Boolean, nullable=True)
-tipo_asignacion = db.Column(db.Enum(AsignacionEnum), nullable=True)
-obra_social = db.Column(db.String(25), nullable=False, unique=False)
-nro_afiliado = db.Column(db.String(25), nullable=False, unique=False)
-curatela = db.Column(db.Boolean, nullable=False)
-observaciones_curatela = db.Column(db.String(255), nullable=True)
-nombre_institucion = db.Column(db.String(50), nullable=False)
-direccion_id = db.Column(db.Integer, db.ForeignKey("domicilio.id"))
-direccion = db.relationship("Domicilio", foreign_keys=[direccion_id], backref="direccion_jinetes")
-telefono_institucion = db.Column(db.String(15), nullable=False)
-grado = db.Column(db.Integer, nullable=False)
-observaciones_institucion = db.Column(db.String(255), nullable=True)
-profesionales = db.Column(db.String(255), nullable=True)'''
+'''
+
+
+
+
+
+
+
+    
+@bp.get("/editar_jinete<int:jinete_id>")
+def edit_jinete_form(jinete_id):
+    jinete = jya.traer_jinete(jinete_id)
+    form = AddJineteForm(
+        obj=jinete
+    )  
+    # Asignar los valores del domicilio
+    form.domicilio_calle.data = jinete.domicilio.calle
+    form.domicilio_numero.data = jinete.domicilio.numero
+    form.domicilio_piso.data = jinete.domicilio.piso
+    form.domicilio_departamento.data = jinete.domicilio.departamento
+    form.domicilio_localidad.data = jinete.domicilio.localidad
+    form.domicilio_provincia.data = jinete.domicilio.provincia
+
+    # Asignar los valores del contacto de emergencia
+    form.contacto_emergencia_nombre.data = jinete.contacto_emergencia.nombre
+    form.contacto_emergencia_apellido.data = jinete.contacto_emergencia.apellido
+    form.contacto_emergencia_telefono.data = jinete.contacto_emergencia.telefono
+
+    cargar_choices_form(form)
+    
+    if form.validate_on_submit():
+        form.populate_obj(jinete)
+    return render_template("jya/editar_jya.html", form=form, jinete=jinete)
+
+
+
+
+
+
+
+@bp.post("/editar_jinete<int:jinete_id>")
+def editar_jinete(jinete_id):
+    jinete = jya.traer_jinete(jinete_id)
+    form = AddJineteForm(
+        obj=jinete
+    )  
+    
+    cargar_choices_form(form)
+    
+    if form.validate_on_submit():
+        # Actualizar los datos del empleado con los valores del formulario
+        form.populate_obj(jinete)
+
+        # Asignar los valores del domicilio
+        jinete.domicilio.calle = form.domicilio_calle.data
+        jinete.domicilio.numero = form.domicilio_numero.data
+        jinete.domicilio.piso = form.domicilio_piso.data
+        jinete.domicilio.departamento = form.domicilio_departamento.data
+        jinete.domicilio.localidad_id = (
+            form.domicilio_localidad.data
+        )  # Asegúrate de que `localidad` es el ID
+        jinete.domicilio.provincia_id = (
+            form.domicilio_provincia.data
+        )  # Asegúrate de que `provincia` es el ID
+
+
+        # Asignar los valores del contacto de emergencia
+        jinete.contacto_emergencia.nombre = form.contacto_emergencia_nombre.data
+        jinete.contacto_emergencia.apellido = form.contacto_emergencia_apellido.data
+        jinete.contacto_emergencia.telefono = form.contacto_emergencia_telefono.data
+
+        # Guardar los cambios en la base de datos
+        flash("Jinete actualizado  exitosamente", "success")
+        db.session.commit()
+        return view_jinete(jinete_id=jinete.id)
+    else:
+        flash("Por favor corrija los errores en el formulario:", "error")
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"Error en el campo {field}: {error}", "danger")
+
+    return render_template("jya/editar_jya.html", form=form, jinete=jinete)

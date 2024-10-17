@@ -289,22 +289,6 @@ def run():
         contacto_emergencia_id=2,
     )
 
-
-    direccion_1 = jya.add_direccion(
-        calle="Olazabal",
-        numero=4321,
-        localidad_id=9,
-        provincia_id=4,
-    )
-    
-    direccion_2 = jya.add_direccion(
-        calle="Diagonal 73",
-        numero=1234,
-        localidad_id=5,
-        provincia_id=5,
-    )
-    
-
     # Tema permisos y roles (esto debe quedar definido. No se borra.)
     # Permisos
     # Modulo 2
@@ -423,6 +407,16 @@ def run():
         localidad_id=5,
         provincia_id=5,
     )
+    
+    nacimiento_1 = jya.add_nacimiento(
+        localidad_id=1,
+        provincia_id=1,
+    )
+    
+    nacimiento_2 = jya.add_nacimiento(
+        localidad_id=2,
+        provincia_id=2,
+    )
         
     jya.create_jinete(
         nombre="Martin",
@@ -430,8 +424,7 @@ def run():
         dni="12345678",
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
-        localidad_nacimiento_id=1,
-        provincia_nacimiento_id=1,
+        nacimiento=nacimiento_1,
         domicilio_id=1,
         telefono="12345654321",
         contacto_emergencia=contacto_emergencia_ej1,
@@ -456,7 +449,7 @@ def run():
         trabajo_institucional=TrabajoEnum.deporte,
         condicion=False,
         sede=SedeEnum.casj,
-        dia=["jueves"],
+        dia=["jueves", "viernes"],
     )
     
     jya.create_jinete(
@@ -466,8 +459,7 @@ def run():
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
         domicilio_id=3,
-        localidad_nacimiento_id=2,
-        provincia_nacimiento_id=2,
+        nacimiento=nacimiento_2,
         telefono="12345654321",
         contacto_emergencia=contacto_emergencia_ej2,
         becado=True,

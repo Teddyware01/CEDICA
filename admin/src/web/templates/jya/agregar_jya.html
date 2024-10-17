@@ -105,7 +105,7 @@
         </div>
         
         <div>
-            <label for="contacto_emergencia_telefono" class="form-element">Telefono contacto de Emergencia:</label>
+            <label for="contacto_emergencia_telefono" class="form-element">Teléfono contacto de Emergencia:</label>
             {{ form.contacto_emergencia_telefono }}
         </div>
 
@@ -263,7 +263,7 @@
 
         <div>
             <label for="telefono_institucion" class="form-element">Teléfono:</label>
-            {{ form.telefono }}
+            {{ form.telefono_institucion }}
         </div>
 
         <div>
@@ -299,6 +299,26 @@
         <div>
             <label for="profesionales" class="form-element">PROFESIONALES que lo ATIENDEN:</label>
             {{ form.profesionales }}
+        </div>
+
+        <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN: </strong></h2>
+
+        <div>
+            <label for="trabajo_institucional" class="form-element">Propuesta de trabajo Institucional:</label>
+            {{ form.trabajo_institucional(id="trabajo_institucional") }}
+        </div>
+
+        <div>
+            <label for="condicion" class="form-element">Condición:</label>
+            <input type="radio" id="condicion_si" name="condicion" value="si">
+            <label for="condicion_si">Regular</label>
+            <input type="radio" id="condicion_no" name="condicion" value="no">
+            <label for="condicion_no">De baja</label>
+        </div>
+
+        <div>
+            <label for="sede" class="form-element">SEDE:</label>
+            {{ form.sede }}
         </div>
 
         <div class="form-group">
