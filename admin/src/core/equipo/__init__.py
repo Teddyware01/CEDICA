@@ -35,9 +35,7 @@ def get_localidad_by_id(localidad_id):
 
 
 # Tabla Empleado
-
-
-def list_empleados(sort_by=None, id_puesto_laboral=None, search=None):
+def list_empleados(sort_by=None, id_puesto_laboral=None, search=None,page=1, per_page=5):
     query = Empleado.query
     if id_puesto_laboral and id_puesto_laboral != "cualquiera":
         query = query.filter(Empleado.puesto_laboral_id == id_puesto_laboral)
@@ -65,8 +63,8 @@ def list_empleados(sort_by=None, id_puesto_laboral=None, search=None):
         elif sort_by == "created_at_desc":
             query = query.order_by(Empleado.fecha_inicio.desc())
 
-    return query.all()
-
+    paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
+    return paginated_query
 
 def create_empleado(**kwargs):
     empleado = Empleado(**kwargs)
