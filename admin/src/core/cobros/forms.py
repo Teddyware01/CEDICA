@@ -19,7 +19,5 @@ class RegistroCobroForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(RegistroCobroForm, self).__init__(*args, **kwargs)
-        # Cargar los jinetes y amazonas
         self.jinete.choices = [(j.id, f"{j.nombre} {j.apellido}") for j in Jinete.query.all()]
-        # Cargar los empleados que reciben el dinero
         self.recibido_por.choices = [(e.id, f"{e.nombre} {e.apellido}") for e in Empleado.query.all()]

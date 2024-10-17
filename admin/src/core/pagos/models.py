@@ -7,7 +7,7 @@ class Pago(db.Model):
     beneficiario = db.Column(db.String(100), nullable=False)
     monto = db.Column(db.Float, nullable=False)
     fecha_pago = db.Column(db.Date, nullable=False, default=datetime)
-    tipo_pago = db.Column(db.String(50), nullable=False)  # Aquí se almacena en minúsculas
+    tipo_pago = db.Column(db.String(50), nullable=False) #Tipo de pago (Guardar en minuscula para las verificaciones)
     descripcion = db.Column(db.Text, nullable=True)
 
     def __repr__(self):

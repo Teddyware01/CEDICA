@@ -28,21 +28,23 @@ def registrar_pago():
 
         db.session.add(nuevo_pago)
         db.session.commit()
-        flash("Pago registrado exitosamente.")
+
+        ##flash("Pago registrado exitosamente.", "success")
         return redirect(url_for("pagos.listar_pagos"))
 
     return render_template("registrar_pago.html", form=form)
 
+
 @pagos_bp.route("/listado", methods=["GET"])
-##@login_required
-##@check("pago_index")
+@login_required
+@check("pago_index")
 def listar_pagos():
     pagos_realizado = Pagos.query.all()
     return render_template("listado_pagos.html", pagos_realizado=pagos_realizado)
 
 @pagos_bp.route("/eliminar/<int:id>", methods=["POST"])
-##@login_required
-##@check("pago_destroy")
+@login_required
+@check("pago_destroy")
 def eliminar_pago(id):
     pago = Pagos.query.get_or_404(id)
     db.session.delete(pago)
@@ -51,16 +53,16 @@ def eliminar_pago(id):
     return redirect(url_for("pagos.listar_pagos"))
 
 @pagos_bp.route("/<int:id>", methods=["GET"])
-##@login_required
-##@check("pago_show")
+@login_required
+@check("pago_show")
 def mostrar_pagos(id):
     pago = Pagos.query.get_or_404(id)
     return render_template("show_pago.html", pago=pago)
 
 # Endpoint para editar un pago específico
 @pagos_bp.route("/editar/<int:id>", methods=["GET", "POST"])
-##@login_required
-##@check("pago_update")
+@login_required
+@check("pago_update")
 def editar_pago(id):
     pago = Pagos.query.get_or_404(id)
     form = PagoForm(obj=pago)  # Cargar los datos existentes en el formulario
@@ -80,8 +82,8 @@ def editar_pago(id):
     return render_template("editar_pago.html", form=form)  # Renderizar el formulario de edición
 
 @pagos_bp.route("/search", methods=["GET"])
-##@login_required
-##@check("pago_index") ## aca tener cuiddado si revienta puede ser esto
+@login_required
+@check("pago_index") ## aca tener cuiddado si revienta puede ser esto
 def buscar_pagos():
     tipo_pago = request.args.get("tipo_pago").lower() if request.args.get("tipo_pago") else None
     fecha_inicio = request.args.get("fecha_inicio")

@@ -95,20 +95,25 @@ def buscar_cobros():
     medio_pago = request.args.get("medio_pago")
     fecha_inicio = request.args.get("fecha_inicio")
     fecha_fin = request.args.get("fecha_fin")
-    nombre_recibe = request.args.get("nombre_recibe")
-    apellido_recibe = request.args.get("apellido_recibe")
+    nombre_recibe = request.args.get("nombre")
+    apellido_recibe = request.args.get("apellido")
+    orden = request.args.get("orden", "asc")
 
-    query = RegistroCobro.query
+    query = RegistroCobro.query.join(Empleado, RegistroCobro.recibido_por == Empleado.id)
 
     if medio_pago:
-        query = query.filter(RegistroCobro.medio_pago == medio_pago)
+        query = query.filter(RegistroCobro.medio_pago == medio_pago.lower())    
     if fecha_inicio and fecha_fin:
-        query = query.filter(RegistroCobro.fecha_pago.between(fecha_inicio, fecha_fin))
+        query = query.filter(RegistroCobro.fecha_pago.between(fecha_inicio, fecha_fin))    
     if nombre_recibe:
-        query = query.filter(RegistroCobro.quien_recibe.has(nombre=nombre_recibe))
+        query = query.filter(Empleado.nombre.ilike(f"{nombre_recibe}%"))
     if apellido_recibe:
-        query = query.filter(RegistroCobro.quien_recibe.has(apellido=apellido_recibe))
+        query = query.filter(Empleado.apellido.ilike(f"{apellido_recibe}%"))
+    if orden == "desc":
+        query = query.order_by(RegistroCobro.fecha_pago.desc())
+    else:
+        query = query.order_by(RegistroCobro.fecha_pago.asc())
 
-    cobros = query.order_by(RegistroCobro.fecha_pago).all()
+    cobros_realizado = query.all()
 
-    return render_template("listado_cobros.html", cobros=cobros)
+    return render_template("listado_cobros.html", cobros_realizado=cobros_realizado)

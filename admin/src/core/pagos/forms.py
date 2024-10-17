@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import SelectField, DecimalField, DateField, StringField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Length, Optional
-from src.core.equipo.models import Empleado  # Asegúrate de tener importado el modelo de Empleado
+from src.core.equipo.models import Empleado  
 
 
 class PagoForm(FlaskForm):
@@ -10,7 +10,6 @@ class PagoForm(FlaskForm):
     monto = DecimalField("Monto", validators=[DataRequired()])
     fecha_pago = DateField("Fecha de Pago", format='%Y-%m-%d', validators=[DataRequired()])
     
-    # Cambiar todas las opciones de tipo de pago a minúsculas
     tipo_pago = SelectField("Tipo de Pago", 
                             choices=[('honorario', 'Honorario'), 
                                      ('proveedor', 'Proveedor'), 
@@ -21,5 +20,4 @@ class PagoForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(PagoForm, self).__init__(*args, **kwargs)
-        # Cargar los empleados registrados en el sistema
         self.beneficiario.choices = [(empleado.id, f"{empleado.nombre} {empleado.apellido}") for empleado in Empleado.query.all()]
