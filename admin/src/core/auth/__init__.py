@@ -3,9 +3,12 @@ from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
 
-
-def list_users(sort_by=None):
+def list_users(sort_by=None, search=None, page=1, per_page=2):
     query = Users.query
+    if search:
+        query = query.filter(
+                Users.email.like(f"%{search}%"),   
+        )
     if sort_by:
         if sort_by == "email_asc":
             query = query.order_by(Users.email.asc())
@@ -15,7 +18,10 @@ def list_users(sort_by=None):
             query = query.order_by(Users.fecha_creacion.asc())
         elif sort_by == "created_at_desc":
             query = query.order_by(Users.fecha_creacion.desc())
-    return query.all()
+
+
+    paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
+    return paginated_query
 
 
 def create_user(**kwargs):

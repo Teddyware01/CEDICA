@@ -10,7 +10,10 @@ bp = Blueprint("users", __name__, url_prefix="/listado_De_usuarios")
 @bp.get("/")
 def listar_usuarios():
     sort_by = request.args.get("sort_by")
-    users = auth.list_users(sort_by=sort_by)
+    search = request.args.get("search")
+    page = request.args.get("page", type=int, default=1) 
+    
+    users = auth.list_users(sort_by=sort_by, search=search, page=page)
     return render_template("listado.html", usuarios=users)
 
 
