@@ -1,7 +1,7 @@
 from src.core.database import db
 from src.core import ecuestre
-
-
+from flask import current_app
+from os import fstat
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 
 bp = Blueprint("ecuestre", __name__, url_prefix="/ecuestre")
@@ -20,7 +20,8 @@ def ver_ecuestre(ecuestre_id):
     sedes = ecuestre.traer_sedes(caballo.sede_id)
     ids_empleados = ecuestre.traer_id_empleados(ecuestre_id)
     equipos = ecuestre.traer_equipo(ids_empleados)
-    return render_template("ecuestre/ver_ecuestre.html", ecuestre=caballo, sede=sedes, entrenadores=equipos)
+    documentos = ecuestre.traerdocumento(ecuestre_id)
+    return render_template("ecuestre/ver_ecuestre.html", ecuestre=caballo, sede=sedes, entrenadores=equipos, documentos=documentos)
 
 
 @bp.get("/editar_ecuestre<int:ecuestre_id>")
@@ -32,7 +33,7 @@ def edit_ecuestre_form(ecuestre_id):
     todos_empleados = ecuestre.traer_todosempleados()
     return render_template("ecuestre/edit_ecuestre.html", ecuestre=caballo, sede=sedes, entrenadores=equipos, empleados=todos_empleados)
 
-@bp.post("/editar_cliente<int:ecuestre_id>")
+@bp.post("/editar_ecuestre<int:ecuestre_id>")
 def update_ecuestre(ecuestre_id):
     sede_input = request.form["sede_id"]
     sexo = request.form["sexo"]
@@ -106,3 +107,29 @@ def add_ecuestre():
     ecuestre.agregar_empleados(ecuestre_id,entrenadores_asignados)
     flash("Ecuestre agregado exitosamente", "success")
     return redirect(url_for("ecuestre.listar_ecuestre"))
+
+
+@bp.get("/editar_ecuestre/documentos<int:ecuestre_id>")
+def subir_archivo_form(ecuestre_id):
+    caballo = ecuestre.traer_ecuestre(ecuestre_id)
+    return render_template("ecuestre/add_documento.html", ecuestre=caballo)
+
+@bp.post("/editar_ecuestre/documentos<int:ecuestre_id>")
+def agregar_documento(ecuestre_id):
+    file = request.files["documento"]
+    client = current_app.storage.client
+    size = fstat(file.fileno()).st_size
+    client.put_object("grupo15", file.filename, file, size, content_type=file.content_type)    
+    ecuestre.crear_documento(
+        titulo=file.filename,
+        tipo=request.form["tipo_archivo"], 
+        ecuestre_id=ecuestre_id
+    )  
+    return ver_ecuestre(ecuestre_id)
+
+
+@bp.get("/editar_ecuestre/documentos/<string:file_name>")
+def mostrar_archivo(file_name):
+    client = current_app.storage.client
+    url =  client.presigned_get_object("grupo15", file_name) # Esto sirve para archivos sensibles como documento de jya.
+    return redirect(url)

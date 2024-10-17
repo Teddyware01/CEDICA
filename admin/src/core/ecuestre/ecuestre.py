@@ -1,6 +1,6 @@
 from src.core.database import db
 from datetime import datetime
-
+from src.core.ecuestre.ecuestredocs import Ecuestre_docs
 
 empleado_ecuestre = db.Table(
     "empleado_ecuestre",
@@ -21,7 +21,7 @@ class Ecuestre (db.Model):
     sede_id = db.Column(db.Integer, db.ForeignKey('sedes.id'), nullable=False)
     sede_asignada = db.relationship("Sedes", back_populates="ecuestre")
     empleado = db.relationship("Empleado", secondary="empleado_ecuestre", back_populates="ecuestre")
-
+    documentos = db.relationship("Ecuestre_docs", back_populates="ecuestre")
     def __repr__(self):
         return f"{self.id} nombre: {self.nombre}"
 

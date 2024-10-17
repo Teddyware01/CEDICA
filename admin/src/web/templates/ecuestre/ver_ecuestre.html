@@ -8,9 +8,13 @@
 
 {% block content %}
     {{ super() }}
-    <h1 class="text-center">Detalles del Caballo</h1>
+     <!-- Contenedor de pestañas -->
+     <div class="tab-container">
+        <div class="tab active" onclick="openTab(event, 'general')">Información general</div>
+        <div class="tab" onclick="openTab(event, 'documentos')">Documentos</div>
+    </div>
 
-    <div class="caballo-detalles">
+    <div id="general" class="tab-content active">
         <table class="table">
             <tr>
                 <th>Nombre</th>
@@ -52,9 +56,64 @@
             </tr>
         </table>
     </div>
+    <div id="documentos" class="tab-content">    
+        <!-- Lista de documentos -->
+        <h2>Documentos:</h2>
+        {% if documentos %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Titulo</th>
+                        <th>Fecha subida</th>
+                        <th>Tipo</th>
+                    </tr>
+                </thead>            
+                <tbody>
+                    {% for doc in documentos %}
+                        <tr>
+                            <td>{{ doc.titulo }}</td>
+                            <td>{{ doc.fecha_subida.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td>{{ doc.tipo }}</td>
+                            <td><a href="{{ url_for('ecuestre.mostrar_archivo', file_name=doc.titulo) }}" >Abrir</a></td>
+                        </tr>
+                    {% endfor %}
+            </table>
+        {% else %}
+            <p>No hay documentos para mostrar.</p>
+        {% endif %}
+        
+        <!-- Botones de acción en Documentos -->
+        <div class="form-actions">
+            <a href="#" class="btn btn-enlace">+ Enlace</a>
+            <a href="{{ url_for('ecuestre.subir_archivo_form', ecuestre_id=ecuestre.id) }}" class="btn btn-subir">↑ Subir</a>
+        </div>
+    </div>
 
     <div class="actions">
         <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-back">Volver al Listado</a>
     </div>
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabContent, tabs;
+
+            // Ocultar todos los contenidos de las pestañas
+            tabContent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].style.display = "none";
+                tabContent[i].classList.remove("active");
+            }
+
+            // Eliminar la clase "active" de todas las pestañas
+            tabs = document.getElementsByClassName("tab");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+
+            // Mostrar el contenido actual y agregar clase "active" a la pestaña seleccionada
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
 
 {% endblock %}

@@ -3,6 +3,9 @@ from src.core.equipo.models import Empleado
 from src.core.ecuestre.ecuestre import Ecuestre
 from src.core.ecuestre.ecuestre import empleado_ecuestre
 from src.core.database import db
+from src.core.ecuestre.ecuestredocs import Ecuestre_docs
+from sqlalchemy import or_
+from sqlalchemy import cast, String
 
 def create_sede(**kwargs):
     sede = Sedes(**kwargs)
@@ -126,4 +129,13 @@ def delete_ecuestre(ecuestre_id):
         return True
     return False
 
+def crear_documento(**kwargs):
+    documento = Ecuestre_docs(**kwargs)
+    db.session.add(documento)
+    db.session.commit()
+    return documento
 
+
+def traerdocumento(ecuestre_id):
+    documentos = Ecuestre_docs.query.filter(Ecuestre_docs.ecuestre_id == ecuestre_id).all()
+    return documentos
