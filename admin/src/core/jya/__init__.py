@@ -3,7 +3,7 @@ from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
 from src.core.jya.models import Jinete, PensionEnum
-from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad, Nacimiento
+from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad
 from sqlalchemy import or_
 
 def list_jinetes(sort_by=None, search=None):
@@ -88,13 +88,6 @@ def add_direccion(**kwargs):
     db.session.add(direccion)
     db.session.commit()
     return direccion
-
-def add_nacimiento(**kwargs):
-    nacimiento = Nacimiento(**kwargs)
-    db.session.add(nacimiento)
-    db.session.commit()
-    return nacimiento
-
 
 def list_provincias():
     return Provincia.query.all()

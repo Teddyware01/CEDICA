@@ -21,29 +21,10 @@ def listar_jinetes():
 
     return render_template("jya/listado_jya.html", jinetes=jinetes)
 
-def preparar_form(form):
-    form.pension.choices = [(p.name, p.value) for p in PensionEnum]
-    form.diagnostico.choices = [(d.name, d.value) for d in DiagnosticoEnum]
-    form.tipos_discapacidad.choices = [(disc.name, disc.value) for disc in TiposDiscapacidadEnum]
-    form.domicilio_provincia.choices = [
-        (p.id, p.nombre) for p in jya.list_provincias()
-    ]
-    form.domicilio_localidad.choices = [
-        (p.id, p.nombre) for p in jya.list_localidades()
-    ]
-    
-    form.localidad_nacimiento.choices = [
-        (l.id, l.nombre) for l in jya.list_localidades()
-    ]
-    
-    form.tipo_asignacion.choices = [(asig.name, asig.value) for asig in AsignacionEnum]
-    
-    form.dia.choices = [(dia.name, dia.value) for dia in DiasEnum]
-
 @bp.get("/agregar_jinete")
 def add_jinete_form():
     form = AddJineteForm()
-    form = preparar_form(form)
+
 
     return render_template("jya/agregar_jya.html", form=form)
 
@@ -115,7 +96,7 @@ def view_jinete(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
     documentos = list_documentos()
     tipos_discapacidad_nombres = [tipo.name for tipo in jinete.tipos_discapacidad] if jinete.tipos_discapacidad else []
-    dias_nombres = [dia.name for dia in jinete.dia] if jinete.dia else []
+    dias_nombres = [d.name for d in jinete.dia] if jinete.dia else []
     return render_template("jya/ver_jya.html", jinete=jinete, tipos_discapacidad=tipos_discapacidad_nombres, dia=dias_nombres, documentos=documentos)
 
 
@@ -248,6 +229,7 @@ def editar_jinete(jinete_id):
     cargar_choices_form(form)
 
     form.tipos_discapacidad.data = [tipo.value for tipo in jinete.tipos_discapacidad]
+    form.dia.data = [d.value for d in jinete.dia]
     if form.validate_on_submit():
         # Actualizar los datos del empleado con los valores del formulario
         form.populate_obj(jinete)

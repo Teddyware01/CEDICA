@@ -50,12 +50,12 @@
         <div><strong> Lugar de nacimiento: </strong></div>
         <div>
             <label for="provincia_nacimiento" class="form-element">Provincia:</label>
-            {{ form.domicilio_provincia }}
+            {{ form.provincia_nacimiento }}
         </div>
 
         <div>
             <label for="localidad_nacimiento" class="form-element">Localidad:</label>
-            {{ form.domicilio_localidad }}
+            {{ form.localidad_nacimiento }}
         </div>
 
         <div><strong> Domicilio actual: </strong></div>
@@ -119,7 +119,7 @@
 
         <div>
             <label for="observaciones" class="form-element">observaciones:</label>
-            {{ form.observaciones_becado() }}
+            {{ form.observaciones_becado }}
         </div>
 
         <div>
@@ -185,7 +185,7 @@
 
         <div>
             <label for="tipo_asignacion" class="form-element">Tipo de asignación:</label>
-            {{ form.tipo_asignacion(id="tipo_asignacion") }}
+            {{ form.tipo_asignacion }}
         </div>
 
         <script>
@@ -212,7 +212,7 @@
 
         <div>
             <label for="pension" class="form-element">tipo pension:</label>
-            {{ form.pension(id="tipo_pension") }}
+            {{ form.pension }}
         </div>
 
         <script>
@@ -305,7 +305,7 @@
 
         <div>
             <label for="trabajo_institucional" class="form-element">Propuesta de trabajo Institucional:</label>
-            {{ form.trabajo_institucional(id="trabajo_institucional") }}
+            {{ form.trabajo_institucional }}
         </div>
 
         <div>

@@ -281,14 +281,14 @@
                 <label for="institucion_direccion_numero" class="form-element">Numero:</label>
                 {{ form.institucion_direccion_numero }}
             </div>
-             
+            
             <div>
-                <label for="institucion_direccion_departamento" class="form-element">Calle:</label>
+                <label for="institucion_direccion_departamento" class="form-element">Departamento:</label>
                 {{ form.institucion_direccion_departamento }}
             </div>
             
             <div>
-                <label for="institucion_direccion_piso" class="form-element">Numero:</label>
+                <label for="institucion_direccion_piso" class="form-element">Piso:</label>
                 {{ form.institucion_direccion_piso }}
             </div>
             
@@ -340,13 +340,17 @@
             <div class="form-group">
                 <label for="dia">DÍA:</label>
                 <div class="checkbox-group">
-                    {% for d in form.dia %}
-                        <input type="checkbox" id="dia_{{ loop.index0 }}" name="{{ d.name }}" value="{{ d.data }}"
-                            {{ 'checked' if d.data in form.dia.data else '' }}>
-                        <label for="dia_{{ loop.index0 }}">{{ d.label.text }}</label>
+                    {% for value, label in form.dia.choices %}
+                        <input type="checkbox" id="dia_{{ loop.index0 }}" name="dia"
+                            value="{{ value }}"
+                            {% if value in form.dia.data %} checked {% endif %}>
+                        <label for="dia_{{ loop.index0 }}">{{ label }}</label>
                     {% endfor %}
                 </div>
             </div>
+
+            
+
     
             <div>
                 <button type="submit" style="margin: 10px;" class="btn btn-submit">Guardar Cambios</button>

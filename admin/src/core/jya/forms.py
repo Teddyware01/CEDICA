@@ -15,10 +15,12 @@ from wtforms.widgets import DateInput
 from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum
 
 class AddJineteForm(FlaskForm):
+    
     nombre = StringField(
         "Nombre",
         validators=[DataRequired(message="El nombre es obligatorio"), Length(max=100)],
     )
+    
     apellido = StringField(
         "Apellido",
         validators=[
@@ -54,7 +56,10 @@ class AddJineteForm(FlaskForm):
     
     becado = BooleanField("Becado")
     
-    observaciones_becado = StringField("Observaciones becado")
+    observaciones_becado = StringField(
+        "Observaciones becado",
+        validators=[Optional(), Length(max=255, message="Las observaciones no deben exceder los 255 caracteres.")]
+    )
     
     certificado_discapacidad = BooleanField("Certificado de discapacidad")
     
@@ -80,6 +85,7 @@ class AddJineteForm(FlaskForm):
         coerce=str,
         validators=[DataRequired(message="Seleccionar al menos un tipo de discapacidad es obligatorio")],
     )
+    
     # LUGAR NACIMIENTO
     provincia_nacimiento = SelectField(
         "Provincia de Nacimiento", coerce=int, validators=[DataRequired()]
@@ -92,7 +98,7 @@ class AddJineteForm(FlaskForm):
     # domicilio actual
     domicilio_calle = StringField("Calle", validators=[DataRequired("Ingrese calle del domicilio")])
     domicilio_numero = IntegerField("Número", validators=[DataRequired("Ingrese número del domicilio")])
-    domicilio_departamento = IntegerField("Departamento", validators=[Optional()])
+    domicilio_departamento = StringField("Departamento", validators=[Optional()])
     domicilio_piso = IntegerField("Piso", validators=[Optional()])
     domicilio_provincia = SelectField(
         "Provincia", coerce=int, validators=[DataRequired()]
@@ -169,7 +175,7 @@ class AddJineteForm(FlaskForm):
     # domicilio actual
     institucion_direccion_calle = StringField("Calle", validators=[DataRequired("Ingrese calle del domicilio")])
     institucion_direccion_numero = IntegerField("Número", validators=[DataRequired("Ingrese número del domicilio")])
-    institucion_direccion_departamento = IntegerField("Departamento", validators=[Optional()])
+    institucion_direccion_departamento = StringField("Departamento", validators=[Optional()])
     institucion_direccion_piso = IntegerField("Piso", validators=[Optional()])
     institucion_direccion_provincia = SelectField("Provincia", coerce=int, validators=[DataRequired()])
     institucion_direccion_localidad = SelectField("Localidad", coerce=int, validators=[DataRequired()])
@@ -201,10 +207,10 @@ class AddJineteForm(FlaskForm):
     dia = SelectMultipleField(
         "DIA",
         choices=[(dia.name, dia.value) for dia in DiasEnum],
+        coerce=str,
         validators=[DataRequired(message="Seleccionar al menos un dia")],
     )
-    
-    
+            
     submit = SubmitField("Guardar")
     
 '''

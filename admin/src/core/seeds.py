@@ -410,15 +410,6 @@ def run():
         provincia_id=5,
     )
     
-    nacimiento_1 = jya.add_nacimiento(
-        localidad_id=1,
-        provincia_id=1,
-    )
-    
-    nacimiento_2 = jya.add_nacimiento(
-        localidad_id=2,
-        provincia_id=2,
-    )
         
     jya.create_jinete(
         nombre="Martin",
@@ -437,7 +428,7 @@ def run():
         certificado_discapacidad=False,
         pension=PensionEnum.provincial,
         diagnostico=DiagnosticoEnum.otro,
-        tipos_discapacidad=["mental","motora"],
+        tipos_discapacidad=[TiposDiscapacidadEnum.sensorial,TiposDiscapacidadEnum.visceral],
         asignacion_familiar=False,
         tipo_asignacion=AsignacionEnum.por_discapacidad,
         obra_social="OSDE",
@@ -445,7 +436,7 @@ def run():
         curatela=False,
         observaciones_curatela="Hace 1 mes.",
         nombre_institucion = "Anexa",
-        direccion_id =1,
+        direccion_id=1,
         telefono_institucion = "1234567890",
         grado = "2024",
         observaciones_institucion = "Nada.",
@@ -453,7 +444,7 @@ def run():
         trabajo_institucional=TrabajoEnum.deporte,
         condicion=False,
         sede=SedeEnum.casj,
-        dia=["jueves", "viernes"],
+        dia=[DiasEnum.jueves, DiasEnum.viernes],
     )
     
     jya.create_jinete(
@@ -473,7 +464,7 @@ def run():
         certificado_discapacidad=True,
         pension=PensionEnum.nacional,
         diagnostico=DiagnosticoEnum.ecne,
-        tipos_discapacidad=["mental","sensorial"],
+        tipos_discapacidad=[TiposDiscapacidadEnum.mental,TiposDiscapacidadEnum.motora],
         asignacion_familiar=True,
         tipo_asignacion=AsignacionEnum.por_hijo,
         obra_social="IOMA",
@@ -489,7 +480,7 @@ def run():
         trabajo_institucional=TrabajoEnum.hipoterapia,
         condicion=True,
         sede=SedeEnum.hlp,
-        dia=["lunes"],
+        dia=[DiasEnum.lunes],
     )
     
     legajo.create_documento(
