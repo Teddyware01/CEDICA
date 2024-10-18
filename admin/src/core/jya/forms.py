@@ -17,18 +17,7 @@ from wtforms.widgets import DateInput
 from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum, TipoDocumentoEnum
 
 
-class FamiliarForm(FlaskForm):
-    parentesco_familiar = StringField('Parentesco', validators=[DataRequired()])
-    nombre_familiar = StringField('Nombre', validators=[DataRequired()])
-    apellido_familiar = StringField('Apellido', validators=[DataRequired()])
-    dni_familiar = StringField('DNI', validators=[DataRequired(), Regexp(r"^\d{7,8}$", message="Ingrese un DNI válido")])
-    direccion_familiar = StringField('Domicilio actual', validators=[DataRequired()])
-    localidad_familiar = StringField('Localidad', validators=[DataRequired()])
-    provincia_familiar = StringField('Provincia', validators=[DataRequired()])
-    celular_familiar = StringField('Celular actual', validators=[DataRequired(), Regexp(r"^\d+$", message="Ingrese un número válido")])
-    email_familiar = StringField('Email', validators=[DataRequired(), Email()])
-    nivel_escolaridad_familiar = SelectField('Nivel de escolaridad', choices=[('Primario', 'Primario'), ('Secundario', 'Secundario'), ('Terciario', 'Terciario'), ('Universitario', 'Universitario')], validators=[DataRequired()])
-    actividad_ocupacion_familiar = StringField('Actividad u ocupación', validators=[DataRequired()])
+
 
 class DocumentoForm(FlaskForm):
     titulo = StringField('Titulo', validators=[DataRequired()])
@@ -105,12 +94,12 @@ class AddJineteForm(FlaskForm):
         validators=[DataRequired(message="El tipo de pension es obligatorio")],
     )
     
-    '''tipos_discapacidad = SelectMultipleField(
+    tipos_discapacidad = SelectMultipleField(
         "Tipo de Discapacidad",
         choices=[(disc.name, disc.value) for disc in TiposDiscapacidadEnum],
         coerce=str,
         validators=[DataRequired(message="Seleccionar al menos un tipo de discapacidad es obligatorio")],
-    )'''
+    )
     
     # LUGAR NACIMIENTO
     provincia_nacimiento = SelectField(
@@ -217,11 +206,25 @@ class AddJineteForm(FlaskForm):
         validators=[DataRequired(message="Los profesionales son obligatorios")],
     )
     
-    familiares = FieldList(
-        FormField(FamiliarForm),
-        #min_entries=1,   Asegura al menos una entrada de familiar
-        label="Familiares"
+    # ---------- FAMILIARES ---------- 
+    parentesco_familiar = StringField('Parentesco', validators=[DataRequired()])
+    nombre_familiar = StringField("Nombre",validators=[DataRequired(message="El nombre es obligatorio"), Length(max=100)],)
+    
+    apellido_familiar = StringField("Apellido", validators=[DataRequired(message="El apellido es obligatorio"), Length(max=100),],)
+    
+    dni_familiar = StringField("DNI", validators=[DataRequired(message="El DNI es obligatorio"), Length(max=11), Regexp(r"^\d+$", message="El DNI debe contener solo números"),],
     )
+    #direccion_familiar_calle = StringField("Calle", validators=[DataRequired("Ingrese la calle")])
+    #direccion_familiar_numero = IntegerField("Número", validators=[DataRequired("Ingrese el número")])
+    #direccion_familiar_departamento = StringField("Departamento", validators=[Optional()])
+    #direccion_familiar_piso = IntegerField("Piso", validators=[Optional()])
+    #direccion_familiar_provincia = SelectField("Provincia", coerce=int, validators=[DataRequired()])
+    #direccion_familiar_localidad = SelectField("Localidad", coerce=int, validators=[DataRequired()])
+    direccion_familiar = StringField("Direccion", validators=[DataRequired()])
+    celular_familiar = StringField("Celular", validators=[DataRequired(message="El teléfono es obligatorio"), Length(max=15), Regexp(r"^\d+$", message="El telefono debe contener solo números")])
+    email_familiar = StringField('Email', validators=[DataRequired()])
+    nivel_escolaridad_familiar = SelectField('Nivel de escolaridad', choices=[('Primario', 'Primario'), ('Secundario', 'Secundario'), ('Terciario', 'Terciario'), ('Universitario', 'Universitario')], validators=[DataRequired()])
+    actividad_ocupacion_familiar = StringField('Actividad u ocupación', validators=[DataRequired()])
     
     trabajo_institucional = SelectField(
         "Trabajo institucional",

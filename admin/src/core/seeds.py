@@ -5,7 +5,7 @@ from src.core import jya
 from src.core import equipo
 from src.core.equipo.extra_models import Provincia,Localidad, Domicilio
 from src.core.equipo.models import CondicionEnum
-from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum
+from src.core.jya.models import PensionEnum, DiagnosticoEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum
 from datetime import datetime
 
 from src.core.auth import Permisos
@@ -491,8 +491,8 @@ def run():
         apellido_familiar="Diaz",
         dni_familiar="654321",
         direccion_familiar="sddsa",
-        provincia_familiar="asdf",
-        localidad_familiar="asdf",
+        #="asdf",
+        #localidad_familiar="asdf",
         celular_familiar="0987654321",
         email_familiar="juan@diaz",
         nivel_escolaridad_familiar='Primario',

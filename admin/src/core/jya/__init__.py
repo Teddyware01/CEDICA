@@ -168,3 +168,22 @@ def associate_jinete_documento(jinete_id, documento_id):
 
     # Guardar los cambios en la base de datos
     db.session.commit()
+
+def traer_familiares():
+    query = Familiar.query
+    return query.all()
+
+def agregar_familiar(jinete_id, lista_id_familiares):
+    jinete = Jinete.query.get(jinete_id)
+    if not jinete:
+        raise ValueError("Jinete no encontrado")
+
+    # Obtener todos los familiares de una vez usando `in_` para mejorar el rendimiento
+    familiares = Familiar.query.filter(Familiar.id.in_(lista_id_familiares)).all()
+    
+    # Agregar los familiares a la lista de familiares del jinete
+    for familiar in familiares:
+        if familiar not in jinete.familiares:
+            jinete.familiares.append(familiar)
+
+    db.session.commit()

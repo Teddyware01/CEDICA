@@ -16,6 +16,16 @@ class DiasEnum(Enum):
     sabado="Sábado"
     domingo="Domingo"
 
+'''class Dias():
+    id = db.Column(db.Integer, primary_key=True)
+    dias = db.Column(db.Enum(DiasEnum), nullable=True)
+    jinetes = db.relationship('Jinete', secondary='jinete_dias', back_populates='dias')
+    
+jinete_dias = db.Table('jinete_dias',
+    db.Column('jinete_id', db.Integer, db.ForeignKey('jinete.id'), primary_key=True),
+    db.Column('dias_id', db.Integer, db.ForeignKey('dias.id'), primary_key=True)
+)'''
+
 class AsignacionEnum(Enum):
     por_hijo='Asignación Universal por hijo'
     por_discapacidad='Asignación Universal por hijo con Discapacidad'
@@ -48,12 +58,16 @@ class TiposDiscapacidadEnum(Enum):
     sensorial="Sensorial"
     visceral="Visceral"
 
-class TipoDiscapacidad():
+class TipoDiscapacidad(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    mental = db.Column(db.String(10), nullable=True)
-    motora = db.Column(db.String(10), nullable=True)
-    sensorial = db.Column(db.String(10), nullable=True)
-    visceral = db.Column(db.String(10), nullable=True)
+    descripcion = db.Column(db.String(255), nullable=False)
+    jinetes = db.relationship('Jinete', secondary='jinete_discapacidad', back_populates='discapacidades')
+
+
+jinete_discapacidad = db.Table('jinete_discapacidad',
+    db.Column('jinete_id', db.Integer, db.ForeignKey('jinete.id'), primary_key=True),
+    db.Column('discapacidad_id', db.Integer, db.ForeignKey('tipo_discapacidad.id'), primary_key=True)
+)
 
 class EscolaridadEnum(Enum):
     primario="Primario"
@@ -83,9 +97,8 @@ class Familiar(db.Model):
     nombre_familiar = db.Column(db.String(255), nullable=False)
     apellido_familiar = db.Column(db.String(255), nullable=False)
     dni_familiar = db.Column(db.String(10), nullable=False, unique=True)
-    direccion_familiar = db.Column(db.String(255), nullable=False)  # Calle, nº, piso, depto.
-    localidad_familiar = db.Column(db.String(255), nullable=False)
-    provincia_familiar = db.Column(db.String(255), nullable=False)
+    
+    direccion_familiar = db.Column(db.String(255), nullable=False)
     celular_familiar = db.Column(db.String(15), nullable=False)
     email_familiar = db.Column(db.String(255), nullable=False)
     nivel_escolaridad_familiar = db.Column(db.String(255), nullable=False)  # Podría ser Enum si prefieres
@@ -146,6 +159,7 @@ class Jinete(db.Model):
     beneficiario_pension = db.Column(db.Boolean)
     pension = db.Column(db.Enum(PensionEnum), nullable=True)
     #tipos_discapacidad =  db.Column(ARRAY(db.Enum(TiposDiscapacidadEnum)), nullable=True)
+    discapacidades = db.relationship('TipoDiscapacidad', secondary='jinete_discapacidad', back_populates='jinetes')
     asignacion_familiar = db.Column(db.Boolean, nullable=True)
     tipo_asignacion = db.Column(db.Enum(AsignacionEnum), nullable=True)
     obra_social = db.Column(db.String(25), nullable=False, unique=False)
@@ -163,7 +177,7 @@ class Jinete(db.Model):
     trabajo_institucional=db.Column(db.Enum(TrabajoEnum), nullable=False)
     condicion=db.Column(db.Boolean, nullable=False) # true regular, false de baja
     sede=db.Column(db.Enum(SedeEnum), nullable=False)
-    #dia=db.Column(ARRAY(db.Enum(DiasEnum)), nullable=True)
+    #dias = db.relationship('Dias', secondary='jinete_dias', back_populates='jinetes')
     #profesor si puesto laboral = Terapeuta o profesion = profesor.
     #conductor_caballo dado de alta al sistema.
     #caballo dado de alta al sistema.
