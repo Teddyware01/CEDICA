@@ -32,8 +32,6 @@ def mostrar_usuario(user_id):
 @check("user_new")
 def add_client_form():
     empleados_asignables = Empleado.query.filter(Empleado.usuario_asignado == None ).all()
-    print("empleados_asignables")
-    print(empleados_asignables)
     return render_template("add_client.html",empleados_asignables=empleados_asignables)
 
 @bp.post("/agregar_cliente")
@@ -63,7 +61,13 @@ def add_client():
 def edit_client_form(user_id):
     user = auth.traer_usuario(user_id)
     roles = auth.traer_roles(user_id)
-    return render_template("edit_client.html", user=user, roles=roles)
+    empleados_asignables = Empleado.query.filter(Empleado.usuario_asignado == None ).all() #los disponibles(sin asignar)
+    empleado_ya_asignado = user.empleado_asignado
+
+    # Si tiene uno asignado, que lo muestre en la lista de opciones
+    if empleado_ya_asignado:
+        empleados_asignables.append(empleado_ya_asignado)
+    return render_template("edit_client.html", user=user, roles=roles, empleados_asignables=empleados_asignables, empleado_ya_asignado=empleado_ya_asignado)
 
 
 @bp.get("/eliminar_cliente/<int:user_id>")
@@ -95,6 +99,7 @@ def update_user(user_id):
         user_id,
         email=request.form["email"],
         alias=request.form["alias"],
+        empleado_id=request.form["empleado_asignado"],
         password=request.form["password"],
         system_admin=request.form.get("is_admin") is not None,
         activo=request.form.get("is_active") is not None, 

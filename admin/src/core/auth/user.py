@@ -15,7 +15,9 @@ class Users(db.Model):
 
     issues = db.relationship("Issue", back_populates="user")
     
-    empleado_id = db.Column(db.Integer, db.ForeignKey("empleado.id"), nullable=True)
+   # empleado_id = db.Column(db.Integer, db.ForeignKey("empleado.id"), nullable=True)
+    empleado_id = db.Column(db.Integer, db.ForeignKey("empleado.id", ondelete="SET NULL"), nullable=True)
+   
     empleado_asignado = db.relationship("Empleado", back_populates="usuario_asignado")
 
     def __repr__(self):

@@ -45,7 +45,8 @@ class Empleado(db.Model):
         back_populates="empleado",
     )
 
-    documentos = db.relationship("Empleado_docs", back_populates="empleado")
+#    documentos = db.relationship("Empleado_docs", back_populates="empleado")
+    documentos = db.relationship("Empleado_docs", back_populates="empleado", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Empleado #{self.id}. AyN = {self.apellido}, {self.nombre}. Email = {self.email}. DNI = {self.dni}>"
