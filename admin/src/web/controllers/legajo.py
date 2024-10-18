@@ -5,7 +5,7 @@ from src.core import auth
 from src.core.jya import legajo
 from src.core.database import db
 from src.core.jya.legajo.forms import AddDocumentoForm
-from src.core.jya.legajo.models import TipoDocumentoEnum
+from src.core.jya.models import TipoDocumentoEnum
 
 bp = Blueprint("legajo", __name__, url_prefix="/jinetes/legajo")
 

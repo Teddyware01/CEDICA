@@ -16,7 +16,7 @@ from pathlib import Path
 from src.core.database import db
 from sqlalchemy import text
 from src.core.jya import legajo
-from src.core.jya.legajo.models import TipoDocumentoEnum
+from src.core.jya.models import TipoDocumentoEnum
 
 from src.core import ecuestre
 from src.core.auth import Roles
@@ -428,7 +428,7 @@ def run():
         certificado_discapacidad=False,
         pension=PensionEnum.provincial,
         diagnostico=DiagnosticoEnum.otro,
-        tipos_discapacidad=[TiposDiscapacidadEnum.sensorial,TiposDiscapacidadEnum.visceral],
+        #tipos_discapacidad=[TiposDiscapacidadEnum.sensorial,TiposDiscapacidadEnum.visceral],
         asignacion_familiar=False,
         tipo_asignacion=AsignacionEnum.por_discapacidad,
         obra_social="OSDE",
@@ -445,7 +445,7 @@ def run():
         trabajo_institucional=TrabajoEnum.deporte,
         condicion=False,
         sede=SedeEnum.casj,
-        dia=[DiasEnum.jueves, DiasEnum.viernes],
+        #dia=[DiasEnum.jueves, DiasEnum.viernes],
     )
     
     jya.create_jinete(
@@ -465,7 +465,7 @@ def run():
         certificado_discapacidad=True,
         pension=PensionEnum.nacional,
         diagnostico=DiagnosticoEnum.ecne,
-        tipos_discapacidad=[TiposDiscapacidadEnum.mental,TiposDiscapacidadEnum.motora],
+        #tipos_discapacidad=[TiposDiscapacidadEnum.mental,TiposDiscapacidadEnum.motora],
         asignacion_familiar=True,
         tipo_asignacion=AsignacionEnum.por_hijo,
         obra_social="IOMA",
@@ -481,11 +481,11 @@ def run():
         trabajo_institucional=TrabajoEnum.hipoterapia,
         condicion=True,
         sede=SedeEnum.hlp,
-        dia=[DiasEnum.lunes],
+        #dia=[DiasEnum.lunes],
     )
-    if nuevo_jinete and nuevo_jinete.id:
-        familiar = jya.add_familiar(
-        jinete_id=nuevo_jinete.id,  # Usamos el ID del jinete que acabamos de crear
+    
+    familiar_1 = jya.add_familiar(
+        #jinetes=nuevo_jinete, 
         parentesco_familiar="Tio",
         nombre_familiar="Juan",
         apellido_familiar="Diaz",
@@ -498,17 +498,16 @@ def run():
         nivel_escolaridad_familiar='Primario',
         actividad_ocupacion_familiar="Ingeniero."
     )
-    else:
-        # Manejo del error, por ejemplo, lanzar una excepción o registrar un error
-        print("Error al crear el jinete, no se ha generado ID.")
-        # Ahora crea el familiar asociado a ese jinete
+
+    jya.associate_jinete_familiar(1, 1)
     
     
-    legajo.create_documento(
+    documento_1 = jya.add_documento(
         titulo="Curriculum Vitae",
         tipo=TipoDocumentoEnum.evaluacion,
-        jinete_id=nuevo_jinete.id,
     )
+    
+    jya.associate_jinete_documento(1,1)
 
 
     # Modulo ecuestre

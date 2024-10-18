@@ -5,7 +5,7 @@ from src.core import auth
 from src.core import jya
 from src.core.database import db
 from src.core.jya.forms import AddJineteForm
-from src.core.jya.models import Jinete, PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum
+from src.core.jya.models import Jinete, PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, Familiar, Documento
 from src.core.jya.legajo import list_documentos
 
 bp = Blueprint("jya", __name__, url_prefix="/jinetes")
@@ -20,6 +20,7 @@ def listar_jinetes():
     jinetes = jya.list_jinetes(sort_by=sort_by, search=search).paginate(page=page, per_page=per_page)
 
     return render_template("jya/listado_jya.html", jinetes=jinetes)
+
 
 @bp.get("/agregar_jinete")
 def add_jinete_form():
@@ -68,7 +69,7 @@ def add_jinete():
         otro=form.otro.data,
         beneficiario_pension=form.beneficiario_pension.data,
         pension = form.pension.data,
-        tipos_discapacidad = [TiposDiscapacidadEnum[tipos_discapacidad] for tipos_discapacidad in form.tipos_discapacidad.data],
+        #tipos_discapacidad = [TiposDiscapacidadEnum[tipos_discapacidad] for tipos_discapacidad in form.tipos_discapacidad.data],
         asignacion_familiar=form.asignacion_familiar.data,
         tipo_asignacion=AsignacionEnum[form.tipo_asignacion.data] if form.asignacion_familiar.data and form.tipo_asignacion.data else None,
         obra_social=form.obra_social.data,
@@ -84,7 +85,7 @@ def add_jinete():
         trabajo_institucional=form.trabajo_institucional.data,
         condicion=form.condicion.data,
         sede=form.sede.data,
-        dia = [DiasEnum[dia] for dia in form.dia.data],
+        #dia = [DiasEnum[dia] for dia in form.dia.data],
         
     )
     
@@ -95,9 +96,10 @@ def add_jinete():
 def view_jinete(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
     documentos = list_documentos()
-    tipos_discapacidad_nombres = [tipo.name for tipo in jinete.tipos_discapacidad] if jinete.tipos_discapacidad else []
-    dias_nombres = [d.name for d in jinete.dia] if jinete.dia else []
-    return render_template("jya/ver_jya.html", jinete=jinete, tipos_discapacidad=tipos_discapacidad_nombres, dia=dias_nombres, documentos=documentos)
+    #tipos_discapacidad_nombres = [tipo.name for tipo in jinete.tipos_discapacidad] if jinete.tipos_discapacidad else []
+    #dias_nombres = [d.name for d in jinete.dia] if jinete.dia else []
+    #return render_template("jya/ver_jya.html", jinete=jinete, tipos_discapacidad=tipos_discapacidad_nombres, dia=dias_nombres, documentos=documentos)
+    return render_template("jya/ver_jya.html", jinete=jinete, documentos=documentos)
 
 
 
@@ -145,17 +147,20 @@ def cargar_choices_form(form):
     # Cargar las opciones para los campos de selección
     form.pension.choices = [(p.name, p.value) for p in PensionEnum]
     form.diagnostico.choices = [(d.name, d.value) for d in DiagnosticoEnum]
-    form.tipos_discapacidad.choices = [(disc.name, disc.value) for disc in TiposDiscapacidadEnum]
+    #form.tipos_discapacidad.choices = [(disc.name, disc.value) for disc in TiposDiscapacidadEnum]
     form.tipo_asignacion.choices = [(asig.name, asig.value) for asig in AsignacionEnum]
     form.domicilio_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
     form.domicilio_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]
 
     form.localidad_nacimiento.choices = [(l.id, l.nombre) for l in jya.list_localidades()]  
     form.provincia_nacimiento.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
-    form.dia.choices = [(dia.name, dia.value) for dia in DiasEnum]
+    #form.dia.choices = [(dia.name, dia.value) for dia in DiasEnum]
     
     form.institucion_direccion_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]  
     form.institucion_direccion_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
+    
+    form.familiares.choices = [(f.id, f.nombre_familiar) for f in Familiar.query.order_by(Familiar.nombre_familiar).all()]
+    form.documento.choices = [(d.id, d.titulo) for d in Documento.query.order_by(Documento.titulo).all()]
     
     
 
@@ -176,7 +181,9 @@ domicilio = db.relationship("Domicilio", foreign_keys=[domicilio_id], back_popul
 @bp.get("/editar_jinete<int:jinete_id>")
 def edit_jinete_form(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
-    form = AddJineteForm(obj=jinete)  
+    form = AddJineteForm(obj=jinete)
+    form.familiares.populate_obj(jinete.familiares)
+    form.documentos.populate_obj(jinete.documentos)
     cargar_choices_form(form)
     
     print("OPCIONES")
@@ -205,8 +212,8 @@ def edit_jinete_form(jinete_id):
     form.contacto_emergencia_telefono.data = jinete.contacto_emergencia.telefono
 
     # Arreglando campos que no cargan automaticamente
-    form.tipos_discapacidad.data = [tipo.value for tipo in jinete.tipos_discapacidad]
-    form.dia.data = [tipo.value for tipo in jinete.dia]
+    #form.tipos_discapacidad.data = [tipo.value for tipo in jinete.tipos_discapacidad]
+    #form.dia.data = [tipo.value for tipo in jinete.dia]
     form.localidad_nacimiento.data = jinete.localidad_nacimiento.id
     form.provincia_nacimiento.data = jinete.provincia_nacimiento.id
 
@@ -228,11 +235,30 @@ def editar_jinete(jinete_id):
     
     cargar_choices_form(form)
 
-    form.tipos_discapacidad.data = [tipo.value for tipo in jinete.tipos_discapacidad]
-    form.dia.data = [d.value for d in jinete.dia]
+    #form.tipos_discapacidad.data = [tipo.value for tipo in jinete.tipos_discapacidad]
+    #form.dia.data = [d.value for d in jinete.dia]
     if form.validate_on_submit():
-        # Actualizar los datos del empleado con los valores del formulario
+        # Actualizar los datos del jinete con los valores del formulario
         form.populate_obj(jinete)
+        for i, familiar_data in enumerate(form.familiares.data):
+            if len(jinete.familiares) > i:
+                # Actualizar familiar existente
+                for key, value in familiar_data.items():
+                    setattr(jinete.familiares[i], key, value)
+            else:
+                # Añadir nuevo familiar
+                nuevo_familiar = Familiar(**familiar_data)
+                jinete.familiares.append(nuevo_familiar)
+                
+        for i, doc_data in enumerate(form.documentos.data):
+            if len(jinete.documentos) > i:
+                # Actualizar documento existente
+                for key, value in doc_data.items():
+                    setattr(jinete.documentos[i], key, value)
+            else:
+                # Añadir nuevo documento
+                nuevo_documento = Documento(**doc_data)
+                jinete.documentos.append(nuevo_documento)
 
         # Asignar los valores del domicilio
         jinete.domicilio.calle = form.domicilio_calle.data
@@ -255,8 +281,8 @@ def editar_jinete(jinete_id):
 
 
         # Valores arreglados.
-        jinete.localidad_nacimiento.id = form.localidad_nacimiento.data 
-        jinete.provincia_nacimiento.id = form.provincia_nacimiento.data 
+        jinete.localidad_nacimiento_id = form.localidad_nacimiento.data 
+        jinete.provincia_nacimiento_id = form.provincia_nacimiento.data 
         # Guardar los cambios en la base de datos
         flash("Jinete actualizado  exitosamente", "success")
         db.session.commit()

@@ -48,6 +48,13 @@ class TiposDiscapacidadEnum(Enum):
     sensorial="Sensorial"
     visceral="Visceral"
 
+class TipoDiscapacidad():
+    id = db.Column(db.Integer, primary_key=True)
+    mental = db.Column(db.String(10), nullable=True)
+    motora = db.Column(db.String(10), nullable=True)
+    sensorial = db.Column(db.String(10), nullable=True)
+    visceral = db.Column(db.String(10), nullable=True)
+
 class EscolaridadEnum(Enum):
     primario="Primario"
     secundario="Secundario"
@@ -70,7 +77,8 @@ class SedeEnum(Enum):
     
 class Familiar(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    jinete_id = db.Column(db.Integer, db.ForeignKey('jinete.id'), nullable=False)
+    #jinete_id = db.Column(db.Integer, db.ForeignKey('jinete.id'), nullable=False)
+    jinetes = db.relationship('Jinete', secondary='jinete_familiar', back_populates='familiares')
     parentesco_familiar = db.Column(db.String(255), nullable=False)
     nombre_familiar = db.Column(db.String(255), nullable=False)
     apellido_familiar = db.Column(db.String(255), nullable=False)
@@ -82,6 +90,34 @@ class Familiar(db.Model):
     email_familiar = db.Column(db.String(255), nullable=False)
     nivel_escolaridad_familiar = db.Column(db.String(255), nullable=False)  # Podría ser Enum si prefieres
     actividad_ocupacion_familiar = db.Column(db.String(255), nullable=False)
+
+jinete_familiar = db.Table('jinete_familiar',
+    db.Column('jinete_id', db.Integer, db.ForeignKey('jinete.id'), primary_key=True),
+    db.Column('familiar_id', db.Integer, db.ForeignKey('familiar.id'), primary_key=True)
+)
+
+class TipoDocumentoEnum(Enum):
+    entrevista="entrevista"
+    evaluacion="evaluacion"
+    planificaciones="planificaciones"
+    evolucion="evolución"
+    cronicas="crónicas"
+    documental="documental"
+    
+class Documento(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    titulo = db.Column(db.String(100), nullable=False)
+    fecha_subida = db.Column(db.DateTime, default=datetime.now)
+    tipo = db.Column(db.Enum(TipoDocumentoEnum), nullable=False)
+    
+    jinetes = db.relationship('Jinete', secondary='jinete_documento', back_populates='documentos')
+    #jinete_id = db.Column(db.Integer, db.ForeignKey("jinete.id"), nullable=False)
+    #jinete = db.relationship("Jinete", back_populates="documentos")
+    
+jinete_documento = db.Table('jinete_documento',
+    db.Column('jinete_id', db.Integer, db.ForeignKey('jinete.id'), primary_key=True),
+    db.Column('documetno_id', db.Integer, db.ForeignKey('documento.id'), primary_key=True)
+)
     
 class Jinete(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -109,7 +145,7 @@ class Jinete(db.Model):
     otro = db.Column(db.String(100), nullable=True)
     beneficiario_pension = db.Column(db.Boolean)
     pension = db.Column(db.Enum(PensionEnum), nullable=True)
-    tipos_discapacidad =  db.Column(ARRAY(db.Enum(TiposDiscapacidadEnum)), nullable=True)
+    #tipos_discapacidad =  db.Column(ARRAY(db.Enum(TiposDiscapacidadEnum)), nullable=True)
     asignacion_familiar = db.Column(db.Boolean, nullable=True)
     tipo_asignacion = db.Column(db.Enum(AsignacionEnum), nullable=True)
     obra_social = db.Column(db.String(25), nullable=False, unique=False)
@@ -127,13 +163,15 @@ class Jinete(db.Model):
     trabajo_institucional=db.Column(db.Enum(TrabajoEnum), nullable=False)
     condicion=db.Column(db.Boolean, nullable=False) # true regular, false de baja
     sede=db.Column(db.Enum(SedeEnum), nullable=False)
-    dia=db.Column(ARRAY(db.Enum(DiasEnum)), nullable=True)
+    #dia=db.Column(ARRAY(db.Enum(DiasEnum)), nullable=True)
     #profesor si puesto laboral = Terapeuta o profesion = profesor.
     #conductor_caballo dado de alta al sistema.
     #caballo dado de alta al sistema.
     #auxiliar_pista dado de alta al sistema.
-    familiares = db.relationship('Familiar', backref='jinete')
-    documentos = db.relationship("Documento", back_populates="jinete", cascade="all, delete-orphan")
+    # sin tabla intermedia: familiares = db.relationship('Familiar', backref='jinete')
+    familiares = db.relationship('Familiar', secondary='jinete_familiar', back_populates='jinetes')
+    documentos = db.relationship("Documento", secondary='jinete_documento', back_populates='jinetes')
+    #documentos = db.relationship("Documento", back_populates="jinete", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User #{self.id} nombre = {self.nombre}>"

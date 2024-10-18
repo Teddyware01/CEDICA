@@ -162,16 +162,7 @@
                 {{ form.otro }}
             </div>
     
-                
-            <div class="form-group">
-                <label for="tipos_discapacidad">Tipos de Discapacidad:</label>
-                {% for value, label in form.tipos_discapacidad.choices %}
-                <input type="checkbox" id="tipo_{{ loop.index0 }}" name="tipos_discapacidad[]"
-                    value="{{ value }}" 
-                    {% if label in form.tipos_discapacidad.data %} checked {% endif %}>
-                <label for="tipo_{{ loop.index0 }}">{{ label }}</label>
-                {% endfor %}
-            </div>
+            
             
             <label for="becado" class="form-element">Becado:</label>
             <input type="radio" id="becado_si" name="becado" value="si" {{ 'checked' if form.becado.data else '' }}>
@@ -337,17 +328,6 @@
                 {{ form.sede }}
             </div>
     
-            <div class="form-group">
-                <label for="dia">DÍA:</label>
-                <div class="checkbox-group">
-                    {% for value, label in form.dia.choices %}
-                        <input type="checkbox" id="dia_{{ loop.index0 }}" name="dia"
-                            value="{{ value }}"
-                            {% if value in form.dia.data %} checked {% endif %}>
-                        <label for="dia_{{ loop.index0 }}">{{ label }}</label>
-                    {% endfor %}
-                </div>
-            </div>
 
             
 

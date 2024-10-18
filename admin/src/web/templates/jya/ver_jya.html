@@ -64,29 +64,32 @@
             <p><strong>PROFESIONALES que lo ATIENDEN: </strong> {{ jinete.profesionales }}</p>
             
             <h2><strong> DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
-            <p><strong>Parentesco: </strong> {{ jinete.parentesco_familiar }}</p>
-            <p><strong>Nombre: </strong> {{ jinete.nombre_familiar }}</p>
-            <p><strong>Apellido: </strong> {{ jinete.apellido_familiar }}</p>
-            <p><strong>DNI / año actual: </strong>{{ jinete.dni_familiar }}</p>           
-            <p><strong>Domicilio:</strong> {{ jinete.direccion_familiar }}</p>
-            <p><strong>Provinicia:</strong> {{ jinete.provincia_familiar }}</p>
-            <p><strong>Localidad:</strong> {{ jinete.localidad_familiar }}</p>
-            <p><strong>Celular: </strong> {{ jinete.celular_familiar }}</p>
-            <p><strong>Parentesco: </strong> {{ jinete.nombre_familiar }}</p>
-            mail
-            <p><strong>escolaridad: </strong> {{ jinete.nivel_escolaridad_familiar }}</p>
-            <p><strong>Actividad / año actual: </strong> {{ jinete.actividad_ocupacion_familiar }}</p>           
+            {% if jinete.familiares %}
+                {% for familiar in jinete.familiares %}
+                    <div>
+                        <p><strong>Parentesco:</strong> {{ familiar.parentesco_familiar }}</p>
+                        <p><strong>Nombre:</strong> {{ familiar.nombre_familiar }}</p>
+                        <p><strong>Apellido:</strong> {{ familiar.apellido_familiar }}</p>
+                        <p><strong>DNI:</strong> {{ familiar.dni_familiar }}</p>
+                        <p><strong>Domicilio:</strong> {{ familiar.direccion_familiar }}</p>
+                        <p><strong>Provincia:</strong> {{ familiar.provincia_familiar }}</p>
+                        <p><strong>Localidad:</strong> {{ familiar.localidad_familiar }}</p>
+                        <p><strong>Celular:</strong> {{ familiar.celular_familiar }}</p>
+                        <p><strong>Email:</strong> {{ familiar.email_familiar }}</p>
+                        <p><strong>Escolaridad:</strong> {{ familiar.nivel_escolaridad_familiar }}</p>
+                        <p><strong>Actividad / Ocupación:</strong> {{ familiar.actividad_ocupacion_familiar }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No hay familiares registrados.</p>
+            {% endif %}         
 
 
             <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN </strong></h2>
             <p><strong>Propuesta de trabajo institucional:</strong> {{ jinete.trabajo_institucional.value }}</p>
             <p><strong>Condición:</strong> {{ "REGULAR" if jinete.condicion else "DE BAJA" }}</p>
             <p><strong>SEDE:</strong> {{ jinete.sede.value }}</p>
-            <p><strong>DÍAS:</strong> {{ jinete.dia.value }}
-                {% for d in dia %}
-                <span>{{ d }}</span>{% if not loop.last %}, {% endif %}
-            {% endfor %}
-            </p>
+            
 
             <!-- Botones solo en Información general -->
             <div class="form-actions">
@@ -125,15 +128,17 @@
                         </tr>
                     </thead>            
                     <tbody>
-                        {% for doc in documentos %}
-                            <tr>
-                                <td>{{ doc.titulo }}</td>
-                                <td>{{ doc.fecha_subida }}</td>
-                                <td>{{ doc.tipo.value }}</td>
+                        {% if jinete.documentos %}
+                            {% for doc in jinete.documentos %}
+                                <tr>
+                                    <td>{{ doc.titulo }}</td>
+                                    <td>{{ doc.fecha_subida }}</td>
+                                    <td>{{ doc.tipo.value }}</td>
                                 
-                            </tr>
-                        {% endfor %}
-                </table>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
             {% else %}
                 <p>No hay documentos para mostrar.</p>
             {% endif %}

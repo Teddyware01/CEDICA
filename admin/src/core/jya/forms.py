@@ -8,27 +8,38 @@ from wtforms import (
     BooleanField,
     SubmitField,
     widgets,
+    FieldList, 
+    FormField,
 )
 from src.core.equipo.extra_models import Localidad
 from wtforms.validators import DataRequired, Email, Length, Optional, Regexp, ValidationError, NumberRange
 from wtforms.widgets import DateInput
-from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum
+from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum, TipoDocumentoEnum
 
 
 class FamiliarForm(FlaskForm):
     parentesco_familiar = StringField('Parentesco', validators=[DataRequired()])
     nombre_familiar = StringField('Nombre', validators=[DataRequired()])
     apellido_familiar = StringField('Apellido', validators=[DataRequired()])
-    dni_familiar = StringField('DNI', validators=[DataRequired()])
+    dni_familiar = StringField('DNI', validators=[DataRequired(), Regexp(r"^\d{7,8}$", message="Ingrese un DNI válido")])
     direccion_familiar = StringField('Domicilio actual', validators=[DataRequired()])
     localidad_familiar = StringField('Localidad', validators=[DataRequired()])
     provincia_familiar = StringField('Provincia', validators=[DataRequired()])
-    celular_familiar = StringField('Celular actual', validators=[DataRequired()])
-    email_familiar = StringField('e-mail', validators=[DataRequired()])
+    celular_familiar = StringField('Celular actual', validators=[DataRequired(), Regexp(r"^\d+$", message="Ingrese un número válido")])
+    email_familiar = StringField('Email', validators=[DataRequired(), Email()])
     nivel_escolaridad_familiar = SelectField('Nivel de escolaridad', choices=[('Primario', 'Primario'), ('Secundario', 'Secundario'), ('Terciario', 'Terciario'), ('Universitario', 'Universitario')], validators=[DataRequired()])
     actividad_ocupacion_familiar = StringField('Actividad u ocupación', validators=[DataRequired()])
 
-
+class DocumentoForm(FlaskForm):
+    titulo = StringField('Titulo', validators=[DataRequired()])
+    fecha_subida = DateTimeField('Fecha subida', validators=[DataRequired()])
+    
+    tipo = SelectField('Tipo de documento',
+        choices=[(tipo.name, tipo.value) for tipo in TipoDocumentoEnum],
+        coerce=int,
+        validators=[DataRequired(message="El tipo de diagnostico es obligatorio")],
+    )
+    
 class AddJineteForm(FlaskForm):
     
     nombre = StringField(
@@ -94,12 +105,12 @@ class AddJineteForm(FlaskForm):
         validators=[DataRequired(message="El tipo de pension es obligatorio")],
     )
     
-    tipos_discapacidad = SelectMultipleField(
+    '''tipos_discapacidad = SelectMultipleField(
         "Tipo de Discapacidad",
         choices=[(disc.name, disc.value) for disc in TiposDiscapacidadEnum],
         coerce=str,
         validators=[DataRequired(message="Seleccionar al menos un tipo de discapacidad es obligatorio")],
-    )
+    )'''
     
     # LUGAR NACIMIENTO
     provincia_nacimiento = SelectField(
@@ -206,6 +217,12 @@ class AddJineteForm(FlaskForm):
         validators=[DataRequired(message="Los profesionales son obligatorios")],
     )
     
+    familiares = FieldList(
+        FormField(FamiliarForm),
+        #min_entries=1,   Asegura al menos una entrada de familiar
+        label="Familiares"
+    )
+    
     trabajo_institucional = SelectField(
         "Trabajo institucional",
         choices=[(trab.name, trab.value) for trab in TrabajoEnum],
@@ -219,49 +236,17 @@ class AddJineteForm(FlaskForm):
         validators=[DataRequired(message="La sede es obligatoria")],
     )
     
-    dia = SelectMultipleField(
+    '''dia = SelectMultipleField(
         "DIA",
         choices=[(dia.name, dia.value) for dia in DiasEnum],
         coerce=str,
         validators=[DataRequired(message="Seleccionar al menos un dia")],
+    )'''
+    
+    documento = FieldList(
+        FormField(DocumentoForm),
+        #min_entries=1,   Asegura al menos una entrada de documento
+        label="Documentos"
     )
             
     submit = SubmitField("Guardar")
-    
-'''
-    parentesco_familiar
-    
-    nombre_familiar
-    
-    apellido_familiar
-    
-    dni_familiar
-    
-    domicilio_calle_familiar
-    
-    domicilio_numero_familiar
-    
-    domicilio_piso_familiar
-    
-    domicilio_departamento_familiar
-    
-    domicilio_localidad_familiar
-    
-    domicilio_provincia_familiar
-    
-    telefono_familiar
-    
-    Email_familiar
-    
-    escolaridad_familiar #desplegable
-    
-    ocupacion_familiar
-        
-    profesor_institucion
-    
-    conductor_caballo_institucion
-    
-    caballo_institucion
-    
-    auxiliar_institucion
-'''

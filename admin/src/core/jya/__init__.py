@@ -2,7 +2,7 @@ from src.core.database import db
 from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
-from src.core.jya.models import Jinete, Familiar
+from src.core.jya.models import Jinete, Familiar, Documento
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad
 from sqlalchemy import or_
 
@@ -109,3 +109,62 @@ def add_familiar(**kwargs):
     db.session.add(familiar)
     db.session.commit()
     return familiar
+
+def associate_jinete_familiar(jinete_id, familiar_id):
+    # Obtener instancias de Jinete y Familiar
+    jinete = Jinete.query.get(jinete_id)
+    familiar = Familiar.query.get(familiar_id)
+
+    # Verificar si los objetos fueron recuperados correctamente
+    if not jinete or not familiar:
+        raise ValueError("Jinete o Familiar no encontrado")
+
+    # Agregar el familiar al jinete usando la relación definida
+    jinete.familiares.append(familiar)
+
+    # Guardar los cambios en la base de datos
+    db.session.commit()
+    
+
+def add_documento(**kwargs):
+    documento = Documento(**kwargs)
+    db.session.add(documento)
+    db.session.commit()
+
+    return documento
+
+def delete_documento(id):
+    documento = Documento.query.get(id)
+    if documento:
+        db.session.delete(documento)
+        db.session.commit()
+        return True
+    return False
+
+
+def edit_documento(id, **kwargs):
+    documento = Documento.query.get(id)
+    for key, value in kwargs.items():
+        if hasattr(documento, key):
+            setattr(documento, key, value)
+    db.session.commit()
+    
+
+def get_documento(jinete_id): 
+    documento = Documento.query.get(jinete_id)
+    return documento
+
+def associate_jinete_documento(jinete_id, documento_id):
+    # Obtener instancias de Jinete y Documento
+    jinete = Jinete.query.get(jinete_id)
+    documento = Documento.query.get(documento_id)
+
+    # Verificar si los objetos fueron recuperados correctamente
+    if not jinete or not documento:
+        raise ValueError("Jinete o documento no encontrado")
+
+    # Agregar el documento al jinete usando la relación definida
+    jinete.documentos.append(documento)
+
+    # Guardar los cambios en la base de datos
+    db.session.commit()

@@ -6,7 +6,7 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired,Regexp, ValidationError, Length
 from wtforms.widgets import DateInput
-from .models import TipoDocumentoEnum
+from src.core.jya.models import TipoDocumentoEnum
 
 class AddDocumentoForm(FlaskForm):
     titulo = StringField(
