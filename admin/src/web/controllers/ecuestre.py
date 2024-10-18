@@ -2,6 +2,7 @@ from src.core.database import db
 from src.core import ecuestre
 from flask import current_app
 from os import fstat
+import re
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 
@@ -52,6 +53,16 @@ def update_ecuestre(ecuestre_id):
         sede_id = 3
     else:
         sede_id = None 
+    nombre = request.form["nombre"]
+    raza = request.form["raza"]
+    pelaje = request.form["pelaje"]
+    fields_to_validate = {
+        "Nombre": nombre,
+        "Raza": raza,
+        "Pelaje": pelaje,
+    }
+    if not validate_fields(fields_to_validate):
+        return edit_ecuestre_form(ecuestre_id)        
     ecuestre.edit_encuestre(
         ecuestre_id,
         nombre = request.form["nombre"],
@@ -97,12 +108,22 @@ def add_ecuestre():
         sexo = True
     else:
         sexo = False
+    nombre = request.form["nombre"]
+    raza = request.form["raza"]
+    pelaje = request.form["pelaje"]
+    fields_to_validate = {
+        "Nombre": nombre,
+        "Raza": raza,
+        "Pelaje": pelaje,
+    }
+    if not validate_fields(fields_to_validate):
+        return add_ecuestre_form()
     nuevo_ecuestre = ecuestre.create_ecuestre(
-        nombre = request.form["nombre"],
+        nombre = nombre,
         fecha_nacimiento = request.form["fecha_nacimiento"],
         sexo = sexo,
-        raza = request.form["raza"],
-        pelaje = request.form["pelaje"],
+        raza = raza,
+        pelaje = pelaje,
         fecha_ingreso = request.form["fecha_ingreso"],
         tipoJyA = request.form["tipoJyA"],
         sede_id = int(request.form["sede"])
@@ -150,3 +171,16 @@ def eliminar_documento_form(ecuestre_id, documento_id):
     ecuestre_datos = ecuestre.traer_ecuestre(ecuestre_id)
     documento = ecuestre.traerdocumentoporid(documento_id)
     return render_template("ecuestre/delete_documento.html", ecuestre=ecuestre_datos, doc=documento)
+
+
+
+
+def validate_fields(fields):
+    # Expresión regular que permite letras, tildes, diéresis y espacios
+    pattern = r"^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ\s]+$"
+    for field_name, field_value in fields.items():
+        if not re.match(pattern, field_value):
+            print(f"El campo a analizar es: {field_name}")  # Mensaje de depuración
+            flash(f"El campo '{field_name}' con valor '{field_value}' solo puede contener letras.", "error")
+            return False
+    return True

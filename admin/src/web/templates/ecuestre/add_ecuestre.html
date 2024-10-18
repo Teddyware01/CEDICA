@@ -4,7 +4,7 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='crear_ecuestre_Style.css') }}">
+    
 {% endblock %}
 
 {% block navbar %}
@@ -17,7 +17,15 @@
 
 {% block content %}
     <h1 class="text-center">Agregar Nuevo Ecuestre</h1>
-
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
     <form action="{{ url_for('ecuestre.add_ecuestre') }}" method="POST" class="ecuestre-form">
         <div class="form-group">
             <label for="nombre">Nombre</label>
@@ -86,5 +94,6 @@
             <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-cancel">Cancelar</a>
         </div>
     </form>
+
 {% endblock %}
 

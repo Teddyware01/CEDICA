@@ -527,3 +527,19 @@ p {
         z-index: 1001; 
     }
 }
+
+.flashes {
+    list-style-type: none; /* Elimina los puntos de la lista */
+    margin: 20px 0; /* Espacio superior e inferior */
+    padding: 15px; /* Espaciado interno */
+    border: 1px solid #f44336; /* Color del borde */
+    border-radius: 5px; /* Esquinas redondeadas */
+    background-color: #f8d7da; /* Color de fondo */
+    color: #721c24; /* Color del texto */
+    font-size: 1.2em; /* Aumentar el tamaño de la fuente */
+    font-weight: bold; /* Negrita */
+}
+
+.flashes li {
+    margin-bottom: 10px; /* Espacio entre los mensajes */
+}
