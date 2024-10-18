@@ -9,75 +9,148 @@
 
 {% block content %}
     {{ super() }}
-
-    <script>
-        function confirmarEliminacion(event, empleadoId) {
-            event.preventDefault();  // Detener el comportamiento predeterminado del enlace
-        
-            if (confirm("¿Estás seguro de que deseas eliminar este empleado?")) {
-                fetch(`/equipo/eliminar_empleado/${empleadoId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = "{{ url_for('equipo.listar_empleados') }}";  // Redirige después de eliminar
-                    } else {
-                        alert("Error al eliminar el empleado.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("Error al eliminar el empleado.");
-                });
-            }
-        }
-    </script>
     
-    <a href="#" class="btn btn-danger" onclick="confirmarEliminacion(event, {{ empleado.id }})">Eliminar</a>
-
-
     <h1 class="text-center">Ver empleado.</h1>
     <h2>Mostrando toda la informacion del empleado.</h2>
-    <p>Apellido: {{empleado.apellido}}</p>
-    <p>Nombre: {{empleado.nombre}}</p>
-    <p>DNI: {{empleado.dni}}</p>
-    <p>Email: {{empleado.email}}</p>
-    <p>Telefono: {{empleado.telefono}}</p>
-    <p>Fecha de inicio: {{empleado.fecha_inicio}}</p>
-    <p>Fecha de cese: {{empleado.fecha_cese if empleado.fecha_cese else "Ninguna asignada."}}</p>
-    <p>Condicion: {{empleado.condicion}}</p>
-    <p>Activo: {{"SI" if empleado.activo else "NO" }}</p>
-    <p>Profesion: {{empleado.profesion.nombre}}</p>
-    <p>Puesto laboral: {{empleado.puesto_laboral.nombre}}</p>
-    
-    <h3>Obra Social: {{empleado.obra_social}}</h3>
-    <p>Numero de afiliado: {{empleado.nro_afiliado}}</p>
-    
-    <h3>Domicilio:</h3>
-    <p>Calle: {{empleado.domicilio.calle}}</p>
-    <p>Numero: {{empleado.domicilio.numero}}</p>
-    <p>Departamento: {{empleado.domicilio.departamento if empleado.domicilio.departamento else "Ninguno."}}</p>
-    <p>Piso: {{empleado.domicilio.Piso if empleado.domicilio.Piso else "Ninguno."}}</p>
-    <p>Provincia: {{empleado.domicilio.provincia.nombre}}</p>
-    <p>Localidad: {{empleado.domicilio.localidad.nombre}}</p>
-    
-    <h3>Contacto de emergencia:</h3>
-    <p>Apellido: {{empleado.contacto_emergencia.apellido}}</p>
-    <p>Nombre: {{empleado.contacto_emergencia.nombre}}</p>
-    <p>Calle: {{empleado.contacto_emergencia.telefono}}</p>
+
+    <!-- Contenedor de pestañas -->
+    <div class="tab-container">
+        <div class="tab active" onclick="openTab(event, 'general')">Información general</div>
+        <div class="tab" onclick="openTab(event, 'documentos')">Documentos</div>
+    </div>
+
+    <!-- Contenido de la pestaña "Información general" -->
+    <div id="general" class="tab-content active">
+        
+
+        <p>Apellido: {{empleado.apellido}}</p>
+        <p>Nombre: {{empleado.nombre}}</p>
+        <p>DNI: {{empleado.dni}}</p>
+        <p>Email: {{empleado.email}}</p>
+        <p>Telefono: {{empleado.telefono}}</p>
+        <p>Fecha de inicio: {{empleado.fecha_inicio}}</p>
+        <p>Fecha de cese: {{empleado.fecha_cese if empleado.fecha_cese else "Ninguna asignada."}}</p>
+        <p>Condicion: {{empleado.condicion}}</p>
+        <p>Activo: {{"SI" if empleado.activo else "NO" }}</p>
+        <p>Profesion: {{empleado.profesion.nombre}}</p>
+        <p>Puesto laboral: {{empleado.puesto_laboral.nombre}}</p>
+        
+        <h3>Obra Social: {{empleado.obra_social}}</h3>
+        <p>Numero de afiliado: {{empleado.nro_afiliado}}</p>
+        
+        <h3>Domicilio:</h3>
+        <p>Calle: {{empleado.domicilio.calle}}</p>
+        <p>Numero: {{empleado.domicilio.numero}}</p>
+        <p>Departamento: {{empleado.domicilio.departamento if empleado.domicilio.departamento else "Ninguno."}}</p>
+        <p>Piso: {{empleado.domicilio.Piso if empleado.domicilio.Piso else "Ninguno."}}</p>
+        <p>Provincia: {{empleado.domicilio.provincia.nombre}}</p>
+        <p>Localidad: {{empleado.domicilio.localidad.nombre}}</p>
+        
+        <h3>Contacto de emergencia:</h3>
+        <p>Apellido: {{empleado.contacto_emergencia.apellido}}</p>
+        <p>Nombre: {{empleado.contacto_emergencia.nombre}}</p>
+        <p>Calle: {{empleado.contacto_emergencia.telefono}}</p>
 
 
-    <h3>Archivos y documentos:</h3>
-    {% if documentos %}
-        {% for doc in documentos %}
-            <p> {{doc.nombre}}.</p>
-        {% endfor %}
-    {% else %}
-         <p>El empleado no tiene documentos para mostrar.</p>
-    {% endif %}
+        <a href="{{url_for('equipo.edit_empleado_form', empleado_id=empleado.id )}}" class="btn btn-edit">Editar</a>
+        <a href="{{url_for('equipo.delete_empleado', empleado_id=empleado.id )}}" class="btn btn-danger">Eliminar</a>
+    </div>
+    
+    <!-- Contenido de la pestaña "Documentos" -->
+    <div id="documentos" class="tab-content">
+        <!-- Formulario de búsqueda y ordenamiento -->
+        <form method="GET" action="{{ url_for('equipo.show_empleado', empleado_id=empleado.id) }}" class="mb-3">
+            <input type="hidden" name="tab" value="documentos">
+            <label for="sort_by">Ordenar por:</label>
+            <select name="sort_by" id="sort_by">
+                <option value="titulo_asc">Titulo (Ascendente)</option>
+                <option value="titulo_desc">Titulo (Descendente)</option>
+                <option value="fecha_asc">Fecha de subida (Ascendente)</option>
+                <option value="fecha_desc">Fecha de subida (Descendente)</option>
+            </select>
+            <button type="submit" class="btn btn-sort btn-secondary">Ordenar</button>
+    
+            <input type="text" id="search" name="search" placeholder="Titulo, o tipo" value="{{ request.args.get('search', '') }}">
+            <button type="submit" class="btn btn-sort btn-secondary">Buscar</button>
+        </form>
+            
+        <!-- Lista de documentos -->
+        <h2>Documentos:</h2>
+        {% if documentos %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Titulo</th>
+                        <th>Fecha subida</th>
+                        <th>Tipo</th>
+                    </tr>
+                </thead>            
+                <tbody>
+                    {% for doc in documentos %}
+                        <tr>
+                            <td>{{ doc.titulo }}</td>
+                            <td>{{ doc.fecha_subida }}</td>
+                            <td>{{ doc.tipo.value }}</td>
+                            
+                        </tr>
+                    {% endfor %}
+            </table>
+        {% else %}
+            <p>No hay documentos para mostrar.</p>
+        {% endif %}
+        
+        <!-- Botones de acción en Documentos -->
+        <div class="form-actions">
+            <a href="#" class="btn btn-enlace">+ Enlace</a>
+            <a href="{{ url_for('equipo.show_empleado', empleado_id=empleado.id) }}" class="btn btn-subir">↑ Subir</a>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var activeTab = document.querySelector("input[name='tab']").value;
+            if (activeTab) {
+                openTab(null, activeTab);
+            } else {
+                openTab(null, 'general');
+            }
+        });
+        
+        function openTab(evt, tabName) {
+            var i, tabContent, tabs;
+        
+            tabContent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].style.display = "none";
+                tabContent[i].classList.remove("active");
+            }
+        
+            tabs = document.getElementsByClassName("tab");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+        
+            var currentTab = document.getElementById(tabName);
+            if (currentTab) {
+                currentTab.style.display = "block";
+                currentTab.classList.add("active");
+            }
+        
+            // Marcar la pestaña como activa
+            if (evt) {
+                evt.currentTarget.classList.add("active");
+            } else {
+                
+                Array.from(tabs).forEach(function(tab) {
+                    if (tab.getAttribute('onclick').includes("'" + tabName + "'")) {
+                        tab.classList.add("active");
+                    }
+                });
+            }
+        
+            document.querySelector("input[name='tab']").value = tabName;
+        }
+    </script>
+
 {% endblock %}
 
 

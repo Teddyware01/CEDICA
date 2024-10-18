@@ -10,32 +10,6 @@
 {% block content %}
     {{ super() }}
 
-    <script>
-        function confirmarEliminacion(event, empleadoId) {
-            event.preventDefault();  // Detener el comportamiento predeterminado del enlace
-        
-            if (confirm("¿Estás seguro de que deseas eliminar este empleado?")) {
-                fetch(`/equipo/eliminar_empleado/${empleadoId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = "{{ url_for('equipo.listar_empleados') }}";  // Redirige después de eliminar
-                    } else {
-                        alert("Error al eliminar el empleado.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("Error al eliminar el empleado.");
-                });
-            }
-        }
-    </script>
-    
     <body>
 
         <h1 class="text-center">Listado de empleados del equipo.</h1>
@@ -93,9 +67,9 @@
                 <td>{{emp.profesion.nombre}}</td>
                 <td>{{emp.puesto_laboral.nombre}}</td>
                 <td>
-                    <a href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}" class="btn btn-add">SHOW</a>
-                    <a href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}" class="btn btn-edit">UPDATE</a>
-                    <a href="#" class="btn btn-danger" onclick="confirmarEliminacion(event, {{ emp.id }})">Eliminar</a>
+                    <a href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}" class="btn btn-add">VER</a>
+                    <a href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}" class="btn btn-edit">EDITAR</a>
+                    <a href="{{url_for('equipo.delete_empleado', empleado_id=emp.id )}}" class="btn btn-danger">Eliminar</a>
                 </td>
             </tr>
             {% endfor %}
