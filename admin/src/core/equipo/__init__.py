@@ -1,6 +1,6 @@
 # src/core/equipo/__init__.py
 from src.core.database import db
-from src.core.equipo.models import Empleado
+from src.core.equipo.models import Empleado, Empleado_docs
 from src.core.equipo.models import Profesion, PuestoLaboral
 from src.core.equipo.extra_models import (
     ContactoEmergencia,
@@ -10,6 +10,33 @@ from src.core.equipo.extra_models import (
 )
 
 from sqlalchemy import or_
+
+
+# DOCUMENTOS de EMPLEADOS:
+
+def crear_documento(**kwargs):
+    documento = Empleado_docs(**kwargs)
+    db.session.add(documento)
+    db.session.commit()
+    return documento
+
+
+def traerdocumentos(empleado_id, page=1, per_page=1):
+    documentos = Empleado_docs.query.filter(Empleado_docs.empleado_id == empleado_id).paginate(page=page, per_page=per_page, error_out=False)
+    return documentos
+
+def traerdocumentoporid(documento_id):
+    documento = Empleado_docs.query.get_or_404(documento_id)
+    return documento
+
+
+
+def delete_documento(documento_id):
+    documento = traerdocumentoporid(documento_id)
+    db.session.delete(documento)
+    db.session.commit()
+
+
 
 
 # Tabla Provincia

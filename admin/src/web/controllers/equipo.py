@@ -7,6 +7,11 @@ from src.core.equipo.forms import AddEmpleadoForm
 from src.core import equipo
 from src.core import auth
 
+
+from flask import current_app
+from os import fstat
+import re
+
 from src.web.handlers.auth import check,login_required
 
 from src.core.database import db
@@ -62,11 +67,12 @@ def add_empleado_form():
 @check("empleado_show")
 def show_empleado(empleado_id):
     empleado = equipo.Empleado.query.get(empleado_id)
+    page = request.args.get('page', 1, type=int)
+    documentos_paginated = equipo.traerdocumentos(empleado_id, page=page)
+    active_tab = request.args.get('tab', 'general')
 
-    # Luego se cargaran los documentos adjuntos.
-    documentos = None
     return render_template(
-        "equipo/ver_empleado.html", empleado=empleado, documentos=documentos
+        "equipo/ver_empleado.html", empleado=empleado, documentos_paginated=documentos_paginated,active_tab=active_tab
     )
 
 
@@ -92,7 +98,6 @@ def destroy_empleado(empleado_id):
     return redirect(url_for("equipo.listar_empleados"))
 
 
-# probar si esta bien asi o si va "request.form.campo" en lugar de "form.campo"
 @bp.post("/agregar_empleado")
 @login_required
 @check("empleado_create")
@@ -172,7 +177,7 @@ def edit_empleado_form(empleado_id):
     empleado = Empleado.query.get_or_404(empleado_id)  # Obtener el empleado
     form = AddEmpleadoForm(
         obj=empleado
-    )  # Poblar el formulario con los datos del empleado
+    ) 
 
     cargar_choices_form(form)
     # Asignar los valores del domicilio
@@ -247,35 +252,52 @@ def update_empleado(empleado_id):
         return render_template("equipo/edit_empleado.html", form=form, empleado=empleado)
 
 
+# DOCUMENTOS:
 
-"""sumary_line
 
-Keyword arguments:
-argument -- description
-Return: return_description
+@bp.get("/editar_empleado/<int:empleado_id>/documentos")
+def subir_archivo_form(empleado_id):    
+    empleado = equipo.Empleado.query.get_or_404(empleado_id)
+    return render_template("equipo/add_documento.html", empleado=empleado)
 
-@bp.get("/<int:jinete_id>/edit")
-def ver_documentos(empleado_id):
-    empleado = equipo.Empleado.query.get(empleado_id)
-    return render_template("jya/edit.html", empleado=empleado)
 
-@bp.post("/<int:jinete_id>/update")
-def update_documentos(jinete_id):
+
+@bp.post("/editar_empleado/<int:empleado_id>/documentos/")
+def agregar_documento(empleado_id):
+
     params = request.form.copy()
     
-    if "avatar" in request.files:
-        file = request.files["avatar"]
+    if "documento" not in request.files or request.files["documento"].filename == "":
+        flash("El archivo es obligatorio.", "error")  # Mensaje de error
+        return redirect(url_for("equipo.subir_archivo_form", empleado_id=empleado_id))
+
+    if "documento" in request.files:
+        file = request.files["documento"]
         client = current_app.storage.client
         size = fstat(file.fileno()).st_size
-        #ulid = u.new()
-        
-        client.put_object(
-            "grupo15", file.filename, file, size, content_type=file.content_type
-        )           #f"avatars/{ulid}-{file.filename}",
-        params["avatar"] = file.filename #Hacer funcion para que genere nombres unicos para el archivo y guardarlo en el usuario. Libreria ULID
-                                
-    jya.update_jinete(jinete_id, **params)
-    flash("Usuario modificado correctamente", "success")
-    
-    return redirect(url_for("jya.listar_jinetes"))
-"""
+        client.put_object("grupo15", file.filename, file, size, content_type=file.content_type)
+        equipo.crear_documento(
+            titulo=file.filename,
+            tipo=request.form["tipo_archivo"], 
+            empleado_id=empleado_id
+        ) 
+    return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id))
+
+
+@bp.get("/editar_empleado/<int:empleado_id>/documentos/<string:file_name>")
+def descargar_archivo(empleado_id, file_name):
+    client = current_app.storage.client
+    url = client.presigned_get_object("grupo15", file_name, ExpiresIn=10800)  # 3 horas en segundos
+    return redirect(url)
+
+@bp.get("/editar_empleado/<int:empleado_id>/documentos/<int:documento_id>/eliminar")
+def eliminar_documento_form(empleado_id, documento_id):
+    empleado = equipo.Empleado.query.get_or_404(empleado_id)
+    documento = equipo.traerdocumentoporid(documento_id)
+    return render_template("equipo/delete_documento.html", empleado=empleado, doc=documento)
+                    
+                    
+@bp.post("/editar_empleado/<int:empleado_id>/documentos/<int:documento_id>/eliminar")
+def eliminar_documento(empleado_id, documento_id):
+    equipo.delete_documento(documento_id)
+    return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id, tab='documentos'))

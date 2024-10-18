@@ -75,7 +75,7 @@
             
         <!-- Lista de documentos -->
         <h2>Documentos:</h2>
-        {% if documentos %}
+        {% if documentos_paginated %}
             <table class="table">
                 <thead>
                     <tr>
@@ -85,15 +85,46 @@
                     </tr>
                 </thead>            
                 <tbody>
-                    {% for doc in documentos %}
+                    {% for doc in documentos_paginated %}
                         <tr>
                             <td>{{ doc.titulo }}</td>
                             <td>{{ doc.fecha_subida }}</td>
                             <td>{{ doc.tipo.value }}</td>
-                            
+                            <td>
+                                <a href="{{ url_for('equipo.descargar_archivo',empleado_id=empleado.id, file_name=doc.titulo) }}" >Descargar</a>
+                                <a href="{{ url_for('equipo.eliminar_documento_form', empleado_id=empleado.id, documento_id=doc.id) }}" >Eliminar</a>
+                            </td>
                         </tr>
                     {% endfor %}
             </table>
+            <!-- Paginación -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if documentos_paginated.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('equipo.show_empleado', empleado_id=empleado.id, page=documentos_paginated.prev_num, tab='documentos') }}" aria-label="Anterior">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for page_num in documentos_paginated.iter_pages() %}
+                        {% if page_num %}
+                            <li class="page-item {% if page_num == documentos_paginated.page %}active{% endif %}">
+                                <a class="page-link" href="{{ url_for('equipo.show_empleado', empleado_id=empleado.id, page=page_num, tab='documentos') }}">{{ page_num }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">…</span></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if documentos_paginated.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('equipo.show_empleado', empleado_id=empleado.id, page=documentos_paginated.next_num, tab='documentos') }}" aria-label="Siguiente">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
         {% else %}
             <p>No hay documentos para mostrar.</p>
         {% endif %}
@@ -102,15 +133,17 @@
         <div class="form-actions">
             <a href="#" class="btn btn-enlace">+ Enlace</a>
             <!-- CORREGIR ESTE LINK -->
-            <a href="{{ url_for('equipo.show_empleado', empleado_id=empleado.id) }}" class="btn btn-subir">↑ Subir</a>
+            <a href="{{ url_for('equipo.subir_archivo_form', empleado_id=empleado.id) }}" class="btn btn-subir">↑ Subir</a>
         </div>
     </div>
     
     <script>
+        
         document.addEventListener('DOMContentLoaded', function() {
-            // Abre la pestaña 'general' por defecto al cargar la página
-            openTab(null, 'general');
+            var activeTab = "{{ active_tab }}";
+            openTab(null, activeTab ? activeTab : 'general');
         });
+        
 
         function openTab(evt, tabName) {
             var i, tabContent, tabs;
