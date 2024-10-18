@@ -27,7 +27,7 @@ class DevelopmentConfig(Config):
     MINIO_SECURE = False
     # Config de postgres
     DB_USER = "postgres"
-    DB_PASSWORD = os.getenv("DB_PASSWORD")
+    DB_PASSWORD = "postgres"
     DB_HOST = "localhost"
     DB_PORT = "5432"
     DB_NAME = "grupo15"

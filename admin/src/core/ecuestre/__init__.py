@@ -136,6 +136,10 @@ def crear_documento(**kwargs):
     return documento
 
 
-def traerdocumento(ecuestre_id):
-    documentos = Ecuestre_docs.query.filter(Ecuestre_docs.ecuestre_id == ecuestre_id).all()
+def traerdocumento(ecuestre_id, page=1, per_page=1):
+    documentos = Ecuestre_docs.query.filter(Ecuestre_docs.ecuestre_id == ecuestre_id).paginate(page=page, per_page=per_page, error_out=False)
     return documentos
+
+def traerdocumentoporid(documento_id):
+    documento = Ecuestre_docs.query.get(documento_id)
+    return documento

@@ -2,6 +2,7 @@ from src.core.database import db
 from src.core import ecuestre
 from flask import current_app
 from os import fstat
+
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 
 bp = Blueprint("ecuestre", __name__, url_prefix="/ecuestre")
@@ -20,8 +21,10 @@ def ver_ecuestre(ecuestre_id):
     sedes = ecuestre.traer_sedes(caballo.sede_id)
     ids_empleados = ecuestre.traer_id_empleados(ecuestre_id)
     equipos = ecuestre.traer_equipo(ids_empleados)
-    documentos = ecuestre.traerdocumento(ecuestre_id)
-    return render_template("ecuestre/ver_ecuestre.html", ecuestre=caballo, sede=sedes, entrenadores=equipos, documentos=documentos)
+    page = request.args.get('page', 1, type=int)
+    documentos_paginated = ecuestre.traerdocumento(ecuestre_id, page=page)
+    active_tab = request.args.get('tab', 'general')
+    return render_template("ecuestre/ver_ecuestre.html", ecuestre=caballo, sede=sedes, entrenadores=equipos, documentos=documentos_paginated.items, pagination=documentos_paginated, active_tab=active_tab)
 
 
 @bp.get("/editar_ecuestre<int:ecuestre_id>")
@@ -57,6 +60,7 @@ def update_ecuestre(ecuestre_id):
         raza = request.form["raza"],
         pelaje = request.form["pelaje"],
         fecha_ingreso = request.form["fecha_ingreso"],
+        tipoJyA = request.form["tipoJyA"],
         sede_id = sede_id,
     )
    
@@ -88,7 +92,7 @@ def add_ecuestre_form():
 
 @bp.post("/add_ecuestre")
 def add_ecuestre():
-    sexo = request.form["sexo"],
+    sexo = request.form["sexo"]
     if(sexo == "MACHO"):
         sexo = True
     else:
@@ -100,6 +104,7 @@ def add_ecuestre():
         raza = request.form["raza"],
         pelaje = request.form["pelaje"],
         fecha_ingreso = request.form["fecha_ingreso"],
+        tipoJyA = request.form["tipoJyA"],
         sede_id = int(request.form["sede"])
     )
     ecuestre_id = nuevo_ecuestre.id
@@ -133,3 +138,15 @@ def mostrar_archivo(file_name):
     client = current_app.storage.client
     url =  client.presigned_get_object("grupo15", file_name) # Esto sirve para archivos sensibles como documento de jya.
     return redirect(url)
+
+@bp.post("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/eliminar")
+def eliminar_documento(ecuestre_id, documento_id):
+    ecuestre.eliminar_documento(documento_id)
+    flash("Documento eliminado correctamente.", "success")
+    return redirect(url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre_id, tab='documentos'))
+
+@bp.get("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/eliminar")
+def eliminar_documento_form(ecuestre_id, documento_id):
+    ecuestre_datos = ecuestre.traer_ecuestre(ecuestre_id)
+    documento = ecuestre.traerdocumentoporid(documento_id)
+    return render_template("ecuestre/delete_documento.html", ecuestre=ecuestre_datos, doc=documento)

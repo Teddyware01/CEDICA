@@ -2,6 +2,7 @@ from src.core.database import db
 from datetime import datetime
 from src.core.ecuestre.ecuestredocs import Ecuestre_docs
 
+
 empleado_ecuestre = db.Table(
     "empleado_ecuestre",
     db.Column("ecuestre_id", db.Integer, db.ForeignKey("ecuestre.id"), primary_key=True),
@@ -18,6 +19,7 @@ class Ecuestre (db.Model):
     raza = db.Column(db.String(255), nullable=False)
     pelaje = db.Column(db.String(255), nullable=False)
     fecha_ingreso = db.Column(db.DateTime, nullable=False)
+    tipoJyA = db.Column(db.String(255), nullable=False)
     sede_id = db.Column(db.Integer, db.ForeignKey('sedes.id'), nullable=False)
     sede_asignada = db.relationship("Sedes", back_populates="ecuestre")
     empleado = db.relationship("Empleado", secondary="empleado_ecuestre", back_populates="ecuestre")

@@ -510,7 +510,8 @@ def run():
         raza="Pura Sangre",
         pelaje="Negro",
         fecha_ingreso="2020-06-15",
-        sede_id=3
+        sede_id=3,
+        tipoJyA ="MONTA_TERAPEUTICA"  # Asignando un tipo
     )
 
     caballo2 = ecuestre.create_ecuestre(
@@ -520,7 +521,8 @@ def run():
         raza="Andaluz",
         pelaje="Blanco",
         fecha_ingreso="2021-03-10",
-        sede_id=2
+        sede_id=2,
+        tipoJyA ="HIPOTERAPIA"  # Asignando un tipo
     )
 
     caballo3 = ecuestre.create_ecuestre(
@@ -530,7 +532,8 @@ def run():
         raza="Árabe",
         pelaje="Gris",
         fecha_ingreso="2021-07-20",
-        sede_id=1
+        sede_id=1,
+        tipoJyA ="DEPORTE_EQUESTRE" # Asignando un tipo
     )
 
     caballo4 = ecuestre.create_ecuestre(
@@ -540,7 +543,8 @@ def run():
         raza="Cuarto de Milla",
         pelaje="Castaño",
         fecha_ingreso="2022-01-05",
-        sede_id=1
+        sede_id=1,
+        tipoJyA ="ACTIVIDADES_RECREATIVAS"  # Asignando un tipo
     )
 
     caballo5 = ecuestre.create_ecuestre(
@@ -550,7 +554,8 @@ def run():
         raza="Frisón",
         pelaje="Negro",
         fecha_ingreso="2019-11-11",
-        sede_id=2
+        sede_id=2,
+        tipoJyA ="EQUITACION"  # Asignando un tipo
     )
 
     caballo6 = ecuestre.create_ecuestre(
@@ -560,7 +565,8 @@ def run():
         raza="Mustang",
         pelaje="Palomino",
         fecha_ingreso="2022-09-09",
-        sede_id=1
+        sede_id=1,
+        tipoJyA ="MONTA_TERAPEUTICA"  # Asignando un tipo
     )
 
     caballo7 = ecuestre.create_ecuestre(
@@ -570,7 +576,8 @@ def run():
         raza="Criollo",
         pelaje="Bayo",
         fecha_ingreso="2021-04-22",
-        sede_id=3
+        sede_id=3,
+        tipoJyA ="HIPOTERAPIA"  # Asignando un tipo
     )
 
     caballo8 = ecuestre.create_ecuestre(
@@ -580,7 +587,8 @@ def run():
         raza="Lusitano",
         pelaje="Alazán",
         fecha_ingreso="2021-10-15",
-        sede_id=2
+        sede_id=2,
+        tipoJyA ="ACTIVIDADES_RECREATIVAS"  # Asignando un tipo
     )
 
     caballo9 = ecuestre.create_ecuestre(
@@ -590,7 +598,8 @@ def run():
         raza="Hannoveriano",
         pelaje="Castaño Oscuro",
         fecha_ingreso="2020-08-01",
-        sede_id=3
+        sede_id=3,
+        tipoJyA ="DEPORTE_EQUESTRE"  # Asignando un tipo
     )
 
     caballo10 = ecuestre.create_ecuestre(
@@ -600,8 +609,10 @@ def run():
         raza="Percherón",
         pelaje="Gris Claro",
         fecha_ingreso="2022-03-30",
-        sede_id=1
+        sede_id=1,
+        tipoJyA ="EQUITACION"  # Asignando un tipo
     )
+
 
     ecuestre.asignar_empleado(caballo1, [empleado1,empleado2])
     ecuestre.asignar_empleado(caballo2, [empleado3,empleado1]) 

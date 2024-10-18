@@ -4,9 +4,7 @@
 
 {% block head %}
     {{ super() }}
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='crear_ecuestre_Style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='crear_ecuestre_Style.css') }}">
 {% endblock %}
 
 {% block navbar %}
@@ -62,6 +60,16 @@
                 <option value="3">OTRO</option>
             </select>
         </div>
+        <div class="form-group">
+            <label for="tipoJyA">Tipo de JyA Asignados:</label>
+            <select id="tipoJyA" name="tipoJyA" required>
+                <option value="HIPOTERAPIA">Hipoterapia</option>
+                <option value="MONTA_TERAPEUTICA">Monta Terapéutica</option>
+                <option value="DEPORTE_EQUESTRE_ADAPTADO">Deporte Ecuestre Adaptado</option>
+                <option value="ACTIVIDADES_RECREATIVAS">Actividades Recreativas</option>
+                <option value="EQUITACION">Equitación</option>
+            </select>
+        </div>
         <h3>Seleccionar Entrenadores y Conductores</h3>
         <div class="form-group">
             {% for empleado in empleados %}
@@ -72,6 +80,7 @@
                 </div>
             {% endfor %}
         </div>
+
         <div class="form-actions">
             <button type="submit" class="btn btn-submit">Agregar Ecuestre</button>
             <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-cancel">Cancelar</a>
