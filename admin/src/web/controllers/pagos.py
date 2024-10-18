@@ -8,6 +8,8 @@ from src.web.handlers.auth import login_required, check
 pagos_bp = Blueprint("pagos", __name__, template_folder="../templates/pagos")
 
 @pagos_bp.route("/registrar", methods=["GET", "POST"])
+@login_required
+@check("pago_create")
 def registrar_pago():
     form = PagoForm()
 

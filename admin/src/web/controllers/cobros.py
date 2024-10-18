@@ -3,11 +3,13 @@ from src.core.database import db
 from src.core.cobros.models import RegistroCobro
 from src.core.cobros.forms import RegistroCobroForm
 from src.core.equipo.models import Empleado
+from src.web.handlers.auth import login_required, check
 
 cobros_bp = Blueprint("cobros", __name__, template_folder="../templates/cobros")
 
-
 @cobros_bp.route("/registrar", methods=["GET", "POST"])
+@login_required
+@check("cobro_create")
 def registrar_cobro():
     form = RegistroCobroForm()
 
@@ -29,6 +31,8 @@ def registrar_cobro():
 
 
 @cobros_bp.route("/listado", methods=["GET"])
+@login_required
+@check("cobro_index")
 def listar_cobros():
     fecha_inicio = request.args.get("fecha_inicio")
     fecha_fin = request.args.get("fecha_fin")
@@ -63,6 +67,8 @@ def listar_cobros():
     return render_template("listado_cobros.html", cobros_realizado=cobros_realizado)
 
 @cobros_bp.route("/editar/<int:id>", methods=["GET", "POST"])
+@login_required
+@check("cobro_update")
 def editar_cobro(id):
     cobro = RegistroCobro.query.get_or_404(id)
     form = RegistroCobroForm(obj=cobro)
@@ -82,15 +88,18 @@ def editar_cobro(id):
 
 
 @cobros_bp.route("/eliminar/<int:id>", methods=["POST"])
+@login_required
+@check("cobro_index")
 def eliminar_cobro(id):
     cobro = RegistroCobro.query.get_or_404(id)
     db.session.delete(cobro)
     db.session.commit()
-    flash("Cobro eliminado exitosamente.")
+    ##flash("Cobro eliminado exitosamente.")
     return redirect(url_for("cobros.listar_cobros"))
 
-
 @cobros_bp.route("/buscar", methods=["GET"])
+@login_required
+@check("cobro_show")
 def buscar_cobros():
     medio_pago = request.args.get("medio_pago")
     fecha_inicio = request.args.get("fecha_inicio")
