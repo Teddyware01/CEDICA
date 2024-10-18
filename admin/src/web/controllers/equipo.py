@@ -5,6 +5,7 @@ from src.core.equipo.models import Empleado, Profesion, PuestoLaboral, Condicion
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia
 from src.core.equipo.forms import AddEmpleadoForm
 from src.core import equipo
+from src.core import auth
 
 from src.web.handlers.auth import check,login_required
 
@@ -69,10 +70,17 @@ def show_empleado(empleado_id):
     )
 
 
-@bp.post("/eliminar_empleado/<int:empleado_id>")
+@bp.get("/eliminar_empleado/<int:empleado_id>")
 @login_required
 @check("empleado_destroy")
 def delete_empleado(empleado_id):
+    empleado = Empleado.query.get_or_404(empleado_id)
+    return render_template("equipo/delete_empleado.html", empleado=empleado)
+
+@bp.post("/eliminar_empleado/<int:empleado_id>")
+@login_required
+@check("empleado_destroy")
+def destroy_empleado(empleado_id):
     empleado = Empleado.query.get_or_404(empleado_id)
     try:
         equipo.delete_empleado(empleado_id)
@@ -217,11 +225,10 @@ def update_empleado(empleado_id):
         empleado.domicilio.departamento = form.domicilio_departamento.data
         empleado.domicilio.localidad_id = (
             form.domicilio_localidad.data
-        )  # Asegúrate de que `localidad` es el ID
+        )
         empleado.domicilio.provincia_id = (
             form.domicilio_provincia.data
-        )  # Asegúrate de que `provincia` es el ID
-
+        )
         # Asignar los valores del contacto de emergencia
         empleado.contacto_emergencia.nombre = form.contacto_emergencia_nombre.data
         empleado.contacto_emergencia.apellido = form.contacto_emergencia_apellido.data
@@ -230,7 +237,7 @@ def update_empleado(empleado_id):
         # Guardar los cambios en la base de datos
         flash("Empleado registrado  exitosamente", "success")
         db.session.commit()
-        return redirect(url_for("equipo.ver_empleado", empleado_id=empleado.id))
+        return redirect(url_for("equipo.show_empleado", empleado_id=empleado.id))
 
     else:
         flash("Por favor corrija los errores en el formulario:", "error")
@@ -238,3 +245,37 @@ def update_empleado(empleado_id):
             for error in errors:
                 flash(f"Error en el campo {field}: {error}", "danger")
         return render_template("equipo/edit_empleado.html", form=form, empleado=empleado)
+
+
+
+"""sumary_line
+
+Keyword arguments:
+argument -- description
+Return: return_description
+
+@bp.get("/<int:jinete_id>/edit")
+def ver_documentos(empleado_id):
+    empleado = equipo.Empleado.query.get(empleado_id)
+    return render_template("jya/edit.html", empleado=empleado)
+
+@bp.post("/<int:jinete_id>/update")
+def update_documentos(jinete_id):
+    params = request.form.copy()
+    
+    if "avatar" in request.files:
+        file = request.files["avatar"]
+        client = current_app.storage.client
+        size = fstat(file.fileno()).st_size
+        #ulid = u.new()
+        
+        client.put_object(
+            "grupo15", file.filename, file, size, content_type=file.content_type
+        )           #f"avatars/{ulid}-{file.filename}",
+        params["avatar"] = file.filename #Hacer funcion para que genere nombres unicos para el archivo y guardarlo en el usuario. Libreria ULID
+                                
+    jya.update_jinete(jinete_id, **params)
+    flash("Usuario modificado correctamente", "success")
+    
+    return redirect(url_for("jya.listar_jinetes"))
+"""
