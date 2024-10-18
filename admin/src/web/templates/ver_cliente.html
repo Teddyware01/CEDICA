@@ -38,10 +38,17 @@
             </div>
 
             <div class="client-row">
-                <label>Roles:</label>
-                <span>{{ roles_nombres | join(', ') }}</span> 
+                <label>Usuario asignado:</label>
+                {% if user.empleado_asignado %}
+                    <span>{{ user.empleado_asignado.dni }}</span> 
+                    <span>{{ user.empleado_asignado.profesion.nombre }}</span> 
+                    <span>{{ user.empleado_asignado.puesto_laboral.nombre }}</span> 
+                    <a href="{{ url_for('equipo.show_empleado', empleado_id = user.empleado_asignado.id) }}" class="btn btn-secondary">Ver empleado</a>
+                {% else %}
+                   <span>No tiene.</span> 
+                {%endif%}
             </div>            
-
+            
             <div class="form-actions">
                 <a href="{{ url_for('users.edit_client_form', user_id=user.id) }}" class="btn btn-edit">Editar</a>
                 <a href="{{ url_for('users.listar_usuarios') }}" class="btn btn-back">Volver</a>

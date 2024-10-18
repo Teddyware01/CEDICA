@@ -14,6 +14,9 @@ class Users(db.Model):
     roles = db.relationship("Roles", secondary="usuario_rol", back_populates="users")
 
     issues = db.relationship("Issue", back_populates="user")
+    
+    empleado_id = db.Column(db.Integer, db.ForeignKey("empleado.id"), nullable=True)
+    empleado_asignado = db.relationship("Empleado", back_populates="usuario_asignado")
 
     def __repr__(self):
         return f"<User #{self.id} email = {self.email}>"

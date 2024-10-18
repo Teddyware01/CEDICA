@@ -35,6 +35,7 @@ class Empleado(db.Model):
     )
 
     # relaciones
+    usuario_asignado = db.relationship("Users", back_populates="empleado_asignado")
     profesion = db.relationship("Profesion", back_populates="empleado")
     puesto_laboral = db.relationship("PuestoLaboral", back_populates="empleado")
     domicilio = db.relationship("Domicilio", back_populates="empleado")
