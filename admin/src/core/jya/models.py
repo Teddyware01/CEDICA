@@ -16,7 +16,7 @@ class DiasEnum(Enum):
     sabado="Sábado"
     domingo="Domingo"
 
-'''class Dias():
+class Dias(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     dias = db.Column(db.Enum(DiasEnum), nullable=True)
     jinetes = db.relationship('Jinete', secondary='jinete_dias', back_populates='dias')
@@ -24,7 +24,7 @@ class DiasEnum(Enum):
 jinete_dias = db.Table('jinete_dias',
     db.Column('jinete_id', db.Integer, db.ForeignKey('jinete.id'), primary_key=True),
     db.Column('dias_id', db.Integer, db.ForeignKey('dias.id'), primary_key=True)
-)'''
+)
 
 class AsignacionEnum(Enum):
     por_hijo='Asignación Universal por hijo'
@@ -177,7 +177,7 @@ class Jinete(db.Model):
     trabajo_institucional=db.Column(db.Enum(TrabajoEnum), nullable=False)
     condicion=db.Column(db.Boolean, nullable=False) # true regular, false de baja
     sede=db.Column(db.Enum(SedeEnum), nullable=False)
-    #dias = db.relationship('Dias', secondary='jinete_dias', back_populates='jinetes')
+    dias = db.relationship('Dias', secondary='jinete_dias', back_populates='jinetes')
     #profesor si puesto laboral = Terapeuta o profesion = profesor.
     #conductor_caballo dado de alta al sistema.
     #caballo dado de alta al sistema.

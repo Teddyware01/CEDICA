@@ -2,7 +2,7 @@ from src.core.database import db
 from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
-from src.core.jya.models import Jinete, Familiar, Documento
+from src.core.jya.models import Jinete, Familiar, Documento, Dias
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad
 from sqlalchemy import or_
 
@@ -125,6 +125,24 @@ def associate_jinete_familiar(jinete_id, familiar_id):
     # Guardar los cambios en la base de datos
     db.session.commit()
     
+def add_dias(**kwargs):
+    dias = Dias(**kwargs)
+    db.session.add(dias)
+    db.session.commit()
+    return dias
+
+def associate_jinete_dias(jinete_id, dias_id):
+    # Obtener instancias de Jinete y Dias
+    jinete = Jinete.query.get(jinete_id)
+    dias = Dias.query.get(dias_id)
+
+    if not jinete or not dias:
+        raise ValueError("Jinete o Dias no encontrado")
+
+    jinete.dias.append(dias)
+
+    # Guardar los cambios en la base de datos
+    db.session.commit()
 
 def add_documento(**kwargs):
     documento = Documento(**kwargs)
@@ -169,7 +187,7 @@ def associate_jinete_documento(jinete_id, documento_id):
     # Guardar los cambios en la base de datos
     db.session.commit()
 
-def traer_familiares():
+'''def traer_familiares():
     query = Familiar.query
     return query.all()
 
@@ -187,3 +205,4 @@ def agregar_familiar(jinete_id, lista_id_familiares):
             jinete.familiares.append(familiar)
 
     db.session.commit()
+'''

@@ -205,6 +205,13 @@ class AddJineteForm(FlaskForm):
         "Profesionales",
         validators=[DataRequired(message="Los profesionales son obligatorios")],
     )
+    ############# diassssssssssss
+    dias = SelectField(
+        "Dias", 
+        choices=[(dias.name, dias.value) for dias in DiasEnum],
+        validators=[DataRequired()],
+    )
+
     
     # ---------- FAMILIARES ---------- 
     parentesco_familiar = StringField('Parentesco', validators=[DataRequired()])

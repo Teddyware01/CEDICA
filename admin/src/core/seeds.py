@@ -484,7 +484,7 @@ def run():
         #dia=[DiasEnum.lunes],
     )
     
-    familiar_1 = jya.add_familiar(
+    jya.add_familiar(
         #jinetes=nuevo_jinete, 
         parentesco_familiar="Tio",
         nombre_familiar="Juan",
@@ -501,6 +501,10 @@ def run():
 
     jya.associate_jinete_familiar(1, 1)
     
+    jya.add_dias(
+        dias=DiasEnum.lunes,
+    )
+    jya.associate_jinete_dias(1, 1)
     
     documento_1 = jya.add_documento(
         titulo="Curriculum Vitae",
