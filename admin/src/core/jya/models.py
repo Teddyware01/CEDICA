@@ -95,7 +95,7 @@ from sqlalchemy.dialects.postgresql import ARRAY
 class PensionEnum(Enum):
     provincial="Provincial"
     nacional="Nacional"
-''' 
+
 class DiasEnum(Enum):
     lunes="Lunes"
     martes="Martes"
@@ -104,11 +104,11 @@ class DiasEnum(Enum):
     viernes="Viernes"
     sabado="Sábado"
     domingo="Domingo"
-'''
+
 class AsignacionEnum(Enum):
-    por_hijo="Asignación Universal por hijo"
-    por_discapacidad="Asignación Universal por hijo con Discapacidad"
-    escolar="Asignación por ayuda escolar anual"
+    por_hijo='Asignación Universal por hijo'
+    por_discapacidad='Asignación Universal por hijo con Discapacidad'
+    escolar='Asignación por ayuda escolar anual'
     
 class DiagnosticoEnum(Enum):
     ecne="ECNE"
@@ -143,6 +143,20 @@ class EscolaridadEnum(Enum):
     terciario="Terciario"
     universitario="Universitario"
     
+class TrabajoEnum(Enum):
+    hipoterapia="Hipoterapia"
+    monta_terapeutica="Monta Terapéutica"
+    deporte="Deporte"
+    ecuestre_adaptado="Ecuestre Adaptado"
+    actividades_recreativas="Actividades Recreativas"
+    equitacion="Equitación"
+    
+class SedeEnum(Enum):
+    casj="CASJ"
+    hlp="HLP"
+    otro="OTRO"
+
+    
 '''class Persona(db.Model):
     __abstract__ = True
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -163,15 +177,16 @@ class Jinete(db.Model):
     dni = db.Column(db.String(10), nullable=False, unique=True)
     edad = db.Column(db.Integer, nullable=False)
     fecha_nacimiento = db.Column(db.DateTime, nullable=False)
-    localidad_nacimiento_id = db.Column(db.Integer, db.ForeignKey("localidad.id"), nullable=False)
-    localidad_nacimiento = db.relationship("Localidad", back_populates="jinetes")
+    #nacimiento_id = db.Column(db.Integer, db.ForeignKey("nacimiento.id"), nullable=False)
+    #nacimiento = db.relationship("Nacimiento", back_populates="jinetes")
+    
     provincia_nacimiento_id = db.Column(db.Integer, db.ForeignKey("provincia.id"), nullable=False)
     provincia_nacimiento = db.relationship("Provincia", back_populates="jinetes")
+    localidad_nacimiento_id = db.Column(db.Integer, db.ForeignKey("localidad.id"), nullable=False)
+    localidad_nacimiento = db.relationship("Localidad", back_populates="jinetes")
     domicilio_id = db.Column(db.Integer, db.ForeignKey("domicilio.id"), nullable=False)
     domicilio = db.relationship("Domicilio", foreign_keys=[domicilio_id], back_populates="jinetes")
-    fecha_nacimiento = db.Column(db.DateTime, nullable=False)
     telefono = db.Column(db.String(15), nullable=False)
-    avatar = db.Column(db.String(255), nullable=True)
     contacto_emergencia_id = db.Column(db.Integer, db.ForeignKey("contacto_emergencia.id"), nullable=False)
     contacto_emergencia = db.relationship("ContactoEmergencia", back_populates="jinete")
     becado = db.Column(db.Boolean, default=False)
@@ -180,7 +195,7 @@ class Jinete(db.Model):
     diagnostico = db.Column(db.Enum(DiagnosticoEnum), nullable=True)
     otro = db.Column(db.String(100), nullable=True)
     beneficiario_pension = db.Column(db.Boolean)
-    pension = db.Column(db.Enum(PensionEnum), nullable=False)
+    pension = db.Column(db.Enum(PensionEnum), nullable=True)
     tipos_discapacidad =  db.Column(ARRAY(db.Enum(TiposDiscapacidadEnum)), nullable=True)
     asignacion_familiar = db.Column(db.Boolean, nullable=True)
     tipo_asignacion = db.Column(db.Enum(AsignacionEnum), nullable=True)
@@ -188,7 +203,7 @@ class Jinete(db.Model):
     nro_afiliado = db.Column(db.String(25), nullable=False, unique=False)
     curatela = db.Column(db.Boolean, nullable=False)
     observaciones_curatela = db.Column(db.String(255), nullable=True)
-    nombre_institucion = db.Column(db.String(50), nullable=False)
+    nombre_institucion = db.Column(db.String(50), nullable=True) 
     direccion_id = db.Column(db.Integer, db.ForeignKey("domicilio.id"))
     direccion = db.relationship("Domicilio", foreign_keys=[direccion_id], backref="direccion_jinetes")
     telefono_institucion = db.Column(db.String(15), nullable=False)
@@ -196,8 +211,16 @@ class Jinete(db.Model):
     observaciones_institucion = db.Column(db.String(255), nullable=True)
     profesionales = db.Column(db.String(255), nullable=True)
     
+    trabajo_institucional=db.Column(db.Enum(TrabajoEnum), nullable=False)
+    condicion=db.Column(db.Boolean, nullable=False) # true regular, false de baja
+    sede=db.Column(db.Enum(SedeEnum), nullable=False)
+    dia=db.Column(ARRAY(db.Enum(DiasEnum)), nullable=True)
+    #profesor si puesto laboral = Terapeuta o profesion = profesor.
+    #conductor_caballo dado de alta al sistema.
+    #caballo dado de alta al sistema.
+    #auxiliar_pista dado de alta al sistema.
     
-    documentos = db.relationship("Documento", back_populates="jinete")
+    documentos = db.relationship("Documento", back_populates="jinete", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User #{self.id} nombre = {self.nombre}>"

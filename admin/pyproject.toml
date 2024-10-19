@@ -14,6 +14,7 @@ flask-sqlalchemy = "^3.1.1"
 psycopg2-binary = "^2.9.9"
 flask-session = "^0.8.0"
 minio = "^7.2.9"
+email-validator = "^2.2.0"
 
 
 [tool.poetry.group.dev.dependencies]

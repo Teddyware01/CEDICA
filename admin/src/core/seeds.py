@@ -3,11 +3,11 @@ from src.core import board
 from src.core import auth
 from src.core import jya
 from src.core import equipo
-from src.core.equipo.extra_models import Provincia, Domicilio
+from src.core.equipo.extra_models import Provincia,Localidad, Domicilio
 from src.core.equipo.models import CondicionEnum
-from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum
+from src.core.pagos.models import Pago
+from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum
 from datetime import datetime
-
 
 from src.core.auth import Permisos
 from datetime import datetime
@@ -20,6 +20,15 @@ from src.core.jya import legajo
 from src.core.jya.legajo.models import TipoDocumentoEnum
 
 from src.core import ecuestre
+from src.core.auth import Roles
+
+
+from src.core import equipo
+from src.core import auth
+from src.core.equipo.extra_models import Provincia 
+
+from src.core.database import db
+from sqlalchemy import text
 
 def ejecutar_sql_script(file_path):
     with open(file_path, "r", encoding="utf-8") as sql_file:
@@ -29,12 +38,6 @@ def ejecutar_sql_script(file_path):
         connection.execute(text(sql_script))
         connection.commit()
 
-from src.core import equipo
-from src.core import auth
-from src.core.equipo.extra_models import Provincia 
-
-from src.core.database import db
-from sqlalchemy import text
 def ejecutar_sql_script(file_path):
     with open(file_path, 'r',encoding='utf-8') as sql_file:
         sql_script = sql_file.read()
@@ -118,9 +121,6 @@ def run():
     )
 
     
-    rol_system_admin = auth.create_roles(
-        nombre="System Admin",
-    )
 
     auth.assign_rol(user1, [rol_administracion, rol_voluntariado])
     auth.assign_rol(
@@ -192,15 +192,15 @@ def run():
 
     # Contactos de Emergencia
     contacto_emergencia_ej1 = equipo.add_contacto_emergencia(
-        nombre="juan", apellido="perez", telefono="11111111111"
+        nombre="juan", apellido="perez", telefono="1010101010"
     )
 
     contacto_emergencia_ej2 = equipo.add_contacto_emergencia(
-        nombre="jj", apellido="lopez", telefono="22222222222"
+        nombre="jj", apellido="lopez", telefono="1422222222222"
     )
 
     contacto_emergencia_ej3 = equipo.add_contacto_emergencia(
-        nombre="diego", apellido="marado", telefono="33333333333"
+        nombre="diego", apellido="marado", telefono="153333333333333"
     )
 
     empleado1 = equipo.create_empleado(
@@ -292,7 +292,40 @@ def run():
         contacto_emergencia_id=2,
     )
 
+    pagos_datos = [
+        {
+            "beneficiario": "Juan Pérez",
+            "monto": 1000.0,
+            "fecha_pago": datetime(2024, 10, 1),
+            "tipo_pago": "Honorario",
+            "descripcion": "Pago por servicio de asesoría",
+        },
+        {
+            "beneficiario": "María Gómez",
+            "monto": 1500.0,
+            "fecha_pago": datetime(2024, 10, 5),
+            "tipo_pago": "Gastos_varios",
+            "descripcion": "Pago por compra de insumos",
+        },
+        {
+            "beneficiario": "Carlos López",
+            "monto": 2000.0,
+            "fecha_pago": datetime(2024, 10, 10),
+            "tipo_pago": "Gastos_varios",
+            "descripcion": "Pago por servicios de mantenimiento",
+        },
+    ]
 
+    for pago in pagos_datos:
+        nuevo_pago = Pago(
+            beneficiario=pago["beneficiario"],
+            monto=pago["monto"],
+            fecha_pago=pago["fecha_pago"],
+            tipo_pago=pago["tipo_pago"],
+            descripcion=pago["descripcion"],
+        )
+        db.session.add(nuevo_pago)  # Agregar el pago a la sesión
+    db.session.commit()  # Confirmar todos los cambios en la base de datos
     direccion_1 = jya.add_direccion(
         calle="Olazabal",
         numero=4321,
@@ -357,10 +390,6 @@ def run():
 
 
     # Asignacion a roles
-    # rol sys_admin
-    for permiso in Permisos.query.all():
-        auth.assign_permiso(rol_system_admin, permiso)
-        
     # rol administracion
     auth.assign_permiso(rol_administracion, empleado_index)
     auth.assign_permiso(rol_administracion, empleado_show)
@@ -430,6 +459,16 @@ def run():
         localidad_id=5,
         provincia_id=5,
     )
+    
+    nacimiento_1 = jya.add_nacimiento(
+        localidad_id=1,
+        provincia_id=1,
+    )
+    
+    nacimiento_2 = jya.add_nacimiento(
+        localidad_id=2,
+        provincia_id=2,
+    )
         
     jya.create_jinete(
         nombre="Martin",
@@ -437,6 +476,7 @@ def run():
         dni="12345678",
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
+        #nacimiento=nacimiento_1,
         localidad_nacimiento_id=1,
         provincia_nacimiento_id=1,
         domicilio_id=1,
@@ -460,6 +500,10 @@ def run():
         grado = "2024",
         observaciones_institucion = "Nada.",
         profesionales = "Psicologa y maestra",
+        trabajo_institucional=TrabajoEnum.deporte,
+        condicion=False,
+        sede=SedeEnum.casj,
+        dia=["jueves", "viernes"],
     )
     
     jya.create_jinete(
@@ -469,8 +513,9 @@ def run():
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
         domicilio_id=3,
-        localidad_nacimiento_id=2,
-        provincia_nacimiento_id=2,
+        #nacimiento=nacimiento_2,
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=1,
         telefono="12345654321",
         contacto_emergencia=contacto_emergencia_ej2,
         becado=True,
@@ -491,6 +536,10 @@ def run():
         grado = "2020",
         observaciones_institucion = "ASDF.",
         profesionales = "Terapeuta y docente",
+        trabajo_institucional=TrabajoEnum.hipoterapia,
+        condicion=True,
+        sede=SedeEnum.hlp,
+        dia=["lunes"],
     )
     
     legajo.create_documento(
@@ -621,3 +670,20 @@ def run():
     ecuestre.asignar_empleado(caballo9, [empleado5,empleado2]) 
     ecuestre.asignar_empleado(caballo10, [empleado1,empleado2, empleado4]) 
 
+
+    # Super_user que tiene todos los permisos. Utililizable para probar la pagina comodamente
+    super_user = auth.create_user(
+        email="super_user@hotmail.com",
+        alias="super_user",
+        password="super_user",
+        system_admin=True,
+        activo=True,
+    )
+    
+    rol_system_admin = auth.create_roles(
+        nombre="System Admin",
+    )
+    for perm in Permisos.query.all():
+        auth.assign_permiso(rol_system_admin, perm)
+
+    auth.assign_rol(super_user, [rol_system_admin])

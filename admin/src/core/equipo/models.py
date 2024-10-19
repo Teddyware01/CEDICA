@@ -22,7 +22,7 @@ class Empleado(db.Model):
     condicion = db.Column(db.Enum(CondicionEnum), nullable=False)
     activo = db.Column(db.Boolean, default=True)
     obra_social = db.Column(db.String(25), nullable=False, unique=False)
-    nro_afiliado = db.Column(db.Integer, nullable=False, unique=False)
+    nro_afiliado = db.Column(db.String(25), nullable=False, unique=False)
 
     # campos id
     profesion_id = db.Column(db.Integer, db.ForeignKey("profesion.id"), nullable=False)
@@ -35,6 +35,7 @@ class Empleado(db.Model):
     )
 
     # relaciones
+    usuario_asignado = db.relationship("Users", back_populates="empleado_asignado")
     profesion = db.relationship("Profesion", back_populates="empleado")
     puesto_laboral = db.relationship("PuestoLaboral", back_populates="empleado")
     domicilio = db.relationship("Domicilio", back_populates="empleado")
@@ -43,6 +44,9 @@ class Empleado(db.Model):
         "ContactoEmergencia",
         back_populates="empleado",
     )
+
+#    documentos = db.relationship("Empleado_docs", back_populates="empleado")
+    documentos = db.relationship("Empleado_docs", back_populates="empleado", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Empleado #{self.id}. AyN = {self.apellido}, {self.nombre}. Email = {self.email}. DNI = {self.dni}>"
@@ -60,3 +64,23 @@ class PuestoLaboral(db.Model):
     nombre = db.Column(db.String(100), nullable=False, unique=True)
 
     empleado = db.relationship("Empleado", back_populates="puesto_laboral")
+
+
+
+
+
+class TiposDocumentosEnum(Enum):
+    TITULO = "Titulo"
+    COPIA_DNI = "Copia DNI"
+    CV_ACTUALIZADO = "CV actualizado"
+
+
+
+class Empleado_docs(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    titulo = db.Column(db.String(100), nullable=False)
+    fecha_subida = db.Column(db.DateTime, default=datetime.now)
+    tipo = db.Column(db.Enum(TiposDocumentosEnum), nullable=False)
+
+    empleado_id = db.Column(db.Integer, db.ForeignKey("empleado.id"), nullable=False)
+    empleado = db.relationship("Empleado", back_populates="documentos")

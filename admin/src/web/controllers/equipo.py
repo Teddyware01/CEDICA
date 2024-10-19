@@ -1,10 +1,16 @@
 # src/web/controllers/equipo.py
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for,abort
 from flask import session
 from src.core.equipo.models import Empleado, Profesion, PuestoLaboral, CondicionEnum
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia
 from src.core.equipo.forms import AddEmpleadoForm
 from src.core import equipo
+from src.core import auth
+
+
+from flask import current_app
+from os import fstat
+import re
 
 from src.web.handlers.auth import check,login_required
 
@@ -20,10 +26,10 @@ def listar_empleados():
     sort_by = request.args.get("sort_by")
     id_puesto_laboral = request.args.get("id_puesto_laboral")
     search = request.args.get("search")
-
+    page = request.args.get("page", type=int, default=1) 
     # usa lo de... src/core/equipo/__init__.py
     empleados = equipo.list_empleados(
-        sort_by=sort_by, id_puesto_laboral=id_puesto_laboral, search=search
+        sort_by=sort_by, id_puesto_laboral=id_puesto_laboral, search=search, page=page
     )
     puestos_laborales = equipo.list_puestos_laborales()
     return render_template(
@@ -53,26 +59,34 @@ def add_empleado_form():
     ]
     form.condicion.choices = [(e.name, e.value) for e in CondicionEnum]
 
-    return render_template("equipo/add_empleado.html", form=form)
+    return render_template("equipo/agregar_empleado.html", form=form)
 
 
-@bp.get("/ver_empleado<int:empleado_id>")
+@bp.get("/ver_empleado/<int:empleado_id>")
 @login_required
 @check("empleado_show")
 def show_empleado(empleado_id):
     empleado = equipo.Empleado.query.get(empleado_id)
+    page = request.args.get('page', 1, type=int)
+    documentos_paginated = equipo.traerdocumentos(empleado_id, page=page)
+    active_tab = request.args.get('tab', 'general')
 
-    # Luego se cargaran los documentos adjuntos.
-    documentos = None
     return render_template(
-        "equipo/show_empleado.html", empleado=empleado, documentos=documentos
+        "equipo/ver_empleado.html", empleado=empleado, documentos_paginated=documentos_paginated,active_tab=active_tab
     )
 
+
+@bp.get("/eliminar_empleado/<int:empleado_id>")
+@login_required
+@check("empleado_destroy")
+def delete_empleado(empleado_id):
+    empleado = Empleado.query.get_or_404(empleado_id)
+    return render_template("equipo/delete_empleado.html", empleado=empleado)
 
 @bp.post("/eliminar_empleado/<int:empleado_id>")
 @login_required
 @check("empleado_destroy")
-def delete_empleado(empleado_id):
+def destroy_empleado(empleado_id):
     empleado = Empleado.query.get_or_404(empleado_id)
     try:
         equipo.delete_empleado(empleado_id)
@@ -84,14 +98,13 @@ def delete_empleado(empleado_id):
     return redirect(url_for("equipo.listar_empleados"))
 
 
-# probar si esta bien asi o si va "request.form.campo" en lugar de "form.campo"
 @bp.post("/agregar_empleado")
 @login_required
 @check("empleado_create")
 def add_empleado():
 
     form = AddEmpleadoForm(request.form)
-    cargar_choices_form(form)
+    cargar_choices_form(form=form)
     if form.validate_on_submit():
         # Crear nuevo Domicilio registrado con los datos del formulario
         localidad = equipo.get_localidad_by_id(form.domicilio_localidad.data)
@@ -132,7 +145,6 @@ def add_empleado():
         flash("Empleado registrado exitosamente", "success")
         return redirect(url_for("equipo.listar_empleados"))
     else:
-        flash("Por favor corrija los errores en el formulario:", "error")
         for field, errors in form.errors.items():
             for error in errors:
                 flash(
@@ -140,10 +152,10 @@ def add_empleado():
                     "danger",
                 )
 
-        return redirect(url_for("equipo.add_empleado_form"))
+        return render_template("equipo/agregar_empleado.html", form=form)
 
 
-def cargar_choices_form(form, empleado=None):
+def cargar_choices_form(form):
     # Cargar las opciones para los campos de selección
     form.profesion_id.choices = [(p.id, p.nombre) for p in equipo.list_profesiones()]
     form.puesto_laboral_id.choices = [
@@ -158,16 +170,30 @@ def cargar_choices_form(form, empleado=None):
     form.condicion.choices = [(e.name, e.value) for e in CondicionEnum]
 
 
-@bp.get("/editar_empleado<int:empleado_id>")
+@bp.get("/editar_empleado/<int:empleado_id>")
 @login_required
 @check("empleado_update")
 def edit_empleado_form(empleado_id):
     empleado = Empleado.query.get_or_404(empleado_id)  # Obtener el empleado
-    form = AddEmpleadoForm(
-        obj=empleado
-    )  # Poblar el formulario con los datos del empleado
+    form = AddEmpleadoForm(obj=empleado) 
 
-    cargar_choices_form(form)
+    form.nombre.data = empleado.nombre
+    form.apellido.data = empleado.apellido
+    form.dni.data = empleado.dni
+    form.email.data = empleado.email
+    form.telefono.data = empleado.telefono
+    form.fecha_inicio.data = empleado.fecha_inicio
+    form.fecha_cese.data = empleado.fecha_cese
+    form.condicion.data = empleado.condicion
+    form.activo.data = empleado.activo
+    form.profesion_id.data = empleado.profesion_id
+    form.puesto_laboral_id.data = empleado.puesto_laboral_id
+    form.obra_social.data = empleado.obra_social
+    form.nro_afiliado.data = empleado.nro_afiliado
+
+    cargar_choices_form(form=form)
+    
+
     # Asignar los valores del domicilio
     form.domicilio_calle.data = empleado.domicilio.calle
     form.domicilio_numero.data = empleado.domicilio.numero
@@ -181,8 +207,6 @@ def edit_empleado_form(empleado_id):
     form.contacto_emergencia_apellido.data = empleado.contacto_emergencia.apellido
     form.contacto_emergencia_telefono.data = empleado.contacto_emergencia.telefono
 
-    if form.validate_on_submit():
-        form.populate_obj(empleado)
     return render_template("equipo/edit_empleado.html", form=form, empleado=empleado)
 
 
@@ -191,21 +215,12 @@ def edit_empleado_form(empleado_id):
 @check("empleado_update")
 def update_empleado(empleado_id):
     empleado = Empleado.query.get_or_404(empleado_id)  # Obtener el empleado
-    form = AddEmpleadoForm(
-        obj=empleado
-    )  # Poblar el formulario con los datos del empleado
+    # Poblar el formulario con los datos del empleado
+    form = AddEmpleadoForm(obj=empleado)  
+    form.obj=empleado
     # Cargar las opciones para los campos de selección
-    form.profesion_id.choices = [(p.id, p.nombre) for p in equipo.list_profesiones()]
-    form.puesto_laboral_id.choices = [
-        (p.id, p.nombre) for p in equipo.list_puestos_laborales()
-    ]
-    form.domicilio_provincia.choices = [
-        (p.id, p.nombre) for p in equipo.list_provincias()
-    ]
-    form.domicilio_localidad.choices = [
-        (l.id, l.nombre) for l in equipo.list_localidades()
-    ]
-    form.condicion.choices = [(e.name, e.value) for e in CondicionEnum]
+    cargar_choices_form(form=form)
+    
 
     if form.validate_on_submit():
         # Actualizar los datos del empleado con los valores del formulario
@@ -218,11 +233,10 @@ def update_empleado(empleado_id):
         empleado.domicilio.departamento = form.domicilio_departamento.data
         empleado.domicilio.localidad_id = (
             form.domicilio_localidad.data
-        )  # Asegúrate de que `localidad` es el ID
+        )
         empleado.domicilio.provincia_id = (
             form.domicilio_provincia.data
-        )  # Asegúrate de que `provincia` es el ID
-
+        )
         # Asignar los valores del contacto de emergencia
         empleado.contacto_emergencia.nombre = form.contacto_emergencia_nombre.data
         empleado.contacto_emergencia.apellido = form.contacto_emergencia_apellido.data
@@ -231,11 +245,93 @@ def update_empleado(empleado_id):
         # Guardar los cambios en la base de datos
         flash("Empleado registrado  exitosamente", "success")
         db.session.commit()
-        return show_empleado(empleado_id=empleado.id)
+        return redirect(url_for("equipo.show_empleado", empleado_id=empleado.id))
+
     else:
         flash("Por favor corrija los errores en el formulario:", "error")
         for field, errors in form.errors.items():
             for error in errors:
                 flash(f"Error en el campo {field}: {error}", "danger")
+        return render_template("equipo/edit_empleado.html", form=form, empleado=empleado)
 
-    return render_template("equipo/edit_empleado.html", form=form, empleado=empleado)
+
+# DOCUMENTOS:
+
+
+@login_required
+@check("empleado_update")
+@bp.get("/editar_empleado/<int:empleado_id>/documentos")
+def subir_archivo_form(empleado_id):    
+    empleado = equipo.Empleado.query.get_or_404(empleado_id)
+    return render_template("equipo/add_documento.html", empleado=empleado)
+
+
+ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'}
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+MAX_CANT_MEGABYTES = 20  # cant megabytes
+MAX_CONTENT_LENGTH = MAX_CANT_MEGABYTES * 1024 * 1024  
+
+@bp.before_request
+def limit_content_length():
+    if request.content_length is not None and request.content_length > MAX_CONTENT_LENGTH:
+        abort(413)  # Payload Too Large
+
+
+@login_required
+@check("empleado_update")
+@bp.post("/editar_empleado/<int:empleado_id>/documentos/")
+def agregar_documento(empleado_id):
+
+    params = request.form.copy()
+    
+    if "documento" not in request.files or request.files["documento"].filename == "":
+        flash("El archivo es obligatorio.", "error")  # Mensaje de error
+        return redirect(url_for("equipo.subir_archivo_form", empleado_id=empleado_id))
+
+    if "documento" in request.files:
+        file = request.files["documento"]
+        if not allowed_file(file.filename):
+            flash("Tipo de archivo no permitido.", "error")
+            return redirect(url_for("equipo.subir_archivo_form", empleado_id=empleado_id))
+        
+        if file.content_length > MAX_CONTENT_LENGTH:
+            flash("El archivo excede el tamaño máximo permitido de 5 MB.", "error")
+            return redirect(url_for("equipo.subir_archivo_form", empleado_id=empleado_id))
+
+        client = current_app.storage.client
+        size = fstat(file.fileno()).st_size
+        client.put_object("grupo15", file.filename, file, size, content_type=file.content_type)
+        equipo.crear_documento(
+            titulo=file.filename,
+            tipo=request.form["tipo_archivo"], 
+            empleado_id=empleado_id
+        ) 
+    return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id))
+
+
+@login_required
+@check("empleado_index")
+@bp.get("/editar_empleado/<int:empleado_id>/documentos/<string:file_name>")
+def descargar_archivo(empleado_id, file_name):
+    client = current_app.storage.client
+    url = client.presigned_get_object("grupo15", file_name, ExpiresIn=10800)  # 3 horas en segundos
+    return redirect(url)
+
+@login_required
+@check("empleado_update")
+@bp.get("/editar_empleado/<int:empleado_id>/documentos/<int:documento_id>/eliminar")
+def eliminar_documento_form(empleado_id, documento_id):
+    empleado = equipo.Empleado.query.get_or_404(empleado_id)
+    documento = equipo.traerdocumentoporid(documento_id)
+    return render_template("equipo/delete_documento.html", empleado=empleado, doc=documento)
+                    
+     
+@login_required
+@check("empleado_update")               
+@bp.post("/editar_empleado/<int:empleado_id>/documentos/<int:documento_id>/eliminar")
+def eliminar_documento(empleado_id, documento_id):
+    equipo.delete_documento(documento_id)
+    return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id, tab='documentos'))
