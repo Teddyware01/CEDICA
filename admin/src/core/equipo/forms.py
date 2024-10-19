@@ -9,7 +9,7 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired,ValidationError, Email, Length, Optional, Regexp
 from wtforms.widgets import DateInput
-from .models import CondicionEnum
+from .models import CondicionEnum, Empleado
 from .extra_models import Localidad
 
 
@@ -39,6 +39,7 @@ class AddEmpleadoForm(FlaskForm):
         validators=[
             DataRequired(message="El Email es obligatorio"),
             Length(max=255),
+            Email(message="Ingrese un correo electrónico válido"),
         ],
     )
     telefono = StringField(
@@ -119,7 +120,12 @@ class AddEmpleadoForm(FlaskForm):
     )
 
     submit = SubmitField("Guardar")
-    
+
+    def __init__(self, *args, obj=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.obj = obj  # Guardar el objeto que se está editando
+        
+
     # Validación personalizada, el nombre declarado sigue nomenclatura a respetar.
     def validate_domicilio_localidad(self, field_localidad):
         # Obtener la localidad seleccionada
@@ -131,4 +137,23 @@ class AddEmpleadoForm(FlaskForm):
         if localidad.provincia_id != provincia_id_seleccionada:
             raise ValidationError("La localidad seleccionada no corresponde a la provincia elegida.")       
         print("ACA ESTAMOS")
+    
+    
+    def validate_dni(self, dni):
+        empleado = Empleado.query.filter_by(dni=dni.data).first()
+        if empleado and (self.obj is None or empleado.id != self.obj.id):
+            raise ValidationError("Este DNI ya está registrado.")
 
+    def validate_email(self, email):
+        empleado = Empleado.query.filter_by(email=email.data).first()
+        if empleado and (self.obj is None or  empleado.id != self.obj.id):
+            raise ValidationError("Este correo electrónico ya está registrado.")
+
+    def validate_telefono(self, telefono):
+        empleado = Empleado.query.filter_by(telefono=telefono.data).first()
+        if empleado and (self.obj is None or empleado.id != self.obj.id):
+            raise ValidationError("Este número de teléfono ya está registrado.")
+
+    def validate_fecha_cese(self, field):
+        if field.data and field.data <= self.fecha_inicio.data:
+            raise ValidationError("La fecha de cese debe ser posterior a la fecha de inicio.")
