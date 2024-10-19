@@ -6,10 +6,12 @@ from os import fstat
 import re
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-
+from src.web.handlers.auth import check,login_required
 bp = Blueprint("ecuestre", __name__, url_prefix="/ecuestre")
 
 @bp.get("/")
+@login_required
+@check("ecuestre_index")
 def listar_ecuestre():
     sort_by = request.args.get("sort_by")
     search = request.args.get("search")
@@ -17,7 +19,10 @@ def listar_ecuestre():
     ecuestres = ecuestre.list_ecuestre(sort_by=sort_by, search=search, page=page)
     return render_template("ecuestre/listado.html", ecuestre=ecuestres)
 
+
 @bp.get("/ecuestre<int:ecuestre_id>")
+@login_required
+@check("ecuestre_show")
 def ver_ecuestre(ecuestre_id):
     caballo = ecuestre.traer_ecuestre(ecuestre_id)
     sedes = ecuestre.traer_sedes(caballo.sede_id)
@@ -30,6 +35,8 @@ def ver_ecuestre(ecuestre_id):
 
 
 @bp.get("/editar_ecuestre<int:ecuestre_id>")
+@login_required
+@check("ecuestre_update")
 def edit_ecuestre_form(ecuestre_id):
     caballo = ecuestre.traer_ecuestre(ecuestre_id)
     sedes = ecuestre.traer_sedes(caballo.sede_id)
@@ -39,6 +46,8 @@ def edit_ecuestre_form(ecuestre_id):
     return render_template("ecuestre/edit_ecuestre.html", ecuestre=caballo, sede=sedes, entrenadores=equipos, empleados=todos_empleados)
 
 @bp.post("/editar_ecuestre<int:ecuestre_id>")
+@login_required
+@check("ecuestre_update")
 def update_ecuestre(ecuestre_id):
     sede_input = request.form["sede_id"]
     sexo = request.form["sexo"]
@@ -84,6 +93,8 @@ def update_ecuestre(ecuestre_id):
   
 
 @bp.get("/eliminar_ecuestre<int:ecuestre_id>")
+@login_required
+@check("ecuestre_destroy")
 def delete_ecuestre_form(ecuestre_id):
     ecuestre_datos = ecuestre.traer_ecuestre(ecuestre_id)
     sedes = ecuestre.traer_sedes(ecuestre_datos.sede_id)
@@ -92,17 +103,23 @@ def delete_ecuestre_form(ecuestre_id):
 
 
 @bp.post("/eliminar_ecuestre<int:ecuestre_id>")
+@login_required
+@check("ecuestre_destroy")
 def delete_ecuestre(ecuestre_id):
     ecuestre.delete_ecuestre(ecuestre_id)
     return redirect(url_for("ecuestre.listar_ecuestre"))
 
 
 @bp.get("/add_ecuestre")
+@login_required
+@check("ecuestre_create")
 def add_ecuestre_form():
     todos_empleados = ecuestre.traer_todosempleados()
     return render_template("ecuestre/add_ecuestre.html", empleados=todos_empleados)
 
 @bp.post("/add_ecuestre")
+@login_required
+@check("ecuestre_create")
 def add_ecuestre():
     sexo = request.form["sexo"]
     if(sexo == "MACHO"):
@@ -137,11 +154,15 @@ def add_ecuestre():
 
 
 @bp.get("/editar_ecuestre/documentos<int:ecuestre_id>")
+@login_required
+@check("ecuestre_update")
 def subir_archivo_form(ecuestre_id):
     caballo = ecuestre.traer_ecuestre(ecuestre_id)
     return render_template("ecuestre/add_documento.html", ecuestre=caballo)
 
 @bp.post("/editar_ecuestre/documentos<int:ecuestre_id>")
+@login_required
+@check("ecuestre_update")
 def agregar_documento(ecuestre_id):
     file = request.files["documento"] 
     extensiones_permitidas = {'png', 'jpg', 'jpeg', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'txt'}
@@ -172,6 +193,8 @@ def agregar_documento(ecuestre_id):
 
 
 @bp.get("/editar_ecuestre/<int:ecuestre_id>/documentos/<string:file_name>")
+@login_required
+@check("ecuestre_show")
 def mostrar_archivo(ecuestre_id, file_name):
     nuevo_nombre_archivo = f"{ecuestre_id}_{file_name}"
     expiration = timedelta(seconds=120)
@@ -180,6 +203,8 @@ def mostrar_archivo(ecuestre_id, file_name):
     return False
 
 @bp.post("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/eliminar")
+@login_required
+@check("ecuestre_update")
 def eliminar_documento(ecuestre_id, documento_id):
     documento = ecuestre.traerdocumentoporid(documento_id)
     client = current_app.storage.client
@@ -189,6 +214,8 @@ def eliminar_documento(ecuestre_id, documento_id):
     return redirect(url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre_id, tab='documentos'))
 
 @bp.get("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/eliminar")
+@login_required
+@check("ecuestre_update")
 def eliminar_documento_form(ecuestre_id, documento_id):
     ecuestre_datos = ecuestre.traer_ecuestre(ecuestre_id)
     documento = ecuestre.traerdocumentoporid(documento_id)
