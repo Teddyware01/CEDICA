@@ -106,6 +106,9 @@ def update_user(user_id):
 @check("user_update")
 def block_user(user_id):
     user = auth.traer_usuario(user_id)
+    if user.system_admin:
+        flash("No se puede bloquear un usuario administrador")
+        return render_template("listado.html", usuarios=auth.list_users())
     if user:
         user.activo = False
         db.session.commit()
