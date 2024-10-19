@@ -15,6 +15,22 @@
                 
             <!-- Formulario de búsqueda y ordenamiento -->
             <form method="POST" action="{{ url_for('jya.update', jinete_id=jinete.id) }}" enctype="multipart/form-data" class="mb-3">
+                <div class="form-group">
+                    <div>
+                        <label for="titulo_documento" class="form-element">Titulo del documento:</label>
+                        
+                    </div>
+                    <label for="tipo_archivo">Tipo de Archivo:</label>
+                    <select id="tipo_archivo" name="tipo_archivo" class="form-control">
+                        <option value="entrevista">Entrevista</option>
+                        <option value="evaluacion">Evaluacion</option>
+                        <option value="planificaciones">Planificaciones</option>
+                        <option value="evolucion">Evolucion</option>
+                        <option value="cronicas">Cronicas</option>
+                        <option value="documental">Documental</option>
+                    </select>
+                </div>
+                
                 <fieldset>
                     <legend>{{ jinete.nombre }} {{ jinete.apellido }}</legend>
                     <label>

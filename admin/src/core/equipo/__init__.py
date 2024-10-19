@@ -68,6 +68,30 @@ def list_empleados(sort_by=None, id_puesto_laboral=None, search=None):
     return query.all()
 
 
+
+def list_auxiliares_pista():
+    auxiliar = PuestoLaboral.query.filter_by(nombre="Auxiliar").first()
+    if auxiliar:
+        return Empleado.query.filter_by(puesto_laboral_id=auxiliar.id).all()
+    return []
+
+def list_conductores_caballos():
+    conductor = PuestoLaboral.query.filter_by(nombre="Conductor").first()
+    if conductor:
+        return Empleado.query.filter_by(puesto_laboral_id=conductor.id).all()
+    return []
+
+def list_terapeutas_y_profesores():
+    terapeuta = PuestoLaboral.query.filter_by(nombre="Terapeuta").first()
+    profesor = PuestoLaboral.query.filter_by(nombre="Profesor/a").first()
+    if terapeuta or profesor:
+        return Empleado.query.filter(or_(
+            Empleado.puesto_laboral_id == terapeuta.id,
+            Empleado.puesto_laboral_id == profesor.id
+        )).all()
+    return []
+
+
 def create_empleado(**kwargs):
     empleado = Empleado(**kwargs)
     db.session.add(empleado)

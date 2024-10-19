@@ -117,20 +117,16 @@ class TipoDocumentoEnum(Enum):
     cronicas="crónicas"
     documental="documental"
     
-class Documento(db.Model):
+class JineteDocumento(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    titulo = db.Column(db.String(100), nullable=False)
-    fecha_subida = db.Column(db.DateTime, default=datetime.now)
-    tipo = db.Column(db.Enum(TipoDocumentoEnum), nullable=False)
+    titulo_documento = db.Column(db.String(100), nullable=False)
+    nombre_archivo = db.Column(db.String(255), nullable=False)
+    fecha_subida_documento = db.Column(db.DateTime, default=datetime.now)
+    tipo_documento = db.Column(db.Enum(TipoDocumentoEnum), nullable=False)
     
-    jinetes = db.relationship('Jinete', secondary='jinete_documento', back_populates='documentos')
-    #jinete_id = db.Column(db.Integer, db.ForeignKey("jinete.id"), nullable=False)
-    #jinete = db.relationship("Jinete", back_populates="documentos")
+    jinete_id = db.Column(db.Integer, db.ForeignKey("jinete.id"), nullable=False)
+    jinete = db.relationship("Jinete", back_populates="documentos")
     
-jinete_documento = db.Table('jinete_documento',
-    db.Column('jinete_id', db.Integer, db.ForeignKey('jinete.id'), primary_key=True),
-    db.Column('documetno_id', db.Integer, db.ForeignKey('documento.id'), primary_key=True)
-)
     
 class Jinete(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -184,8 +180,23 @@ class Jinete(db.Model):
     #auxiliar_pista dado de alta al sistema.
     # sin tabla intermedia: familiares = db.relationship('Familiar', backref='jinete')
     familiares = db.relationship('Familiar', secondary='jinete_familiar', back_populates='jinetes')
-    documentos = db.relationship("Documento", secondary='jinete_documento', back_populates='jinetes')
-    #documentos = db.relationship("Documento", back_populates="jinete", cascade="all, delete-orphan")
+    documentos = db.relationship("JineteDocumento", back_populates="jinete", cascade="all, delete-orphan")
 
+  
+    # Relaciones con tres empleados diferentes:
+    #ids:
+    profesor_o_terapeuta_id = db.Column(db.Integer, db.ForeignKey('empleado.id'), nullable=True)
+    conductor_caballo_id = db.Column(db.Integer, db.ForeignKey('empleado.id'), nullable=True)
+    auxiliar_pista_id = db.Column(db.Integer, db.ForeignKey('empleado.id'), nullable=True)
+    caballo_id = db.Column(db.Integer, db.ForeignKey('ecuestre.id'), nullable=True)
+
+    # Definir las relaciones
+    profesor_o_terapeuta = db.relationship('Empleado', foreign_keys=[profesor_o_terapeuta_id], backref='profesor_o_terapeuta_jinetes')
+    conductor_caballo = db.relationship('Empleado', foreign_keys=[conductor_caballo_id], backref='conductor_caballo_jinetes')
+    auxiliar_pista = db.relationship('Empleado', foreign_keys=[auxiliar_pista_id], backref='auxiliar_pista_jinetes')
+    caballo = db.relationship('Ecuestre', foreign_keys=[caballo_id], backref='auxiliar_pista_jinetes')
+
+
+    #ids
     def __repr__(self):
         return f"<User #{self.id} nombre = {self.nombre}>"

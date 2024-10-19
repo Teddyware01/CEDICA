@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}Eliminar Documento{% endblock %}
+
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="delete-confirmation">
+        <h2>¿Estás seguro de que deseas eliminar este documento?</h2>
+        <div class="document-details">
+            <p><strong>Título:</strong> {{ doc.titulo_documento }}</p>
+            <p><strong>Fecha de subida:</strong> {{ doc.fecha_subida_documento.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            <p><strong>Tipo:</strong> {{ doc.tipo_documento }}</p>
+        </div>
+        <div class="form-actions">
+            <form action="{{ url_for('jya.eliminar_documento', jinete_id=jinete.id, documento_id=doc.id) }}" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Confirmar</button>
+            </form>
+            <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id, tab='documentos') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </div>
+{% endblock %}

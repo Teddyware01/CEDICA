@@ -15,7 +15,7 @@ from flask_session import Session
 
 from src.web.handlers.auth import is_authenticated, check_permission
 from src.web.controllers.jya import bp as jya_bp
-from src.web.controllers.legajo import bp as legajo_bp
+
 session= Session()
 
 def create_app(env="development", static_folder="../../static"):
@@ -52,7 +52,6 @@ def create_app(env="development", static_folder="../../static"):
 
 
     app.register_blueprint(jya_bp)
-    app.register_blueprint(legajo_bp)
 
     app.jinja_env.globals.update(avatar_url=helpers.avatar_url)
     

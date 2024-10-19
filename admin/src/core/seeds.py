@@ -15,7 +15,6 @@ from pathlib import Path
 
 from src.core.database import db
 from sqlalchemy import text
-from src.core.jya import legajo
 from src.core.jya.models import TipoDocumentoEnum
 
 from src.core import ecuestre
@@ -506,13 +505,6 @@ def run():
     )
     jya.associate_jinete_dias(1, 1)
     
-    documento_1 = jya.add_documento(
-        titulo="Curriculum Vitae",
-        tipo=TipoDocumentoEnum.evaluacion,
-    )
-    
-    jya.associate_jinete_documento(1,1)
-
 
     # Modulo ecuestre
     sede1 = ecuestre.create_sede(

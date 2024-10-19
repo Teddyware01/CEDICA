@@ -322,14 +322,40 @@
                 {{ form.sede }}
             </div>
     
+        <div>
+            <label for="caballo" class="form-element">Caballo:</label>
+            {{ form.caballo }}
+        </div>
+        
+        
+        <div>
+            <label for="profesor_o_terapeuta" class="form-element">Profesor o terapeuta:</label>
+            {{ form.profesor_o_terapeuta }}
+        </div>
+        
+        
+        <div>
+            <label for="conductor_caballo" class="form-element">Conductor caballo:</label>
+            {{ form.conductor_caballo }}
+        </div>
+        
+        <div>
+            <label for="auxiliar_pista" class="form-element">Auxiliar de pista:</label>
+            {{ form.auxiliar_pista }}
+        </div>
+        
+        <div>
+            <button type="submit" class="btn btn-primary">Agregar Jinete</button>
+            <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
+        </div>
 
-            
+        
 
-    
-            <div>
-                <button type="submit" style="margin: 10px;" class="btn btn-submit">Guardar Cambios</button>
-                <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
-            </div>
+
+        <div>
+            <button type="submit" style="margin: 10px;" class="btn btn-submit">Guardar Cambios</button>
+            <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
+        </div>
         </form>
     </div>
 {% endblock %}

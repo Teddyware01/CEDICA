@@ -2,9 +2,9 @@ from src.core.database import db
 from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
-from src.core.jya.models import Jinete, Familiar, Documento, Dias
+from src.core.jya.models import Jinete, Familiar, Dias, JineteDocumento
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad
-from sqlalchemy import or_
+from sqlalchemy import String, cast, or_
 
 def list_jinetes(sort_by=None, search=None):
     query = Jinete.query
@@ -145,37 +145,32 @@ def associate_jinete_dias(jinete_id, dias_id):
     db.session.commit()
 
 def add_documento(**kwargs):
-    documento = Documento(**kwargs)
+    documento = JineteDocumento(**kwargs)
     db.session.add(documento)
     db.session.commit()
 
     return documento
 
-def delete_documento(id):
-    documento = Documento.query.get(id)
-    if documento:
-        db.session.delete(documento)
-        db.session.commit()
-        return True
-    return False
-
-
-def edit_documento(id, **kwargs):
-    documento = Documento.query.get(id)
+def delete_documento(documento_id):
+    documento = get_documento(documento_id)
+    db.session.delete(documento)
+    db.session.commit()
+    
+def edit_documento(jinete_id, **kwargs):
+    documento = get_documento(jinete_id)
     for key, value in kwargs.items():
         if hasattr(documento, key):
             setattr(documento, key, value)
     db.session.commit()
     
-
 def get_documento(jinete_id): 
-    documento = Documento.query.get(jinete_id)
+    documento = JineteDocumento.query.get(jinete_id)
     return documento
 
 def associate_jinete_documento(jinete_id, documento_id):
     # Obtener instancias de Jinete y Documento
     jinete = Jinete.query.get(jinete_id)
-    documento = Documento.query.get(documento_id)
+    documento = JineteDocumento.query.get(documento_id)
 
     # Verificar si los objetos fueron recuperados correctamente
     if not jinete or not documento:
@@ -186,6 +181,8 @@ def associate_jinete_documento(jinete_id, documento_id):
 
     # Guardar los cambios en la base de datos
     db.session.commit()
+
+
 
 '''def traer_familiares():
     query = Familiar.query
@@ -206,3 +203,38 @@ def agregar_familiar(jinete_id, lista_id_familiares):
 
     db.session.commit()
 '''
+
+def traer_documentos(jinete_id, page=1, per_page=10, sort_by=None, search=None):
+    # Inicializar el query filtrando por el jinete_id
+    query = JineteDocumento.query.filter(JineteDocumento.jinete_id == jinete_id)
+
+    # Agregar la funcionalidad de búsqueda si existe un término de búsqueda
+    if search:
+        query = query.filter(
+            JineteDocumento.titulo_documento.like(f"%{search}%") |
+            cast(JineteDocumento.tipo_documento, String).like(f"%{search}%")
+        )
+
+    # Agregar la funcionalidad de ordenamiento basada en el valor de sort_by
+    if sort_by:
+        if sort_by == "titulo_asc":
+            query = query.order_by(JineteDocumento.titulo_documento.asc())
+        elif sort_by == "titulo_desc":
+            query = query.order_by(JineteDocumento.titulo_documento.desc())
+        elif sort_by == "fecha_asc":
+            query = query.order_by(JineteDocumento.fecha_subida_documento.asc())
+        elif sort_by == "fecha_desc":
+            query = query.order_by(JineteDocumento.fecha_subida_documento.desc())
+
+    # Retornar los resultados paginados
+    return query.paginate(page=page, per_page=per_page, error_out=False)
+
+def traer_documento_id(documento_id):
+    documento = JineteDocumento.query.get_or_404(documento_id)
+    return documento
+
+
+def delete_documento(documento_id):
+    documento = traer_documento_id(documento_id)
+    db.session.delete(documento)
+    db.session.commit()
