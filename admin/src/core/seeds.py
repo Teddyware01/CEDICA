@@ -6,6 +6,7 @@ from src.core import equipo
 from src.core.equipo.extra_models import Provincia,Localidad, Domicilio
 from src.core.equipo.models import CondicionEnum
 from src.core.pagos.models import Pago
+from src.core.cobros.models import RegistroCobro
 from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum
 from datetime import datetime
 
@@ -174,6 +175,7 @@ def run():
         localidad_id=15,
         provincia_id=15,
     )
+
     domicilio_ej2 = equipo.add_domiclio(
         calle="122",
         numero="42",
@@ -324,8 +326,9 @@ def run():
             tipo_pago=pago["tipo_pago"],
             descripcion=pago["descripcion"],
         )
-        db.session.add(nuevo_pago)  # Agregar el pago a la sesión
-    db.session.commit()  # Confirmar todos los cambios en la base de datos
+        db.session.add(nuevo_pago)
+    db.session.commit()
+
     direccion_1 = jya.add_direccion(
         calle="Olazabal",
         numero=4321,
@@ -670,6 +673,39 @@ def run():
     ecuestre.asignar_empleado(caballo9, [empleado5,empleado2]) 
     ecuestre.asignar_empleado(caballo10, [empleado1,empleado2, empleado4]) 
 
+    
+    cobro1 = RegistroCobro(
+        jinete_id=1,  
+        fecha_pago=datetime(2024, 1, 15),
+        medio_pago='efectivo',
+        monto=1000.0,
+        recibido_por=1,  
+        observaciones="Primer pago del año."
+    )
+
+    cobro2 = RegistroCobro(
+        jinete_id=2, 
+        fecha_pago=datetime(2024, 2, 20),
+        medio_pago='tarjeta_credito',
+        monto=1500.0,
+        recibido_por=2, 
+        observaciones="Pago correspondiente a febrero."
+    )
+
+    cobro3 = RegistroCobro(
+        jinete_id=1,  
+        fecha_pago=datetime(2024, 3, 25),
+        medio_pago='tarjeta_debito',
+        monto=2000.0,
+        recibido_por=1,  
+        observaciones="Pago de honorarios."
+    )
+
+    db.session.add(cobro1)
+    db.session.add(cobro2)
+    db.session.add(cobro3)
+
+    db.session.commit()
 
     # Super_user que tiene todos los permisos. Utililizable para probar la pagina comodamente
     super_user = auth.create_user(
