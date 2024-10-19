@@ -91,8 +91,26 @@ def run():
         activo=True,
     )
 
+    user3 = auth.create_user(
+        email="franvr@hotmail",
+        alias="franvr",
+        password="franvr",
+        system_admin=False,
+        activo=True,
+    )
+
+    user4 = auth.create_user(
+        email="franvr2@hotmail",
+        alias="franvr2",
+        password="franvr2",
+        system_admin=False,
+        activo=True,
+    )
+
     board.assign_user(issue1, user1)
     board.assign_user(issue2, user2)
+    board.assign_user(issue3, user3)
+    board.assign_user(issue4, user4)
 
     label1 = board.create_label(
         title="urgente",
@@ -127,6 +145,8 @@ def run():
     auth.assign_rol(
         user2, [rol_administracion, rol_voluntariado, rol_tecnica, rol_ecuestre]
     )
+    auth.assign_rol(user3, [rol_tecnica])
+    auth.assign_rol(user4, [rol_voluntariado])
     board.assign_labels(issue1, [label1])
     board.assign_labels(issue2, [label1, label2])
 

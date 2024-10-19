@@ -11,9 +11,11 @@
     </div>
     {% endif %}
     
+    {% if is_authenticated(session) and check_permission(session,"cobro_create") %}
     <div class="actions">
         <a href="{{ url_for('cobros.registrar_cobro') }}" class="btn btn-add">Registrar Cobro</a>
     </div>
+    {% endif %}
 
     <form method="GET" action="{{ url_for('cobros.buscar_cobros') }}" class="mb-3 search-form">
         <div class="form-row">
@@ -78,10 +80,14 @@
                 <td>{{ cobro.empleado.nombre }} {{ cobro.empleado.apellido }}</td>
                 <td>{{ cobro.observaciones }}</td>
                 <td>
+                    {% if is_authenticated(session) and check_permission(session,"cobro_delete") %}
                     <form method="POST" action="{{ url_for('cobros.eliminar_cobro', id=cobro.id) }}" style="display:inline;">
                         <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que deseas eliminar este cobro?');">Eliminar</button>
                     </form>
+                    {% endif %}
+                    {% if is_authenticated(session) and check_permission(session,"cobro_update") %}                    
                     <a href="{{ url_for('cobros.editar_cobro', id=cobro.id) }}" class="btn btn-edit">Editar</a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
