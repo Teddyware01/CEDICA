@@ -14,21 +14,9 @@ from wtforms import (
 from src.core.equipo.extra_models import Localidad
 from wtforms.validators import DataRequired, Email, Length, Optional, Regexp, ValidationError, NumberRange
 from wtforms.widgets import DateInput
-from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum, TipoDocumentoEnum
+from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum
 
 
-
-
-class DocumentoForm(FlaskForm):
-    titulo = StringField('Titulo', validators=[DataRequired()])
-    fecha_subida = DateTimeField('Fecha subida', validators=[DataRequired()])
-    
-    tipo = SelectField('Tipo de documento',
-        choices=[(tipo.name, tipo.value) for tipo in TipoDocumentoEnum],
-        coerce=int,
-        validators=[DataRequired(message="El tipo de diagnostico es obligatorio")],
-    )
-    
 class AddJineteForm(FlaskForm):
     
     nombre = StringField(
@@ -253,10 +241,7 @@ class AddJineteForm(FlaskForm):
         validators=[DataRequired(message="Seleccionar al menos un dia")],
     )'''
     
-    documento = FieldList(
-        FormField(DocumentoForm),
-        #min_entries=1,   Asegura al menos una entrada de documento
-        label="Documentos"
-    )
+    titulo_documento = StringField(
+        'Titulo documento', validators=[DataRequired("Ingrese el titulo del documento")])
             
     submit = SubmitField("Guardar")

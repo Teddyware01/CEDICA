@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}Carga de documentos a jinete{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <article class="form-container">
+        <div>
+            <h1 class="text-center">Cargar archivo</h1>
+
+            <!-- Formulario de búsqueda y ordenamiento -->
+            <form method="POST" action="{{ url_for('jya.agregar_documento', jinete_id=jinete.id) }}" enctype="multipart/form-data" class="mb-3">
+                <div class="form-group">
+
+                    <label for="titulo_documento">Titulo del archivo:</label>
+                    <input type="text" id="titulo_documento" name="titulo_documento" class="form-control" required>
+                    <label for="tipo_documento">Tipo de Archivo:</label>
+                    <select id="tipo_documento" name="tipo_documento" class="form-control">
+                        <option value="evaluacion">Evaluación</option>
+                        <option value="entrevista">Entrevista</option>
+                        <option value="planificaciones">Planificaciones</option>
+                        <option value="evolucion">Evolución</option>
+                        <option value="cronicas">Crónicas</option>
+                        <option value="documental">Documental</option>
+                    </select>
+                </div>
+                <fieldset>
+                    <label>
+                        <input type="file" name="documento" accept=".pdf,.doc,.docx,.jpg,.png" required>
+                    </label>
+                </fieldset>
+                <input type="submit" value="Guardar">
+            </form>
+        </div>
+    </article>
+
+    <a class="secondary" href="{{ url_for('home') }}">Volver al inicio</a>
+{% endblock %}

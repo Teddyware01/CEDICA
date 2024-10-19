@@ -117,20 +117,16 @@ class TipoDocumentoEnum(Enum):
     cronicas="crónicas"
     documental="documental"
     
-class Documento(db.Model):
+class JineteDocumento(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    titulo = db.Column(db.String(100), nullable=False)
-    fecha_subida = db.Column(db.DateTime, default=datetime.now)
-    tipo = db.Column(db.Enum(TipoDocumentoEnum), nullable=False)
+    titulo_documento = db.Column(db.String(100), nullable=False)
+    nombre_archivo = db.Column(db.String(255), nullable=False)
+    fecha_subida_documento = db.Column(db.DateTime, default=datetime.now)
+    tipo_documento = db.Column(db.Enum(TipoDocumentoEnum), nullable=False)
     
-    jinetes = db.relationship('Jinete', secondary='jinete_documento', back_populates='documentos')
-    #jinete_id = db.Column(db.Integer, db.ForeignKey("jinete.id"), nullable=False)
-    #jinete = db.relationship("Jinete", back_populates="documentos")
+    jinete_id = db.Column(db.Integer, db.ForeignKey("jinete.id"), nullable=False)
+    jinete = db.relationship("Jinete", back_populates="documentos")
     
-jinete_documento = db.Table('jinete_documento',
-    db.Column('jinete_id', db.Integer, db.ForeignKey('jinete.id'), primary_key=True),
-    db.Column('documetno_id', db.Integer, db.ForeignKey('documento.id'), primary_key=True)
-)
     
 class Jinete(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -184,8 +180,7 @@ class Jinete(db.Model):
     #auxiliar_pista dado de alta al sistema.
     # sin tabla intermedia: familiares = db.relationship('Familiar', backref='jinete')
     familiares = db.relationship('Familiar', secondary='jinete_familiar', back_populates='jinetes')
-    documentos = db.relationship("Documento", secondary='jinete_documento', back_populates='jinetes')
-    #documentos = db.relationship("Documento", back_populates="jinete", cascade="all, delete-orphan")
+    documentos = db.relationship("JineteDocumento", back_populates="jinete", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User #{self.id} nombre = {self.nombre}>"

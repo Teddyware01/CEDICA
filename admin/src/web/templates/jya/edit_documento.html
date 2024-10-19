@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}Editar Jinete{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <div>
+        <h1 class="text-center">Editar Jinete</h1>
+        
+        <form method="POST" action="{{ url_for('jya.editar_documento', jinete_id=jinete_id, documento_id=documento.id) }}" enctype="multipart/form-data" class="mb-3">
+            <div class="form-group">
+
+                <label for="titulo_documento">Titulo del archivo:</label>
+                <input type="text" id="titulo_documento" name="titulo_documento" class="form-control" required>
+                <label for="tipo_documento">Tipo de Archivo:</label>
+                <select id="tipo_documento" name="tipo_documento" class="form-control">
+                    <option value="evaluacion">Evaluación</option>
+                    <option value="entrevista">Entrevista</option>
+                    <option value="planificaciones">Planificaciones</option>
+                    <option value="evolucion">Evolución</option>
+                    <option value="cronicas">Crónicas</option>
+                    <option value="documental">Documental</option>
+                </select>
+            </div>
+            <fieldset>
+                <label>
+                    <input type="file" name="documento" accept=".pdf,.doc,.docx,.jpg,.png" required>
+                </label>
+            </fieldset>
+            <input type="submit" value="Guardar">
+        </form>
+    </div>
+{% endblock %}
