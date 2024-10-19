@@ -5,6 +5,7 @@ from src.core import jya
 from src.core import equipo
 from src.core.equipo.extra_models import Provincia, Domicilio
 from src.core.equipo.models import CondicionEnum
+from src.core.pagos.models import Pago
 from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum
 from datetime import datetime
 
@@ -289,7 +290,40 @@ def run():
         contacto_emergencia_id=2,
     )
 
+    pagos_datos = [
+        {
+            "beneficiario": "Juan Pérez",
+            "monto": 1000.0,
+            "fecha_pago": datetime(2024, 10, 1),
+            "tipo_pago": "Honorario",
+            "descripcion": "Pago por servicio de asesoría",
+        },
+        {
+            "beneficiario": "María Gómez",
+            "monto": 1500.0,
+            "fecha_pago": datetime(2024, 10, 5),
+            "tipo_pago": "Gastos_varios",
+            "descripcion": "Pago por compra de insumos",
+        },
+        {
+            "beneficiario": "Carlos López",
+            "monto": 2000.0,
+            "fecha_pago": datetime(2024, 10, 10),
+            "tipo_pago": "Gastos_varios",
+            "descripcion": "Pago por servicios de mantenimiento",
+        },
+    ]
 
+    for pago in pagos_datos:
+        nuevo_pago = Pago(
+            beneficiario=pago["beneficiario"],
+            monto=pago["monto"],
+            fecha_pago=pago["fecha_pago"],
+            tipo_pago=pago["tipo_pago"],
+            descripcion=pago["descripcion"],
+        )
+        db.session.add(nuevo_pago)  # Agregar el pago a la sesión
+    db.session.commit()  # Confirmar todos los cambios en la base de datos
     direccion_1 = jya.add_direccion(
         calle="Olazabal",
         numero=4321,
