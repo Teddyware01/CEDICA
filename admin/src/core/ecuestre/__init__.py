@@ -130,16 +130,39 @@ def delete_ecuestre(ecuestre_id):
     return False
 
 def crear_documento(**kwargs):
-    documento = Ecuestre_docs(**kwargs)
-    db.session.add(documento)
-    db.session.commit()
-    return documento
+    # Verificar si ya existe un documento con el mismo título para el mismo ecuestre_id
+    existe = db.session.query(Ecuestre_docs).filter_by(titulo=kwargs['titulo'], ecuestre_id=kwargs['ecuestre_id']).first()
+    
+    if not existe:
+        documento = Ecuestre_docs(**kwargs)
+        db.session.add(documento)
+        db.session.commit()
+        return documento
+    
+    return False
 
 
-def traerdocumento(ecuestre_id, page=1, per_page=1):
+def traerdocumento(ecuestre_id, page=1, per_page=5):
     documentos = Ecuestre_docs.query.filter(Ecuestre_docs.ecuestre_id == ecuestre_id).paginate(page=page, per_page=per_page, error_out=False)
     return documentos
 
 def traerdocumentoporid(documento_id):
     documento = Ecuestre_docs.query.get(documento_id)
     return documento
+
+def eliminar_documento(documento_id):
+    documento = traerdocumentoporid(documento_id)
+    if documento:
+        db.session.delete(documento)
+        db.session.commit()
+        return True
+    return False
+
+
+def ya_tiene_ese_documento(ecuestre_id, name):
+    documento = Ecuestre_docs.query.filter(
+        Ecuestre_docs.ecuestre_id == ecuestre_id,
+        Ecuestre_docs.titulo.ilike(name)  
+    ).first()  
+
+    return documento is not None

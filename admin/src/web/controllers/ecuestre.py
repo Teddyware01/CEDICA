@@ -1,4 +1,5 @@
 from src.core.database import db
+from datetime import timedelta
 from src.core import ecuestre
 from flask import current_app
 from os import fstat
@@ -142,10 +143,24 @@ def subir_archivo_form(ecuestre_id):
 
 @bp.post("/editar_ecuestre/documentos<int:ecuestre_id>")
 def agregar_documento(ecuestre_id):
-    file = request.files["documento"]
-    client = current_app.storage.client
+    file = request.files["documento"] 
+    extensiones_permitidas = {'png', 'jpg', 'jpeg', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'txt'}
+    extension = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else ''
+    if extension not in extensiones_permitidas:
+        flash("Tipo de archivo no permitido. Solo se permiten archivos: png, jpg, pdf, doc, xls, ppt, odt, txt.", "error")
+        return subir_archivo_form(ecuestre_id)
+    tamano_maximo = 10 * 1024 * 1024
     size = fstat(file.fileno()).st_size
-    client.put_object("grupo15", file.filename, file, size, content_type=file.content_type)    
+    if size > tamano_maximo:
+        flash(f"El archivo excede el tamaño máximo permitido de {tamano_maximo / (1024 * 1024)} MB.", "error")
+        return subir_archivo_form(ecuestre_id)
+    existe = ecuestre.ya_tiene_ese_documento(ecuestre_id, file.filename)
+    if(existe):
+        flash(f"El archivo ya se encuentra almacenado")
+        return subir_archivo_form(ecuestre_id)
+    nuevo_nombre_archivo = f"{ecuestre_id}_{file.filename}"
+    client = current_app.storage.client
+    client.put_object("grupo15", nuevo_nombre_archivo, file, size, content_type=file.content_type)    
     ecuestre.crear_documento(
         titulo=file.filename,
         tipo=request.form["tipo_archivo"], 
@@ -154,14 +169,21 @@ def agregar_documento(ecuestre_id):
     return ver_ecuestre(ecuestre_id)
 
 
-@bp.get("/editar_ecuestre/documentos/<string:file_name>")
-def mostrar_archivo(file_name):
+
+
+@bp.get("/editar_ecuestre/<int:ecuestre_id>/documentos/<string:file_name>")
+def mostrar_archivo(ecuestre_id, file_name):
+    nuevo_nombre_archivo = f"{ecuestre_id}_{file_name}"
+    expiration = timedelta(seconds=120)
     client = current_app.storage.client
-    url =  client.presigned_get_object("grupo15", file_name) # Esto sirve para archivos sensibles como documento de jya.
-    return redirect(url)
+    url =  client.presigned_get_object("grupo15", nuevo_nombre_archivo, expires=expiration) # Esto sirve para archivos sensibles como documento de jya.
+    return False
 
 @bp.post("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/eliminar")
 def eliminar_documento(ecuestre_id, documento_id):
+    documento = ecuestre.traerdocumentoporid(documento_id)
+    client = current_app.storage.client
+    client.remove_object("grupo15", documento.titulo)
     ecuestre.eliminar_documento(documento_id)
     flash("Documento eliminado correctamente.", "success")
     return redirect(url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre_id, tab='documentos'))

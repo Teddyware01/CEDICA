@@ -8,13 +8,21 @@
 {% endblock %}
 
 {% block content %}
-    {{ super() }}
     <article class="form-container">
         <div>
+            
             <h1 class="text-center">Cargar archivo</h1>
-                
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}    
             <!-- Formulario de búsqueda y ordenamiento -->
-            <form method="POST" action="{{ url_for('ecuestre.agregar_documento', ecuestre_id=ecuestre.id) }}" enctype="multipart/form-data" class="mb-3">
+            <form method="POST" action="{{ url_for('ecuestre.agregar_documento',  ecuestre_id=ecuestre.id) }}" enctype="multipart/form-data" class="mb-3">
                 <div class="form-group">
                     <label for="tipo_archivo">Tipo de Archivo:</label>
                     <select id="tipo_archivo" name="tipo_archivo" class="form-control">
@@ -31,6 +39,9 @@
                     </label>
                 </fieldset>
                 <input type="submit" value="Guardar">
+            </form>
+            <form method="GET" action="{{ url_for('ecuestre.ver_ecuestre',  ecuestre_id=ecuestre.id) }}"  class="mb-3">
+                <input type="submit" value="Cancelar">
             </form>
         </div>
     </article>
