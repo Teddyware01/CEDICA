@@ -271,7 +271,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-MAX_CANT_MEGABYTES = 2  # cant megabytes
+MAX_CANT_MEGABYTES = 20  # cant megabytes
 MAX_CONTENT_LENGTH = MAX_CANT_MEGABYTES * 1024 * 1024  
 
 @bp.before_request
