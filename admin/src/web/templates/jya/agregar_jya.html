@@ -166,13 +166,15 @@
         </div>
 
         <div class="form-group">
-            <label for="tipos_discapacidad">Tipos de Discapacidad:</label>
-            <div class="checkbox-group">
-                {% for subfield in form.tipos_discapacidad %}
-                <input type="checkbox" id="tipo_{{ loop.index0 }}" name="tipos_discapacidad" value="{{ subfield.data }}">
-                <label for="tipo_{{ loop.index0 }}">{{ subfield.label.text }}</label>
+            <label>Tipos de Discapacidad:</label>
+            {% for checkbox in form.discapacidades %}
+                <div class="form-check">
+                    {{ checkbox.label(class="form-check-label") }}
+                    {{ checkbox(class="form-check-input") }}
+                </div>
             {% endfor %}
         </div>
+        
         <div>
             <label for="asignacion_familiar" class="form-element">¿Percibe alguna asignación familiar?</label>
             <input type="radio" id="asignacion_si" name="asignacion" value="si">
@@ -370,13 +372,13 @@
         </div>
 
         <div class="form-group">
-            <label for="dia">DIA:</label>
-            <div class="checkbox-group">
-                {% for subfield in form.dia %}
-                <input type="checkbox" id="dia_{{ loop.index0 }}" name="dia" value="{{ subfield.data }}">
-                <label for="dia_{{ loop.index0 }}">{{ subfield.label.text }}</label>
-                {% endfor %}
-            </div>
+            <label>Dias:</label>
+            {% for checkbox in form.dias %}
+                <div class="form-check">
+                    {{ checkbox.label(class="form-check-label") }}
+                    {{ checkbox(class="form-check-input") }}
+                </div>
+            {% endfor %}
         </div>
 
         <div>

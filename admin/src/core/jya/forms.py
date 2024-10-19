@@ -13,7 +13,7 @@ from wtforms import (
 )
 from src.core.equipo.extra_models import Localidad
 from wtforms.validators import DataRequired, Email, Length, Optional, Regexp, ValidationError, NumberRange
-from wtforms.widgets import DateInput
+from wtforms.widgets import DateInput, ListWidget, CheckboxInput
 from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum
 
 
@@ -82,11 +82,20 @@ class AddJineteForm(FlaskForm):
         validators=[DataRequired(message="El tipo de pension es obligatorio")],
     )
     
-    tipos_discapacidad = SelectMultipleField(
-        "Tipo de Discapacidad",
-        choices=[(disc.name, disc.value) for disc in TiposDiscapacidadEnum],
+    discapacidades = SelectMultipleField(
+        "Tipos de Discapacidad",
+        choices=[],
         coerce=str,
-        validators=[DataRequired(message="Seleccionar al menos un tipo de discapacidad es obligatorio")],
+        widget=ListWidget(prefix_label=False),
+        option_widget=CheckboxInput()
+    )
+    
+    dias = SelectMultipleField(
+        "Dias",
+        choices=[],  # Se llenará dinámicamente
+        coerce=str,  # Convertimos los valores del formulario a cadenas (los valores del Enum)
+        widget=ListWidget(prefix_label=False),
+        option_widget=CheckboxInput()
     )
     
     # LUGAR NACIMIENTO
@@ -193,14 +202,7 @@ class AddJineteForm(FlaskForm):
         "Profesionales",
         validators=[DataRequired(message="Los profesionales son obligatorios")],
     )
-    ############# diassssssssssss
-    dias = SelectField(
-        "Dias", 
-        choices=[(dias.name, dias.value) for dias in DiasEnum],
-        validators=[DataRequired()],
-    )
 
-    
     # ---------- FAMILIARES ---------- 
     parentesco_familiar = StringField('Parentesco', validators=[DataRequired()])
     nombre_familiar = StringField("Nombre",validators=[DataRequired(message="El nombre es obligatorio"), Length(max=100)],)
@@ -234,14 +236,14 @@ class AddJineteForm(FlaskForm):
         validators=[DataRequired(message="La sede es obligatoria")],
     )
     
-    '''dia = SelectMultipleField(
-        "DIA",
-        choices=[(dia.name, dia.value) for dia in DiasEnum],
+    dias = SelectMultipleField(
+        "Dias", 
         coerce=str,
-        validators=[DataRequired(message="Seleccionar al menos un dia")],
-    )'''
+        choices=[],
+        widget=ListWidget(prefix_label=False),
+        option_widget=CheckboxInput()
+    )
+
     
-    titulo_documento = StringField(
-        'Titulo documento', validators=[DataRequired("Ingrese el titulo del documento")])
-            
+    
     submit = SubmitField("Guardar")

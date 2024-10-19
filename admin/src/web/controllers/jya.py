@@ -5,7 +5,7 @@ from src.core import auth
 from src.core import jya
 from src.core.database import db
 from src.core.jya.forms import AddJineteForm
-from src.core.jya.models import Jinete, PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, Familiar, JineteDocumento, TipoDiscapacidad
+from src.core.jya.models import Jinete, PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, Dias, DiasEnum, Familiar, JineteDocumento, TipoDiscapacidad
 
 bp = Blueprint("jya", __name__, url_prefix="/jinetes")
 
@@ -87,8 +87,18 @@ def add_jinete():
             trabajo_institucional=form.trabajo_institucional.data,
             condicion=form.condicion.data,
             sede=form.sede.data,
+            dias=form.dias.data,
         )
+        dias_seleccionados = [DiasEnum[day] for day in form.dias.data]  # Convertimos de string a DiasEnum
+        dias_db = Dias.query.filter(Dias.dias.in_(dias_seleccionados)).all()  # Buscamos los días en la base de datos
 
+        nuevo_jinete.dias.extend(dias_db)
+        
+        discapacidades_seleccionadas = [TiposDiscapacidadEnum[discapacidad] for discapacidad in form.tipos_discapacidad.data]
+        discapacidades_db = TipoDiscapacidad.query.filter(TipoDiscapacidad.descripcion.in_(discapacidades_seleccionadas)).all()
+        
+        nuevo_jinete.discapacidades.extend(discapacidades_db)
+        
         # Ahora agregar el familiar
         nuevo_familiar = jya.add_familiar(
             parentesco_familiar=form.parentesco_familiar.data,
@@ -153,17 +163,20 @@ def cargar_choices_form(form):
     form.tipo_asignacion.choices = [(asig.name, asig.value) for asig in AsignacionEnum]
     form.domicilio_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
     form.domicilio_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]
-
+    #ver
+    form.discapacidades.choices = [(d.id, d.descripcion) for d in TipoDiscapacidad.query.all()]
+    #
     form.localidad_nacimiento.choices = [(l.id, l.nombre) for l in jya.list_localidades()]  
     form.provincia_nacimiento.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
     #form.dia.choices = [(dia.name, dia.value) for dia in DiasEnum]
     
     form.institucion_direccion_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]  
     form.institucion_direccion_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
-    
-    form.documento.choices = [(d.id, d.titulo) for d in JineteDocumento.query.order_by(JineteDocumento.titulo).all()]
-    form.tipos_discapacidad.choices = [(d.id, d.descripcion) for d in TipoDiscapacidad.query.all()]
-    
+    ### ver si esta bien comentado.
+    #form.documento.choices = [(d.id, d.titulo_documento) for d in JineteDocumento.query.order_by(JineteDocumento.titulo_documento).all()]
+    #form.discapacidades.choices = [(d.id, d.descripcion) for d in TipoDiscapacidad.query.all()]
+    form.discapacidades.choices = [(tipo.name, tipo.value) for tipo in TiposDiscapacidadEnum]
+    form.dias.choices = [(dia.name, dia.value) for dia in DiasEnum]
     
 
 
@@ -240,7 +253,7 @@ def editar_jinete(jinete_id):
     if form.validate_on_submit():
         # Actualizar los datos del jinete con los valores del formulario
         form.populate_obj(jinete)
-        jinete.discapacidades = [TipoDiscapacidad.query.get(d_id) for d_id in form.discapacidades.data]
+        #jinete.discapacidades = [TipoDiscapacidad.query.get(d_id) for d_id in form.discapacidades.data]
                 
         for i, doc_data in enumerate(form.documentos.data):
             if len(jinete.documentos) > i:

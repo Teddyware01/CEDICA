@@ -174,12 +174,12 @@
         {% else %}
             <p>No hay documentos para mostrar.</p>
         {% endif %}
-    </div>
 
-    <!-- Botones de acción en Documentos -->
-    <div class="form-actions">
-        <a href="#" class="btn btn-enlace">+ Enlace</a>
-        <a href="{{ url_for('jya.add_documento_form', jinete_id=jinete.id) }}" class="btn btn-subir">↑ Subir</a>
+        <!-- Botones de acción solo para Documentos -->
+        <div class="form-actions">
+            <a href="#" class="btn btn-enlace">+ Enlace</a>
+            <a href="{{ url_for('jya.add_documento_form', jinete_id=jinete.id) }}" class="btn btn-subir">↑ Subir</a>
+        </div>
     </div>
 
     <script>

@@ -500,10 +500,10 @@ def run():
 
     jya.associate_jinete_familiar(1, 1)
     
-    jya.add_dias(
+    '''jya.add_dias(
         dias=DiasEnum.lunes,
     )
-    jya.associate_jinete_dias(1, 1)
+    jya.associate_jinete_dias(1, 1)'''
     
 
     # Modulo ecuestre

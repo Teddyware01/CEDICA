@@ -421,6 +421,20 @@ p {
     margin: 0 2px; 
 }
 
+.form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Espacio entre cada checkbox */
+}
+
+.form-check-input {
+    margin-right: 10px; /* Espacio entre el checkbox y el texto */
+}
+
+.form-check-label {
+    margin: 0;
+}
+
 /* Móviles: Menos de 767px */
 @media (max-width: 767px) {
     .container, .example-wrapper, .demo-wrapper {

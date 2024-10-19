@@ -16,11 +16,14 @@ class DiasEnum(Enum):
     sabado="Sábado"
     domingo="Domingo"
 
+
+    # Relación inversa con Jinete
 class Dias(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     dias = db.Column(db.Enum(DiasEnum), nullable=True)
+    #dias = db.Column(db.String(50))
     jinetes = db.relationship('Jinete', secondary='jinete_dias', back_populates='dias')
-    
+
 jinete_dias = db.Table('jinete_dias',
     db.Column('jinete_id', db.Integer, db.ForeignKey('jinete.id'), primary_key=True),
     db.Column('dias_id', db.Integer, db.ForeignKey('dias.id'), primary_key=True)
@@ -60,7 +63,7 @@ class TiposDiscapacidadEnum(Enum):
 
 class TipoDiscapacidad(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    descripcion = db.Column(db.String(255), nullable=False)
+    tipos_discapacidad = db.Column(db.Enum(TiposDiscapacidadEnum), nullable=True)
     jinetes = db.relationship('Jinete', secondary='jinete_discapacidad', back_populates='discapacidades')
 
 
@@ -155,7 +158,9 @@ class Jinete(db.Model):
     beneficiario_pension = db.Column(db.Boolean)
     pension = db.Column(db.Enum(PensionEnum), nullable=True)
     #tipos_discapacidad =  db.Column(ARRAY(db.Enum(TiposDiscapacidadEnum)), nullable=True)
-    discapacidades = db.relationship('TipoDiscapacidad', secondary='jinete_discapacidad', back_populates='jinetes')
+    #discapacidades = db.relationship('TipoDiscapacidad', secondary='jinete_discapacidad', back_populates='jinetes')
+    discapacidades = db.relationship('TipoDiscapacidad', secondary=jinete_discapacidad, backref='jinetes_discapacidades')
+
     asignacion_familiar = db.Column(db.Boolean, nullable=True)
     tipo_asignacion = db.Column(db.Enum(AsignacionEnum), nullable=True)
     obra_social = db.Column(db.String(25), nullable=False, unique=False)
@@ -173,7 +178,7 @@ class Jinete(db.Model):
     trabajo_institucional=db.Column(db.Enum(TrabajoEnum), nullable=False)
     condicion=db.Column(db.Boolean, nullable=False) # true regular, false de baja
     sede=db.Column(db.Enum(SedeEnum), nullable=False)
-    dias = db.relationship('Dias', secondary='jinete_dias', back_populates='jinetes')
+    dias = db.relationship('Dias', secondary=jinete_dias, back_populates='jinetes')
     #profesor si puesto laboral = Terapeuta o profesion = profesor.
     #conductor_caballo dado de alta al sistema.
     #caballo dado de alta al sistema.
