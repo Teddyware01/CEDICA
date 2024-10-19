@@ -1,4 +1,5 @@
 from flask import abort, render_template, request, redirect, flash, url_for, current_app
+from flask import abort, render_template, request, redirect, flash, url_for, current_app
 from os import fstat
 from flask import Blueprint
 from src.core import auth
@@ -119,8 +120,14 @@ def add_jinete():
 
 
 @bp.get("/ver_jinete/<int:jinete_id>")
+@bp.get("/ver_jinete/<int:jinete_id>")
 def view_jinete(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
+    page=request.args.get("page", 1, type=int)
+    active_tab=request.args.get("tab", "general")
+    sort_by = request.args.get("sort_by")
+    search = request.args.get("search")
+    documentos = jya.traer_documentos(jinete_id, page=page, sort_by=sort_by, search=search)
     page=request.args.get("page", 1, type=int)
     active_tab=request.args.get("tab", "general")
     sort_by = request.args.get("sort_by")
@@ -130,15 +137,18 @@ def view_jinete(jinete_id):
     #dias_nombres = [d.name for d in jinete.dia] if jinete.dia else []
     #return render_template("jya/ver_jya.html", jinete=jinete, tipos_discapacidad=tipos_discapacidad_nombres, dia=dias_nombres, documentos=documentos)
     return render_template("jya/ver_jya.html", jinete=jinete, documentos=documentos, active_tab=active_tab)
+    return render_template("jya/ver_jya.html", jinete=jinete, documentos=documentos, active_tab=active_tab)
 
 
 
+@bp.get("/eliminar_jinete/<int:jinete_id>")
 @bp.get("/eliminar_jinete/<int:jinete_id>")
 def delete_jinete_form(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
     return render_template("jya/eliminar_jya.html", jinete=jinete)
 
 
+@bp.post("/eliminar_jinete/<int:jinete_id>")
 @bp.post("/eliminar_jinete/<int:jinete_id>")
 def delete_jinete(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
@@ -164,6 +174,7 @@ def cargar_choices_form(form):
     form.institucion_direccion_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
     
     form.documento.choices = [(d.id, d.titulo) for d in JineteDocumento.query.order_by(JineteDocumento.titulo).all()]
+    form.documento.choices = [(d.id, d.titulo) for d in JineteDocumento.query.order_by(JineteDocumento.titulo).all()]
     form.tipos_discapacidad.choices = [(d.id, d.descripcion) for d in TipoDiscapacidad.query.all()]
 
     form.conductor.choices = [(ecuestres.name, ecuestres.value) for ecuestres in list_ecuestre()]
@@ -188,6 +199,7 @@ domicilio = db.relationship("Domicilio", foreign_keys=[domicilio_id], back_popul
 
 
     
+@bp.get("/editar_jinete/<int:jinete_id>")
 @bp.get("/editar_jinete/<int:jinete_id>")
 def edit_jinete_form(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
@@ -237,8 +249,10 @@ def edit_jinete_form(jinete_id):
 
 
 @bp.post("/editar_jinete/<int:jinete_id>")
+@bp.post("/editar_jinete/<int:jinete_id>")
 def editar_jinete(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
+    form = AddJineteForm(obj=jinete)  
     form = AddJineteForm(obj=jinete)  
     
     cargar_choices_form(form)
@@ -257,6 +271,7 @@ def editar_jinete(jinete_id):
                     setattr(jinete.documentos[i], key, value)
             else:
                 # Añadir nuevo documento
+                nuevo_documento = JineteDocumento(**doc_data)
                 nuevo_documento = JineteDocumento(**doc_data)
                 jinete.documentos.append(nuevo_documento)
 
@@ -295,6 +310,150 @@ def editar_jinete(jinete_id):
 
     return render_template("jya/editar_jya.html", form=form, jinete=jinete)
 
+
+
+
+
+@bp.get("/<int:jinete_id>/edit")
+def edit(jinete_id):
+    jinete = jya.traer_jinete(jinete_id)
+    
+    return render_template("jya/edit.html", jinete=jinete)
+
+
+@bp.post("/<int:jinete_id>/update")
+def update(jinete_id):
+    params = request.form.copy()
+        
+    if "documento" not in request.files or request.files["documento"].filename == "":
+        flash("El archivo es obligatorio.", "error")  # Mensaje de error
+        return redirect(url_for("jya.subir_archivo_form", jinete_id=jinete_id))
+
+    if "documento" in request.files:
+        file = request.files["documento"]
+        client = current_app.storage.client
+        size = fstat(file.fileno()).st_size
+        
+        #ulid = u.new()
+        
+        client.put_object(
+            "grupo15", file.filename, file, size, content_type=file.content_type
+        )           #f"avatars/{ulid}-{file.filename}",
+        params["documento"] = file.filename #Hacer funcion para que genere nombres unicos para el archivo y guardarlo en el usuario. Libreria ULID
+                                
+    jya.update_jinete(jinete_id, **params)
+    flash("Usuario modificado correctamente", "success")
+    
+    return redirect(url_for("jya.listar_jinetes"))
+
+
+# AGREGAR ARCHIVO GET
+@bp.get("/<int:jinete_id>/agregar_documento")
+def add_documento_form(jinete_id):
+    jinete = jya.traer_jinete(jinete_id)
+    
+    return render_template("jya/add_documento.html", jinete=jinete)
+
+ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'}
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+MAX_CANT_MEGABYTES = 20  # cant megabytes
+MAX_CONTENT_LENGTH = MAX_CANT_MEGABYTES * 1024 * 1024
+
+@bp.before_request
+def limit_content_length():
+    if request.content_length is not None and request.content_length > MAX_CONTENT_LENGTH:
+        abort(413)  # Payload Too Large
+
+# AGREGAR ARCHIVO POST
+@bp.post("/<int:jinete_id>/agregar_documento")
+def agregar_documento(jinete_id):
+    params = request.form.copy()
+    if "documento" not in request.files or request.files["documento"].filename == "":
+        flash("El archivo es obligatorio.", "error")  # Mensaje de error
+        return redirect(url_for("jya.add_documento_form", jinete_id=jinete_id))
+
+    if "documento" in request.files:
+        file = request.files["documento"]
+        if not allowed_file(file.filename):
+            flash("Tipo de archivo no permitido.", "error")
+            return redirect(url_for("jya.add_documento_form", jinete_id=jinete_id))
+
+        if file.content_length > MAX_CONTENT_LENGTH:
+            flash("El archivo excede el tamaño máximo permitido de 5 MB.", "error")
+            return redirect(url_for("jya.add_documento_form", jinete_id=jinete_id))
+
+        tipo_documento = request.form.get("tipo_documento")
+        if not tipo_documento:
+            flash("Debe seleccionar un tipo de archivo.", "error")
+            return redirect(url_for("jya.add_documento_form", form=request.form, jinete_id=jinete_id))
+        client = current_app.storage.client
+        size = fstat(file.fileno()).st_size
+        client.put_object("grupo15", file.filename, file, size, content_type=file.content_type)
+        jya.add_documento(
+            nombre_archivo=file.filename,
+            titulo_documento=request.form["titulo_documento"],
+            tipo_documento=request.form["tipo_documento"], 
+            jinete_id=jinete_id
+        ) 
+    
+    flash("Documento agregado exitosamente", "success")
+    return redirect(url_for("jya.view_jinete", jinete_id=jinete_id))
+
+# DESCARGAR ARCHIVO
+@bp.get("/editar_jinete/<int:jinete_id>/documentos/<string:file_name>") 
+def mostrar_archivo(jinete_id, file_name):
+    client = current_app.storage.client
+    url = client.presigned_get_object("grupo15", file_name, ExpiresIn=10800)  # 3 horas en segundos
+    return redirect(url)
+
+# ELIMINAR ARCHIVO GET
+@bp.get("/editar_jinete/<int:jinete_id>/documentos/<int:documento_id>/eliminar")
+def eliminar_documento_form(jinete_id, documento_id):
+    jinete = jya.traer_jinete(jinete_id)
+    documento = jya.traer_documento_id(documento_id)
+    return render_template("jya/delete_documento.html", jinete=jinete, doc=documento)
+
+# ELIMINAR ARCHIVO POST
+@bp.post("/editar_jinete/<int:jinete_id>/documentos/<int:documento_id>/eliminar")
+def eliminar_documento(jinete_id, documento_id):
+    jya.delete_documento(documento_id)
+    return redirect(url_for("jya.view_jinete", jinete_id=jinete_id, tab='documentos'))
+
+# EDITAR ARCHIVO GET
+@bp.get("/editar_jinete/<int:jinete_id>/documentos/<int:documento_id>/editar")
+def editar_documento_form(documento_id, jinete_id):
+    documento = jya.traer_documento_id(documento_id)
+    return render_template("jya/edit_documento.html", documento=documento, jinete_id=jinete_id)
+
+
+# EDITAR ARCHIVO POST
+@bp.post("/editar_jinete/<int:jinete_id>/documentos/<int:documento_id>/editar")
+def editar_documento(documento_id, jinete_id):
+
+    if "documento" not in request.files or request.files["documento"].filename == "":
+        flash("El archivo es obligatorio.", "error")  # Mensaje de error
+        return redirect(url_for("jya.edit_documento_form", documento_id=documento_id))
+
+    if "documento" in request.files:
+        file = request.files["documento"]
+        if not allowed_file(file.filename):
+            flash("Tipo de archivo no permitido.", "error")
+            return redirect(url_for("jya.edit_documento_form", documento_id=documento_id))
+
+        if file.content_length > MAX_CONTENT_LENGTH:
+            flash("El archivo excede el tamaño máximo permitido de 5 MB.", "error")
+            return redirect(url_for("jya.edit_documento_form", documento_id=documento_id))
+
+        tipo_documento = request.form.get("tipo_documento")
+        if not tipo_documento:
+            flash("Debe seleccionar un tipo de archivo.", "error")
+            return redirect(url_for("jya.edit_documento_form", form=request.form, documento_id=documento_id))
+        
+    flash("Documento editado exitosamente", "success")
+    return redirect(url_for("jya.view_jinete", jinete_id=jinete_id))
 
 
 
