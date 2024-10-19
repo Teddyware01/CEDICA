@@ -4,7 +4,7 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -21,16 +21,13 @@
         <!-- Contenido de la pestaña "Información general" -->
         <div id="general" class="tab-content active">
             <h2><strong> DATOS PERSONALES DEL JINETE O AMAZONA </strong></h2>
-            <div class="image-container">
-                <p><strong>Imagen:</strong></p>
-                <img src={{ avatar_url(jinete.avatar) }} alt="Avatar" width="30" height="30">
-            </div>
+
             <p><strong>Nombre/s:</strong> {{ jinete.nombre }}</p>
             <p><strong>Apellido/s:</strong> {{ jinete.apellido }}</p>
             <p><strong>DNI:</strong> {{ jinete.dni }}</p>
             <p><strong>Edad:</strong> {{ jinete.edad }}</p>
             <p><strong>Fecha de nacimiento:</strong> {{ jinete.fecha_nacimiento.strftime('%d/%m/%Y') }}</p>
-            <p><strong>Lugar de nacimiento:</strong> {{ jinete.provincia_nacimiento.nombre }}, {{ jinete.localidad_nacimiento.nombre }}</p> 
+            <p><strong>Lugar de nacimiento:</strong> {{ jinete.nacimiento.provincia.nombre }}, {{ jinete.nacimiento.localidad.nombre }}</p> 
             <!-- Domicilio actual (calle, nro, depto, localidad, provincia) -->
             <p><strong>Domicilio actual:</strong> Calle: {{ jinete.domicilio.calle }}, numero: {{ jinete.domicilio.numero }}, piso: {{ jinete.domicilio.piso | default('-', true) }}, departamento: 
                 {{ jinete.domicilio.departamento | default('-', true) }}, {{ jinete.domicilio.localidad.nombre }}, {{ jinete.domicilio.provincia.nombre }}</p>
@@ -43,17 +40,13 @@
             <p><strong>Posee certificado discapacidad:</strong> {{"SI" if jinete.certificado_discapacidad else "NO" }}</p>
             <p><strong>¿Con qué diagnóstico?</strong> {{ jinete.diagnostico.value if jinete.diagnostico.value else '-' }}</p>
             <p><strong>Si es OTRO indique cuál:</strong> {{ jinete.otro if jinete.diagnostico.value == "otro" else '-' }}</p>
-            <p><strong>Tipo de Discapacidad:</strong> {{ jinete.tipos_discapacidad.name }}
-                {% for tipo in tipos_discapacidad %}
-                    <span>{{ tipo }}</span>{% if not loop.last %}, {% endif %}
+            <p><strong>Tipo de Discapacidad:</strong> 
+                {% for tipo in jinete.tipos_discapacidad %}
+                    <span>{{ tipo.value }}</span>{% if not loop.last %}, {% endif %}
                 {% endfor %}
             </p>
             <p><strong>¿Percibe alguna Asignación Familiar?</strong> {{"SI" if jinete.asignacion_familiar else "NO" }}</p>
-            <p><strong>Asignaciones:</strong> {{ jinete.tipo_asignacion.value }}
-                {% for tipo in tipo_asignacion %}
-                    <span>{{ tipo_asignacion }}</span>{% if not loop.last %}, {% endif %}
-                {% endfor %}
-            </p>
+            <p><strong>Asignaciones:</strong> {{ jinete.tipo_asignacion.value }}</p>
             <p><strong>¿Es beneficiario de alguna pensión?</strong>  {{"SI" if jinete.pension else "NO" }}</p>
             <p><strong>¿Cuál? </strong> {{ jinete.pension.value }}</p>
             <h2><strong> SITUACIÓN PREVISIONAL </strong></h2>
@@ -70,6 +63,15 @@
             <p><strong>Observaciones:</strong> {{ jinete.observaciones_institucion }}</p>
             <p><strong>PROFESIONALES que lo ATIENDEN: </strong> {{ jinete.profesionales }}</p>
             
+            <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN </strong></h2>
+            <p><strong>Propuesta de trabajo institucional:</strong> {{ jinete.trabajo_institucional.value }}</p>
+            <p><strong>Condición:</strong> {{ "REGULAR" if jinete.condicion else "DE BAJA" }}</p>
+            <p><strong>SEDE:</strong> {{ jinete.sede.value }}</p>
+            <p><strong>DÍAS:</strong> {{ jinete.dia.value }}
+                {% for d in dia %}
+                <span>{{ d }}</span>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+            </p>
 
             <!-- Botones solo en Información general -->
             <div class="form-actions">
@@ -81,7 +83,7 @@
         <!-- Contenido de la pestaña "Documentos" -->
         <div id="documentos" class="tab-content">
             <!-- Formulario de búsqueda y ordenamiento -->
-            <form method="GET" action="{{ url_for('legajo.listar_documentos') }}" class="mb-3">
+            <form method="GET" action="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="mb-3">
                 <input type="hidden" name="tab" value="documentos">
                 <label for="sort_by">Ordenar por:</label>
                 <select name="sort_by" id="sort_by">
@@ -130,27 +132,50 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var activeTab = document.querySelector("input[name='tab']").value;
+            if (activeTab) {
+                openTab(null, activeTab);
+            } else {
+                openTab(null, 'general');
+            }
+        });
+        
         function openTab(evt, tabName) {
             var i, tabContent, tabs;
-
-            // Ocultar todos los contenidos de las pestañas
+        
             tabContent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabContent.length; i++) {
                 tabContent[i].style.display = "none";
                 tabContent[i].classList.remove("active");
             }
-
-            // Eliminar la clase "active" de todas las pestañas
+        
             tabs = document.getElementsByClassName("tab");
             for (i = 0; i < tabs.length; i++) {
                 tabs[i].classList.remove("active");
             }
-
-            // Mostrar el contenido actual y agregar clase "active" a la pestaña seleccionada
-            document.getElementById(tabName).style.display = "block";
-            document.getElementById(tabName).classList.add("active");
-            evt.currentTarget.classList.add("active");
+        
+            var currentTab = document.getElementById(tabName);
+            if (currentTab) {
+                currentTab.style.display = "block";
+                currentTab.classList.add("active");
+            }
+        
+            // Marcar la pestaña como activa
+            if (evt) {
+                evt.currentTarget.classList.add("active");
+            } else {
+                
+                Array.from(tabs).forEach(function(tab) {
+                    if (tab.getAttribute('onclick').includes("'" + tabName + "'")) {
+                        tab.classList.add("active");
+                    }
+                });
+            }
+        
+            document.querySelector("input[name='tab']").value = tabName;
         }
-    </script>
+        </script>
+        
 
 {% endblock %}

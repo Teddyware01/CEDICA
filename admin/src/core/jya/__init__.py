@@ -3,7 +3,7 @@ from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
 from src.core.jya.models import Jinete, PensionEnum
-from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad
+from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad, Nacimiento
 from sqlalchemy import or_
 
 def list_jinetes(sort_by=None, search=None):
@@ -89,23 +89,24 @@ def add_direccion(**kwargs):
     db.session.commit()
     return direccion
 
-# Tabla Provincia
+def add_nacimiento(**kwargs):
+    nacimiento = Nacimiento(**kwargs)
+    db.session.add(nacimiento)
+    db.session.commit()
+    return nacimiento
+
+
 def list_provincias():
     return Provincia.query.all()
-
 
 def get_provincia_by_id(provincia_id):
     return Provincia.query.get(provincia_id)
 
-
-# Tabla Localidad
-# Retorna todas las localidades, o las de una provincia si se le pasa el id_provincia.
 def list_localidades(id_provincia=None):
     query = Localidad.query
     if id_provincia:
         query = query.filter(Localidad.provincia_id == id_provincia)
     return query.all()
-
 
 def get_localidad_by_id(localidad_id):
     return Localidad.query.get(localidad_id)

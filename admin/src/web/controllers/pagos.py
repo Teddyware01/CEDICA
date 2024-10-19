@@ -31,8 +31,7 @@ def registrar_pago():
         db.session.add(nuevo_pago)
         db.session.commit()
 
-        #flash("Pago registrado exitosamente.", "success")
-        return redirect(url_for("pagos.listar_pagos"))
+        return redirect(url_for('pagos.listar_pagos', success="Pago registrado exitosamente."))
 
     return render_template("registrar_pago.html", form=form)
 
@@ -41,8 +40,9 @@ def registrar_pago():
 @check("pago_index")
 def listar_pagos():
     orden = request.args.get("orden", "asc")
+    success = request.args.get("success")
     pagos_realizado = Pagos.query.order_by(Pagos.fecha_pago.asc() if orden == "asc" else Pagos.fecha_pago.desc()).all()
-    return render_template("listado_pagos.html", pagos_realizado=pagos_realizado, orden=orden)
+    return render_template("listado_pagos.html", pagos_realizado=pagos_realizado, orden=orden, success=success)
 
 @pagos_bp.route("/eliminar/<int:id>", methods=["POST"])
 @login_required
@@ -51,7 +51,6 @@ def eliminar_pago(id):
     pago = Pagos.query.get_or_404(id)
     db.session.delete(pago)
     db.session.commit()
-    ##flash("Pago eliminado exitosamente.")
     return redirect(url_for("pagos.listar_pagos"))
 
 @pagos_bp.route("/<int:id>", methods=["GET"])
@@ -86,14 +85,14 @@ def editar_pago(id):
         pago.descripcion = form.descripcion.data
 
         db.session.commit()
-        #flash("Pago actualizado exitosamente.", "success")
-        return redirect(url_for("pagos.listar_pagos"))
+
+        return redirect(url_for('pagos.listar_pagos', success="Pago editado exitosamente."))
 
     return render_template("editar_pago.html", form=form, pago=pago)
 
 @pagos_bp.route("/search", methods=["GET"])
 @login_required
-@check("pago_index") ## aca tener cuiddado si revienta puede ser esto
+@check("pago_index")
 def buscar_pagos():
     tipo_pago = request.args.get("tipo_pago").lower() if request.args.get("tipo_pago") else None
     fecha_inicio = request.args.get("fecha_inicio")
@@ -105,9 +104,7 @@ def buscar_pagos():
         query = query.filter(db.func.lower(Pagos.tipo_pago) == tipo_pago)
     if fecha_inicio and fecha_fin:
         query = query.filter(Pagos.fecha_pago.between(fecha_inicio, fecha_fin))
-    if orden == "desc":
-        pagos = query.order_by(Pagos.fecha_pago.desc()).all()
-    else:
-        pagos = query.order_by(Pagos.fecha_pago).all()
+    
+    pagos_realizado = query.order_by(Pagos.fecha_pago.asc() if orden == "asc" else Pagos.fecha_pago.desc()).all()
 
-    return render_template("listado_pagos.html", pagos_realizado=pagos)
+    return render_template("listado_pagos.html", pagos_realizado=pagos_realizado, orden=orden)

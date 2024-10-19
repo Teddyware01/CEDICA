@@ -3,10 +3,10 @@ from src.core import board
 from src.core import auth
 from src.core import jya
 from src.core import equipo
-from src.core.equipo.extra_models import Provincia, Domicilio
+from src.core.equipo.extra_models import Provincia,Localidad, Domicilio
 from src.core.equipo.models import CondicionEnum
 from src.core.pagos.models import Pago
-from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum
+from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum
 from datetime import datetime
 
 from src.core.auth import Permisos
@@ -22,6 +22,14 @@ from src.core.jya.legajo.models import TipoDocumentoEnum
 from src.core import ecuestre
 from src.core.auth import Roles
 
+
+from src.core import equipo
+from src.core import auth
+from src.core.equipo.extra_models import Provincia 
+
+from src.core.database import db
+from sqlalchemy import text
+
 def ejecutar_sql_script(file_path):
     with open(file_path, "r", encoding="utf-8") as sql_file:
         sql_script = sql_file.read()
@@ -30,12 +38,6 @@ def ejecutar_sql_script(file_path):
         connection.execute(text(sql_script))
         connection.commit()
 
-from src.core import equipo
-from src.core import auth
-from src.core.equipo.extra_models import Provincia 
-
-from src.core.database import db
-from sqlalchemy import text
 def ejecutar_sql_script(file_path):
     with open(file_path, 'r',encoding='utf-8') as sql_file:
         sql_script = sql_file.read()
@@ -457,6 +459,16 @@ def run():
         localidad_id=5,
         provincia_id=5,
     )
+    
+    nacimiento_1 = jya.add_nacimiento(
+        localidad_id=1,
+        provincia_id=1,
+    )
+    
+    nacimiento_2 = jya.add_nacimiento(
+        localidad_id=2,
+        provincia_id=2,
+    )
         
     jya.create_jinete(
         nombre="Martin",
@@ -464,6 +476,7 @@ def run():
         dni="12345678",
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
+        #nacimiento=nacimiento_1,
         localidad_nacimiento_id=1,
         provincia_nacimiento_id=1,
         domicilio_id=1,
@@ -487,6 +500,10 @@ def run():
         grado = "2024",
         observaciones_institucion = "Nada.",
         profesionales = "Psicologa y maestra",
+        trabajo_institucional=TrabajoEnum.deporte,
+        condicion=False,
+        sede=SedeEnum.casj,
+        dia=["jueves", "viernes"],
     )
     
     jya.create_jinete(
@@ -496,8 +513,9 @@ def run():
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
         domicilio_id=3,
-        localidad_nacimiento_id=2,
-        provincia_nacimiento_id=2,
+        #nacimiento=nacimiento_2,
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=1,
         telefono="12345654321",
         contacto_emergencia=contacto_emergencia_ej2,
         becado=True,
@@ -518,6 +536,10 @@ def run():
         grado = "2020",
         observaciones_institucion = "ASDF.",
         profesionales = "Terapeuta y docente",
+        trabajo_institucional=TrabajoEnum.hipoterapia,
+        condicion=True,
+        sede=SedeEnum.hlp,
+        dia=["lunes"],
     )
     
     legajo.create_documento(

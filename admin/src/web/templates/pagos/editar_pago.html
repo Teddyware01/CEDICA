@@ -20,6 +20,11 @@
     <div class="form-group" id="otro_beneficiario_field" {% if form.tipo_pago.data == 'honorario' %}style="display:none;"{% endif %}>
         {{ form.otro_beneficiario.label(class="form-label") }}
         {{ form.otro_beneficiario(class="form-control", value=form.otro_beneficiario.data or pago.beneficiario) }}
+        {% if form.otro_beneficiario.errors %}
+            <div class="text-danger">
+                {{ form.otro_beneficiario.errors[0] }}
+            </div>
+        {% endif %}
     </div>
 
     <div class="form-group">
