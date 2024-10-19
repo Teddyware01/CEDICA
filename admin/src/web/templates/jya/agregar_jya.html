@@ -109,6 +109,13 @@
             {{ form.contacto_emergencia_telefono }}
         </div>
 
+        <!--Agrego aca -->
+        <div class="form-group">
+            {{ form.estado_pago.label(class="form-label") }}
+            {{ form.estado_pago(class="form-control") }}
+        </div>        
+        <!--Agrego aca -->
+
         <div>
             <label for="becado" class="form-element">Becado:</label>
             <input type="radio" id="becado_si" name="becado" value="si">

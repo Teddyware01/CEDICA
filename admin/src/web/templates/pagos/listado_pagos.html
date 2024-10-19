@@ -8,7 +8,6 @@
         <a href="{{ url_for('pagos.registrar_pago') }}" class="btn btn-add">Registrar Pago</a>
     </div>
 
-    <!-- Formulario de búsqueda -->
     <form method="GET" action="{{ url_for('pagos.buscar_pagos') }}" class="mb-3 search-form">
         <div class="form-row"> 
             <div class="form-group col-md-6"> 
@@ -32,20 +31,29 @@
                 <label for="fecha_fin">Fecha Fin:</label>
                 <input type="date" id="fecha_fin" name="fecha_fin" class="form-control">
             </div>
-    
-            <div class="form-group col-md-6">
-                <label for="orden">Ordenar por Fecha:</label>
-                <select id="orden" name="orden" class="form-control">
-                    <option value="asc">Ascendente</option>
-                    <option value="desc">Descendente</option>
-                </select>
-            </div>
         </div>
     
         <div class="form-group text-center full-width">
             <button type="submit" class="btn btn-primary">Buscar</button>
         </div>
     </form>
+
+    <div class="form-group text-right">
+        <label for="orden">Ordenar por Fecha:</label>
+        <select id="orden" name="orden" class="form-control">
+            <option value="asc" {% if orden == 'asc' %}selected{% endif %}>Ascendente</option>
+            <option value="desc" {% if orden == 'desc' %}selected{% endif %}>Descendente</option>
+        </select>
+    </div>
+
+    <script>
+        document.getElementById('orden').addEventListener('change', function() {
+            const selectedOrder = this.value;
+            const url = new URL(window.location.href);
+            url.searchParams.set('orden', selectedOrder);
+            window.location.href = url.href;
+        });
+    </script>
 
     <table class="table">
         <thead>

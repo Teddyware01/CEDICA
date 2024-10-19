@@ -41,6 +41,8 @@
                     <th>Apellido</th>
                     <th>DNI</th>
                     <th>profesionales</th>
+                    <th>Estado de Pago</th> <!-- Nueva columna -->
+                    <th>Acciones</th> <!-- Nueva columna -->
                 </tr>
             </thead>            
             <tbody>
@@ -53,6 +55,15 @@
                         <td>{{ jinete.apellido }}</td>
                         <td>{{ jinete.dni }}</td>
                         <td>{{ jinete.profesionales }}</td>
+                        <!-- agrego aca-->
+                        <td>
+                            {% if jinete.estado_pago %}
+                                <span class="badge badge-success">Al día</span>
+                            {% else %}
+                                <span class="badge badge-danger">En deuda</span>
+                            {% endif %}
+                        </td>
+                        <!-- agrego aca-->
                         <td>
                             <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="btn btn-edit btn-primary">Ver jinete</a>
                             <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit btn-secondary">Editar jinete</a>

@@ -31,18 +31,18 @@ def registrar_pago():
         db.session.add(nuevo_pago)
         db.session.commit()
 
-        ##flash("Pago registrado exitosamente.", "success")
+        #flash("Pago registrado exitosamente.", "success")
         return redirect(url_for("pagos.listar_pagos"))
 
     return render_template("registrar_pago.html", form=form)
-
 
 @pagos_bp.route("/listado", methods=["GET"])
 @login_required
 @check("pago_index")
 def listar_pagos():
-    pagos_realizado = Pagos.query.all()
-    return render_template("listado_pagos.html", pagos_realizado=pagos_realizado)
+    orden = request.args.get("orden", "asc")
+    pagos_realizado = Pagos.query.order_by(Pagos.fecha_pago.asc() if orden == "asc" else Pagos.fecha_pago.desc()).all()
+    return render_template("listado_pagos.html", pagos_realizado=pagos_realizado, orden=orden)
 
 @pagos_bp.route("/eliminar/<int:id>", methods=["POST"])
 @login_required
@@ -61,27 +61,35 @@ def mostrar_pagos(id):
     pago = Pagos.query.get_or_404(id)
     return render_template("show_pago.html", pago=pago)
 
-# Endpoint para editar un pago específico
 @pagos_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 @login_required
 @check("pago_update")
 def editar_pago(id):
     pago = Pagos.query.get_or_404(id)
-    form = PagoForm(obj=pago)  # Cargar los datos existentes en el formulario
+    
+    if pago.tipo_pago != 'honorario':
+        form = PagoForm(obj=pago, otro_beneficiario=pago.beneficiario)
+    else:
+        form = PagoForm(obj=pago)
 
     if form.validate_on_submit():
-        # Actualizar los datos del pago
-        pago.beneficiario = form.beneficiario.data
+        if form.tipo_pago.data == 'honorario':
+            if form.beneficiario.data:
+                empleado = Empleado.query.get(form.beneficiario.data)
+                pago.beneficiario = f"{empleado.nombre} {empleado.apellido}"
+        else:
+            pago.beneficiario = form.otro_beneficiario.data
+
         pago.monto = form.monto.data
         pago.fecha_pago = form.fecha_pago.data
         pago.tipo_pago = form.tipo_pago.data.lower()
         pago.descripcion = form.descripcion.data
 
         db.session.commit()
-       ## flash("Pago actualizado exitosamente.")
+        #flash("Pago actualizado exitosamente.", "success")
         return redirect(url_for("pagos.listar_pagos"))
 
-    return render_template("editar_pago.html", form=form)  # Renderizar el formulario de edición
+    return render_template("editar_pago.html", form=form, pago=pago)
 
 @pagos_bp.route("/search", methods=["GET"])
 @login_required
@@ -93,16 +101,10 @@ def buscar_pagos():
     orden = request.args.get("orden", "asc")
     
     query = Pagos.query
-
-    # Filtrar por tipo de pago
     if tipo_pago:
         query = query.filter(db.func.lower(Pagos.tipo_pago) == tipo_pago)
-    
-    # Filtrar por rango de fechas
     if fecha_inicio and fecha_fin:
         query = query.filter(Pagos.fecha_pago.between(fecha_inicio, fecha_fin))
-    
-    # Ordenar resultados
     if orden == "desc":
         pagos = query.order_by(Pagos.fecha_pago.desc()).all()
     else:

@@ -195,7 +195,8 @@ class Jinete(db.Model):
     grado = db.Column(db.Integer, nullable=False)
     observaciones_institucion = db.Column(db.String(255), nullable=True)
     profesionales = db.Column(db.String(255), nullable=True)
-    
+    ##agrego aca
+    estado_pago = db.Column(db.Boolean, default=True)
     
     documentos = db.relationship("Documento", back_populates="jinete")
 

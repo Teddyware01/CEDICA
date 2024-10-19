@@ -84,6 +84,8 @@ def add_jinete():
         curatela=form.curatela.data,
         observaciones_institucion=form.observaciones_institucion.data,
         profesionales=form.profesionales.data,
+        ##agrego aca
+        estado_pago=form.estado_pago.data,
         
     )
     
@@ -190,6 +192,8 @@ def editar_jinete(jinete_id):
         telefono=request.form["telefono"],
         domicilio_provincia = request.form["domicilio_provincia"],
         domicilio_localidad = request.form["domicilio_localidad"],
+        ##agrego aca
+        estado_pago=form.estado_pago.data,
         
         
 
