@@ -2,9 +2,10 @@ from src.core.database import db
 from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
-from src.core.jya.models import Jinete, Familiar, Dias, JineteDocumento
+from src.core.jya.models import Jinete, Familiar, Dias, JineteDocumento,TiposDiscapacidadEnum, DiasEnum,DiagnosticoEnum,AsignacionEnum,PensionEnum,TrabajoEnum,SedeEnum
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad
 from sqlalchemy import String, cast, or_
+
 
 def list_jinetes(sort_by=None, search=None):
     query = Jinete.query
@@ -55,7 +56,7 @@ def edit_jinete(id, **kwargs):
     
 
 def traer_jinete(jinete_id): #get_jinete
-    jinete = Jinete.query.get(jinete_id)
+    jinete = Jinete.query.get_or_404(jinete_id)
     return jinete
     
 def update_jinete(jinete_id, **kwargs):
@@ -251,3 +252,39 @@ def delete_documento(documento_id):
     documento = traer_documento_id(documento_id)
     db.session.delete(documento)
     db.session.commit()
+
+
+def list_discapacidades():
+    return [tipo.value for tipo in TiposDiscapacidadEnum]
+
+
+def list_dias_semana():
+    return  [(dia.value,dia.name) for dia in DiasEnum]
+
+def list_jinete_dias_semana(jinete_id):
+    jinete = traer_jinete(jinete_id)
+    return [{'name': dia.dias.name, 'value': dia.dias.value} for dia in jinete.dias]
+
+def list_tipos_diagnostico():
+    return  [diagnostico.value for diagnostico in DiagnosticoEnum]
+
+def list_tipos_asignacion():
+    return  [(asignacion.name, asignacion.value )for asignacion in AsignacionEnum]
+
+def list_tipos_pensiones():
+    return  [(pension.name, pension.value )for pension in PensionEnum]
+    
+
+def list_familiares_por_jinete(jinete_id):
+    jinete = traer_jinete(jinete_id=jinete_id)
+    familiares = []
+    if jinete:
+        familiares = jinete.familiares
+    return familiares
+
+
+def list_trabajo_institucional():
+    return  [(trabajo.name, trabajo.value) for trabajo in TrabajoEnum]
+    
+def list_sedes():
+    return  [(sede.name, sede.value) for sede in SedeEnum]

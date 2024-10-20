@@ -4,6 +4,7 @@ from os import fstat
 from flask import Blueprint
 from src.core import auth
 from src.core import jya
+from src.core import equipo
 from src.core.database import db
 from src.core.jya.forms import AddJineteForm
 from src.core.jya.models import Jinete, PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, Dias, DiasEnum, Familiar, JineteDocumento, TipoDiscapacidad
@@ -212,58 +213,34 @@ def cargar_choices_form(form):
 @bp.get("/editar_jinete/<int:jinete_id>")
 def edit_jinete_form(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
-    form = AddJineteForm(obj=jinete)
-    cargar_choices_form(form)
-    
-    
-    # Asignar los valores del domicilio
-    form.domicilio_calle.data = jinete.domicilio.calle
-    form.domicilio_numero.data = jinete.domicilio.numero
-    form.domicilio_piso.data = jinete.domicilio.piso
-    form.domicilio_departamento.data = jinete.domicilio.departamento
-    form.domicilio_localidad.data = jinete.domicilio.localidad
-    form.domicilio_provincia.data = jinete.domicilio.provincia
-
-    # Asignar los valores del contacto de emergencia
-    form.contacto_emergencia_nombre.data = jinete.contacto_emergencia.nombre
-    form.contacto_emergencia_apellido.data = jinete.contacto_emergencia.apellido
-    form.contacto_emergencia_telefono.data = jinete.contacto_emergencia.telefono
-
-    # Arreglando campos que no cargan automaticamente
-    #form.tipos_discapacidad.data = [tipo.value for tipo in jinete.tipos_discapacidad]
-    #form.dia.data = [tipo.value for tipo in jinete.dia]
-    form.localidad_nacimiento.data = jinete.localidad_nacimiento.id
-    form.provincia_nacimiento.data = jinete.provincia_nacimiento.id
-    
-    form.becado.data = jinete.becado
-    form.certificado_discapacidad.data = jinete.certificado_discapacidad
-    form.asignacion_familiar.data = jinete.asignacion_familiar
-    form.beneficiario_pension.data = jinete.beneficiario_pension
-    form.curatela.data = jinete.curatela
-    form.condicion.data = jinete.condicion
-    
-    form.discapacidades.data = jinete.discapacidades
-    form.dias.data = jya.get_jinete_dias(jinete.id)
-
-    if form.validate_on_submit():
-        dias_seleccionados = form.dias.data  
-        dias_db = Dias.query.filter(Dias.dias.in_(dias_seleccionados)).all()  
-
-        # Convertir los IDs de las discapacidades seleccionadas a objetos de la base de datos
-        discapacidades_seleccionadas = form.discapacidades.data  # Esto trae los IDs seleccionados en el formulario
-        discapacidades_db = TipoDiscapacidad.query.filter(TipoDiscapacidad.tipos_discapacidad.in_(discapacidades_seleccionadas)).all()
-        localidad = jya.get_localidad_by_id(form.localidad_familiar.data)
-        provincia = jya.get_provincia_by_id(form.provincia_familiar.data)
-        jinete.discapacidades = discapacidades_db
-        jinete.localidad = localidad
-        jinete.provincia = provincia
-        jinete.dias = dias_db
-        
-        form.populate_obj(jinete)
-    return render_template("jya/editar_jya.html", form=form, jinete=jinete)
+    tipos_discapacidad = jya.list_discapacidades()
+    dias_semana = jya.list_dias_semana()
+    jinete_dias_semana = jya.list_jinete_dias_semana(jinete_id)
+    localidades = equipo.list_localidades()
+    provincias = equipo.list_provincias()
+    tipos_diagnostico =  jya.list_tipos_diagnostico()
+    tipos_de_asignacion = jya.list_tipos_asignacion()
+    tipos_pensiones = jya.list_tipos_pensiones()
+    familiares = jya.list_familiares_por_jinete(jinete_id)
+    trabajos_institucionales = jya.list_trabajo_institucional()
+    list_sedes = jya.list_sedes()
+    list_profes_terapeutas = equipo.list_terapeutas_y_profesores()
+    list_conductores = equipo.list_conductores_caballos()
+    list_auxiliares_pista = equipo.list_auxiliares_pista()
+    list_caballos = list_ecuestre()
+    jinete_dias_name = [dia['name'] for dia in jinete_dias_semana if 'name' in dia]
+   
+    return render_template("jya/editar_jya.html", jinete=jinete,jinete_dias_name=jinete_dias_name,
+        tipos_discapacidad=tipos_discapacidad,dias_semana=dias_semana,jinete_dias_semana=jinete_dias_semana,localidades=localidades,
+        provincias=provincias, tipos_diagnostico=tipos_diagnostico,tipos_de_asignacion=tipos_de_asignacion,tipos_pensiones=tipos_pensiones, 
+        familiares=familiares,trabajos_institucionales=trabajos_institucionales,list_sedes=list_sedes,
+        list_profes_terapeutas=list_profes_terapeutas,
+        list_conductores=list_conductores,
+        list_auxiliares_pista=list_auxiliares_pista,
+        list_caballos=list_caballos)
 
 
-
+#agregar que levante el "nuevo_familiar"
 @bp.post("/editar_jinete/<int:jinete_id>")
 def editar_jinete(jinete_id):
     jinete = jya.traer_jinete(jinete_id)

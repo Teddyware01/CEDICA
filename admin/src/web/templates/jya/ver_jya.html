@@ -42,8 +42,10 @@
         </p>
         <p><strong>¿Percibe alguna Asignación Familiar?</strong> {{"SI" if jinete.asignacion_familiar else "NO" }}</p>
         <p><strong>Asignaciones:</strong> {{ jinete.tipo_asignacion.value }}</p>
-        <p><strong>¿Es beneficiario de alguna pensión?</strong>  {{"SI" if jinete.pension else "NO" }}</p>
-        <p><strong>¿Cuál? </strong> {{ jinete.pension.value }}</p>
+        <p><strong>¿Es beneficiario de alguna pensión?</strong>  {{"SI" if jinete.beneficiario_pension else "NO" }}</p>
+        {% if jinete.beneficiario_pension %}
+            <p><strong>¿Cuál? </strong> {{ jinete.pension.value }}</p>
+        {% endif  %}
         <h2><strong> SITUACIÓN PREVISIONAL </strong></h2>
         <p><strong>Obra social del alumno:</strong> {{ jinete.obra_social }}</p>
         <p><strong>N° afiliado:</strong> {{ jinete.nro_afiliado }}</p>

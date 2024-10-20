@@ -95,7 +95,7 @@ def list_empleados(sort_by=None, id_puesto_laboral=None, search=None,page=1, per
 
 
 def list_auxiliares_pista():
-    auxiliar = PuestoLaboral.query.filter_by(nombre="Auxiliar").first()
+    auxiliar = PuestoLaboral.query.filter_by(nombre="Auxiliar de pista").first()
     if auxiliar:
         return Empleado.query.filter_by(puesto_laboral_id=auxiliar.id).all()
     return []

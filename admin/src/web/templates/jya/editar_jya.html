@@ -13,145 +13,175 @@
         <h1 class="text-center">Editar Jinete</h1>
         
         <form action="{{ url_for('jya.editar_jinete', jinete_id=jinete.id) }}" method="POST">
-            {{ form.hidden_tag() }}
-            
-{% extends "layout.html" %}
 
-{% block title %}Editar Jinete{% endblock %}
-
-{% block head %}
-    {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-{% endblock %}
-
-{% block content %}
-    {{ super() }}
-    <div>
-        <h1 class="text-center">Editar Jinete</h1>
-        
-        <form action="{{ url_for('jya.editar_jinete', jinete_id=jinete.id) }}" method="POST">
-            {{ form.hidden_tag() }}
-            
-            <div>
-                <label for="nombre" class="form-element">Nombre/s:</label>
-                {{ form.nombre }}
-            </div>
-            
-            <div>
-                <label for="apellido" class="form-element">Apellido/s:</label>
-                {{ form.apellido }}
-            </div>
-    
-            <div>
-                <label for="dni" class="form-element">DNI:</label>
-                {{ form.dni }}
-            </div>
-            
-            <div>
-                <label for="edad" class="form-element">Edad:</label>
-                {{ form.edad }}
-            </div>
-    
-            <div>
-                <label for="fecha_nacimiento" class="form-element">Fecha de Nacimiento:</label>
-                {{ form.fecha_nacimiento }}
-            </div>
-            
-            <div><strong> Lugar de nacimiento: </strong></div>
-            <div>
-                <label for="provincia_nacimiento" class="form-element">Provincia:</label>
-                {{ form.provincia_nacimiento }}
-            </div>
-    
-            <div>
-                <label for="localidad_nacimiento" class="form-element">Localidad:</label>
-                {{ form.localidad_nacimiento }}
-            </div>
-    
-            <div><strong> Domicilio actual: </strong></div>
-            <div>
-                <label for="domicilio_calle" class="form-element">Calle:</label>
-                {{ form.domicilio_calle }}
-            </div>
-            
-            <div>
-                <label for="domicilio_numero" class="form-element">Numero:</label>
-                {{ form.domicilio_numero }}
-            </div>
-            
-            <div>
-                <label for="domicilio_departamento" class="form-element">Departamento:</label>
-                {{ form.domicilio_departamento }}
-            </div>
-            
-            <div>
-                <label for="domicilio_piso" class="form-element">Piso:</label>
-                {{ form.domicilio_piso }}
-            </div>
-            
-            <div>
-                <label for="domicilio_provincia" class="form-element">Provincia:</label>
-                {{ form.domicilio_provincia }}
-            </div>
-            
-            <div>
-                <label for="domicilio_localidad" class="form-element">Localidad:</label>
-                {{ form.domicilio_localidad }}
-            </div>
-    
-            <div>
-                <label for="telefono" class="form-element">Teléfono actual:</label>
-                {{ form.telefono }}
-            </div>
-    
-            <div>
-                <label for="contacto_emergencia_nombre" class="form-element">Nombre contacto de emergencia:</label>
-                {{ form.contacto_emergencia_nombre }}
-            </div>
-            
-            <div>
-                <label for="contacto_emergencia_apellido" class="form-element">Apellido contacto de emergencia:</label>
-                {{ form.contacto_emergencia_apellido }}
-            </div>
-            
-            <div>
-                <label for="contacto_emergencia_telefono" class="form-element">Teléfono contacto de Emergencia:</label>
-                {{ form.contacto_emergencia_telefono }}
-            </div>
-
-            <!-- aca modifico -->
             <div class="form-group">
-                {{ form.estado_pago.label(class="form-label") }}
-                {{ form.estado_pago(class="form-control") }}
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" value="{{ jinete.nombre }}" required>
             </div>
-            <!-- aca modifico -->        
-        
+    
+            <div class="form-group">
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellido" value="{{ jinete.apellido }}" required>
+            </div>
+
+            
+            <div class="form-group">
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" name="dni" value="{{ jinete.dni }}" required>
+            </div>
+
+            
+            <div class="form-group">
+                <label for="edad">Edad:</label>
+                <input type="edad" id="edad" name="edad" value="{{ jinete.edad }}" required>
+            </div>
+
+                
+            <div class="form-group">
+                <label for="fecha_nacimiento">Fecha nacimiento:</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ jinete.fecha_nacimiento }}" required>
+            </div>
+
+
+            <div><strong> Lugar de nacimiento: </strong></div>
+            
+                
+            <div class="form-group">
+                <label for="provincia_nacimiento">provincia nacimiento</label>
+                <select id="provincia_nacimiento" name="provincia_nacimiento" value="{{jinete.provincia_nacimiento.id}}" required>
+                    {% for prov in provincias %}
+                        <option value="{{prov.id}}">{{prov.nombre}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+
+                
+            <div class="form-group">
+                <label for="localidad_nacimiento">localidad_nacimiento</label>
+                <select id="localidad_nacimiento" name="localidad_nacimiento" value="{{jinete.localidad_nacimiento.id}}" required>
+                    {% for loc in localidades %}
+                        <option value="{{loc.id}}">{{loc.nombre}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+            <div><strong> Domicilio actual: </strong></div>
+            
+
+            <div class="form-group">
+                <label for="domicilio.calle">domicilio.calle:</label>
+                <input type="text" id="domicilio.calle" name="domicilio.calle" value="{{ jinete.domicilio.calle }}" required>
+            </div>
+
+            
+            <div class="form-group">
+                <label for="domicilio.numero">domicilio.numero:</label>
+                <input type="text" id="domicilio.numero" name="domicilio.numero" value="{{ jinete.domicilio.numero }}" required>
+            </div>
+
+            
+            <div class="form-group">
+                <label for="domicilio.piso">domicilio.piso:</label>
+                <input type="text" id="domicilio.piso" name="domicilio.piso" value="{{ jinete.domicilio.piso }}" required>
+            </div>
+
+            
+            <div class="form-group">
+                <label for="domicilio.departamento">domicilio.departamento:</label>
+                <input type="text" id="domicilio.departamento" name="domicilio.departamento" value="{{ jinete.domicilio.departamento }}" required>
+            </div>
+
+            
+            <div class="form-group">
+                <label for="domicilio.provincia">domicilio.provincia</label>
+                <select id="domicilio.provincia" name="domicilio.provincia" value="{{jinete.domicilio.provincia.id}}" required>
+                    {% for prov in provincias %}
+                        <option value="{{prov.id}}">{{prov.nombre}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+
+                
+            <div class="form-group">
+                <label for="domicilio.localidad">domicilio.localidad</label>
+                <select id="domicilio.localidad" name="domicilio.localidad" value="{{jinete.domicilio.localidad.id}}" required>
+                    {% for loc in localidades %}
+                        <option value="{{loc.id}}">{{loc.nombre}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="telefono">telefono:</label>
+                <input type="telefono" id="telefono" name="telefono" value="{{ jinete.telefono }}" required>
+            </div>
+
+            
+            
+            <div class="form-group">
+                <label for="contacto_emergencia.nombre">contacto_emergencia.nombre:</label>
+                <input type="text" id="contacto_emergencia.nombre" name="contacto_emergencia.nombre" value="{{ jinete.contacto_emergencia.nombre }}" required>
+            </div>
+
+            
+            
+            <div class="form-group">
+                <label for="contacto_emergencia.apellido">contacto_emergencia.apellido:</label>
+                <input type="text" id="contacto_emergencia.apellido" name="contacto_emergencia.apellido" value="{{ jinete.contacto_emergencia.apellido }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="contacto_emergencia.telefono">contacto_emergencia.telefono:</label>
+                <input type="text" id="contacto_emergencia.telefono" name="contacto_emergencia.telefono" value="{{ jinete.contacto_emergencia.telefono }}" required>
+            </div>
+            
             <div>
                 <label for="becado" class="form-element">Becado:</label>
                 <input type="radio" id="becado_si" name="becado" value="si" 
-                    {% if form.becado.data == True %}checked{% endif %}>
+                    {% if jinete.becado == True %}checked{% endif %}>
                 <label for="becado_si">Sí</label>
                 
                 <input type="radio" id="becado_no" name="becado" value="no" 
-                    {% if form.becado.data == False %}checked{% endif %}>
+                    {% if jinete.becado == False %}checked{% endif %}>
                 <label for="becado_no">No</label>
             </div>
-    
-            <div>
-                <label for="observaciones" class="form-element">observaciones:</label>
-                {{ form.observaciones_becado }}
+
+            <div class="form-group">
+                <label for="observaciones_becado">observaciones_becado:</label>
+                <input type="text" id="observaciones_becado" name="observaciones_becado" value="{{ jinete.observaciones_becado }}" required>
             </div>
-    
+
+            
+            <div>
+                <label for="estado_pago" class="form-element">estado_pago:</label>
+                <input type="radio" id="estado_pago_si" name="estado_pago" value="si" 
+                    {% if jinete.estado_pago == True %}checked{% endif %}>
+                <label for="estado_pago_si">Sí</label>
+                
+                <input type="radio" id="estado_pago_no" name="estado_pago" value="no" 
+                    {% if jinete.estado_pago == False %}checked{% endif %}>
+                <label for="estado_pago_no">No</label>
+            </div>
+
+
+            
             <div>
                 <label for="certificado_discapacidad" class="form-element">
                     ¿Posee certificado<br>
                     de discapacidad?
                 </label>
                 <input type="radio" id="certificado_si" name="certificado" value="si"
-                    {% if form.certificado_discapacidad.data == True %}checked{% endif %}>
+                    {% if jinete.certificado_discapacidad == True %}checked{% endif %}>
                 <label for="certificado_si">Sí</label>
                 <input type="radio" id="certificado_no" name="certificado" value="no"
-                    {% if form.certificado_discapacidad.data == False %}checked{% endif %}>
+                    {% if jinete.certificado_discapacidad == False %}checked{% endif %}>
                 <label for="certificado_no">No</label>
             </div>
     
@@ -177,44 +207,61 @@
                 });
             </script>
             
-            <div>
-                <label for="diagnostico" class="form-element">tipo diagnostico:</label>
-                {{ form.diagnostico }}
+            
+
+            
+            <div class="form-group">
+                <label for="diagnostico">diagnostico</label>
+                <select id="diagnostico" name="diagnostico" value="{{jinete.diagnostico}}" required>
+                    {% for diagnostico in tipos_diagnostico %}
+                    <option value="{{diagnostico.name}}">{{diagnostico}}</option>
+                    {% endfor %}
+                    <!--ver si en value agarrar el .name u otra cosa.-->
+                </select>
             </div>
-    
+            
             <div>
                 <label for="otro" class="form-element">Si es otro indique cuál:</label>
-                {{ form.otro }}
+                <input type="text" id="otro" name="otro" value="{{ jinete.otro }}">
             </div>
-    
+
             <div class="form-group">
                 <label>Tipos de Discapacidad:</label>
-                {% for checkbox in form.discapacidades %}
+                {% for tipo in tipos_discapacidad %}
                     <div class="form-check">
-                        {{ checkbox.label(class="form-check-label") }}
-                        {{ checkbox(class="form-check-input") }}
+                        <input class="form-check-input" type="checkbox" id="{{ tipo }}" name="discapacidades" value="{{ tipo }}">
+                        <label class="form-check-label" for="{{ tipo }}">{{ tipo }}</label>
                     </div>
                 {% endfor %}
             </div>
             
+            
+
             <div>
                 <label for="asignacion_familiar" class="form-element">¿Percibe alguna asignación familiar?</label>
                 <input type="radio" id="asignacion_si" name="asignacion" value="si"
-                {% if form.asignacion_familiar.data == True %}checked{% endif %}>
+                {% if jinete.asignacion_familiar == True %}checked{% endif %}>
                 <label for="asignacion_si">Sí</label>
 
                 <input type="radio" id="asignacion_no" name="asignacion" value="no"
-                {% if form.asignacion_familiar.data == False %}checked{% endif %}>
+                {% if jinete.asignacion_familiar == False %}checked{% endif %}>
                 <label for="asignacion_no">No</label>
             </div>
 
-            
     
-            <div>
-                <label for="tipo_asignacion" class="form-element">Tipo de asignación:</label>
-                {{ form.tipo_asignacion }}
+            <div class="form-group">
+                <label for="tipo_asignacion">Tipo de Asignación</label>
+                <select id="tipo_asignacion" name="tipo_asignacion">
+                    {% for tipo in tipos_de_asignacion %}
+                    <option value="{{ tipo[0] }}" {% if tipo[0] == jinete.tipo_asignacion.name %}selected{% endif %}>
+                        <p> {{ tipo[1]}}</p>
+                    </option>
+                    {% endfor %}
+                </select>
             </div>
-    
+            
+            
+
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const radioButtons = document.querySelectorAll('input[name="asignacion"]');
@@ -229,28 +276,37 @@
                 });
             </script>
     
+
             <div>
                 <label for="beneficiario_pension" class="form-element">¿Es beneficiario de alguna pensión?</label>
                 <input type="radio" id="pension_si" name="beneficiario_pension" value="si"
-                {% if form.beneficiario_pension.data == True %}checked{% endif %}>
+                {% if jinete.beneficiario_pension == True %}checked{% endif %}>
                 <label for="pension_si">Sí</label>
                 <input type="radio" id="pension_no" name="beneficiario_pension" value="no"
-                {% if form.beneficiario_pension.data == False %}checked{% endif %}>
+                {% if jinete.beneficiario_pension == False %}checked{% endif %}>
                 <label for="pension_no">No</label>
             </div>
 
-            
-    
-            <div>
-                <label for="pension" class="form-element">tipo pension:</label>
-                {{ form.pension }}
+
+            <div class="form-group">
+                <label for="pension">Pensión:</label>
+                <select id="pension" name="pension" {% if not jinete.beneficiario_pension %}disabled{% endif %}>
+                    {% for pension in tipos_pensiones %}
+                    <option value="{{ pension[0] }}" {% if pension[0] == jinete.pension.value %}selected{% endif %}>
+                        {{ pension[1] }}
+                    </option>
+                    {% endfor %}
+                </select>
             </div>
-    
+            
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const radioButtons = document.querySelectorAll('input[name="beneficiario_pension"]');
-                    const selectPension = document.getElementById('tipo_pension');
-                
+                    const selectPension = document.getElementById('pension');
+            
+                    // Inicializa el estado del select basado en la opción seleccionada
+                    selectPension.disabled = !document.getElementById('pension_si').checked;
+            
                     radioButtons.forEach(radio => {
                         radio.addEventListener('change', function() {
                             // Habilita o deshabilita el elemento según si la opción "Sí" está seleccionada
@@ -259,221 +315,354 @@
                     });
                 });
             </script>
-    
+
             <h2><strong> SITUACIÓN PREVISIONAL </strong></h2>
-    
-            <div>
-                <label for="obra_social" class="form-element">Obra Social:</label>
-                {{ form.obra_social }}
-            </div>
             
-            <div>
-                <label for="nro_afiliado" class="form-element">Numero afiliado:</label>
-                {{ form.nro_afiliado }}
+            <div class="form-group">
+                <label for="obra_social">obra_social:</label>
+                <input type="text" id="obra_social" name="obra_social" value="{{ jinete.obra_social }}" required>
             </div>
-    
+
+            
+            
+            <div class="form-group">
+                <label for="nro_afiliado">nro_afiliado:</label>
+                <input type="text" id="nro_afiliado" name="nro_afiliado" value="{{ jinete.nro_afiliado }}" required>
+            </div>
+
             <div>
                 <label for="curatela" class="form-element"> ¿Posee curatela? </label>
                 <input type="radio" id="curatela_si" name="curatela" value="si"
-                {% if form.curatela.data == True %}checked{% endif %}>
+                {% if jinete.curatela == True %}checked{% endif %}>
                 <label for="curatela_si">Sí</label>
                 <input type="radio" id="curatela_no" name="curatela" value="no"
-                {% if form.curatela.data == False %}checked{% endif %}>
+                {% if jinete.curatela == False %}checked{% endif %}>
                 <label for="curatela_no">No</label>
             </div>
             
-            <div>
-                <label for="observaciones" class="form-element">observaciones:</label>
-                {{ form.observaciones }}
-            </div>
-    
-            <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
-    
-            <div>
-                <label for="nombre_institucion" class="form-element">Nombre de la Institución:</label>
-                {{ form.nombre_institucion }}
-            </div>
-    
-            <div>
-                <label for="telefono_institucion" class="form-element">Teléfono:</label>
-                {{ form.telefono_institucion }}
-            </div>
-    
-            <div>
-                <label for="institucion_direccion_calle" class="form-element">Calle:</label>
-                {{ form.institucion_direccion_calle }}
-            </div>
             
-            <div>
-                <label for="institucion_direccion_numero" class="form-element">Numero:</label>
-                {{ form.institucion_direccion_numero }}
-            </div>
-    
-            <div>
-                <label for="institucion_direccion_departamento" class="form-element">Departamento:</label>
-                {{ form.institucion_direccion_departamento }}
-            </div>
-    
-            <div>
-                <label for="institucion_direccion_piso" class="form-element">Piso:</label>
-                {{ form.institucion_direccion_piso }}
-            </div>
-            
-            <div>
-                <label for="institucion_direccion_provincia" class="form-element">Provincia:</label>
-                {{ form.institucion_direccion_provincia }}
-            </div>
-            
-            <div>
-                <label for="institucion_direccion_localidad" class="form-element">Localidad:</label>
-                {{ form.institucion_direccion_localidad }}
-            </div>
-    
-            <div>
-                <label for="grado" class="form-element">Grado / año actual:</label>
-                {{ form.grado }}
-            </div>
-    
-            <div>
-                <label for="observaciones_institucion" class="form-element">Observaciones:</label>
-                {{ form.observaciones }}
-            </div>
-    
-            <div>
-                <label for="profesionales" class="form-element">PROFESIONALES que lo ATIENDEN:</label>
-                {{ form.profesionales }}
-            </div>
-    
-    
-    
-            <h2><strong> DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
-            <div>
-                <label for="parentesco_familiar" class="form-element">Parentesco:</label>
-                {{ form.parentesco_familiar }}
-            </div>
-            
-            <div>
-                <label for="nombre_familiar" class="form-element">Nombre:</label>
-                {{ form.nombre_familiar }}
-            </div>
-            
-            <div>
-                <label for="apellido_familiar" class="form-element">Apellido/s:</label>
-                {{ form.apellido_familiar }}
-            </div>
-    
-            <div>
-                <label for="dni_familiar" class="form-element">DNI:</label>
-                {{ form.dni_familiar }}
-            </div>
-            
-            <div><strong> Domicilio actual: </strong></div>
-            <div>
-                <label for="direccion_familiar" class="form-element">Direccion:</label>
-                {{ form.direccion_familiar }}
-            </div>
-    
-            <div>
-                <label for="provincia_familiar" class="form-element">Provincia:</label>
-                {{ form.provincia_familiar }}
-            </div>
-    
-            <div>
-                <label for="localidad_familiar" class="form-element">localidad:</label>
-                {{ form.localidad_familiar }}
-            </div>
-    
-    
-            <div>
-                <label for="celular_familiar" class="form-element">Celular actual:</label>
-                {{ form.celular_familiar }}
-            </div>
-    
-            <div>
-                <label for="nivel_escolaridad_familiar" class="form-element">escolaridad:</label>
-                {{ form.nivel_escolaridad_familiar }}
-            </div>
-    
-            <div>
-                <label for="email_familiar" class="form-element">email:</label>
-                {{ form.email_familiar }}
-            </div>
-            
-            <div>
-                <label for="actividad_ocupacion_familiar" class="form-element">Actividad u ocupación:</label>
-                {{ form.actividad_ocupacion_familiar }}
-            </div>
-    
-            <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN: </strong></h2>
-    
-            <div>
-                <label for="trabajo_institucional" class="form-element">Propuesta de trabajo Institucional:</label>
-                {{ form.trabajo_institucional }}
-            </div>
-    
-            <div>
-                <label for="condicion" class="form-element">Condición:</label>
-                <input type="radio" id="condicion_si" name="condicion" value="si"
-                {% if form.condicion.data == True %}checked{% endif %}>
-                <label for="condicion_si">Regular</label>
-                <input type="radio" id="condicion_no" name="condicion" value="no"
-                {% if form.condicion.data == False %}checked{% endif %}>
-                <label for="condicion_no">De baja</label>
-            </div>
-    
-            <div>
-                <label for="sede" class="form-element">SEDE:</label>
-                {{ form.sede }}
-            </div>
-    
             <div class="form-group">
-                <label>Dias:</label>
-                {% for checkbox in form.dias %}
+                <label for="observaciones_curatela">observaciones_curatela:</label>
+                <input type="text" id="observaciones_curatela" name="observaciones_curatela" value="{{ jinete.observaciones_curatela }}">
+            </div>
+
+            <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
+            
+            <div class="form-group">
+                <label for="nombre_institucion">nombre_institucion:</label>
+                <input type="text" id="nombre_institucion" name="nombre_institucion" value="{{ jinete.nombre_institucion }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono_institucion">telefono_institucion:</label>
+                <input type="text" id="telefono_institucion" name="telefono_institucion" value="{{ jinete.telefono_institucion }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="direccion.calle">direccion.calle:</label>
+                <input type="text" id="direccion.calle" name="direccion.calle" value="{{ jinete.direccion.calle }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="direccion.numero">direccion.numero:</label>
+                <input type="text" id="direccion.numero" name="direccion.numero" value="{{ jinete.direccion.numero }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="direccion.piso">direccion.piso:</label>
+                <input type="text" id="direccion.piso" name="direccion.piso" value="{{ jinete.direccion.piso or '' }}">
+
+            </div>
+
+            <div class="form-group">
+                <label for="direccion.departamento">direccion.departamento:</label>
+                <input type="text" id="direccion.departamento" name="direccion.departamento" value="{{ jinete.direccion.departamento or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="direccion.provincia">direccion.provincia</label>
+                <select id="direccion.provincia" name="direccion.provincia" value="{{jinete.direccion.provincia.id}}" required>
+                    {% for prov in provincias %}
+                        <option value="{{prov.id}}">{{prov.nombre}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="direccion.localidad">direccion.localidad</label>
+                <select id="direccion.localidad" name="direccion.localidad" value="{{jinete.direccion.localidad.id}}" required>
+                    {% for loc in localidades %}
+                        <option value="{{loc.id}}">{{loc.nombre}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+            
+
+            <div class="form-group">
+                <label for="grado">grado:</label>
+                <input type="text" id="grado" name="grado" value="{{ jinete.grado }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="observaciones_institucion">observaciones_institucion:</label>
+                <input type="text" id="observaciones_institucion" name="observaciones_institucion" value="{{ jinete.observaciones_institucion }}">
+            </div>
+
+            
+            <div class="form-group">
+                <label for="profesionales">profesionales:</label>
+                <input type="text" id="profesionales" name="profesionales" value="{{ jinete.profesionales }}">
+            </div>
+
+            <h2><strong> DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
+            {%if  familiares %}
+                {% for familiar in familiares %}
+                    <div class="form-group">
+                        <label for="familiar.parentesco_familiar">familiar.parentesco_familiar:</label>
+                        <input type="text" id="familiar.parentesco_familiar" name="familiar.parentesco_familiar" value="{{ familiar.parentesco_familiar }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="familiar.nombre_familiar">familiar.nombre_familiar:</label>
+                        <input type="text" id="familiar.nombre_familiar" name="familiar.nombre_familiar" value="{{ familiar.nombre_familiar }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="familiar.apellido_familiar">familiar.apellido_familiar:</label>
+                        <input type="text" id="familiar.apellido_familiar" name="familiar.apellido_familiar" value="{{ familiar.apellido_familiar }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="familiar.dni_familiar">familiar.dni_familiar:</label>
+                        <input type="text" id="familiar.dni_familiar" name="familiar.dni_familiar" value="{{ familiar.dni_familiar }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="familiar.direccion_familiar">familiar.direccion_familiar:</label>
+                        <input type="text" id="familiar.direccion_familiar" name="familiar.direccion_familiar" value="{{ familiar.direccion_familiar }}">
+                    </div>
+                    
+
+                            
+                    <div class="form-group">
+                        <label for="familiar.provincia_familiar">familiar.provincia_familiar</label>
+                        <select id="familiar.provincia_familiar" name="familiar.provincia_familiar" value="{{familiar.provincia_familiar_id}}">
+                            {% for prov in provincias %}
+                                <option value="{{prov.id}}">{{prov.nombre}}</option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="familiar.localidad_familiar">familiar.localidad_familiar</label>
+                        <select id="familiar.localidad_familiar" name="familiar.localidad_familiar" value="{{familiar.localidad_familiar_id}}">
+                            {% for loc in localidades %}
+                                <option value="{{loc.id}}">{{loc.nombre}}</option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+                            
+                    <div class="form-group">
+                        <label for="familiar.celular_familiar">familiar.celular_familiar:</label>
+                        <input type="text" id="familiar.celular_familiar" name="familiar.celular_familiar" value="{{ familiar.celular_familiar }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="familiar.nivel_escolaridad_familiar">familiar.nivel_escolaridad_familiar:</label>
+                        <input type="text" id="familiar.nivel_escolaridad_familiar" name="familiar.nivel_escolaridad_familiar" value="{{ familiar.nivel_escolaridad_familiar }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="familiar.email_familiar">familiar.email_familiar:</label>
+                        <input type="text" id="familiar.email_familiar" name="familiar.email_familiar" value="{{ familiar.email_familiar }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="familiar.actividad_ocupacion_familiar">familiar.actividad_ocupacion_familiar:</label>
+                        <input type="text" id="familiar.actividad_ocupacion_familiar" name="familiar.actividad_ocupacion_familiar" value="{{ familiar.actividad_ocupacion_familiar }}">
+                    </div>
+                    
+                {% endfor %}
+                {% else %}
+                
+                <h2><strong> (OPCIONAL: ) AGREGAR DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
+                <div class="form-group">
+                    <label for="nuevo_familiar.parentesco_familiar">nuevo_familiar.parentesco_familiar:</label>
+                    <input type="text" id="nuevo_familiar.parentesco_familiar" name="nuevo_familiar.parentesco_familiar" value="">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nuevo_familiar.nombre_familiar">nuevo_familiar.nombre_familiar:</label>
+                    <input type="text" id="nuevo_familiar.nombre_familiar" name="nuevo_familiar.nombre_familiar" value="">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nuevo_familiar.apellido_familiar">nuevo_familiar.apellido_familiar:</label>
+                    <input type="text" id="nuevo_familiar.apellido_familiar" name="nuevo_familiar.apellido_familiar" value="">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nuevo_familiar.dni_familiar">nuevo_familiar.dni_familiar:</label>
+                    <input type="text" id="nuevo_familiar.dni_familiar" name="nuevo_familiar.dni_familiar" value="">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nuevo_familiar.direccion_familiar">nuevo_familiar.direccion_familiar:</label>
+                    <input type="text" id="nuevo_familiar.direccion_familiar" name="nuevo_familiar.direccion_familiar" value="">
+                </div>
+                
+                
+                <div class="form-group">
+                    <label for="nuevo_familiar.provincia_familiar">nuevo_familiar.provincia_familiar</label>
+                    <select id="nuevo_familiar.provincia_familiar" name="nuevo_familiar.provincia_familiar" value="">
+                        {% for prov in provincias %}
+                            <option value="{{prov.id}}">{{prov.nombre}}</option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="nuevo_familiar.localidad_familiar">nuevo_familiar.localidad_familiar</label>
+                    <select id="nuevo_familiar.localidad_familiar" name="nuevo_familiar.localidad_familiar" value="">
+                        {% for loc in localidades %}
+                            <option value="{{loc.id}}">{{loc.nombre}}</option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+                        
+
+                <div class="form-group">
+                    <label for="nuevo_familiar.celular_familiar">nuevo_familiar.celular_familiar:</label>
+                    <input type="text" id="nuevo_familiar.celular_familiar" name="nuevo_familiar.celular_familiar" value="">
+                </div>
+                <div class="form-group">
+                    <label for="nuevo_familiar.nivel_escolaridad_familiar">nuevo_familiar.nivel_escolaridad_familiar:</label>
+                    <input type="text" id="nuevo_familiar.nivel_escolaridad_familiar" name="nuevo_familiar.nivel_escolaridad_familiar" value="">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nuevo_familiar.email_familiar">nuevo_familiar.email_familiar:</label>
+                    <input type="text" id="nuevo_familiar.email_familiar" name="nuevo_familiar.email_familiar" value="">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nuevo_familiar.actividad_ocupacion_familiar">nuevo_familiar.actividad_ocupacion_familiar:</label>
+                    <input type="text" id="nuevo_familiar.actividad_ocupacion_familiar" name="nuevo_familiar.actividad_ocupacion_familiar" value="">
+                </div>
+                
+            {% endif %}
+
+
+            
+            <div class="form-group">
+                <label for="trabajo_institucional">trabajo_institucional</label>
+                <select id="trabajo_institucional" name="trabajo_institucional">
+                    {% for trabajo in trabajos_institucionales %}
+                    <option value="{{ trabajo[0] }}" {% if trabajo[0] == jinete.trabajo_institucional.value %}selected{% endif %}>
+                        {{ trabajo[1] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            
+            <div>
+                <label for="condicion" class="form-element">condicion:</label>
+                <input type="radio" id="condicion_si" name="condicion" value="si" 
+                    {% if jinete.condicion == True %}checked{% endif %}>
+                <label for="condicion_si">Sí</label>
+                
+                <input type="radio" id="condicion_no" name="condicion" value="no" 
+                    {% if jinete.condicion == False %}checked{% endif %}>
+                <label for="condicion_no">No</label>
+            </div>
+
+
+            
+        
+
+            
+            <div class="form-group">
+                <label for="sede">sede</label>
+                <select id="sede" name="sede">
+                    {% for sede in list_sedes %}
+                    <option value="{{ sede[0] }}" {% if sede[0] == jinete.sede.value %}selected{% endif %}>
+                        {{ sede[1] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+
+            <div class="form-group">
+                <label>Día:</label>
+                {% for dia in dias_semana %}
                     <div class="form-check">
-                        {{ checkbox.label(class="form-check-label") }}
-                        {{ checkbox(class="form-check-input") }}
+                        <input class="form-check-input" type="checkbox" id="{{ dia }}" name="dias_semana" value="{{ dia }}"
+                            {% if dia[1] in jinete_dias_name %} checked {% endif %}>
+                        <label class="form-check-label" for="{{ dia }}">{{ dia[0] }}</label>
                     </div>
                 {% endfor %}
             </div>
             
-            <div>
-                <label for="caballo" class="form-element">Caballo:</label>
-                {{ form.caballo }}
+            
+
+            <div class="form-group">
+                <label for="caballo">caballo:</label>
+                <input type="text" id="caballo" name="caballo" value="{{ jinete.caballo }}" required>
+            </div>
+
+
+
+            
+            <div class="form-group">
+                <label for="caballo">Caballo:</label>
+                <select id="caballo" name="caballo" value="{{jinete.caballo.id}}" required>
+                    {% for caballo in list_caballos %}
+                        <option value="{{caballo.id}}">{{caballo.nombre}}</option>
+                    {% endfor %}
+                </select>
             </div>
             
-            
-            <div>
-                <label for="profesor_o_terapeuta" class="form-element">Profesor o terapeuta:</label>
-                {{ form.profesor_o_terapeuta }}
+            <div class="form-group">
+                <label for="profesor_o_terapeuta">profesor_o_terapeuta:</label>
+                <select id="profesor_o_terapeuta" name="profesor_o_terapeuta" value="{{jinete.profesor_o_terapeuta.id}}" required>
+                    {% for prof in list_profes_terapeutas %}
+                        <option value="{{prof.id}}">{{prof.apellido}} {{prof.nombre}}</option>
+                    {% endfor %}
+                </select>
             </div>
             
-            
-            <div>
-                <label for="conductor_caballo" class="form-element">Conductor caballo:</label>
-                {{ form.conductor_caballo }}
-            </div>
-            
-            <div>
-                <label for="auxiliar_pista" class="form-element">Auxiliar de pista:</label>
-                {{ form.auxiliar_pista }}
+            <div class="form-group">
+                <label for="conductor_caballo">conductor_caballo:</label>
+                <select id="conductor_caballo" name="conductor_caballo" value="{{jinete.conductor_caballo.id}}" required>
+                    {% for conductor in list_conductores %}
+                        <option value="{{conductor.id}}">{{conductor.apellido}}  {{conductor.nombre}}  </option>
+                    {% endfor %}
+                </select>
             </div>
         
-
-
-        <div>
-            <button type="submit" style="margin: 10px;" class="btn btn-submit">Guardar Cambios</button>
-            <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
-        </div>
-        </form>
-    </div>
-{% endblock %}
+            
+            <div class="form-group">
+                <label for="auxiliar_pista">auxiliar_pista:</label>
+                <select id="auxiliar_pista" name="auxiliar_pista" value="{{jinete.auxiliar_pista.id}}" required>
+                    {% for auxiliar in list_auxiliares_pista %}
+                        <option value="{{auxiliar.id}}">{{auxiliar.apellido}}  {{auxiliar.nombre}}  </option>
+                    {% endfor %}
+                </select>
+            </div>
         
-
-
-        <div>
-            <button type="submit" style="margin: 10px;" class="btn btn-submit">Guardar Cambios</button>
-            <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
-        </div>
+                       
+    
+            <div>
+                <button type="submit" style="margin: 10px;" class="btn btn-submit">Guardar Cambios</button>
+                <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
+            </div>
         </form>
     </div>
 {% endblock %}
