@@ -39,6 +39,9 @@ def registrar_cobro():
 @login_required
 @check("cobro_index")
 def listar_cobros():
+    page = request.args.get("page", 1, type=int)
+    per_page = 5
+
     fecha_inicio = request.args.get("fecha_inicio")
     fecha_fin = request.args.get("fecha_fin")
     medio_pago = request.args.get("medio_pago")
@@ -49,15 +52,17 @@ def listar_cobros():
     query = cobros.listar_cobros(
         fecha_inicio, fecha_fin, medio_pago, nombre_recibido, apellido_recibido
     )
-
-    cobros_realizado = cobros.ordenar_fecha(orden, query)
+    cobros_realizado = cobros.ordenar_fecha(orden, query).paginate(
+        page=page, per_page=per_page
+    )
 
     success_cobro = request.args.get("success_cobro")
 
     return render_template(
         "listado_cobros.html",
-        cobros_realizado=cobros_realizado,
+        cobros_realizado=cobros_realizado.items,
         success_cobro=success_cobro,
+        pagination=cobros_realizado,
     )
 
 
@@ -97,6 +102,9 @@ def eliminar_cobro(id):
 @login_required
 @check("cobro_show")
 def buscar_cobros():
+    page = request.args.get("page", 1, type=int)
+    per_page = 5
+
     medio_pago = request.args.get("medio_pago")
     fecha_inicio = request.args.get("fecha_inicio")
     fecha_fin = request.args.get("fecha_fin")
@@ -107,6 +115,12 @@ def buscar_cobros():
     query = cobros.buscar_cobros(
         medio_pago, fecha_inicio, fecha_fin, nombre_recibe, apellido_recibe, orden
     )
-    cobros_realizado = cobros.obtener_todos(query)
+    cobros_realizado = cobros.obtener_todos(query).paginate(
+        page=page, per_page=per_page
+    )
 
-    return render_template("listado_cobros.html", cobros_realizado=cobros_realizado)
+    return render_template(
+        "listado_cobros.html",
+        cobros_realizado=cobros_realizado.items,
+        pagination=cobros_realizado,
+    )

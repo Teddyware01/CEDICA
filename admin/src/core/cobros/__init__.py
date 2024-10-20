@@ -2,6 +2,8 @@ from src.core.database import db
 from src.core.cobros.models import RegistroCobro
 from src.core.equipo.models import Empleado
 from src.core.cobros.forms import RegistroCobroForm
+from src.core.cobros.models import RegistroCobro
+from sqlalchemy import or_
 
 
 def agregar_cobro(nuevo_cobro):
@@ -10,15 +12,19 @@ def agregar_cobro(nuevo_cobro):
 
 
 def listar_cobros(
-    fecha_inicio, fecha_fin, medio_pago, nombre_recibido, apellido_recibido
+    fecha_inicio=None,
+    fecha_fin=None,
+    medio_pago=None,
+    nombre_recibido=None,
+    apellido_recibido=None,
 ):
-    query = RegistroCobro.query
+    query = db.session.query(RegistroCobro)
 
     if fecha_inicio and fecha_fin:
         query = query.filter(RegistroCobro.fecha_pago.between(fecha_inicio, fecha_fin))
 
     if medio_pago:
-        query = query.filter(RegistroCobro.medio_pago == medio_pago.lower())
+        query = query.filter_by(medio_pago=medio_pago)
 
     if nombre_recibido:
         query = query.join(Empleado).filter(
@@ -29,15 +35,15 @@ def listar_cobros(
         query = query.join(Empleado).filter(
             Empleado.apellido.ilike(f"%{apellido_recibido}%")
         )
+
     return query
 
 
 def ordenar_fecha(orden, query):
-    if orden == "desc":
-        cobros_realizado = query.order_by(RegistroCobro.fecha_pago.desc()).all()
+    if orden == "asc":
+        return query.order_by(RegistroCobro.fecha_pago.asc())
     else:
-        cobros_realizado = query.order_by(RegistroCobro.fecha_pago.asc()).all()
-    return cobros_realizado
+        return query.order_by(RegistroCobro.fecha_pago.desc())
 
 
 def obtener_cobro(id):
@@ -58,28 +64,36 @@ def eliminar_cobro(cobro):
 
 
 def buscar_cobros(
-    medio_pago, fecha_inicio, fecha_fin, nombre_recibe, apellido_recibe, orden
+    medio_pago=None,
+    fecha_inicio=None,
+    fecha_fin=None,
+    nombre_recibe=None,
+    apellido_recibe=None,
+    orden=None,
 ):
-
-    query = RegistroCobro.query.join(
-        Empleado, RegistroCobro.recibido_por == Empleado.id
-    )
+    query = db.session.query(RegistroCobro)
 
     if medio_pago:
-        query = query.filter(RegistroCobro.medio_pago == medio_pago.lower())
+        query = query.filter_by(medio_pago=medio_pago)
+
     if fecha_inicio and fecha_fin:
         query = query.filter(RegistroCobro.fecha_pago.between(fecha_inicio, fecha_fin))
+
     if nombre_recibe:
-        query = query.filter(Empleado.nombre.ilike(f"{nombre_recibe}%"))
+        query = query.join(Empleado).filter(Empleado.nombre.ilike(f"%{nombre_recibe}%"))
+
     if apellido_recibe:
-        query = query.filter(Empleado.apellido.ilike(f"{apellido_recibe}%"))
-    if orden == "desc":
-        query = query.order_by(RegistroCobro.fecha_pago.desc())
-    else:
+        query = query.join(Empleado).filter(
+            Empleado.apellido.ilike(f"%{apellido_recibe}%")
+        )
+
+    if orden == "asc":
         query = query.order_by(RegistroCobro.fecha_pago.asc())
+    else:
+        query = query.order_by(RegistroCobro.fecha_pago.desc())
 
     return query
 
 
 def obtener_todos(query):
-    return query.all()
+    return query

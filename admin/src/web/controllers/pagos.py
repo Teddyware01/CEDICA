@@ -8,6 +8,8 @@ from src.web.handlers.auth import login_required, check
 
 pagos_bp = Blueprint("pagos", __name__, template_folder="../templates/pagos")
 
+PAGOS_POR_PAGINA = 5
+
 
 @pagos_bp.route("/registrar", methods=["GET", "POST"])
 @login_required
@@ -44,13 +46,26 @@ def registrar_pago():
 @check("pago_index")
 def listar_pagos():
     orden = request.args.get("orden", "asc")
+    page = request.args.get(
+        "page", 1, type=int
+    )  
     success = request.args.get("success")
+
     pagos_realizado = pagos.ordenar_pagos(orden)
+    total_paginas = (
+        len(pagos_realizado) + PAGOS_POR_PAGINA - 1
+    ) // PAGOS_POR_PAGINA 
+    pagos_pag = pagos_realizado[
+        (page - 1) * PAGOS_POR_PAGINA : page * PAGOS_POR_PAGINA
+    ]  
+
     return render_template(
         "listado_pagos.html",
-        pagos_realizado=pagos_realizado,
+        pagos_realizado=pagos_pag,
         orden=orden,
         success=success,
+        total_paginas=total_paginas,
+        pagina_actual=page,
     )
 
 
@@ -114,13 +129,27 @@ def buscar_pagos():
     fecha_inicio = request.args.get("fecha_inicio")
     fecha_fin = request.args.get("fecha_fin")
     orden = request.args.get("orden", "asc")
+    page = request.args.get(
+        "page", 1, type=int
+    )  
 
     pagos_realizado = pagos.buscar_pagos(tipo_pago, fecha_inicio, fecha_fin)
 
     pagos_realizado = pagos_realizado.order_by(
         Pagos.fecha_pago.asc() if orden == "asc" else Pagos.fecha_pago.desc()
-    ).all()
+    )
+
+    total_paginas = (pagos_realizado.count() + PAGOS_POR_PAGINA - 1) // PAGOS_POR_PAGINA
+    pagos_pag = (
+        pagos_realizado.offset((page - 1) * PAGOS_POR_PAGINA)
+        .limit(PAGOS_POR_PAGINA)
+        .all()
+    )
 
     return render_template(
-        "listado_pagos.html", pagos_realizado=pagos_realizado, orden=orden
+        "listado_pagos.html",
+        pagos_realizado=pagos_pag,
+        orden=orden,
+        total_paginas=total_paginas,
+        pagina_actual=page,
     )
