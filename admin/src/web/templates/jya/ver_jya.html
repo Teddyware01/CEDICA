@@ -37,7 +37,7 @@
         <p><strong>Si es OTRO indique cuál:</strong> {{ jinete.otro if jinete.diagnostico.value == "otro" else '-' }}</p>
         <p><strong>Tipo de Discapacidad:</strong> 
             {% for tipo in jinete.tipos_discapacidad %}
-                <span>{{ tipo.value }}</span>{% if not loop.last %}, {% endif %}
+                <span>{{ tipo.tipos_discapacidad }}</span>{% if not loop.last %}, {% endif %}
             {% endfor %}
         </p>
         <p><strong>¿Percibe alguna Asignación Familiar?</strong> {{"SI" if jinete.asignacion_familiar else "NO" }}</p>
@@ -86,9 +86,9 @@
         <p><strong>Propuesta de trabajo institucional:</strong> {{ jinete.trabajo_institucional.value }}</p>
         <p><strong>Condición:</strong> {{ "REGULAR" if jinete.condicion else "DE BAJA" }}</p>
         <p><strong>SEDE:</strong> {{ jinete.sede.value }}</p>
-        <p><strong>Dias:</strong>
+        <p><strong>Días:</strong>
             {% for d in jinete.dias %}
-                <span>{{ d.value }}</span>{% if not loop.last %}, {% endif %}
+                <span>{{ d.dias.value }}</span>{% if not loop.last %}, {% endif %}
             {% endfor %}
         </p>
         

@@ -15,12 +15,12 @@
         <form action="{{ url_for('jya.editar_jinete', jinete_id=jinete.id) }}" method="POST">
 
             <div class="form-group">
-                <label for="nombre">Nombre:</label>
+                <label for="nombre">Nombre/s:</label>
                 <input type="text" id="nombre" name="nombre" value="{{ jinete.nombre }}" required>
             </div>
     
             <div class="form-group">
-                <label for="apellido">Apellido:</label>
+                <label for="apellido">Apellido/s:</label>
                 <input type="text" id="apellido" name="apellido" value="{{ jinete.apellido }}" required>
             </div>
 
@@ -44,10 +44,10 @@
 
 
             <div><strong> Lugar de nacimiento: </strong></div>
-            
+
                 
             <div class="form-group">
-                <label for="provincia_nacimiento">provincia nacimiento</label>
+                <label for="provincia_nacimiento">Provincia de nacimiento:</label>
                 <select id="provincia_nacimiento" name="provincia_nacimiento" value="{{jinete.provincia_nacimiento.id}}" required>
                     {% for prov in provincias %}
                         <option value="{{prov.id}}">{{prov.nombre}}</option>
@@ -56,10 +56,9 @@
                 </select>
             </div>
 
-
                 
             <div class="form-group">
-                <label for="localidad_nacimiento">localidad_nacimiento</label>
+                <label for="localidad_nacimiento">Localidad de nacimiento:</label>
                 <select id="localidad_nacimiento" name="localidad_nacimiento" value="{{jinete.localidad_nacimiento.id}}" required>
                     {% for loc in localidades %}
                         <option value="{{loc.id}}">{{loc.nombre}}</option>
@@ -72,31 +71,31 @@
             
 
             <div class="form-group">
-                <label for="domicilio.calle">domicilio.calle:</label>
+                <label for="domicilio.calle">Calle:</label>
                 <input type="text" id="domicilio.calle" name="domicilio.calle" value="{{ jinete.domicilio.calle }}" required>
             </div>
 
             
             <div class="form-group">
-                <label for="domicilio.numero">domicilio.numero:</label>
+                <label for="domicilio.numero">Numero:</label>
                 <input type="text" id="domicilio.numero" name="domicilio.numero" value="{{ jinete.domicilio.numero }}" required>
             </div>
 
             
             <div class="form-group">
-                <label for="domicilio.piso">domicilio.piso:</label>
+                <label for="domicilio.piso">Piso:</label>
                 <input type="text" id="domicilio.piso" name="domicilio.piso" value="{{ jinete.domicilio.piso }}" required>
             </div>
 
             
             <div class="form-group">
-                <label for="domicilio.departamento">domicilio.departamento:</label>
+                <label for="domicilio.departamento">Departamento:</label>
                 <input type="text" id="domicilio.departamento" name="domicilio.departamento" value="{{ jinete.domicilio.departamento }}" required>
             </div>
 
             
             <div class="form-group">
-                <label for="domicilio.provincia">domicilio.provincia</label>
+                <label for="domicilio.provincia">Provincia:</label>
                 <select id="domicilio.provincia" name="domicilio.provincia" value="{{jinete.domicilio.provincia.id}}" required>
                     {% for prov in provincias %}
                         <option value="{{prov.id}}">{{prov.nombre}}</option>
@@ -105,71 +104,66 @@
                 </select>
             </div>
 
-
                 
             <div class="form-group">
-                <label for="domicilio.localidad">domicilio.localidad</label>
+                <label for="domicilio.localidad">Localidad:</label>
                 <select id="domicilio.localidad" name="domicilio.localidad" value="{{jinete.domicilio.localidad.id}}" required>
                     {% for loc in localidades %}
                         <option value="{{loc.id}}">{{loc.nombre}}</option>
                     {% endfor %}
-
                 </select>
             </div>
             
             
             <div class="form-group">
-                <label for="telefono">telefono:</label>
+                <label for="telefono">Teléfono:</label>
                 <input type="telefono" id="telefono" name="telefono" value="{{ jinete.telefono }}" required>
             </div>
 
-            
+            <div><strong> Contacto de emergencia: </strong></div>
             
             <div class="form-group">
-                <label for="contacto_emergencia.nombre">contacto_emergencia.nombre:</label>
+                <label for="contacto_emergencia.nombre">Nombre:</label>
                 <input type="text" id="contacto_emergencia.nombre" name="contacto_emergencia.nombre" value="{{ jinete.contacto_emergencia.nombre }}" required>
             </div>
 
             
             
             <div class="form-group">
-                <label for="contacto_emergencia.apellido">contacto_emergencia.apellido:</label>
+                <label for="contacto_emergencia.apellido">Apellido:</label>
                 <input type="text" id="contacto_emergencia.apellido" name="contacto_emergencia.apellido" value="{{ jinete.contacto_emergencia.apellido }}" required>
             </div>
 
             <div class="form-group">
-                <label for="contacto_emergencia.telefono">contacto_emergencia.telefono:</label>
+                <label for="contacto_emergencia.telefono">Teléfono:</label>
                 <input type="text" id="contacto_emergencia.telefono" name="contacto_emergencia.telefono" value="{{ jinete.contacto_emergencia.telefono }}" required>
             </div>
             
             <div>
-                <label for="becado" class="form-element">Becado:</label>
+                <label for="becado" class="form-element">Está becado:</label>
                 <input type="radio" id="becado_si" name="becado" value="si" 
                     {% if jinete.becado == True %}checked{% endif %}>
                 <label for="becado_si">Sí</label>
-                
                 <input type="radio" id="becado_no" name="becado" value="no" 
                     {% if jinete.becado == False %}checked{% endif %}>
                 <label for="becado_no">No</label>
             </div>
 
             <div class="form-group">
-                <label for="observaciones_becado">observaciones_becado:</label>
+                <label for="observaciones_becado">Observaciones:</label>
                 <input type="text" id="observaciones_becado" name="observaciones_becado" value="{{ jinete.observaciones_becado }}" required>
             </div>
 
             
             <div>
-                <label for="estado_pago" class="form-element">estado_pago:</label>
+                <label for="estado_pago" class="form-element">¿Está al día?</label>
                 <input type="radio" id="estado_pago_si" name="estado_pago" value="si" 
                     {% if jinete.estado_pago == True %}checked{% endif %}>
                 <label for="estado_pago_si">Sí</label>
-                
                 <input type="radio" id="estado_pago_no" name="estado_pago" value="no" 
                     {% if jinete.estado_pago == False %}checked{% endif %}>
                 <label for="estado_pago_no">No</label>
             </div>
-
 
             
             <div>
@@ -190,8 +184,7 @@
                     const radioButtons = document.querySelectorAll('input[name="certificado"]');
                     const selectDiagnostico = document.getElementById('diagnostico');
                     const selectOtro = document.getElementById('otro');
-    
-                
+                    
                     radioButtons.forEach(radio => {
                         radio.addEventListener('change', function() {
                             // Habilita el desplegable si la opción "Sí" está seleccionada
@@ -208,10 +201,8 @@
             </script>
             
             
-
-            
             <div class="form-group">
-                <label for="diagnostico">diagnostico</label>
+                <label for="diagnostico">Diagnóstico:</label>
                 <select id="diagnostico" name="diagnostico" value="{{jinete.diagnostico}}" required>
                     {% for diagnostico in tipos_diagnostico %}
                     <option value="{{diagnostico.name}}">{{diagnostico}}</option>
@@ -221,12 +212,12 @@
             </div>
             
             <div>
-                <label for="otro" class="form-element">Si es otro indique cuál:</label>
+                <label for="otro" class="form-element">Si es otro, indique cuál:</label>
                 <input type="text" id="otro" name="otro" value="{{ jinete.otro }}">
             </div>
 
             <div class="form-group">
-                <label>Tipos de Discapacidad:</label>
+                <label>Tipo de Discapacidad:</label>
                 {% for tipo in tipos_discapacidad %}
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="{{ tipo }}" name="discapacidades" value="{{ tipo }}">
@@ -236,7 +227,6 @@
             </div>
             
             
-
             <div>
                 <label for="asignacion_familiar" class="form-element">¿Percibe alguna asignación familiar?</label>
                 <input type="radio" id="asignacion_si" name="asignacion" value="si"
@@ -250,7 +240,7 @@
 
     
             <div class="form-group">
-                <label for="tipo_asignacion">Tipo de Asignación</label>
+                <label for="tipo_asignacion">Tipo de Asignación:</label>
                 <select id="tipo_asignacion" name="tipo_asignacion">
                     {% for tipo in tipos_de_asignacion %}
                     <option value="{{ tipo[0] }}" {% if tipo[0] == jinete.tipo_asignacion.name %}selected{% endif %}>
@@ -259,8 +249,7 @@
                     {% endfor %}
                 </select>
             </div>
-            
-            
+                
 
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
@@ -319,14 +308,13 @@
             <h2><strong> SITUACIÓN PREVISIONAL </strong></h2>
             
             <div class="form-group">
-                <label for="obra_social">obra_social:</label>
+                <label for="obra_social">Obra social:</label>
                 <input type="text" id="obra_social" name="obra_social" value="{{ jinete.obra_social }}" required>
             </div>
-
             
             
             <div class="form-group">
-                <label for="nro_afiliado">nro_afiliado:</label>
+                <label for="nro_afiliado">Nº afiliado:</label>
                 <input type="text" id="nro_afiliado" name="nro_afiliado" value="{{ jinete.nro_afiliado }}" required>
             </div>
 
@@ -342,56 +330,192 @@
             
             
             <div class="form-group">
-                <label for="observaciones_curatela">observaciones_curatela:</label>
-                <input type="text" id="observaciones_curatela" name="observaciones_curatela" value="{{ jinete.observaciones_curatela }}">
+                <label for="observaciones_curatela">Observaciones:</label>
+                <input type="text" id="observaciones_curatela" name="observaciones_curatela" value="{{ jinete.observaciones_curatela or '' }}">
             </div>
 
             <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
             
             <div class="form-group">
-                <label for="nombre_institucion">nombre_institucion:</label>
+                <label for="nombre_institucion">Nombre de la institución:</label>
                 <input type="text" id="nombre_institucion" name="nombre_institucion" value="{{ jinete.nombre_institucion }}" required>
             </div>
+            
+            <div><strong>Dirección de la institución:</strong></div>
 
             <div class="form-group">
-                <label for="telefono_institucion">telefono_institucion:</label>
-                <input type="text" id="telefono_institucion" name="telefono_institucion" value="{{ jinete.telefono_institucion }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="direccion.calle">direccion.calle:</label>
+                <label for="direccion.calle">Calle:</label>
                 <input type="text" id="direccion.calle" name="direccion.calle" value="{{ jinete.direccion.calle }}" required>
             </div>
-
+            
+            
             <div class="form-group">
-                <label for="direccion.numero">direccion.numero:</label>
+                <label for="direccion.numero">Número:</label>
                 <input type="text" id="direccion.numero" name="direccion.numero" value="{{ jinete.direccion.numero }}" required>
             </div>
-
+            
             <div class="form-group">
-                <label for="direccion.piso">direccion.piso:</label>
+                <label for="direccion.piso">Piso:</label>
                 <input type="text" id="direccion.piso" name="direccion.piso" value="{{ jinete.direccion.piso or '' }}">
-
+                
             </div>
-
+            
             <div class="form-group">
-                <label for="direccion.departamento">direccion.departamento:</label>
+                <label for="direccion.departamento">Departamento:</label>
                 <input type="text" id="direccion.departamento" name="direccion.departamento" value="{{ jinete.direccion.departamento or '' }}">
             </div>
+            
+            <div class="form-group">
+                <label for="direccion.provincia">Provincia:</label>
+                <select id="direccion.provincia" name="direccion.provincia" value="{{jinete.direccion.provincia.id}}" required>
+                    {% for prov in provincias %}
+                    <option value="{{prov.id}}">{{prov.nombre}}</option>
+                    {% endfor %}
+                    
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="direccion.localidad">Localidad:</label>
+                <select id="direccion.localidad" name="direccion.localidad" value="{{jinete.direccion.localidad.id}}" required>
+                    {% for loc in localidades %}
+                    <option value="{{loc.id}}">{{loc.nombre}}</option>
+                    {% endfor %}
+                    
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="telefono_institucion">Teléfono:</label>
+                <input type="text" id="telefono_institucion" name="telefono_institucion" value="{{ jinete.telefono_institucion }}" required>
+            </div>
+            
 
             <div class="form-group">
-                <label for="direccion.provincia">direccion.provincia</label>
-                <select id="direccion.provincia" name="direccion.provincia" value="{{jinete.direccion.provincia.id}}" required>
+                <label for="grado">Grado:</label>
+                <input type="text" id="grado" name="grado" value="{{ jinete.grado }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="observaciones_institucion">Observaciones:</label>
+                <input type="text" id="observaciones_institucion" name="observaciones_institucion" value="{{ jinete.observaciones_institucion }}">
+            </div>
+
+            
+            <div class="form-group">
+                <label for="profesionales">PROFESIONALES que lo ATIENDEN:</label>
+                <input type="text" id="profesionales" name="profesionales" value="{{ jinete.profesionales }}">
+            </div>
+
+            <h2><strong> DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
+
+            {%if  familiares %}
+                {% for familiar in familiares %}
+                    <div class="form-group">
+                        <label for="familiar.parentesco_familiar">Parentesco:</label>
+                        <input type="text" id="familiar.parentesco_familiar" name="familiar.parentesco_familiar" value="{{ familiar.parentesco_familiar }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="familiar.nombre_familiar">Nombre:</label>
+                        <input type="text" id="familiar.nombre_familiar" name="familiar.nombre_familiar" value="{{ familiar.nombre_familiar }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="familiar.apellido_familiar">Apellido:</label>
+                        <input type="text" id="familiar.apellido_familiar" name="familiar.apellido_familiar" value="{{ familiar.apellido_familiar }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="familiar.dni_familiar">DNI:</label>
+                        <input type="text" id="familiar.dni_familiar" name="familiar.dni_familiar" value="{{ familiar.dni_familiar }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="familiar.direccion_familiar">Domicilio:</label>
+                        <input type="text" id="familiar.direccion_familiar" name="familiar.direccion_familiar" value="{{ familiar.direccion_familiar }}">
+                    </div>
+                
+                            
+                    <div class="form-group">
+                        <label for="familiar.provincia_familiar">Provincia:</label>
+                        <select id="familiar.provincia_familiar" name="familiar.provincia_familiar" value="{{familiar.provincia_familiar_id}}">
+                            {% for prov in provincias %}
+                                <option value="{{prov.id}}">{{prov.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="familiar.localidad_familiar">Localidad:</label>
+                        <select id="familiar.localidad_familiar" name="familiar.localidad_familiar" value="{{familiar.localidad_familiar_id}}">
+                            {% for loc in localidades %}
+                                <option value="{{loc.id}}">{{loc.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                            
+                    <div class="form-group">
+                        <label for="familiar.celular_familiar">Celular:</label>
+                        <input type="text" id="familiar.celular_familiar" name="familiar.celular_familiar" value="{{ familiar.celular_familiar }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="familiar.email_familiar">Email:</label>
+                        <input type="text" id="familiar.email_familiar" name="familiar.email_familiar" value="{{ familiar.email_familiar }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="familiar.nivel_escolaridad_familiar">Nivel de escolaridad:</label>
+                        <input type="text" id="familiar.nivel_escolaridad_familiar" name="familiar.nivel_escolaridad_familiar" value="{{ familiar.nivel_escolaridad_familiar }}">
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <label for="familiar.actividad_ocupacion_familiar">Actividad u ocupación:</label>
+                        <input type="text" id="familiar.actividad_ocupacion_familiar" name="familiar.actividad_ocupacion_familiar" value="{{ familiar.actividad_ocupacion_familiar }}">
+                    </div>
+                {% endfor %}
+            {% else %}
+                
+            <h2><strong> (OPCIONAL: ) AGREGAR DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
+            <div class="form-group">
+                <label for="nuevo_familiar.parentesco_familiar">Parentesco:</label>
+                <input type="text" id="nuevo_familiar.parentesco_familiar" name="nuevo_familiar.parentesco_familiar" value="">
+            </div>
+            
+            <div class="form-group">
+                <label for="nuevo_familiar.nombre_familiar">Nombre:</label>
+                <input type="text" id="nuevo_familiar.nombre_familiar" name="nuevo_familiar.nombre_familiar" value="">
+            </div>
+            
+            <div class="form-group">
+                <label for="nuevo_familiar.apellido_familiar">Apellido:</label>
+                <input type="text" id="nuevo_familiar.apellido_familiar" name="nuevo_familiar.apellido_familiar" value="">
+            </div>
+            
+            <div class="form-group">
+                <label for="nuevo_familiar.dni_familiar">DNI:</label>
+                <input type="text" id="nuevo_familiar.dni_familiar" name="nuevo_familiar.dni_familiar" value="">
+            </div>
+            
+            <div class="form-group">
+                <label for="nuevo_familiar.direccion_familiar">Domicilio:</label>
+                <input type="text" id="nuevo_familiar.direccion_familiar" name="nuevo_familiar.direccion_familiar" value="">
+            </div>
+            
+            <div class="form-group">
+                <label for="nuevo_familiar.provincia_familiar">nuevo_familiar.provincia_familiar</label>
+                <select id="nuevo_familiar.provincia_familiar" name="nuevo_familiar.provincia_familiar" value="">
                     {% for prov in provincias %}
                         <option value="{{prov.id}}">{{prov.nombre}}</option>
                     {% endfor %}
-
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="direccion.localidad">direccion.localidad</label>
-                <select id="direccion.localidad" name="direccion.localidad" value="{{jinete.direccion.localidad.id}}" required>
+                <label for="nuevo_familiar.localidad_familiar">nuevo_familiar.localidad_familiar</label>
+                <select id="nuevo_familiar.localidad_familiar" name="nuevo_familiar.localidad_familiar" value="">
                     {% for loc in localidades %}
                         <option value="{{loc.id}}">{{loc.nombre}}</option>
                     {% endfor %}
@@ -401,263 +525,116 @@
             
 
             <div class="form-group">
-                <label for="grado">grado:</label>
-                <input type="text" id="grado" name="grado" value="{{ jinete.grado }}" required>
+                <label for="nuevo_familiar.celular_familiar">Celular:</label>
+                <input type="text" id="nuevo_familiar.celular_familiar" name="nuevo_familiar.celular_familiar" value="">
             </div>
-
             <div class="form-group">
-                <label for="observaciones_institucion">observaciones_institucion:</label>
-                <input type="text" id="observaciones_institucion" name="observaciones_institucion" value="{{ jinete.observaciones_institucion }}">
+                <label for="nuevo_familiar.nivel_escolaridad_familiar">Nivel de escolaridad:</label>
+                <input type="text" id="nuevo_familiar.nivel_escolaridad_familiar" name="nuevo_familiar.nivel_escolaridad_familiar" value="">
             </div>
-
             
             <div class="form-group">
-                <label for="profesionales">profesionales:</label>
-                <input type="text" id="profesionales" name="profesionales" value="{{ jinete.profesionales }}">
+                <label for="nuevo_familiar.email_familiar">Email:</label>
+                <input type="text" id="nuevo_familiar.email_familiar" name="nuevo_familiar.email_familiar" value="">
             </div>
+            
+            <div class="form-group">
+                <label for="nuevo_familiar.actividad_ocupacion_familiar">Actividad u ocupación:
+                </label>
+                <input type="text" id="nuevo_familiar.actividad_ocupacion_familiar" name="nuevo_familiar.actividad_ocupacion_familiar" value="">
+            </div>
+            
+        {% endif %}
 
-            <h2><strong> DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
-            {%if  familiares %}
-                {% for familiar in familiares %}
-                    <div class="form-group">
-                        <label for="familiar.parentesco_familiar">familiar.parentesco_familiar:</label>
-                        <input type="text" id="familiar.parentesco_familiar" name="familiar.parentesco_familiar" value="{{ familiar.parentesco_familiar }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="familiar.nombre_familiar">familiar.nombre_familiar:</label>
-                        <input type="text" id="familiar.nombre_familiar" name="familiar.nombre_familiar" value="{{ familiar.nombre_familiar }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="familiar.apellido_familiar">familiar.apellido_familiar:</label>
-                        <input type="text" id="familiar.apellido_familiar" name="familiar.apellido_familiar" value="{{ familiar.apellido_familiar }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="familiar.dni_familiar">familiar.dni_familiar:</label>
-                        <input type="text" id="familiar.dni_familiar" name="familiar.dni_familiar" value="{{ familiar.dni_familiar }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="familiar.direccion_familiar">familiar.direccion_familiar:</label>
-                        <input type="text" id="familiar.direccion_familiar" name="familiar.direccion_familiar" value="{{ familiar.direccion_familiar }}">
-                    </div>
-                    
-
-                            
-                    <div class="form-group">
-                        <label for="familiar.provincia_familiar">familiar.provincia_familiar</label>
-                        <select id="familiar.provincia_familiar" name="familiar.provincia_familiar" value="{{familiar.provincia_familiar_id}}">
-                            {% for prov in provincias %}
-                                <option value="{{prov.id}}">{{prov.nombre}}</option>
-                            {% endfor %}
-
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="familiar.localidad_familiar">familiar.localidad_familiar</label>
-                        <select id="familiar.localidad_familiar" name="familiar.localidad_familiar" value="{{familiar.localidad_familiar_id}}">
-                            {% for loc in localidades %}
-                                <option value="{{loc.id}}">{{loc.nombre}}</option>
-                            {% endfor %}
-
-                        </select>
-                    </div>
-                            
-                    <div class="form-group">
-                        <label for="familiar.celular_familiar">familiar.celular_familiar:</label>
-                        <input type="text" id="familiar.celular_familiar" name="familiar.celular_familiar" value="{{ familiar.celular_familiar }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="familiar.nivel_escolaridad_familiar">familiar.nivel_escolaridad_familiar:</label>
-                        <input type="text" id="familiar.nivel_escolaridad_familiar" name="familiar.nivel_escolaridad_familiar" value="{{ familiar.nivel_escolaridad_familiar }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="familiar.email_familiar">familiar.email_familiar:</label>
-                        <input type="text" id="familiar.email_familiar" name="familiar.email_familiar" value="{{ familiar.email_familiar }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="familiar.actividad_ocupacion_familiar">familiar.actividad_ocupacion_familiar:</label>
-                        <input type="text" id="familiar.actividad_ocupacion_familiar" name="familiar.actividad_ocupacion_familiar" value="{{ familiar.actividad_ocupacion_familiar }}">
-                    </div>
-                    
+        
+        <div class="form-group">
+            <label for="trabajo_institucional">Trabajo institucional:</label>
+            <select id="trabajo_institucional" name="trabajo_institucional">
+                {% for trabajo in trabajos_institucionales %}
+                <option value="{{ trabajo[0] }}" {% if trabajo[0] == jinete.trabajo_institucional.value %}selected{% endif %}>
+                    {{ trabajo[1] }}
+                </option>
                 {% endfor %}
-                {% else %}
-                
-                <h2><strong> (OPCIONAL: ) AGREGAR DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
-                <div class="form-group">
-                    <label for="nuevo_familiar.parentesco_familiar">nuevo_familiar.parentesco_familiar:</label>
-                    <input type="text" id="nuevo_familiar.parentesco_familiar" name="nuevo_familiar.parentesco_familiar" value="">
-                </div>
-                
-                <div class="form-group">
-                    <label for="nuevo_familiar.nombre_familiar">nuevo_familiar.nombre_familiar:</label>
-                    <input type="text" id="nuevo_familiar.nombre_familiar" name="nuevo_familiar.nombre_familiar" value="">
-                </div>
-                
-                <div class="form-group">
-                    <label for="nuevo_familiar.apellido_familiar">nuevo_familiar.apellido_familiar:</label>
-                    <input type="text" id="nuevo_familiar.apellido_familiar" name="nuevo_familiar.apellido_familiar" value="">
-                </div>
-                
-                <div class="form-group">
-                    <label for="nuevo_familiar.dni_familiar">nuevo_familiar.dni_familiar:</label>
-                    <input type="text" id="nuevo_familiar.dni_familiar" name="nuevo_familiar.dni_familiar" value="">
-                </div>
-                
-                <div class="form-group">
-                    <label for="nuevo_familiar.direccion_familiar">nuevo_familiar.direccion_familiar:</label>
-                    <input type="text" id="nuevo_familiar.direccion_familiar" name="nuevo_familiar.direccion_familiar" value="">
-                </div>
-                
-                
-                <div class="form-group">
-                    <label for="nuevo_familiar.provincia_familiar">nuevo_familiar.provincia_familiar</label>
-                    <select id="nuevo_familiar.provincia_familiar" name="nuevo_familiar.provincia_familiar" value="">
-                        {% for prov in provincias %}
-                            <option value="{{prov.id}}">{{prov.nombre}}</option>
-                        {% endfor %}
-
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="nuevo_familiar.localidad_familiar">nuevo_familiar.localidad_familiar</label>
-                    <select id="nuevo_familiar.localidad_familiar" name="nuevo_familiar.localidad_familiar" value="">
-                        {% for loc in localidades %}
-                            <option value="{{loc.id}}">{{loc.nombre}}</option>
-                        {% endfor %}
-
-                    </select>
-                </div>
-                        
-
-                <div class="form-group">
-                    <label for="nuevo_familiar.celular_familiar">nuevo_familiar.celular_familiar:</label>
-                    <input type="text" id="nuevo_familiar.celular_familiar" name="nuevo_familiar.celular_familiar" value="">
-                </div>
-                <div class="form-group">
-                    <label for="nuevo_familiar.nivel_escolaridad_familiar">nuevo_familiar.nivel_escolaridad_familiar:</label>
-                    <input type="text" id="nuevo_familiar.nivel_escolaridad_familiar" name="nuevo_familiar.nivel_escolaridad_familiar" value="">
-                </div>
-                
-                <div class="form-group">
-                    <label for="nuevo_familiar.email_familiar">nuevo_familiar.email_familiar:</label>
-                    <input type="text" id="nuevo_familiar.email_familiar" name="nuevo_familiar.email_familiar" value="">
-                </div>
-                
-                <div class="form-group">
-                    <label for="nuevo_familiar.actividad_ocupacion_familiar">nuevo_familiar.actividad_ocupacion_familiar:</label>
-                    <input type="text" id="nuevo_familiar.actividad_ocupacion_familiar" name="nuevo_familiar.actividad_ocupacion_familiar" value="">
-                </div>
-                
-            {% endif %}
-
-
-            
-            <div class="form-group">
-                <label for="trabajo_institucional">trabajo_institucional</label>
-                <select id="trabajo_institucional" name="trabajo_institucional">
-                    {% for trabajo in trabajos_institucionales %}
-                    <option value="{{ trabajo[0] }}" {% if trabajo[0] == jinete.trabajo_institucional.value %}selected{% endif %}>
-                        {{ trabajo[1] }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            
-            
-            <div>
-                <label for="condicion" class="form-element">condicion:</label>
-                <input type="radio" id="condicion_si" name="condicion" value="si" 
-                    {% if jinete.condicion == True %}checked{% endif %}>
-                <label for="condicion_si">Sí</label>
-                
-                <input type="radio" id="condicion_no" name="condicion" value="no" 
-                    {% if jinete.condicion == False %}checked{% endif %}>
-                <label for="condicion_no">No</label>
-            </div>
-
-
-            
+            </select>
+        </div>
         
-
+        
+        <div>
+            <label for="condicion" class="form-element">Condición:</label>
+            <input type="radio" id="condicion_si" name="condicion" value="si" 
+                {% if jinete.condicion == True %}checked{% endif %}>
+            <label for="condicion_si">Sí</label>
             
-            <div class="form-group">
-                <label for="sede">sede</label>
-                <select id="sede" name="sede">
-                    {% for sede in list_sedes %}
-                    <option value="{{ sede[0] }}" {% if sede[0] == jinete.sede.value %}selected{% endif %}>
-                        {{ sede[1] }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            
+            <input type="radio" id="condicion_no" name="condicion" value="no" 
+                {% if jinete.condicion == False %}checked{% endif %}>
+            <label for="condicion_no">No</label>
+        </div>
 
-            <div class="form-group">
-                <label>Día:</label>
-                {% for dia in dias_semana %}
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="{{ dia }}" name="dias_semana" value="{{ dia }}"
-                            {% if dia[1] in jinete_dias_name %} checked {% endif %}>
-                        <label class="form-check-label" for="{{ dia }}">{{ dia[0] }}</label>
-                    </div>
+        
+        <div class="form-group">
+            <label for="sede">Sede:</label>
+            <select id="sede" name="sede">
+                {% for sede in list_sedes %}
+                <option value="{{ sede[0] }}" {% if sede[0] == jinete.sede.value %}selected{% endif %}>
+                    {{ sede[1] }}
+                </option>
                 {% endfor %}
-            </div>
-            
-            
-
-            <div class="form-group">
-                <label for="caballo">caballo:</label>
-                <input type="text" id="caballo" name="caballo" value="{{ jinete.caballo }}" required>
-            </div>
-
-
-
-            
-            <div class="form-group">
-                <label for="caballo">Caballo:</label>
-                <select id="caballo" name="caballo" value="{{jinete.caballo.id}}" required>
-                    {% for caballo in list_caballos %}
-                        <option value="{{caballo.id}}">{{caballo.nombre}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="profesor_o_terapeuta">profesor_o_terapeuta:</label>
-                <select id="profesor_o_terapeuta" name="profesor_o_terapeuta" value="{{jinete.profesor_o_terapeuta.id}}" required>
-                    {% for prof in list_profes_terapeutas %}
-                        <option value="{{prof.id}}">{{prof.apellido}} {{prof.nombre}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="conductor_caballo">conductor_caballo:</label>
-                <select id="conductor_caballo" name="conductor_caballo" value="{{jinete.conductor_caballo.id}}" required>
-                    {% for conductor in list_conductores %}
-                        <option value="{{conductor.id}}">{{conductor.apellido}}  {{conductor.nombre}}  </option>
-                    {% endfor %}
-                </select>
-            </div>
+            </select>
+        </div>
         
-            
-            <div class="form-group">
-                <label for="auxiliar_pista">auxiliar_pista:</label>
-                <select id="auxiliar_pista" name="auxiliar_pista" value="{{jinete.auxiliar_pista.id}}" required>
-                    {% for auxiliar in list_auxiliares_pista %}
-                        <option value="{{auxiliar.id}}">{{auxiliar.apellido}}  {{auxiliar.nombre}}  </option>
-                    {% endfor %}
-                </select>
-            </div>
+
+        <div class="form-group">
+            <label>Días:</label>
+            {% for dia in dias_semana %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="{{ dia }}" name="dias_semana" value="{{ dia }}"
+                        {% if dia[1] in jinete_dias_name %} checked {% endif %}>
+                    <label class="form-check-label" for="{{ dia }}">{{ dia[0] }}</label>
+                </div>
+            {% endfor %}
+        </div>
         
-                       
+
+        <div class="form-group">
+            <label for="profesor_o_terapeuta">Profesor/a o Terapeuta:</label>
+            <select id="profesor_o_terapeuta" name="profesor_o_terapeuta" value="{{jinete.profesor_o_terapeuta.id}}" required>
+                {% for prof in list_profes_terapeutas %}
+                    <option value="{{prof.id}}">{{prof.apellido}} {{prof.nombre}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="conductor_caballo">Conductor/a del Caballo:</label>
+            <select id="conductor_caballo" name="conductor_caballo" value="{{jinete.conductor_caballo.id}}" required>
+                {% for conductor in list_conductores %}
+                <option value="{{conductor.id}}">{{conductor.apellido}}  {{conductor.nombre}}  </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        
+        
+        <div class="form-group">
+            <label for="caballo">Caballo:</label>
+            <select id="caballo" name="caballo" value="{{jinete.caballo.id}}" required>
+                {% for caballo in list_caballos %}
+                    <option value="{{caballo.id}}">{{caballo.nombre}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+    
+        
+        <div class="form-group">
+            <label for="auxiliar_pista">Auxiliar de Pista:</label>
+            <select id="auxiliar_pista" name="auxiliar_pista" value="{{jinete.auxiliar_pista.id}}" required>
+                {% for auxiliar in list_auxiliares_pista %}
+                    <option value="{{auxiliar.id}}">{{auxiliar.apellido}}  {{auxiliar.nombre}}  </option>
+                {% endfor %}
+            </select>
+        </div>        
     
             <div>
                 <button type="submit" style="margin: 10px;" class="btn btn-submit">Guardar Cambios</button>
