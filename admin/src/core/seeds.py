@@ -92,18 +92,34 @@ def run():
     )
 
     user3 = auth.create_user(
-        email="franvr@hotmail",
-        alias="franvr",
-        password="franvr",
+        email="tecnica@hotmail",
+        alias="tecnica",
+        password="tecnica",
         system_admin=False,
         activo=True,
     )
 
     user4 = auth.create_user(
-        email="franvr2@hotmail",
-        alias="franvr2",
-        password="franvr2",
+        email="voluntariado@hotmail",
+        alias="voluntariado",
+        password="voluntariado",
         system_admin=False,
+        activo=True,
+    )
+
+    user5 = auth.create_user(
+        email="ecuestre@hotmail",
+        alias="ecuestre",
+        password="ecuestre",
+        system_admin=False,
+        activo=True,
+    )
+
+    user6 = auth.create_user(
+        email="admin@hotmail",
+        alias="admin",
+        password="admin",
+        system_admin=True,
         activo=True,
     )
 
@@ -111,6 +127,8 @@ def run():
     board.assign_user(issue2, user2)
     board.assign_user(issue1, user3)
     board.assign_user(issue1, user4)
+    board.assign_user(issue1, user5)
+    board.assign_user(issue1, user6)
 
     label1 = board.create_label(
         title="urgente",
@@ -147,6 +165,9 @@ def run():
     )
     auth.assign_rol(user3, [rol_tecnica])
     auth.assign_rol(user4, [rol_voluntariado])
+    auth.assign_rol(user5, [rol_ecuestre])
+    auth.assign_rol(user6, [rol_administracion])
+
     board.assign_labels(issue1, [label1])
     board.assign_labels(issue2, [label1, label2])
 
