@@ -3,9 +3,11 @@ from src.core.database import db
 from src.core.cobros.models import RegistroCobro
 from src.core.cobros.forms import RegistroCobroForm
 from src.core.equipo.models import Empleado
+from src.core import cobros
 from src.web.handlers.auth import login_required, check
 
 cobros_bp = Blueprint("cobros", __name__, template_folder="../templates/cobros")
+
 
 @cobros_bp.route("/registrar", methods=["GET", "POST"])
 @login_required
@@ -23,11 +25,15 @@ def registrar_cobro():
             observaciones=form.observaciones.data,
         )
 
-        db.session.add(nuevo_cobro)
-        db.session.commit()
-        return redirect(url_for("cobros.listar_cobros", success_cobro="Cobro registrado exitosamente."))
-    
+        cobros.agregar_cobro(nuevo_cobro)
+        return redirect(
+            url_for(
+                "cobros.listar_cobros", success_cobro="Cobro registrado exitosamente."
+            )
+        )
+
     return render_template("registrar_cobro.html", form=form)
+
 
 @cobros_bp.route("/listado", methods=["GET"])
 @login_required
@@ -40,39 +46,27 @@ def listar_cobros():
     apellido_recibido = request.args.get("apellido_recibido")
     orden = request.args.get("orden", "asc")
 
-    query = RegistroCobro.query
+    query = cobros.listar_cobros(
+        fecha_inicio, fecha_fin, medio_pago, nombre_recibido, apellido_recibido
+    )
 
-    if fecha_inicio and fecha_fin:
-        query = query.filter(RegistroCobro.fecha_pago.between(fecha_inicio, fecha_fin))
-
-    if medio_pago:
-        query = query.filter(RegistroCobro.medio_pago == medio_pago.lower())
-
-    if nombre_recibido:
-        query = query.join(Empleado).filter(
-            Empleado.nombre.ilike(f"%{nombre_recibido}%")
-        )
-
-    if apellido_recibido:
-        query = query.join(Empleado).filter(
-            Empleado.apellido.ilike(f"%{apellido_recibido}%")
-        )
-
-    if orden == "desc":
-        cobros_realizado = query.order_by(RegistroCobro.fecha_pago.desc()).all()
-    else:
-        cobros_realizado = query.order_by(RegistroCobro.fecha_pago.asc()).all()
+    cobros_realizado = cobros.ordenar_fecha(orden, query)
 
     success_cobro = request.args.get("success_cobro")
 
-    return render_template("listado_cobros.html", cobros_realizado=cobros_realizado, success_cobro=success_cobro)
+    return render_template(
+        "listado_cobros.html",
+        cobros_realizado=cobros_realizado,
+        success_cobro=success_cobro,
+    )
+
 
 @cobros_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 @login_required
 @check("cobro_update")
 def editar_cobro(id):
-    cobro = RegistroCobro.query.get_or_404(id)
-    form = RegistroCobroForm(obj=cobro)
+    cobro = cobros.obtener_cobro(id)
+    form = cobros.obtener_cobro_param(cobro)
 
     if form.validate_on_submit():
         cobro.jinete_id = form.jinete.data
@@ -82,20 +76,22 @@ def editar_cobro(id):
         cobro.recibido_por = form.recibido_por.data
         cobro.observaciones = form.observaciones.data
 
-        db.session.commit()
-        return redirect(url_for("cobros.listar_cobros", success_cobro="Cobro editado exitosamente."))
+        cobros.actualizar_cobro()
+        return redirect(
+            url_for("cobros.listar_cobros", success_cobro="Cobro editado exitosamente.")
+        )
 
     return render_template("editar_cobro.html", form=form, cobro=cobro)
+
 
 @cobros_bp.route("/eliminar/<int:id>", methods=["POST"])
 @login_required
 @check("cobro_index")
 def eliminar_cobro(id):
-    cobro = RegistroCobro.query.get_or_404(id)
-    db.session.delete(cobro)
-    db.session.commit()
-    ##flash("Cobro eliminado exitosamente.")
+    cobro = cobros.obtener_cobro(id)
+    cobros.eliminar_cobro(cobro)
     return redirect(url_for("cobros.listar_cobros"))
+
 
 @cobros_bp.route("/buscar", methods=["GET"])
 @login_required
@@ -108,21 +104,9 @@ def buscar_cobros():
     apellido_recibe = request.args.get("apellido")
     orden = request.args.get("orden", "asc")
 
-    query = RegistroCobro.query.join(Empleado, RegistroCobro.recibido_por == Empleado.id)
-
-    if medio_pago:
-        query = query.filter(RegistroCobro.medio_pago == medio_pago.lower())    
-    if fecha_inicio and fecha_fin:
-        query = query.filter(RegistroCobro.fecha_pago.between(fecha_inicio, fecha_fin))    
-    if nombre_recibe:
-        query = query.filter(Empleado.nombre.ilike(f"{nombre_recibe}%"))
-    if apellido_recibe:
-        query = query.filter(Empleado.apellido.ilike(f"{apellido_recibe}%"))
-    if orden == "desc":
-        query = query.order_by(RegistroCobro.fecha_pago.desc())
-    else:
-        query = query.order_by(RegistroCobro.fecha_pago.asc())
-
-    cobros_realizado = query.all()
+    query = cobros.buscar_cobros(
+        medio_pago, fecha_inicio, fecha_fin, nombre_recibe, apellido_recibe, orden
+    )
+    cobros_realizado = cobros.obtener_todos(query)
 
     return render_template("listado_cobros.html", cobros_realizado=cobros_realizado)
