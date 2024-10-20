@@ -16,10 +16,12 @@
 {% endblock %}
 
 {% block content %}
+{{ super() }}
+
     <h1 class="text-center">Carga de jinete</h1>
     
     <form action="{{ url_for('jya.add_jinete') }}" method="POST">
-        
+        {{ form.hidden_tag() }}
         <h2><strong> DATOS PERSONALES DEL JINETE O AMAZONA </strong></h2>
                 
         <div>
@@ -39,7 +41,7 @@
         
         <div>
             <label for="edad" class="form-element">Edad:</label>
-            <input type="number" id="edad" name="edad" required>
+            {{ form.edad }}
         </div>
 
         <div>
@@ -267,23 +269,33 @@
         </div>
 
         <div>
-            <label for="domicilio_calle" class="form-element">Calle:</label>
-            {{ form.domicilio_calle }}
+            <label for="institucion_direccion_calle" class="form-element">Calle:</label>
+            {{ form.institucion_direccion_calle }}
         </div>
         
         <div>
-            <label for="domicilio_numero" class="form-element">Numero:</label>
-            {{ form.domicilio_numero }}
+            <label for="institucion_direccion_numero" class="form-element">Numero:</label>
+            {{ form.institucion_direccion_numero }}
+        </div>
+
+        <div>
+            <label for="institucion_direccion_departamento" class="form-element">Departamento:</label>
+            {{ form.institucion_direccion_departamento }}
+        </div>
+
+        <div>
+            <label for="institucion_direccion_piso" class="form-element">Piso:</label>
+            {{ form.institucion_direccion_piso }}
         </div>
         
         <div>
-            <label for="domicilio_provincia" class="form-element">Provincia:</label>
-            {{ form.domicilio_provincia }}
+            <label for="institucion_direccion_provincia" class="form-element">Provincia:</label>
+            {{ form.institucion_direccion_provincia }}
         </div>
         
         <div>
-            <label for="domicilio_localidad" class="form-element">Localidad:</label>
-            {{ form.domicilio_localidad }}
+            <label for="institucion_direccion_localidad" class="form-element">Localidad:</label>
+            {{ form.institucion_direccion_localidad }}
         </div>
 
         <div>
@@ -329,7 +341,17 @@
             <label for="direccion_familiar" class="form-element">Direccion:</label>
             {{ form.direccion_familiar }}
         </div>
-        
+
+        <div>
+            <label for="provincia_familiar" class="form-element">Provincia:</label>
+            {{ form.provincia_familiar }}
+        </div>
+
+        <div>
+            <label for="localidad_familiar" class="form-element">localidad:</label>
+            {{ form.localidad_familiar }}
+        </div>
+
 
         <div>
             <label for="celular_familiar" class="form-element">Celular actual:</label>
@@ -380,7 +402,7 @@
                 </div>
             {% endfor %}
         </div>
-        
+
         
         <div>
             <label for="caballo" class="form-element">Caballo:</label>

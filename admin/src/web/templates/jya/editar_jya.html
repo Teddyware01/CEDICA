@@ -15,8 +15,23 @@
         <form action="{{ url_for('jya.editar_jinete', jinete_id=jinete.id) }}" method="POST">
             {{ form.hidden_tag() }}
             
-            <h2><strong> DATOS PERSONALES DEL JINETE O AMAZONA </strong></h2>
-                
+{% extends "layout.html" %}
+
+{% block title %}Editar Jinete{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <div>
+        <h1 class="text-center">Editar Jinete</h1>
+        
+        <form action="{{ url_for('jya.editar_jinete', jinete_id=jinete.id) }}" method="POST">
+            {{ form.hidden_tag() }}
+            
             <div>
                 <label for="nombre" class="form-element">Nombre/s:</label>
                 {{ form.nombre }}
@@ -43,17 +58,15 @@
             </div>
             
             <div><strong> Lugar de nacimiento: </strong></div>
-
             <div>
                 <label for="provincia_nacimiento" class="form-element">Provincia:</label>
                 {{ form.provincia_nacimiento }}
             </div>
-
+    
             <div>
                 <label for="localidad_nacimiento" class="form-element">Localidad:</label>
                 {{ form.localidad_nacimiento }}
             </div>
-
     
             <div><strong> Domicilio actual: </strong></div>
             <div>
@@ -108,15 +121,18 @@
     
             <div>
                 <label for="becado" class="form-element">Becado:</label>
-                <input type="radio" id="becado_si" name="becado" value="si" {{ 'checked' if form.becado.data else '' }}>
+                <input type="radio" id="becado_si" name="becado" value="si" 
+                    {% if form.becado.data == True %}checked{% endif %}>
                 <label for="becado_si">Sí</label>
-                <input type="radio" id="becado_no" name="becado" value="no" {{ 'checked' if not form.becado.data else '' }}>
+                
+                <input type="radio" id="becado_no" name="becado" value="no" 
+                    {% if form.becado.data == False %}checked{% endif %}>
                 <label for="becado_no">No</label>
             </div>
     
             <div>
                 <label for="observaciones" class="form-element">observaciones:</label>
-                {{ form.observaciones_becado() }}
+                {{ form.observaciones_becado }}
             </div>
     
             <div>
@@ -124,9 +140,11 @@
                     ¿Posee certificado<br>
                     de discapacidad?
                 </label>
-                <input type="radio" id="certificado_si" name="certificado" value="si" {{ 'checked' if form.certificado_discapacidad.data else '' }}>
+                <input type="radio" id="certificado_si" name="certificado" value="si"
+                    {% if form.certificado_discapacidad.data == True %}checked{% endif %}>
                 <label for="certificado_si">Sí</label>
-                <input type="radio" id="certificado_no" name="certificado" value="no" {{ 'checked' if not form.certificado_discapacidad.data else '' }}>
+                <input type="radio" id="certificado_no" name="certificado" value="no"
+                    {% if form.certificado_discapacidad.data == False %}checked{% endif %}>
                 <label for="certificado_no">No</label>
             </div>
     
@@ -161,21 +179,33 @@
                 <label for="otro" class="form-element">Si es otro indique cuál:</label>
                 {{ form.otro }}
             </div>
-
+    
+            <div class="form-group">
+                <label>Tipos de Discapacidad:</label>
+                {% for checkbox in form.discapacidades %}
+                    <div class="form-check">
+                        {{ checkbox.label(class="form-check-label") }}
+                        {{ checkbox(class="form-check-input") }}
+                    </div>
+                {% endfor %}
+            </div>
             
-            
-
             <div>
                 <label for="asignacion_familiar" class="form-element">¿Percibe alguna asignación familiar?</label>
-                <input type="radio" id="asignacion_si" name="asignacion" value="si" {{ 'checked' if form.asignacion_familiar.data else '' }}>
+                <input type="radio" id="asignacion_si" name="asignacion" value="si"
+                {% if form.asignacion_familiar.data == True %}checked{% endif %}>
                 <label for="asignacion_si">Sí</label>
-                <input type="radio" id="asignacion_no" name="asignacion" value="no" {{ 'checked' if not form.asignacion_familiar.data else '' }}>
+
+                <input type="radio" id="asignacion_no" name="asignacion" value="no"
+                {% if form.asignacion_familiar.data == False %}checked{% endif %}>
                 <label for="asignacion_no">No</label>
             </div>
+
+            
     
             <div>
                 <label for="tipo_asignacion" class="form-element">Tipo de asignación:</label>
-                {{ form.tipo_asignacion(id="tipo_asignacion") }}
+                {{ form.tipo_asignacion }}
             </div>
     
             <script>
@@ -194,15 +224,19 @@
     
             <div>
                 <label for="beneficiario_pension" class="form-element">¿Es beneficiario de alguna pensión?</label>
-                <input type="radio" id="pension_si" name="beneficiario_pension" value="si" {{ 'checked' if form.beneficiario_pension.data else '' }}>
+                <input type="radio" id="pension_si" name="beneficiario_pension" value="si"
+                {% if form.beneficiario_pension.data == True %}checked{% endif %}>
                 <label for="pension_si">Sí</label>
-                <input type="radio" id="pension_no" name="beneficiario_pension" value="no" {{ 'checked' if not form.beneficiario_pension.data else '' }}>
+                <input type="radio" id="pension_no" name="beneficiario_pension" value="no"
+                {% if form.beneficiario_pension.data == False %}checked{% endif %}>
                 <label for="pension_no">No</label>
             </div>
+
+            
     
             <div>
                 <label for="pension" class="form-element">tipo pension:</label>
-                {{ form.pension(id="tipo_pension") }}
+                {{ form.pension }}
             </div>
     
             <script>
@@ -233,9 +267,11 @@
     
             <div>
                 <label for="curatela" class="form-element"> ¿Posee curatela? </label>
-                <input type="radio" id="curatela_si" name="curatela" value="si" {{ 'checked' if form.curatela.data else '' }}>
+                <input type="radio" id="curatela_si" name="curatela" value="si"
+                {% if form.curatela.data == True %}checked{% endif %}>
                 <label for="curatela_si">Sí</label>
-                <input type="radio" id="curatela_no" name="curatela" value="no" {{ 'checked' if not form.curatela.data else '' }}>
+                <input type="radio" id="curatela_no" name="curatela" value="no"
+                {% if form.curatela.data == False %}checked{% endif %}>
                 <label for="curatela_no">No</label>
             </div>
             
@@ -256,7 +292,6 @@
                 {{ form.telefono_institucion }}
             </div>
     
-            
             <div>
                 <label for="institucion_direccion_calle" class="form-element">Calle:</label>
                 {{ form.institucion_direccion_calle }}
@@ -266,12 +301,12 @@
                 <label for="institucion_direccion_numero" class="form-element">Numero:</label>
                 {{ form.institucion_direccion_numero }}
             </div>
-            
+    
             <div>
                 <label for="institucion_direccion_departamento" class="form-element">Departamento:</label>
                 {{ form.institucion_direccion_departamento }}
             </div>
-            
+    
             <div>
                 <label for="institucion_direccion_piso" class="form-element">Piso:</label>
                 {{ form.institucion_direccion_piso }}
@@ -301,19 +336,81 @@
                 <label for="profesionales" class="form-element">PROFESIONALES que lo ATIENDEN:</label>
                 {{ form.profesionales }}
             </div>
-
+    
+    
+    
+            <h2><strong> DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
+            <div>
+                <label for="parentesco_familiar" class="form-element">Parentesco:</label>
+                {{ form.parentesco_familiar }}
+            </div>
+            
+            <div>
+                <label for="nombre_familiar" class="form-element">Nombre:</label>
+                {{ form.nombre_familiar }}
+            </div>
+            
+            <div>
+                <label for="apellido_familiar" class="form-element">Apellido/s:</label>
+                {{ form.apellido_familiar }}
+            </div>
+    
+            <div>
+                <label for="dni_familiar" class="form-element">DNI:</label>
+                {{ form.dni_familiar }}
+            </div>
+            
+            <div><strong> Domicilio actual: </strong></div>
+            <div>
+                <label for="direccion_familiar" class="form-element">Direccion:</label>
+                {{ form.direccion_familiar }}
+            </div>
+    
+            <div>
+                <label for="provincia_familiar" class="form-element">Provincia:</label>
+                {{ form.provincia_familiar }}
+            </div>
+    
+            <div>
+                <label for="localidad_familiar" class="form-element">localidad:</label>
+                {{ form.localidad_familiar }}
+            </div>
+    
+    
+            <div>
+                <label for="celular_familiar" class="form-element">Celular actual:</label>
+                {{ form.celular_familiar }}
+            </div>
+    
+            <div>
+                <label for="nivel_escolaridad_familiar" class="form-element">escolaridad:</label>
+                {{ form.nivel_escolaridad_familiar }}
+            </div>
+    
+            <div>
+                <label for="email_familiar" class="form-element">email:</label>
+                {{ form.email_familiar }}
+            </div>
+            
+            <div>
+                <label for="actividad_ocupacion_familiar" class="form-element">Actividad u ocupación:</label>
+                {{ form.actividad_ocupacion_familiar }}
+            </div>
+    
             <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN: </strong></h2>
-
+    
             <div>
                 <label for="trabajo_institucional" class="form-element">Propuesta de trabajo Institucional:</label>
-                {{ form.trabajo_institucional(id="trabajo_institucional") }}
+                {{ form.trabajo_institucional }}
             </div>
     
             <div>
                 <label for="condicion" class="form-element">Condición:</label>
-                <input type="radio" id="condicion_si" name="condicion" value="si" {{ 'checked' if form.condicion.data else '' }}>
+                <input type="radio" id="condicion_si" name="condicion" value="si"
+                {% if form.condicion.data == True %}checked{% endif %}>
                 <label for="condicion_si">Regular</label>
-                <input type="radio" id="condicion_no" name="condicion" value="no" {{ 'checked' if not form.condicion.data else '' }}>
+                <input type="radio" id="condicion_no" name="condicion" value="no"
+                {% if form.condicion.data == False %}checked{% endif %}>
                 <label for="condicion_no">De baja</label>
             </div>
     
@@ -322,33 +419,47 @@
                 {{ form.sede }}
             </div>
     
+            <div class="form-group">
+                <label>Dias:</label>
+                {% for checkbox in form.dias %}
+                    <div class="form-check">
+                        {{ checkbox.label(class="form-check-label") }}
+                        {{ checkbox(class="form-check-input") }}
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div>
+                <label for="caballo" class="form-element">Caballo:</label>
+                {{ form.caballo }}
+            </div>
+            
+            
+            <div>
+                <label for="profesor_o_terapeuta" class="form-element">Profesor o terapeuta:</label>
+                {{ form.profesor_o_terapeuta }}
+            </div>
+            
+            
+            <div>
+                <label for="conductor_caballo" class="form-element">Conductor caballo:</label>
+                {{ form.conductor_caballo }}
+            </div>
+            
+            <div>
+                <label for="auxiliar_pista" class="form-element">Auxiliar de pista:</label>
+                {{ form.auxiliar_pista }}
+            </div>
+        
+
+
         <div>
-            <label for="caballo" class="form-element">Caballo:</label>
-            {{ form.caballo }}
-        </div>
-        
-        
-        <div>
-            <label for="profesor_o_terapeuta" class="form-element">Profesor o terapeuta:</label>
-            {{ form.profesor_o_terapeuta }}
-        </div>
-        
-        
-        <div>
-            <label for="conductor_caballo" class="form-element">Conductor caballo:</label>
-            {{ form.conductor_caballo }}
-        </div>
-        
-        <div>
-            <label for="auxiliar_pista" class="form-element">Auxiliar de pista:</label>
-            {{ form.auxiliar_pista }}
-        </div>
-        
-        <div>
-            <button type="submit" class="btn btn-primary">Agregar Jinete</button>
+            <button type="submit" style="margin: 10px;" class="btn btn-submit">Guardar Cambios</button>
             <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
         </div>
-
+        </form>
+    </div>
+{% endblock %}
         
 
 

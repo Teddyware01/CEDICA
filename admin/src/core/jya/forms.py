@@ -73,7 +73,7 @@ class AddJineteForm(FlaskForm):
     diagnostico = SelectField(
         "Diagnostico", 
         choices=[(diag.name, diag.value) for diag in DiagnosticoEnum],
-        validators=[DataRequired(message="El tipo de diagnostico es obligatorio")],
+        validators=[Optional()],
     )
     
     beneficiario_pension = BooleanField("Es beneficiario de una pension?")
@@ -91,15 +91,7 @@ class AddJineteForm(FlaskForm):
         widget=ListWidget(prefix_label=False),
         option_widget=CheckboxInput()
     )
-    
-    dias = SelectMultipleField(
-        "Dias",
-        choices=[],  # Se llenará dinámicamente
-        coerce=str,  # Convertimos los valores del formulario a cadenas (los valores del Enum)
-        widget=ListWidget(prefix_label=False),
-        option_widget=CheckboxInput()
-    )
-    
+        
     # LUGAR NACIMIENTO
     provincia_nacimiento = SelectField(
         "Provincia de Nacimiento", coerce=int, validators=[DataRequired()]
@@ -155,7 +147,7 @@ class AddJineteForm(FlaskForm):
     tipo_asignacion = SelectField(
         "Asignacion familiar", 
         choices=[(asig.name, asig.value) for asig in AsignacionEnum],
-        validators=[DataRequired(message="El tipo de asignacion es obligatorio")],
+        validators=[Optional()],
     )
 
     obra_social = StringField(
@@ -217,8 +209,9 @@ class AddJineteForm(FlaskForm):
     #direccion_familiar_numero = IntegerField("Número", validators=[DataRequired("Ingrese el número")])
     #direccion_familiar_departamento = StringField("Departamento", validators=[Optional()])
     #direccion_familiar_piso = IntegerField("Piso", validators=[Optional()])
-    #direccion_familiar_provincia = SelectField("Provincia", coerce=int, validators=[DataRequired()])
-    #direccion_familiar_localidad = SelectField("Localidad", coerce=int, validators=[DataRequired()])
+    
+    provincia_familiar = SelectField("Provincia", coerce=int, validators=[DataRequired()])
+    localidad_familiar = SelectField("Localidad", coerce=int, validators=[DataRequired()])
     direccion_familiar = StringField("Direccion", validators=[DataRequired()])
     celular_familiar = StringField("Celular", validators=[DataRequired(message="El teléfono es obligatorio"), Length(max=15), Regexp(r"^\d+$", message="El telefono debe contener solo números")])
     email_familiar = StringField('Email', validators=[DataRequired()])
@@ -258,6 +251,7 @@ class AddJineteForm(FlaskForm):
         choices=[],
         validators=[Optional()],
     )
+    
     conductor_caballo = SelectField(
         "Conductor de caballo",
         choices=[],

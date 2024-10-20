@@ -144,6 +144,19 @@ def associate_jinete_dias(jinete_id, dias_id):
     # Guardar los cambios en la base de datos
     db.session.commit()
 
+def get_jinete_dias(jinete_id):
+    # Fetch the jinete object by its ID
+    jinete = Jinete.query.get(jinete_id)
+    
+    # Check if the jinete exists
+    if not jinete:
+        return None  # Or raise an exception if preferred
+
+    # Extract the days assigned to the jinete
+    assigned_dias = [dia.dias.value for dia in jinete.dias]  # Accessing the 'dias' Enum value
+
+    return assigned_dias
+
 def add_documento(**kwargs):
     documento = JineteDocumento(**kwargs)
     db.session.add(documento)

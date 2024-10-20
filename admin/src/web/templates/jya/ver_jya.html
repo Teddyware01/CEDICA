@@ -67,8 +67,8 @@
                     <p><strong>Apellido:</strong> {{ familiar.apellido_familiar }}</p>
                     <p><strong>DNI:</strong> {{ familiar.dni_familiar }}</p>
                     <p><strong>Domicilio:</strong> {{ familiar.direccion_familiar }}</p>
-                    <p><strong>Provincia:</strong> {{ familiar.provincia_familiar }}</p>
-                    <p><strong>Localidad:</strong> {{ familiar.localidad_familiar }}</p>
+                    <p><strong>Provincia:</strong> {{ familiar.provincia_familiar.nombre }}</p>
+                    <p><strong>Localidad:</strong> {{ familiar.localidad_familiar.nombre }}</p>
                     <p><strong>Celular:</strong> {{ familiar.celular_familiar }}</p>
                     <p><strong>Email:</strong> {{ familiar.email_familiar }}</p>
                     <p><strong>Escolaridad:</strong> {{ familiar.nivel_escolaridad_familiar }}</p>
@@ -84,6 +84,11 @@
         <p><strong>Propuesta de trabajo institucional:</strong> {{ jinete.trabajo_institucional.value }}</p>
         <p><strong>Condición:</strong> {{ "REGULAR" if jinete.condicion else "DE BAJA" }}</p>
         <p><strong>SEDE:</strong> {{ jinete.sede.value }}</p>
+        <p><strong>Dias:</strong>
+            {% for d in jinete.dias %}
+                <span>{{ d.value }}</span>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </p>
         
 
         <!-- Botones solo en Información general -->

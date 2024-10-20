@@ -444,9 +444,10 @@ def run():
         trabajo_institucional=TrabajoEnum.deporte,
         condicion=False,
         sede=SedeEnum.casj,
-        #dia=[DiasEnum.jueves, DiasEnum.viernes],
     )
     
+
+        
     jya.create_jinete(
         nombre="Carlos",
         apellido="Lopez",
@@ -480,7 +481,6 @@ def run():
         trabajo_institucional=TrabajoEnum.hipoterapia,
         condicion=True,
         sede=SedeEnum.hlp,
-        #dia=[DiasEnum.lunes],
     )
     
     jya.add_familiar(
@@ -490,8 +490,8 @@ def run():
         apellido_familiar="Diaz",
         dni_familiar="654321",
         direccion_familiar="sddsa",
-        #="asdf",
-        #localidad_familiar="asdf",
+        localidad_familiar_id=1,
+        provincia_familiar_id=1,
         celular_familiar="0987654321",
         email_familiar="juan@diaz",
         nivel_escolaridad_familiar='Primario',
@@ -500,10 +500,11 @@ def run():
 
     jya.associate_jinete_familiar(1, 1)
     
-    '''jya.add_dias(
+    jya.add_dias(
         dias=DiasEnum.lunes,
     )
-    jya.associate_jinete_dias(1, 1)'''
+    
+    jya.associate_jinete_dias(1, 1)
     
 
     # Modulo ecuestre

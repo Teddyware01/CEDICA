@@ -17,7 +17,6 @@ class DiasEnum(Enum):
     domingo="Domingo"
 
 
-    # Relación inversa con Jinete
 class Dias(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     dias = db.Column(db.Enum(DiasEnum), nullable=True)
@@ -102,6 +101,10 @@ class Familiar(db.Model):
     dni_familiar = db.Column(db.String(10), nullable=False, unique=True)
     
     direccion_familiar = db.Column(db.String(255), nullable=False)
+    localidad_familiar_id = db.Column(db.Integer, db.ForeignKey("localidad.id"), nullable=False)
+    localidad_familiar = db.relationship("Localidad", back_populates="familiares")  
+    provincia_familiar_id = db.Column(db.Integer, db.ForeignKey("provincia.id"), nullable=False)
+    provincia_familiar = db.relationship("Provincia", back_populates="familiares")  
     celular_familiar = db.Column(db.String(15), nullable=False)
     email_familiar = db.Column(db.String(255), nullable=False)
     nivel_escolaridad_familiar = db.Column(db.String(255), nullable=False)  # Podría ser Enum si prefieres
@@ -158,9 +161,7 @@ class Jinete(db.Model):
     beneficiario_pension = db.Column(db.Boolean)
     pension = db.Column(db.Enum(PensionEnum), nullable=True)
     #tipos_discapacidad =  db.Column(ARRAY(db.Enum(TiposDiscapacidadEnum)), nullable=True)
-    #discapacidades = db.relationship('TipoDiscapacidad', secondary='jinete_discapacidad', back_populates='jinetes')
-    discapacidades = db.relationship('TipoDiscapacidad', secondary=jinete_discapacidad, backref='jinetes_discapacidades')
-
+    discapacidades = db.relationship('TipoDiscapacidad', secondary='jinete_discapacidad', back_populates='jinetes')
     asignacion_familiar = db.Column(db.Boolean, nullable=True)
     tipo_asignacion = db.Column(db.Enum(AsignacionEnum), nullable=True)
     obra_social = db.Column(db.String(25), nullable=False, unique=False)
@@ -187,7 +188,7 @@ class Jinete(db.Model):
     familiares = db.relationship('Familiar', secondary='jinete_familiar', back_populates='jinetes')
     documentos = db.relationship("JineteDocumento", back_populates="jinete", cascade="all, delete-orphan")
 
-  
+
     # Relaciones con tres empleados diferentes:
     #ids:
     profesor_o_terapeuta_id = db.Column(db.Integer, db.ForeignKey('empleado.id'), nullable=True)

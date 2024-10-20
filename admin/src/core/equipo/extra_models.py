@@ -26,6 +26,7 @@ class Domicilio(db.Model):
 
     empleado = db.relationship("Empleado", back_populates="domicilio")
     jinetes = db.relationship("Jinete", foreign_keys="Jinete.domicilio_id", back_populates="domicilio")
+    
 
 class Localidad(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,9 +35,11 @@ class Localidad(db.Model):
     provincia = db.relationship("Provincia", backref="localidad")
     
     jinetes = db.relationship("Jinete", foreign_keys="Jinete.localidad_nacimiento_id", back_populates="localidad_nacimiento")
+    familiares = db.relationship("Familiar", back_populates="localidad_familiar")
 
 class Provincia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(255), nullable=False, unique=True)
 
     jinetes = db.relationship("Jinete", foreign_keys="Jinete.provincia_nacimiento_id", back_populates="provincia_nacimiento")
+    familiares = db.relationship("Familiar", back_populates="provincia_familiar")

@@ -84,12 +84,15 @@ def list_conductores_caballos():
 def list_terapeutas_y_profesores():
     terapeuta = PuestoLaboral.query.filter_by(nombre="Terapeuta").first()
     profesor = PuestoLaboral.query.filter_by(nombre="Profesor/a").first()
-    if terapeuta or profesor:
-        return Empleado.query.filter(or_(
-            Empleado.puesto_laboral_id == terapeuta.id,
-            Empleado.puesto_laboral_id == profesor.id
-        )).all()
-    return []
+    
+    empleados = []
+    
+    if terapeuta:
+        empleados += Empleado.query.filter(Empleado.puesto_laboral_id == terapeuta.id).all()
+    if profesor:
+        empleados += Empleado.query.filter(Empleado.puesto_laboral_id == profesor.id).all()
+    
+    return empleados
 
 
 def create_empleado(**kwargs):
