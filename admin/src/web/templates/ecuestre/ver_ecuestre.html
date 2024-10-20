@@ -8,9 +8,14 @@
 
 {% block content %}
     {{ super() }}
-    <h1 class="text-center">Detalles del Caballo</h1>
+    <!-- Contenedor de pestañas -->
+    <div class="tab-container">
+        <div class="tab {% if active_tab == 'general' %}active{% endif %}" onclick="openTab(event, 'general')">Información general</div>
+        <div class="tab {% if active_tab == 'documentos' %}active{% endif %}" onclick="openTab(event, 'documentos')">Documentos</div>
+    </div>
 
-    <div class="caballo-detalles">
+    <!-- Información general -->
+    <div id="general" class="tab-content {% if active_tab == 'general' %}active{% endif %}">
         <table class="table">
             <tr>
                 <th>Nombre</th>
@@ -37,6 +42,19 @@
                 <td>{{ ecuestre.fecha_ingreso }}</td>
             </tr>
             <tr>
+                <th>Tipo de JyA</th>
+                <td>
+                    {% set tipo_jya_dict = {
+                        'HIPOTERAPIA': 'Hipoterapia',
+                        'MONTA_TERAPEUTICA': 'Monta Terapéutica',
+                        'DEPORTE_EQUESTRE': 'Deporte Ecuestre Adaptado',
+                        'ACTIVIDADES_RECREATIVAS': 'Actividades Recreativas',
+                        'EQUITACION': 'Equitación'
+                    } %}
+                    {{ tipo_jya_dict[ecuestre.tipoJyA] if ecuestre.tipoJyA in tipo_jya_dict else 'Desconocido' }}
+                </td>
+            </tr>
+            <tr>
                 <th>Sede</th>
                 <td>{{ sede.nombre }}</td>
             </tr>
@@ -53,8 +71,106 @@
         </table>
     </div>
 
+    <!-- Documentos -->
+    <div id="documentos" class="tab-content {% if active_tab == 'documentos' %}active{% endif %}">
+        <!-- Lista de documentos -->
+        <h2>Documentos:</h2>
+        {% if documentos %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Fecha subida</th>
+                        <th>Tipo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in documentos %}
+                        <tr>
+                            <td>{{ doc.titulo }}</td>
+                            <td>{{ doc.fecha_subida.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td>{{ doc.tipo }}</td>
+                            <td>
+                                <a href="{{ url_for('ecuestre.mostrar_archivo', ecuestre_id=ecuestre.id, file_name=doc.titulo) }}" class="btn btn-primary" download>
+                                    Descargar 
+                                </a>
+                                <a href="{{ url_for('ecuestre.eliminar_documento_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" >Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <!-- Paginación -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if pagination.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id, page=pagination.prev_num, tab='documentos') }}" aria-label="Anterior">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for page_num in pagination.iter_pages() %}
+                        {% if page_num %}
+                            <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                                <a class="page-link" href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id, page=page_num, tab='documentos') }}">{{ page_num }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">…</span></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if pagination.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id, page=pagination.next_num, tab='documentos') }}" aria-label="Siguiente">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% else %}
+            <p>No hay documentos para mostrar.</p>
+        {% endif %}
+        
+        <!-- Botones de acción en Documentos -->
+        <div class="form-actions">
+            <a href="#" class="btn btn-enlace">+ Enlace</a>
+            <a href="{{ url_for('ecuestre.subir_archivo_form', ecuestre_id=ecuestre.id) }}" class="btn btn-subir">↑ Subir</a>
+        </div>
+    </div>
+
     <div class="actions">
         <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-back">Volver al Listado</a>
     </div>
 
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabContent, tabs;
+
+            // Ocultar todos los contenidos de las pestañas
+            tabContent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].style.display = "none";
+            }
+
+            // Eliminar la clase "active" de todas las pestañas
+            tabs = document.getElementsByClassName("tab");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+
+            // Mostrar el contenido actual y agregar clase "active" a la pestaña seleccionada
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Al cargar la página, abrir la pestaña activa
+        document.addEventListener("DOMContentLoaded", function() {
+            var activeTab = "{{ active_tab }}";
+            openTab({ currentTarget: document.querySelector('.tab[onclick*="' + activeTab + '"]') }, activeTab);
+        });
+    </script>
 {% endblock %}
+

@@ -100,6 +100,9 @@ def add_jinete():
         grado=form.grado.data,
         observaciones_institucion=form.observaciones_institucion.data,
         profesionales=form.profesionales.data,
+        ##agrego aca
+        estado_pago=form.estado_pago.data,
+        ##agrego aca
         trabajo_institucional=form.trabajo_institucional.data,
         condicion=form.condicion.data,
         sede=form.sede.data,
@@ -117,7 +120,6 @@ def view_jinete(jinete_id):
     tipos_discapacidad_nombres = [tipo.name for tipo in jinete.tipos_discapacidad] if jinete.tipos_discapacidad else []
     dias_nombres = [dia.name for dia in jinete.dia] if jinete.dia else []
     return render_template("jya/ver_jya.html", jinete=jinete, tipos_discapacidad=tipos_discapacidad_nombres, dia=dias_nombres, documentos=documentos)
-
 
 
 @bp.get("/eliminar_jinete<int:jinete_id>")

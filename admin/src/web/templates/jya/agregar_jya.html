@@ -109,6 +109,15 @@
             {{ form.contacto_emergencia_telefono }}
         </div>
 
+        <!--Agrego aca -->
+
+        <div>
+            <label for="estado_pago" class="form-element">Estado del jinete (Esta al dia o en deuda):</label>
+            {{ form.estado_pago }}
+        </div>
+
+        <!--Agrego aca -->
+
         <div>
             <label for="becado" class="form-element">Becado:</label>
             <input type="radio" id="becado_si" name="becado" value="si">
@@ -119,7 +128,7 @@
 
         <div>
             <label for="observaciones" class="form-element">observaciones:</label>
-            {{ form.observaciones_becado() }}
+            {{ form.observaciones_becado }}
         </div>
 
         <div>

@@ -14,7 +14,7 @@ class RegistroCobroForm(FlaskForm):
                              validators=[DataRequired()])
     monto = DecimalField("Monto", validators=[DataRequired()])
     recibido_por = SelectField("Recibido por", choices=[], coerce=int, validators=[DataRequired()])
-    observaciones = TextAreaField("Observaciones", validators=[Optional(), Length(max=200)])
+    observaciones = TextAreaField("Observaciones (Opcional)", validators=[Optional(), Length(max=200)])
     submit = SubmitField("Registrar Cobro")
 
     def __init__(self, *args, **kwargs):

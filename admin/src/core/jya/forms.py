@@ -151,6 +151,10 @@ class AddJineteForm(FlaskForm):
         ],
     )
     
+    ##agrego aca
+    estado_pago = BooleanField("Estado de Pago (Marcar si está al día)", default=True)
+    ##agrego aca
+
     curatela = BooleanField("Curatela", validators=[DataRequired("Indique si posee curatela")])
     
     observaciones_curatela = StringField("Observaciones curatela")

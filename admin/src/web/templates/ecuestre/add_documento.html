@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %} Editar jinete {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    <article class="form-container">
+        <div>
+            
+            <h1 class="text-center">Cargar archivo</h1>
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}    
+            <!-- Formulario de búsqueda y ordenamiento -->
+            <form method="POST" action="{{ url_for('ecuestre.agregar_documento',  ecuestre_id=ecuestre.id) }}" enctype="multipart/form-data" class="mb-3">
+                <div class="form-group">
+                    <label for="tipo_archivo">Tipo de Archivo:</label>
+                    <select id="tipo_archivo" name="tipo_archivo" class="form-control">
+                        <option value="Ficha general">Ficha general</option>
+                        <option value="Planificación de Entrenamiento">Planificación de Entrenamiento</option>
+                        <option value="Informe de Evolución">Informe de Evolución</option>
+                        <option value="Carga de Imágenes">Carga de Imágenes</option>
+                        <option value="Registro veterinario">Registro veterinario</option>
+                    </select>
+                </div>
+                <fieldset>
+                    <label>
+                        <input type="file" name="documento">
+                    </label>
+                </fieldset>
+                <input type="submit" value="Guardar">
+            </form>
+            <form method="GET" action="{{ url_for('ecuestre.ver_ecuestre',  ecuestre_id=ecuestre.id) }}"  class="mb-3">
+                <input type="submit" value="Cancelar">
+            </form>
+        </div>
+    </article>
+
+    <a class="secondary" href="{{ url_for('home') }}">Volver al inicio</a>
+{% endblock %}

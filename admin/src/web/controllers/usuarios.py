@@ -14,7 +14,8 @@ bp = Blueprint("users", __name__, url_prefix="/listado_De_usuarios")
 @check("user_index")
 def listar_usuarios():    
     sort_by = request.args.get("sort_by")
-    users = auth.list_users(sort_by=sort_by)
+    page = request.args.get("page", type=int, default=1) 
+    users = auth.list_users(sort_by=sort_by, page=page)
     return render_template("listado.html", usuarios=users)
 
 @bp.get("/cliente/<int:user_id>")
@@ -116,6 +117,9 @@ def update_user(user_id):
 @check("user_update")
 def block_user(user_id):
     user = auth.traer_usuario(user_id)
+    if user.system_admin:
+        flash("No se puede bloquear un usuario administrador")
+        return render_template("listado.html", usuarios=auth.list_users())
     if user:
         user.activo = False
         db.session.commit()
