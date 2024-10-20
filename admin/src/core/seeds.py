@@ -109,8 +109,8 @@ def run():
 
     board.assign_user(issue1, user1)
     board.assign_user(issue2, user2)
-    board.assign_user(issue3, user3)
-    board.assign_user(issue4, user4)
+    board.assign_user(issue1, user3)
+    board.assign_user(issue1, user4)
 
     label1 = board.create_label(
         title="urgente",
@@ -451,7 +451,6 @@ def run():
     
     auth.assign_permiso(rol_tecnica, cobro_index)
     auth.assign_permiso(rol_tecnica, cobro_show)
-
 
     auth.assign_permiso(rol_tecnica, ecuestre_index)
     auth.assign_permiso(rol_tecnica, ecuestre_show)
