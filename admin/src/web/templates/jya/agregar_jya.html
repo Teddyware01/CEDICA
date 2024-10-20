@@ -4,7 +4,7 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 {% block navbar %}
@@ -105,9 +105,18 @@
         </div>
         
         <div>
-            <label for="contacto_emergencia_telefono" class="form-element">Telefono contacto de Emergencia:</label>
+            <label for="contacto_emergencia_telefono" class="form-element">Teléfono contacto de Emergencia:</label>
             {{ form.contacto_emergencia_telefono }}
         </div>
+
+        <!--Agrego aca -->
+
+        <div>
+            <label for="estado_pago" class="form-element">Estado del jinete (Esta al dia o en deuda):</label>
+            {{ form.estado_pago }}
+        </div>
+
+        <!--Agrego aca -->
 
         <div>
             <label for="becado" class="form-element">Becado:</label>
@@ -119,7 +128,7 @@
 
         <div>
             <label for="observaciones" class="form-element">observaciones:</label>
-            {{ form.observaciones() }}
+            {{ form.observaciones_becado }}
         </div>
 
         <div>
@@ -204,26 +213,26 @@
 
         <div>
             <label for="beneficiario_pension" class="form-element">¿Es beneficiario de alguna pensión?</label>
-            <input type="radio" id="pension_si" name="pension" value="si">
+            <input type="radio" id="pension_si" name="beneficiario_pension" value="si">
             <label for="pension_si">Sí</label>
-            <input type="radio" id="pension_no" name="pension" value="no">
+            <input type="radio" id="pension_no" name="beneficiario_pension" value="no">
             <label for="pension_no">No</label>
         </div>
 
         <div>
             <label for="pension" class="form-element">tipo pension:</label>
-            {{ form.pension }}
+            {{ form.pension(id="tipo_pension") }}
         </div>
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                const radioButtons = document.querySelectorAll('input[name="pension"]');
-                const selectAsignacion = document.getElementById('pension');
+                const radioButtons = document.querySelectorAll('input[name="beneficiario_pension"]');
+                const selectPension = document.getElementById('tipo_pension');
             
                 radioButtons.forEach(radio => {
                     radio.addEventListener('change', function() {
                         // Habilita o deshabilita el elemento según si la opción "Sí" está seleccionada
-                        selectAsignacion.disabled = !document.getElementById('pension_si').checked;
+                        selectPension.disabled = !document.getElementById('pension_si').checked;
                     });
                 });
             });
@@ -234,6 +243,11 @@
         <div>
             <label for="obra_social" class="form-element">Obra Social:</label>
             {{ form.obra_social }}
+        </div>
+        
+        <div>
+            <label for="nro_afiliado" class="form-element">Numero afiliado:</label>
+            {{ form.nro_afiliado }}
         </div>
 
         <div>
@@ -253,12 +267,12 @@
 
         <div>
             <label for="nombre_institucion" class="form-element">Nombre de la Institución:</label>
-            {{ form.nombre }}
+            {{ form.nombre_institucion }}
         </div>
 
         <div>
             <label for="telefono_institucion" class="form-element">Teléfono:</label>
-            {{ form.telefono }}
+            {{ form.telefono_institucion }}
         </div>
 
         <div>
@@ -294,6 +308,36 @@
         <div>
             <label for="profesionales" class="form-element">PROFESIONALES que lo ATIENDEN:</label>
             {{ form.profesionales }}
+        </div>
+
+        <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN: </strong></h2>
+
+        <div>
+            <label for="trabajo_institucional" class="form-element">Propuesta de trabajo Institucional:</label>
+            {{ form.trabajo_institucional(id="trabajo_institucional") }}
+        </div>
+
+        <div>
+            <label for="condicion" class="form-element">Condición:</label>
+            <input type="radio" id="condicion_si" name="condicion" value="si">
+            <label for="condicion_si">Regular</label>
+            <input type="radio" id="condicion_no" name="condicion" value="no">
+            <label for="condicion_no">De baja</label>
+        </div>
+
+        <div>
+            <label for="sede" class="form-element">SEDE:</label>
+            {{ form.sede }}
+        </div>
+
+        <div class="form-group">
+            <label for="dia">DIA:</label>
+            <div class="checkbox-group">
+                {% for subfield in form.dia %}
+                <input type="checkbox" id="dia_{{ loop.index0 }}" name="dia" value="{{ subfield.data }}">
+                <label for="dia_{{ loop.index0 }}">{{ subfield.label.text }}</label>
+                {% endfor %}
+            </div>
         </div>
 
         <div>

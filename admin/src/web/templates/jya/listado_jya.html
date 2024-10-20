@@ -4,7 +4,7 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -36,23 +36,30 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Avatar</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>DNI</th>
                     <th>profesionales</th>
+                    <th>Estado de Pago</th> <!-- Nueva columna -->
+                    <th>Acciones</th> <!-- Nueva columna -->
                 </tr>
             </thead>            
             <tbody>
                 {% for jinete in jinetes %}
                     <tr>
-                        <td>
-                            <img src={{ avatar_url(jinete.avatar) }} alt="Avatar" width="30" height="30">
-                        </td>
                         <td>{{ jinete.nombre }}</td>
                         <td>{{ jinete.apellido }}</td>
                         <td>{{ jinete.dni }}</td>
                         <td>{{ jinete.profesionales }}</td>
+                        <!-- agrego aca-->
+                        <td>
+                            {% if jinete.estado_pago %}
+                                <span class="badge badge-success">Al día</span>
+                            {% else %}
+                                <span class="badge badge-danger">En deuda</span>
+                            {% endif %}
+                        </td>
+                        <!-- agrego aca-->
                         <td>
                             <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="btn btn-edit btn-primary">Ver jinete</a>
                             <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit btn-secondary">Editar jinete</a>

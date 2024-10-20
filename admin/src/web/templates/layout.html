@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <title>{% block title %}{% endblock %} - CEDICA</title>
     {% endblock %}
 </head>
@@ -105,7 +105,11 @@
                 hamburger.addEventListener('click', function() {
                     navMenu.style.display = navMenu.style.display === 'block' ? 'none' : 'block';
                 });
-            
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 1024) {
+                        navMenu.style.display = ''; 
+                    }
+                });
                 window.onclick = function(event) {
                     if (!event.target.matches('.hamburger') && !event.target.matches('.nav-link')) {
                         var dropdowns = document.querySelectorAll(".navbar-nav");

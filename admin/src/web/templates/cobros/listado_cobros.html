@@ -4,9 +4,18 @@
 
 {% block content %}
     <h1>Listado de Cobros</h1>
+
+    {% if success_cobro %}
+    <div class="alert alert-success" role="alert">
+        {{ success_cobro }}
+    </div>
+    {% endif %}
+    
+    {% if is_authenticated(session) and check_permission(session,"cobro_create") %}
     <div class="actions">
         <a href="{{ url_for('cobros.registrar_cobro') }}" class="btn btn-add">Registrar Cobro</a>
     </div>
+    {% endif %}
 
     <form method="GET" action="{{ url_for('cobros.buscar_cobros') }}" class="mb-3 search-form">
         <div class="form-row">
@@ -21,12 +30,12 @@
             </div>
             
             <div class="form-group col-md-4">
-                <label for="nombre">Nombre:</label>
+                <label for="nombre">Nombre del que recibio el dinero:</label>
                 <input type="text" id="nombre" name="nombre" class="form-control">
             </div>
     
             <div class="form-group col-md-4">
-                <label for="apellido">Apellido:</label>
+                <label for="apellido">Apellido del que recibio el dinero:</label>
                 <input type="text" id="apellido" name="apellido" class="form-control">
             </div>
 
@@ -37,14 +46,6 @@
                     <option value="efectivo">Efectivo</option>
                     <option value="tarjeta_credito">Tarjeta de Crédito</option>
                     <option value="tarjeta_debito">Tarjeta de Débito</option>
-                </select>
-            </div>
-
-            <div class="form-group col-md-4">
-                <label for="orden">Ordenar por Fecha:</label>
-                <select id="orden" name="orden" class="form-control">
-                    <option value="asc">Ascendente</option>
-                    <option value="desc">Descendente</option>
                 </select>
             </div>
         </div>
@@ -58,7 +59,10 @@
         <thead>
             <tr>
                 <th>Jinete o Amazona</th>
-                <th>Fecha de Pago</th>
+                <th>
+                    <a href="{{ url_for('cobros.listar_cobros', orden='asc') }}">Fecha de Pago &#9650;</a> 
+                    <a href="{{ url_for('cobros.listar_cobros', orden='desc') }}">&#9660;</a>
+                </th>
                 <th>Medio de Pago</th>
                 <th>Monto</th>
                 <th>Recibido por</th>
@@ -76,10 +80,14 @@
                 <td>{{ cobro.empleado.nombre }} {{ cobro.empleado.apellido }}</td>
                 <td>{{ cobro.observaciones }}</td>
                 <td>
+                    {% if is_authenticated(session) and check_permission(session,"cobro_destroy") %}
                     <form method="POST" action="{{ url_for('cobros.eliminar_cobro', id=cobro.id) }}" style="display:inline;">
                         <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que deseas eliminar este cobro?');">Eliminar</button>
                     </form>
+                    {% endif %}
+                    {% if is_authenticated(session) and check_permission(session,"cobro_update") %}                    
                     <a href="{{ url_for('cobros.editar_cobro', id=cobro.id) }}" class="btn btn-edit">Editar</a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

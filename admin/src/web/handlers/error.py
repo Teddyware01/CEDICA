@@ -35,3 +35,10 @@ def forbidden(e):
         403, "Prohibido", "No tienes permiso para acceder a esta pagina."
     )
     return render_template("error.html", error=error), error.code
+
+def payload(e):
+    error = Error(
+        413, "Archivo demasiado grande","El archivo que intentas subir es demasiado grande."
+
+    )
+    return render_template("error.html", error=error), error.code

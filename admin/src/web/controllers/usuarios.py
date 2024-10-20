@@ -1,9 +1,10 @@
 from flask import render_template, request, redirect, flash, url_for
 from flask import Blueprint
 from src.core import auth
+from src.core.auth import Users
 from src.core.database import db
 from src.web.handlers.auth import login_required, check
-
+from src.core.equipo.models import Empleado
 
 bp = Blueprint("users", __name__, url_prefix="/listado_De_usuarios")
 
@@ -21,17 +22,38 @@ def listar_usuarios():
 @login_required
 @check("user_show")
 def mostrar_usuario(user_id):
-    user = auth.traer_usuario(user_id)
-    roles = auth.traer_roles(user_id)
-    roles_nombres = [rol.nombre for rol in roles]
-
+    user = Users.query.get_or_404(user_id)  # Obtener el empleado
+    if user:
+        roles = user.roles
+        roles_nombres = [rol.nombre for rol in roles]
     return render_template("ver_cliente.html", user=user, roles_nombres=roles_nombres)
 
 @bp.get("/agregar_cliente")
 @login_required
-@check("user_create")
+@check("user_new")
 def add_client_form():
-    return render_template("add_client.html")
+    empleados_asignables = Empleado.query.filter(Empleado.usuario_asignado == None ).all()
+    return render_template("add_client.html",empleados_asignables=empleados_asignables)
+
+@bp.post("/agregar_cliente")
+@login_required
+@check("user_new")
+def add_client():
+    email = request.form["email"]
+    if auth.user_email_exists(email):
+        flash("El email ya está en uso por un usuario. Por favor elige otro.", "error")
+        return redirect(url_for("users.add_client_form"))
+    auth.create_user(
+        email=request.form["email"],
+        alias=request.form["alias"],
+        # Puede o NO tener un empleado asignado, que debe estar registrado primero.
+        empleado_id=request.form["empleado_asignado"],    
+        password=request.form["password"],
+        system_admin=request.form.get("is_admin") is not None,
+        activo=request.form.get("is_active") is not None,
+    )
+    flash("Cliente agregado exitosamente", "success")
+    return redirect(url_for("users.listar_usuarios"))
 
 
 @bp.get("/editar_cliente/<int:user_id>")
@@ -40,7 +62,13 @@ def add_client_form():
 def edit_client_form(user_id):
     user = auth.traer_usuario(user_id)
     roles = auth.traer_roles(user_id)
-    return render_template("edit_client.html", user=user, roles=roles)
+    empleados_asignables = Empleado.query.filter(Empleado.usuario_asignado == None ).all() #los disponibles(sin asignar)
+    empleado_ya_asignado = user.empleado_asignado
+
+    # Si tiene uno asignado, que lo muestre en la lista de opciones
+    if empleado_ya_asignado:
+        empleados_asignables.append(empleado_ya_asignado)
+    return render_template("edit_client.html", user=user, roles=roles, empleados_asignables=empleados_asignables, empleado_ya_asignado=empleado_ya_asignado)
 
 
 @bp.get("/eliminar_cliente/<int:user_id>")
@@ -50,24 +78,6 @@ def delete_client_form(user_id):
     user = auth.traer_usuario(user_id)
     return render_template("delete_client.html", user=user)
 
-
-@bp.post("/agregar_cliente")
-@login_required
-@check("user_create")
-def add_client():
-    email = request.form["email"]
-    if auth.user_email_exists(email):
-        flash("El email ya está en uso. Por favor elige otro.", "error")
-        return redirect(url_for("users.add_client_form"))
-    auth.create_user(
-        email=request.form["email"],
-        alias=request.form["alias"],
-        password=request.form["password"],
-        system_admin=request.form.get("is_admin") is not None,
-        activo=request.form.get("is_active") is not None,
-    )
-    flash("Cliente agregado exitosamente", "success")
-    return redirect(url_for("users.listar_usuarios"))
 
 
 @bp.post("/eliminar_cliente/<int:user_id>")
@@ -90,6 +100,7 @@ def update_user(user_id):
         user_id,
         email=request.form["email"],
         alias=request.form["alias"],
+        empleado_id=request.form["empleado_asignado"],
         password=request.form["password"],
         system_admin=request.form.get("is_admin") is not None,
         activo=request.form.get("is_active") is not None, 

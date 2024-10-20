@@ -21,9 +21,9 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     """Development configuration."""
     # Config de Minio
-    MINIO_SERVER="minio.localhost:9000"
-    MINIO_ACCESS_KEY = "t72c7MVDNIvv686yDHkm"
-    MINIO_SECRET_KEY = "CiYoF08qw3jB8fXcYkC9wZDj51KqSzIW2U8eg8F0"
+    MINIO_SERVER="192.168.1.40:9000"
+    MINIO_ACCESS_KEY = "LKzNI6N4wuR6xDHJ9BBc"
+    MINIO_SECRET_KEY = "hmMvq5msVThLa7Gy3hud0h5kahkU2qnAJNAmgGnj"
     MINIO_SECURE = False
     # Config de postgres
     DB_USER = "postgres"

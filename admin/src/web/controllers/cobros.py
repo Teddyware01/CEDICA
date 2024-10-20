@@ -25,10 +25,9 @@ def registrar_cobro():
 
         db.session.add(nuevo_cobro)
         db.session.commit()
-        return redirect(url_for("cobros.listar_cobros"))
-
+        return redirect(url_for("cobros.listar_cobros", success_cobro="Cobro registrado exitosamente."))
+    
     return render_template("registrar_cobro.html", form=form)
-
 
 @cobros_bp.route("/listado", methods=["GET"])
 @login_required
@@ -64,7 +63,9 @@ def listar_cobros():
     else:
         cobros_realizado = query.order_by(RegistroCobro.fecha_pago.asc()).all()
 
-    return render_template("listado_cobros.html", cobros_realizado=cobros_realizado)
+    success_cobro = request.args.get("success_cobro")
+
+    return render_template("listado_cobros.html", cobros_realizado=cobros_realizado, success_cobro=success_cobro)
 
 @cobros_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 @login_required
@@ -82,10 +83,9 @@ def editar_cobro(id):
         cobro.observaciones = form.observaciones.data
 
         db.session.commit()
-        return redirect(url_for("cobros.listar_cobros"))
+        return redirect(url_for("cobros.listar_cobros", success_cobro="Cobro editado exitosamente."))
 
     return render_template("editar_cobro.html", form=form, cobro=cobro)
-
 
 @cobros_bp.route("/eliminar/<int:id>", methods=["POST"])
 @login_required

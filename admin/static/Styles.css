@@ -500,6 +500,17 @@ p {
         flex-direction: row;
         justify-content: space-between;
     }
+    
+    .hamburger {
+        display: none;  /* Asegura que el botón hamburguesa esté oculto en pantallas grandes */
+    }
+
+    .navbar-center {
+        display: flex; 
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
 
     h1 {
         font-size: 2.5rem;
@@ -542,4 +553,8 @@ p {
 
 .flashes li {
     margin-bottom: 10px; /* Espacio entre los mensajes */
+
+    .hamburger {
+        display: block;
+    }
 }

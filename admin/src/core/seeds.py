@@ -3,10 +3,11 @@ from src.core import board
 from src.core import auth
 from src.core import jya
 from src.core import equipo
-from src.core.equipo.extra_models import Provincia, Domicilio
+from src.core.equipo.extra_models import Provincia,Localidad, Domicilio
 from src.core.equipo.models import CondicionEnum
 from src.core.pagos.models import Pago
-from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum
+from src.core.cobros.models import RegistroCobro
+from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum
 from datetime import datetime
 
 from src.core.auth import Permisos
@@ -22,6 +23,14 @@ from src.core.jya.legajo.models import TipoDocumentoEnum
 from src.core import ecuestre
 from src.core.auth import Roles
 
+
+from src.core import equipo
+from src.core import auth
+from src.core.equipo.extra_models import Provincia 
+
+from src.core.database import db
+from sqlalchemy import text
+
 def ejecutar_sql_script(file_path):
     with open(file_path, "r", encoding="utf-8") as sql_file:
         sql_script = sql_file.read()
@@ -30,12 +39,6 @@ def ejecutar_sql_script(file_path):
         connection.execute(text(sql_script))
         connection.commit()
 
-from src.core import equipo
-from src.core import auth
-from src.core.equipo.extra_models import Provincia 
-
-from src.core.database import db
-from sqlalchemy import text
 def ejecutar_sql_script(file_path):
     with open(file_path, 'r',encoding='utf-8') as sql_file:
         sql_script = sql_file.read()
@@ -88,8 +91,44 @@ def run():
         activo=True,
     )
 
+    user3 = auth.create_user(
+        email="tecnica@hotmail",
+        alias="tecnica",
+        password="tecnica",
+        system_admin=False,
+        activo=True,
+    )
+
+    user4 = auth.create_user(
+        email="voluntariado@hotmail",
+        alias="voluntariado",
+        password="voluntariado",
+        system_admin=False,
+        activo=True,
+    )
+
+    user5 = auth.create_user(
+        email="ecuestre@hotmail",
+        alias="ecuestre",
+        password="ecuestre",
+        system_admin=False,
+        activo=True,
+    )
+
+    user6 = auth.create_user(
+        email="admin@hotmail",
+        alias="admin",
+        password="admin",
+        system_admin=True,
+        activo=True,
+    )
+
     board.assign_user(issue1, user1)
     board.assign_user(issue2, user2)
+    board.assign_user(issue1, user3)
+    board.assign_user(issue1, user4)
+    board.assign_user(issue1, user5)
+    board.assign_user(issue1, user6)
 
     label1 = board.create_label(
         title="urgente",
@@ -124,6 +163,11 @@ def run():
     auth.assign_rol(
         user2, [rol_administracion, rol_voluntariado, rol_tecnica, rol_ecuestre]
     )
+    auth.assign_rol(user3, [rol_tecnica])
+    auth.assign_rol(user4, [rol_voluntariado])
+    auth.assign_rol(user5, [rol_ecuestre])
+    auth.assign_rol(user6, [rol_administracion])
+
     board.assign_labels(issue1, [label1])
     board.assign_labels(issue2, [label1, label2])
 
@@ -172,6 +216,7 @@ def run():
         localidad_id=15,
         provincia_id=15,
     )
+
     domicilio_ej2 = equipo.add_domiclio(
         calle="122",
         numero="42",
@@ -322,8 +367,9 @@ def run():
             tipo_pago=pago["tipo_pago"],
             descripcion=pago["descripcion"],
         )
-        db.session.add(nuevo_pago)  # Agregar el pago a la sesión
-    db.session.commit()  # Confirmar todos los cambios en la base de datos
+        db.session.add(nuevo_pago)
+    db.session.commit()
+
     direccion_1 = jya.add_direccion(
         calle="Olazabal",
         numero=4321,
@@ -427,7 +473,6 @@ def run():
     auth.assign_permiso(rol_tecnica, cobro_index)
     auth.assign_permiso(rol_tecnica, cobro_show)
 
-
     auth.assign_permiso(rol_tecnica, ecuestre_index)
     auth.assign_permiso(rol_tecnica, ecuestre_show)
 
@@ -457,6 +502,16 @@ def run():
         localidad_id=5,
         provincia_id=5,
     )
+    
+    nacimiento_1 = jya.add_nacimiento(
+        localidad_id=1,
+        provincia_id=1,
+    )
+    
+    nacimiento_2 = jya.add_nacimiento(
+        localidad_id=2,
+        provincia_id=2,
+    )
         
     jya.create_jinete(
         nombre="Martin",
@@ -464,6 +519,7 @@ def run():
         dni="12345678",
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
+        #nacimiento=nacimiento_1,
         localidad_nacimiento_id=1,
         provincia_nacimiento_id=1,
         domicilio_id=1,
@@ -487,6 +543,10 @@ def run():
         grado = "2024",
         observaciones_institucion = "Nada.",
         profesionales = "Psicologa y maestra",
+        trabajo_institucional=TrabajoEnum.deporte,
+        condicion=False,
+        sede=SedeEnum.casj,
+        dia=["jueves", "viernes"],
     )
     
     jya.create_jinete(
@@ -496,8 +556,9 @@ def run():
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
         domicilio_id=3,
-        localidad_nacimiento_id=2,
-        provincia_nacimiento_id=2,
+        #nacimiento=nacimiento_2,
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=1,
         telefono="12345654321",
         contacto_emergencia=contacto_emergencia_ej2,
         becado=True,
@@ -518,6 +579,10 @@ def run():
         grado = "2020",
         observaciones_institucion = "ASDF.",
         profesionales = "Terapeuta y docente",
+        trabajo_institucional=TrabajoEnum.hipoterapia,
+        condicion=True,
+        sede=SedeEnum.hlp,
+        dia=["lunes"],
     )
     
     legajo.create_documento(
@@ -659,6 +724,39 @@ def run():
     ecuestre.asignar_empleado(caballo9, [empleado5,empleado2]) 
     ecuestre.asignar_empleado(caballo10, [empleado1,empleado2, empleado4]) 
 
+    
+    cobro1 = RegistroCobro(
+        jinete_id=1,  
+        fecha_pago=datetime(2024, 1, 15),
+        medio_pago='efectivo',
+        monto=1000.0,
+        recibido_por=1,  
+        observaciones="Primer pago del año."
+    )
+
+    cobro2 = RegistroCobro(
+        jinete_id=2, 
+        fecha_pago=datetime(2024, 2, 20),
+        medio_pago='tarjeta_credito',
+        monto=1500.0,
+        recibido_por=2, 
+        observaciones="Pago correspondiente a febrero."
+    )
+
+    cobro3 = RegistroCobro(
+        jinete_id=1,  
+        fecha_pago=datetime(2024, 3, 25),
+        medio_pago='tarjeta_debito',
+        monto=2000.0,
+        recibido_por=1,  
+        observaciones="Pago de honorarios."
+    )
+
+    db.session.add(cobro1)
+    db.session.add(cobro2)
+    db.session.add(cobro3)
+
+    db.session.commit()
 
     # Super_user que tiene todos los permisos. Utililizable para probar la pagina comodamente
     super_user = auth.create_user(

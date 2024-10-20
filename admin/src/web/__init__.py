@@ -48,6 +48,8 @@ def create_app(env="development", static_folder="../../static"):
     app.register_error_handler(404, error.error_not_found)
     app.register_error_handler(500, error.error_internal_server_error)
     app.register_error_handler(401, error.unauthorized)
+    app.register_error_handler(413, error.forbidden)
+    app.register_error_handler(413, error.payload)
 
     #registrar functions en jinja
     app.jinja_env.globals.update(is_authenticated=is_authenticated)
