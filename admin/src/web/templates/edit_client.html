@@ -32,6 +32,19 @@
         </div>
 
         <div class="form-group">
+            <label for="empleado_asignado">Empleado asignado:</label>
+            <select class="form-control" id="empleado_asignado" name="empleado_asignado">
+                <option value="">Selecciona un empleado</option>
+                {% for empleado in empleados_asignables %}
+                    <option value="{{ empleado.id }}" {% if empleado_ya_asignado and empleado.id == empleado_ya_asignado.id %}selected{% endif %}>
+                        {{ empleado.nombre }} {{ empleado.apellido }} {{ empleado.dni }} {{ empleado.profesion.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+
+        <div class="form-group">
             <label for="roles">Roles (debe tener al menos uno):</label>
             <div class="checkbox-group">
                 <label>

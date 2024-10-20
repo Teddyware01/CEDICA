@@ -5,6 +5,8 @@ from src.core import jya
 from src.core import equipo
 from src.core.equipo.extra_models import Provincia,Localidad, Domicilio
 from src.core.equipo.models import CondicionEnum
+from src.core.pagos.models import Pago
+from src.core.cobros.models import RegistroCobro
 from src.core.jya.models import PensionEnum, DiagnosticoEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum
 from datetime import datetime
 
@@ -88,8 +90,44 @@ def run():
         activo=True,
     )
 
+    user3 = auth.create_user(
+        email="tecnica@hotmail",
+        alias="tecnica",
+        password="tecnica",
+        system_admin=False,
+        activo=True,
+    )
+
+    user4 = auth.create_user(
+        email="voluntariado@hotmail",
+        alias="voluntariado",
+        password="voluntariado",
+        system_admin=False,
+        activo=True,
+    )
+
+    user5 = auth.create_user(
+        email="ecuestre@hotmail",
+        alias="ecuestre",
+        password="ecuestre",
+        system_admin=False,
+        activo=True,
+    )
+
+    user6 = auth.create_user(
+        email="admin@hotmail",
+        alias="admin",
+        password="admin",
+        system_admin=True,
+        activo=True,
+    )
+
     board.assign_user(issue1, user1)
     board.assign_user(issue2, user2)
+    board.assign_user(issue1, user3)
+    board.assign_user(issue1, user4)
+    board.assign_user(issue1, user5)
+    board.assign_user(issue1, user6)
 
     label1 = board.create_label(
         title="urgente",
@@ -124,6 +162,11 @@ def run():
     auth.assign_rol(
         user2, [rol_administracion, rol_voluntariado, rol_tecnica, rol_ecuestre]
     )
+    auth.assign_rol(user3, [rol_tecnica])
+    auth.assign_rol(user4, [rol_voluntariado])
+    auth.assign_rol(user5, [rol_ecuestre])
+    auth.assign_rol(user6, [rol_administracion])
+
     board.assign_labels(issue1, [label1])
     board.assign_labels(issue2, [label1, label2])
 
@@ -172,6 +215,7 @@ def run():
         localidad_id=15,
         provincia_id=15,
     )
+
     domicilio_ej2 = equipo.add_domiclio(
         calle="122",
         numero="42",
@@ -290,6 +334,56 @@ def run():
         contacto_emergencia_id=2,
     )
 
+    pagos_datos = [
+        {
+            "beneficiario": "Juan Pérez",
+            "monto": 1000.0,
+            "fecha_pago": datetime(2024, 10, 1),
+            "tipo_pago": "Honorario",
+            "descripcion": "Pago por servicio de asesoría",
+        },
+        {
+            "beneficiario": "María Gómez",
+            "monto": 1500.0,
+            "fecha_pago": datetime(2024, 10, 5),
+            "tipo_pago": "Gastos_varios",
+            "descripcion": "Pago por compra de insumos",
+        },
+        {
+            "beneficiario": "Carlos López",
+            "monto": 2000.0,
+            "fecha_pago": datetime(2024, 10, 10),
+            "tipo_pago": "Gastos_varios",
+            "descripcion": "Pago por servicios de mantenimiento",
+        },
+    ]
+
+    for pago in pagos_datos:
+        nuevo_pago = Pago(
+            beneficiario=pago["beneficiario"],
+            monto=pago["monto"],
+            fecha_pago=pago["fecha_pago"],
+            tipo_pago=pago["tipo_pago"],
+            descripcion=pago["descripcion"],
+        )
+        db.session.add(nuevo_pago)
+    db.session.commit()
+
+    direccion_1 = jya.add_direccion(
+        calle="Olazabal",
+        numero=4321,
+        localidad_id=9,
+        provincia_id=4,
+    )
+    
+    direccion_2 = jya.add_direccion(
+        calle="Diagonal 73",
+        numero=1234,
+        localidad_id=5,
+        provincia_id=5,
+    )
+    
+
     # Tema permisos y roles (esto debe quedar definido. No se borra.)
     # Permisos
     # Modulo 2
@@ -377,7 +471,6 @@ def run():
     
     auth.assign_permiso(rol_tecnica, cobro_index)
     auth.assign_permiso(rol_tecnica, cobro_show)
-
 
     auth.assign_permiso(rol_tecnica, ecuestre_index)
     auth.assign_permiso(rol_tecnica, ecuestre_show)
@@ -524,7 +617,8 @@ def run():
         raza="Pura Sangre",
         pelaje="Negro",
         fecha_ingreso="2020-06-15",
-        sede_id=3
+        sede_id=3,
+        tipoJyA ="MONTA_TERAPEUTICA"  # Asignando un tipo
     )
 
     caballo2 = ecuestre.create_ecuestre(
@@ -534,7 +628,8 @@ def run():
         raza="Andaluz",
         pelaje="Blanco",
         fecha_ingreso="2021-03-10",
-        sede_id=2
+        sede_id=2,
+        tipoJyA ="HIPOTERAPIA"  # Asignando un tipo
     )
 
     caballo3 = ecuestre.create_ecuestre(
@@ -544,7 +639,8 @@ def run():
         raza="Árabe",
         pelaje="Gris",
         fecha_ingreso="2021-07-20",
-        sede_id=1
+        sede_id=1,
+        tipoJyA ="DEPORTE_EQUESTRE" # Asignando un tipo
     )
 
     caballo4 = ecuestre.create_ecuestre(
@@ -554,7 +650,8 @@ def run():
         raza="Cuarto de Milla",
         pelaje="Castaño",
         fecha_ingreso="2022-01-05",
-        sede_id=1
+        sede_id=1,
+        tipoJyA ="ACTIVIDADES_RECREATIVAS"  # Asignando un tipo
     )
 
     caballo5 = ecuestre.create_ecuestre(
@@ -564,7 +661,8 @@ def run():
         raza="Frisón",
         pelaje="Negro",
         fecha_ingreso="2019-11-11",
-        sede_id=2
+        sede_id=2,
+        tipoJyA ="EQUITACION"  # Asignando un tipo
     )
 
     caballo6 = ecuestre.create_ecuestre(
@@ -574,7 +672,8 @@ def run():
         raza="Mustang",
         pelaje="Palomino",
         fecha_ingreso="2022-09-09",
-        sede_id=1
+        sede_id=1,
+        tipoJyA ="MONTA_TERAPEUTICA"  # Asignando un tipo
     )
 
     caballo7 = ecuestre.create_ecuestre(
@@ -584,7 +683,8 @@ def run():
         raza="Criollo",
         pelaje="Bayo",
         fecha_ingreso="2021-04-22",
-        sede_id=3
+        sede_id=3,
+        tipoJyA ="HIPOTERAPIA"  # Asignando un tipo
     )
 
     caballo8 = ecuestre.create_ecuestre(
@@ -594,7 +694,8 @@ def run():
         raza="Lusitano",
         pelaje="Alazán",
         fecha_ingreso="2021-10-15",
-        sede_id=2
+        sede_id=2,
+        tipoJyA ="ACTIVIDADES_RECREATIVAS"  # Asignando un tipo
     )
 
     caballo9 = ecuestre.create_ecuestre(
@@ -604,7 +705,8 @@ def run():
         raza="Hannoveriano",
         pelaje="Castaño Oscuro",
         fecha_ingreso="2020-08-01",
-        sede_id=3
+        sede_id=3,
+        tipoJyA ="DEPORTE_EQUESTRE"  # Asignando un tipo
     )
 
     caballo10 = ecuestre.create_ecuestre(
@@ -614,8 +716,10 @@ def run():
         raza="Percherón",
         pelaje="Gris Claro",
         fecha_ingreso="2022-03-30",
-        sede_id=1
+        sede_id=1,
+        tipoJyA ="EQUITACION"  # Asignando un tipo
     )
+
 
     ecuestre.asignar_empleado(caballo1, [empleado1,empleado2])
     ecuestre.asignar_empleado(caballo2, [empleado3,empleado1]) 
@@ -628,6 +732,39 @@ def run():
     ecuestre.asignar_empleado(caballo9, [empleado5,empleado2]) 
     ecuestre.asignar_empleado(caballo10, [empleado1,empleado2, empleado4]) 
 
+    
+    cobro1 = RegistroCobro(
+        jinete_id=1,  
+        fecha_pago=datetime(2024, 1, 15),
+        medio_pago='efectivo',
+        monto=1000.0,
+        recibido_por=1,  
+        observaciones="Primer pago del año."
+    )
+
+    cobro2 = RegistroCobro(
+        jinete_id=2, 
+        fecha_pago=datetime(2024, 2, 20),
+        medio_pago='tarjeta_credito',
+        monto=1500.0,
+        recibido_por=2, 
+        observaciones="Pago correspondiente a febrero."
+    )
+
+    cobro3 = RegistroCobro(
+        jinete_id=1,  
+        fecha_pago=datetime(2024, 3, 25),
+        medio_pago='tarjeta_debito',
+        monto=2000.0,
+        recibido_por=1,  
+        observaciones="Pago de honorarios."
+    )
+
+    db.session.add(cobro1)
+    db.session.add(cobro2)
+    db.session.add(cobro3)
+
+    db.session.commit()
 
     # Super_user que tiene todos los permisos. Utililizable para probar la pagina comodamente
     super_user = auth.create_user(

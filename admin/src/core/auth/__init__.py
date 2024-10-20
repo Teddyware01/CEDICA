@@ -11,7 +11,7 @@ def find_user_by_email(email):
     user = Users.query.filter_by(email=email).first()
     return user
 
-def list_users(sort_by=None):
+def list_users(sort_by=None, page=1, per_page=5):
     query = Users.query
     if sort_by:
         if sort_by == "email_asc":
@@ -22,7 +22,9 @@ def list_users(sort_by=None):
             query = query.order_by(Users.fecha_creacion.asc())
         elif sort_by == "created_at_desc":
             query = query.order_by(Users.fecha_creacion.desc())
-    return query.all()
+
+    paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
+    return paginated_query
 
 
 def create_user(**kwargs):

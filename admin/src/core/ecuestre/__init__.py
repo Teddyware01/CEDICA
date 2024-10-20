@@ -3,6 +3,9 @@ from src.core.equipo.models import Empleado
 from src.core.ecuestre.ecuestre import Ecuestre
 from src.core.ecuestre.ecuestre import empleado_ecuestre
 from src.core.database import db
+from src.core.ecuestre.ecuestredocs import Ecuestre_docs
+from sqlalchemy import or_
+from sqlalchemy import cast, String
 
 def create_sede(**kwargs):
     sede = Sedes(**kwargs)
@@ -18,7 +21,7 @@ def create_ecuestre(**kwargs):
 
     return ecuestre
 
-def list_ecuestre(sort_by=None, search=None):
+def list_ecuestre(sort_by=None, search=None, page=1, per_page=5):
     query = Ecuestre.query
     if search:
         query = query.filter(
@@ -37,7 +40,9 @@ def list_ecuestre(sort_by=None, search=None):
             query = query.order_by(Ecuestre.fecha_ingreso.asc())
         elif sort_by == "fecha_ingreso_desc":
             query = query.order_by(Ecuestre.fecha_ingreso.desc())
-    return query.all()
+
+    paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
+    return paginated_query
 
 
 
@@ -109,6 +114,14 @@ def actualizar_asignados(caballo_id, lista_id):
             ecuestre.empleado.remove(empleado_a_eliminar)
     db.session.commit()
 
+def agregar_empleados(caballo_id, lista_id):
+    ecuestre = Ecuestre.query.get(caballo_id)
+    empleados_asignados_ids = {int(empleado_id) for empleado_id in lista_id}
+    for nuevo_id in empleados_asignados_ids:
+        nuevo_empleado = Empleado.query.get(nuevo_id)
+        if nuevo_empleado:
+            ecuestre.empleado.append(nuevo_empleado)
+    db.session.commit()
 
 def delete_ecuestre(ecuestre_id):
     ecuestre = traer_ecuestre(ecuestre_id)
@@ -117,3 +130,41 @@ def delete_ecuestre(ecuestre_id):
         db.session.commit()
         return True
     return False
+
+def crear_documento(**kwargs):
+    # Verificar si ya existe un documento con el mismo título para el mismo ecuestre_id
+    existe = db.session.query(Ecuestre_docs).filter_by(titulo=kwargs['titulo'], ecuestre_id=kwargs['ecuestre_id']).first()
+    
+    if not existe:
+        documento = Ecuestre_docs(**kwargs)
+        db.session.add(documento)
+        db.session.commit()
+        return documento
+    
+    return False
+
+
+def traerdocumento(ecuestre_id, page=1, per_page=5):
+    documentos = Ecuestre_docs.query.filter(Ecuestre_docs.ecuestre_id == ecuestre_id).paginate(page=page, per_page=per_page, error_out=False)
+    return documentos
+
+def traerdocumentoporid(documento_id):
+    documento = Ecuestre_docs.query.get(documento_id)
+    return documento
+
+def eliminar_documento(documento_id):
+    documento = traerdocumentoporid(documento_id)
+    if documento:
+        db.session.delete(documento)
+        db.session.commit()
+        return True
+    return False
+
+
+def ya_tiene_ese_documento(ecuestre_id, name):
+    documento = Ecuestre_docs.query.filter(
+        Ecuestre_docs.ecuestre_id == ecuestre_id,
+        Ecuestre_docs.titulo.ilike(name)  
+    ).first()  
+
+    return documento is not None

@@ -175,7 +175,9 @@ class Jinete(db.Model):
     grado = db.Column(db.Integer, nullable=False)
     observaciones_institucion = db.Column(db.String(255), nullable=True)
     profesionales = db.Column(db.String(255), nullable=True)
-    
+    ##agrego aca
+    estado_pago = db.Column(db.Boolean, default=True)
+    ##agrego aca
     trabajo_institucional=db.Column(db.Enum(TrabajoEnum), nullable=False)
     condicion=db.Column(db.Boolean, nullable=False) # true regular, false de baja
     sede=db.Column(db.Enum(SedeEnum), nullable=False)
