@@ -12,10 +12,12 @@ from wtforms import (
     FormField,
 )
 from src.core.equipo.extra_models import Localidad
+from src.core.equipo.models import PuestoLaboral
 from wtforms.validators import DataRequired, Email, Length, Optional, Regexp, ValidationError, NumberRange
 from wtforms.widgets import DateInput, ListWidget, CheckboxInput
 from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum
-
+from src.core.ecuestre import list_ecuestre
+from src.core.equipo import list_terapeutas_y_profesores, list_auxiliares_pista, list_conductores_caballos
 
 class AddJineteForm(FlaskForm):
     
@@ -243,7 +245,28 @@ class AddJineteForm(FlaskForm):
         widget=ListWidget(prefix_label=False),
         option_widget=CheckboxInput()
     )
+    
+    
+    caballo = SelectField(
+        "Caballo",
+        choices=[],
+        validators=[DataRequired(message="El tipo de pension es obligatorio")],
+    )
 
-    
-    
+    profesor_o_terapeuta = SelectField(
+        "Profesor o terapeuta",
+        choices=[],
+        validators=[Optional()],
+    )
+    conductor_caballo = SelectField(
+        "Conductor de caballo",
+        choices=[],
+        validators=[Optional()],
+    )
+    auxiliar_pista = SelectField(
+        "Auxiliar de pista",
+        choices=[],
+        validators=[Optional()],
+    )
+            
     submit = SubmitField("Guardar")

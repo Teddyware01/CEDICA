@@ -187,5 +187,21 @@ class Jinete(db.Model):
     familiares = db.relationship('Familiar', secondary='jinete_familiar', back_populates='jinetes')
     documentos = db.relationship("JineteDocumento", back_populates="jinete", cascade="all, delete-orphan")
 
+  
+    # Relaciones con tres empleados diferentes:
+    #ids:
+    profesor_o_terapeuta_id = db.Column(db.Integer, db.ForeignKey('empleado.id'), nullable=True)
+    conductor_caballo_id = db.Column(db.Integer, db.ForeignKey('empleado.id'), nullable=True)
+    auxiliar_pista_id = db.Column(db.Integer, db.ForeignKey('empleado.id'), nullable=True)
+    caballo_id = db.Column(db.Integer, db.ForeignKey('ecuestre.id'), nullable=True)
+
+    # Definir las relaciones
+    profesor_o_terapeuta = db.relationship('Empleado', foreign_keys=[profesor_o_terapeuta_id], backref='profesor_o_terapeuta_jinetes')
+    conductor_caballo = db.relationship('Empleado', foreign_keys=[conductor_caballo_id], backref='conductor_caballo_jinetes')
+    auxiliar_pista = db.relationship('Empleado', foreign_keys=[auxiliar_pista_id], backref='auxiliar_pista_jinetes')
+    caballo = db.relationship('Ecuestre', foreign_keys=[caballo_id], backref='auxiliar_pista_jinetes')
+
+
+    #ids
     def __repr__(self):
         return f"<User #{self.id} nombre = {self.nombre}>"

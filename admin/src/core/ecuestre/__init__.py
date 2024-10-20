@@ -39,6 +39,8 @@ def list_ecuestre(sort_by=None, search=None):
             query = query.order_by(Ecuestre.fecha_ingreso.desc())
     return query.all()
 
+
+
 def traer_ecuestre(ecuestre_id):
     ecuestre = Ecuestre.query.get(ecuestre_id)
     return ecuestre
