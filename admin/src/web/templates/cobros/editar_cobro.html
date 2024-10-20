@@ -4,7 +4,6 @@
 
 {% block content %}
 <h1>Editar Cobro</h1>
-
 <form method="POST" action="{{ url_for('cobros.editar_cobro', id=cobro.id) }}">
     {{ form.hidden_tag() }}
 
