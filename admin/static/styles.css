@@ -435,11 +435,24 @@ p {
     margin: 0;
 }
 
+.session-sesion_iniciada {
+    font-family: 'Arial', sans-serif; 
+    color: #333;
+    font-size: 1.2em;
+    text-align: center;
+    margin: 20px auto;
+    padding: 10px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+}
+
+
 /* Móviles: Menos de 767px */
 @media (max-width: 767px) {
     .container, .example-wrapper, .demo-wrapper {
         padding: 10px;
-        width: auto;
+        width: 100%;
     }
 
     .nav-item, .navbar-nav {

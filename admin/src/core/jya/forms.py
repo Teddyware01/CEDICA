@@ -202,25 +202,24 @@ class AddJineteForm(FlaskForm):
     )
 
     # ---------- FAMILIARES ---------- 
-    parentesco_familiar = StringField('Parentesco', validators=[DataRequired()])
-    nombre_familiar = StringField("Nombre",validators=[DataRequired(message="El nombre es obligatorio"), Length(max=100)],)
+    parentesco_familiar = StringField('Parentesco', validators=[Optional()])
+    nombre_familiar = StringField("Nombre", validators=[Optional()])
     
-    apellido_familiar = StringField("Apellido", validators=[DataRequired(message="El apellido es obligatorio"), Length(max=100),],)
+    apellido_familiar = StringField("Apellido", validators=[Optional()])
+    dni_familiar = StringField("DNI", validators=[Optional()])
     
-    dni_familiar = StringField("DNI", validators=[DataRequired(message="El DNI es obligatorio"), Length(max=11), Regexp(r"^\d+$", message="El DNI debe contener solo números"),],
-    )
     #direccion_familiar_calle = StringField("Calle", validators=[DataRequired("Ingrese la calle")])
     #direccion_familiar_numero = IntegerField("Número", validators=[DataRequired("Ingrese el número")])
     #direccion_familiar_departamento = StringField("Departamento", validators=[Optional()])
     #direccion_familiar_piso = IntegerField("Piso", validators=[Optional()])
     
-    provincia_familiar = SelectField("Provincia", coerce=int, validators=[DataRequired()])
-    localidad_familiar = SelectField("Localidad", coerce=int, validators=[DataRequired()])
-    direccion_familiar = StringField("Direccion", validators=[DataRequired()])
-    celular_familiar = StringField("Celular", validators=[DataRequired(message="El teléfono es obligatorio"), Length(max=15), Regexp(r"^\d+$", message="El telefono debe contener solo números")])
-    email_familiar = StringField('Email', validators=[DataRequired()])
-    nivel_escolaridad_familiar = SelectField('Nivel de escolaridad', choices=[('Primario', 'Primario'), ('Secundario', 'Secundario'), ('Terciario', 'Terciario'), ('Universitario', 'Universitario')], validators=[DataRequired()])
-    actividad_ocupacion_familiar = StringField('Actividad u ocupación', validators=[DataRequired()])
+    provincia_familiar = SelectField("Provincia", coerce=int, validators=[Optional()])
+    localidad_familiar = SelectField("Localidad", coerce=int, validators=[Optional()])
+    direccion_familiar = StringField("Direccion", validators=[Optional()])
+    celular_familiar = StringField("Celular", validators=[Optional()])
+    email_familiar = StringField('Email', validators=[Optional()])
+    nivel_escolaridad_familiar = SelectField('Nivel de escolaridad', choices=[('Primario', 'Primario'), ('Secundario', 'Secundario'), ('Terciario', 'Terciario'), ('Universitario', 'Universitario')], validators=[Optional()])
+    actividad_ocupacion_familiar = StringField('Actividad u ocupación', validators=[Optional()])
     
     trabajo_institucional = SelectField(
         "Trabajo institucional",

@@ -2,7 +2,10 @@ from src.core.database import db
 from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
-from src.core.jya.models import Jinete, Familiar, Dias, JineteDocumento,TiposDiscapacidadEnum, DiasEnum,DiagnosticoEnum,AsignacionEnum,PensionEnum,TrabajoEnum,SedeEnum
+from src.core.jya.models import (Jinete, Familiar, Dias, JineteDocumento,
+                                TiposDiscapacidadEnum, DiasEnum,DiagnosticoEnum, 
+                                AsignacionEnum,PensionEnum,TrabajoEnum,SedeEnum,
+                                TipoDiscapacidad)
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad
 from sqlalchemy import String, cast, or_
 
@@ -141,8 +144,22 @@ def associate_jinete_dias(jinete_id, dias_id):
         raise ValueError("Jinete o Dias no encontrado")
 
     jinete.dias.append(dias)
+    db.session.commit()
+    
+def add_discapacidades(**kwargs):
+    discapacidades = TipoDiscapacidad(**kwargs)
+    db.session.add(discapacidades)
+    db.session.commit()
+    return discapacidades
 
-    # Guardar los cambios en la base de datos
+def associate_jinete_discapacidades(jinete_id, discapacidades_id):
+    jinete = Jinete.query.get(jinete_id)
+    discapacidades = TipoDiscapacidad.query.get(discapacidades_id)
+
+    if not jinete or not discapacidades:
+        raise ValueError("Jinete o discapacidades no encontrado")
+
+    jinete.discapacidades.append(discapacidades)
     db.session.commit()
 
 def get_jinete_dias(jinete_id):
@@ -255,8 +272,22 @@ def delete_documento(documento_id):
 
 
 def list_discapacidades():
-    return [tipo.value for tipo in TiposDiscapacidadEnum]
+    return [(tipo.value,tipo.name) for tipo in TiposDiscapacidadEnum]
 
+
+def list_jinete_tipos_discapacidades(jinete_id):
+    jinete = traer_jinete(jinete_id)
+    return [{'name': disc.tipos_discapacidad.name, 'value': disc.tipos_discapacidad.value} for disc in jinete.discapacidades]
+
+def get_tipos_discapacidades(jinete_id):
+    jinete = Jinete.query.get(jinete_id)
+    
+    if not jinete:
+        return []  
+
+    assigned_discapacidades = [disc.tipos_discapacidad.value for disc in jinete.discapacidades]
+
+    return assigned_discapacidades
 
 def list_dias_semana():
     return  [(dia.value,dia.name) for dia in DiasEnum]

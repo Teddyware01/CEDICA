@@ -95,20 +95,20 @@ class Familiar(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     #jinete_id = db.Column(db.Integer, db.ForeignKey('jinete.id'), nullable=False)
     jinetes = db.relationship('Jinete', secondary='jinete_familiar', back_populates='familiares')
-    parentesco_familiar = db.Column(db.String(255), nullable=False)
-    nombre_familiar = db.Column(db.String(255), nullable=False)
-    apellido_familiar = db.Column(db.String(255), nullable=False)
-    dni_familiar = db.Column(db.String(10), nullable=False, unique=True)
+    parentesco_familiar = db.Column(db.String(255), nullable=True)
+    nombre_familiar = db.Column(db.String(255), nullable=True)
+    apellido_familiar = db.Column(db.String(255), nullable=True)
+    dni_familiar = db.Column(db.String(10), nullable=True, unique=True)
     
-    direccion_familiar = db.Column(db.String(255), nullable=False)
-    localidad_familiar_id = db.Column(db.Integer, db.ForeignKey("localidad.id"), nullable=False)
+    direccion_familiar = db.Column(db.String(255), nullable=True)
+    localidad_familiar_id = db.Column(db.Integer, db.ForeignKey("localidad.id"), nullable=True)
     localidad_familiar = db.relationship("Localidad", back_populates="familiares")  
-    provincia_familiar_id = db.Column(db.Integer, db.ForeignKey("provincia.id"), nullable=False)
+    provincia_familiar_id = db.Column(db.Integer, db.ForeignKey("provincia.id"), nullable=True)
     provincia_familiar = db.relationship("Provincia", back_populates="familiares")  
-    celular_familiar = db.Column(db.String(15), nullable=False)
-    email_familiar = db.Column(db.String(255), nullable=False)
-    nivel_escolaridad_familiar = db.Column(db.String(255), nullable=False)  # Podría ser Enum si prefieres
-    actividad_ocupacion_familiar = db.Column(db.String(255), nullable=False)
+    celular_familiar = db.Column(db.String(15), nullable=True)
+    email_familiar = db.Column(db.String(255), nullable=True)
+    nivel_escolaridad_familiar = db.Column(db.String(255), nullable=True)  # Podría ser Enum si prefieres
+    actividad_ocupacion_familiar = db.Column(db.String(255), nullable=True)
 
 jinete_familiar = db.Table('jinete_familiar',
     db.Column('jinete_id', db.Integer, db.ForeignKey('jinete.id'), primary_key=True),

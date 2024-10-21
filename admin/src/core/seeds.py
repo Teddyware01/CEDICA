@@ -7,7 +7,7 @@ from src.core.equipo.extra_models import Provincia,Localidad, Domicilio
 from src.core.equipo.models import CondicionEnum
 from src.core.pagos.models import Pago
 from src.core.cobros.models import RegistroCobro
-from src.core.jya.models import PensionEnum, DiagnosticoEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum
+from src.core.jya.models import PensionEnum, DiagnosticoEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum, TiposDiscapacidadEnum
 from datetime import datetime
 
 from src.core.auth import Permisos
@@ -600,6 +600,23 @@ def run():
     
     jya.associate_jinete_dias(1, 1)
     
+    jya.add_dias(
+        dias=DiasEnum.martes,
+    )
+    
+    jya.associate_jinete_dias(1, 2)
+    
+    jya.add_discapacidades(
+        tipos_discapacidad=TiposDiscapacidadEnum.motora,
+    )
+    
+    jya.associate_jinete_discapacidades(1, 1)
+    
+    jya.add_discapacidades(
+        tipos_discapacidad=TiposDiscapacidadEnum.sensorial,
+    )
+    
+    jya.associate_jinete_discapacidades(1, 2)
 
     # Modulo ecuestre
     sede1 = ecuestre.create_sede(

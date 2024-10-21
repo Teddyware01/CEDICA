@@ -213,7 +213,10 @@ def cargar_choices_form(form):
 @bp.get("/editar_jinete/<int:jinete_id>")
 def edit_jinete_form(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
+    form = AddJineteForm(obj=jinete)
+    fecha_nacimiento = jinete.fecha_nacimiento.strftime('%Y-%m-%d') if jinete.fecha_nacimiento else ''
     tipos_discapacidad = jya.list_discapacidades()
+    jinete_tipos_discapacidades = jya.list_jinete_tipos_discapacidades(jinete_id)
     dias_semana = jya.list_dias_semana()
     jinete_dias_semana = jya.list_jinete_dias_semana(jinete_id)
     localidades = equipo.list_localidades()
@@ -229,15 +232,16 @@ def edit_jinete_form(jinete_id):
     list_auxiliares_pista = equipo.list_auxiliares_pista()
     list_caballos = list_ecuestre()
     jinete_dias_name = [dia['name'] for dia in jinete_dias_semana if 'name' in dia]
-   
-    return render_template("jya/editar_jya.html", jinete=jinete,jinete_dias_name=jinete_dias_name,
-        tipos_discapacidad=tipos_discapacidad,dias_semana=dias_semana,jinete_dias_semana=jinete_dias_semana,localidades=localidades,
+    tipos_discapacidad_name = [disc['name'] for disc in jinete_tipos_discapacidades if 'name' in disc]
+    
+    return render_template("jya/editar_jya.html", jinete=jinete, fecha_nacimiento=fecha_nacimiento, jinete_dias_name=jinete_dias_name, tipos_discapacidad_name=tipos_discapacidad_name,
+        jinete_tipos_discapacidades=jinete_tipos_discapacidades, tipos_discapacidad=tipos_discapacidad,dias_semana=dias_semana,jinete_dias_semana=jinete_dias_semana,localidades=localidades,
         provincias=provincias, tipos_diagnostico=tipos_diagnostico,tipos_de_asignacion=tipos_de_asignacion,tipos_pensiones=tipos_pensiones, 
         familiares=familiares,trabajos_institucionales=trabajos_institucionales,list_sedes=list_sedes,
         list_profes_terapeutas=list_profes_terapeutas,
         list_conductores=list_conductores,
         list_auxiliares_pista=list_auxiliares_pista,
-        list_caballos=list_caballos)
+        list_caballos=list_caballos, form=form)
 
 
 #agregar que levante el "nuevo_familiar"
