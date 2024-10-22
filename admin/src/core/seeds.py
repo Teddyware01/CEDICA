@@ -503,13 +503,12 @@ def run():
     )
     
         
-    nuevo_jinete = jya.create_jinete(
+    jya.create_jinete(
         nombre="Martin",
         apellido="Diaz",
         dni="12345678",
         edad=10,
         fecha_nacimiento=datetime(2020, 5, 1),
-        #nacimiento=nacimiento_1,
         localidad_nacimiento_id=1,
         provincia_nacimiento_id=1,
         domicilio_id=1,
@@ -520,7 +519,6 @@ def run():
         certificado_discapacidad=False,
         beneficiario_pension=False,
         diagnostico=DiagnosticoEnum.otro,
-        #tipos_discapacidad=[TiposDiscapacidadEnum.sensorial,TiposDiscapacidadEnum.visceral],
         asignacion_familiar=False,
         tipo_asignacion=AsignacionEnum.por_discapacidad,
         obra_social="OSDE",
@@ -577,15 +575,14 @@ def run():
         sede=SedeEnum.hlp,
     )
     
-    jya.add_familiar(
-        #jinetes=nuevo_jinete, 
+    jya.add_familiar( 
         parentesco_familiar="Tio",
         nombre_familiar="Juan",
         apellido_familiar="Diaz",
         dni_familiar="654321",
-        direccion_familiar="sddsa",
-        localidad_familiar_id=500,
-        provincia_familiar_id=1,
+        domicilio_familiar_id=1,
+        #localidad_familiar_id=500,
+        #provincia_familiar_id=1,
         celular_familiar="0987654321",
         email_familiar="juan@diaz",
         nivel_escolaridad_familiar='Primario',

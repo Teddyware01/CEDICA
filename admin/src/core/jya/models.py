@@ -99,12 +99,13 @@ class Familiar(db.Model):
     nombre_familiar = db.Column(db.String(255), nullable=True)
     apellido_familiar = db.Column(db.String(255), nullable=True)
     dni_familiar = db.Column(db.String(10), nullable=True, unique=True)
-    
-    direccion_familiar = db.Column(db.String(255), nullable=True)
-    localidad_familiar_id = db.Column(db.Integer, db.ForeignKey("localidad.id"), nullable=True)
-    localidad_familiar = db.relationship("Localidad", back_populates="familiares")  
-    provincia_familiar_id = db.Column(db.Integer, db.ForeignKey("provincia.id"), nullable=True)
-    provincia_familiar = db.relationship("Provincia", back_populates="familiares")  
+        
+    domicilio_familiar_id = db.Column(db.Integer, db.ForeignKey("domicilio.id"), nullable=True)
+    domicilio_familiar = db.relationship("Domicilio", back_populates="familiares")
+    #localidad_familiar_id = db.Column(db.Integer, db.ForeignKey("localidad.id"), nullable=True)
+    #localidad_familiar = db.relationship("Localidad", back_populates="familiares")  
+    #provincia_familiar_id = db.Column(db.Integer, db.ForeignKey("provincia.id"), nullable=True)
+    #provincia_familiar = db.relationship("Provincia", back_populates="familiares")  
     celular_familiar = db.Column(db.String(15), nullable=True)
     email_familiar = db.Column(db.String(255), nullable=True)
     nivel_escolaridad_familiar = db.Column(db.String(255), nullable=True)  # Podría ser Enum si prefieres

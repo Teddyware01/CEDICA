@@ -141,6 +141,16 @@
             </div>
             
             <div>
+                <label for="estado_pago" class="form-element">¿Está al día?</label>
+                <input type="radio" id="estado_pago_si" name="estado_pago" value="si" 
+                    {% if jinete.estado_pago == True %}checked{% endif %}>
+                <label for="estado_pago_si">Sí</label>
+                <input type="radio" id="estado_pago_no" name="estado_pago" value="no" 
+                    {% if jinete.estado_pago == False %}checked{% endif %}>
+                <label for="estado_pago_no">No</label>
+            </div>
+            
+            <div>
                 <label for="becado" class="form-element">Está becado:</label>
                 <input type="radio" id="becado_si" name="becado" value="si" 
                     {% if jinete.becado == True %}checked{% endif %}>
@@ -155,16 +165,6 @@
                 <input type="text" id="observaciones_becado" name="observaciones_becado" value="{{ jinete.observaciones_becado }}" required>
             </div>
 
-            
-            <div>
-                <label for="estado_pago" class="form-element">¿Está al día?</label>
-                <input type="radio" id="estado_pago_si" name="estado_pago" value="si" 
-                    {% if jinete.estado_pago == True %}checked{% endif %}>
-                <label for="estado_pago_si">Sí</label>
-                <input type="radio" id="estado_pago_no" name="estado_pago" value="no" 
-                    {% if jinete.estado_pago == False %}checked{% endif %}>
-                <label for="estado_pago_no">No</label>
-            </div>
 
             
             <div>
@@ -208,7 +208,6 @@
                     {% for diagnostico in tipos_diagnostico %}
                     <option value="{{diagnostico.name}}">{{diagnostico}}</option>
                     {% endfor %}
-                    <!--ver si en value agarrar el .name u otra cosa.-->
                 </select>
             </div>
             
@@ -358,7 +357,6 @@
             <div class="form-group">
                 <label for="direccion.piso">Piso:</label>
                 <input type="text" id="direccion.piso" name="direccion.piso" value="{{ jinete.direccion.piso or '' }}">
-                
             </div>
             
             <div class="form-group">
@@ -433,14 +431,30 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="familiar.direccion_familiar">Domicilio:</label>
-                        <input type="text" id="familiar.direccion_familiar" name="familiar.direccion_familiar" value="{{ familiar.direccion_familiar }}">
+                        <label for="domicilio_familiar.calle">Calle:</label>
+                        <input type="text" id="domicilio_familiar.calle" name="domicilio_familiar.calle" value="{{ jinete.domicilio_familiar.calle }}" required>
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <label for="domicilio_familiar.numero">Número:</label>
+                        <input type="text" id="domicilio_familiar.numero" name="domicilio_familiar.numero" value="{{ jinete.domicilio_familiar.numero }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="domicilio_familiar.piso">Piso:</label>
+                        <input type="text" id="domicilio_familiar.piso" name="domicilio_familiar.piso" value="{{ jinete.domicilio_familiar.piso or '' }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="domicilio_familiar.departamento">Departamento:</label>
+                        <input type="text" id="domicilio_familiar.departamento" name="domicilio_familiar.departamento" value="{{ jinete.domicilio_familiar.departamento or '' }}">
                     </div>
                 
                             
                     <div class="form-group">
-                        <label for="familiar.provincia_familiar">Provincia:</label>
-                        <select id="familiar.provincia_familiar" name="familiar.provincia_familiar" value="{{familiar.provincia_familiar_id}}">
+                        <label for="familiar.domicilio_familiar_provincia">Provincia:</label>
+                        <select id="familiar.domicilio_familiar_provincia" name="familiar.domicilio_familiar_provincia" value="{{familiar.domicilio_familiar_provincia_id}}">
                             {% for prov in provincias %}
                                 <option value="{{prov.id}}">{{prov.nombre}}</option>
                             {% endfor %}
@@ -448,8 +462,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="familiar.localidad_familiar">Localidad:</label>
-                        <select id="familiar.localidad_familiar" name="familiar.localidad_familiar" value="{{familiar.localidad_familiar_id}}">
+                        <label for="familiar.domicilio_familiar_localidad">Localidad:</label>
+                        <select id="familiar.domicilio_familiar_localidad" name="familiar.domicilio_familiar_localidad" value="{{familiar.domicilio_familiar_localidad_id}}">
                             {% for loc in localidades %}
                                 <option value="{{loc.id}}">{{loc.nombre}}</option>
                             {% endfor %}
@@ -501,13 +515,29 @@
             </div>
             
             <div class="form-group">
-                <label for="nuevo_familiar.direccion_familiar">Domicilio:</label>
-                <input type="text" id="nuevo_familiar.direccion_familiar" name="nuevo_familiar.direccion_familiar" value="">
+                <label for="domicilio_familiar.calle">Calle:</label>
+                <input type="text" id="domicilio_familiar.calle" name="domicilio_familiar.calle" value="{{ jinete.domicilio_familiar.calle }}" required>
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="domicilio_familiar.numero">Número:</label>
+                <input type="text" id="domicilio_familiar.numero" name="domicilio_familiar.numero" value="{{ jinete.domicilio_familiar.numero }}" required>
             </div>
             
             <div class="form-group">
-                <label for="nuevo_familiar.provincia_familiar">nuevo_familiar.provincia_familiar</label>
-                <select id="nuevo_familiar.provincia_familiar" name="nuevo_familiar.provincia_familiar" value="">
+                <label for="domicilio_familiar.piso">Piso:</label>
+                <input type="text" id="domicilio_familiar.piso" name="domicilio_familiar.piso" value="{{ jinete.domicilio_familiar.piso or '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="domicilio_familiar.departamento">Departamento:</label>
+                <input type="text" id="domicilio_familiar.departamento" name="domicilio_familiar.departamento" value="{{ jinete.domicilio_familiar.departamento or '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="nuevo_familiar.domicilio_familiar_provincia">nuevo_familiar.domicilio_familiar_provincia</label>
+                <select id="nuevo_familiar.domicilio_familiar_provincia" name="nuevo_familiar.domicilio_familiar_provincia" value="">
                     {% for prov in provincias %}
                         <option value="{{prov.id}}">{{prov.nombre}}</option>
                     {% endfor %}
@@ -515,8 +545,8 @@
             </div>
 
             <div class="form-group">
-                <label for="nuevo_familiar.localidad_familiar">nuevo_familiar.localidad_familiar</label>
-                <select id="nuevo_familiar.localidad_familiar" name="nuevo_familiar.localidad_familiar" value="">
+                <label for="nuevo_familiar.domicilio_familiar_localidad">nuevo_familiar.domicilio_familiar_localidad</label>
+                <select id="nuevo_familiar.domicilio_familiar_localidad" name="nuevo_familiar.domicilio_familiar_localidad" value="">
                     {% for loc in localidades %}
                         <option value="{{loc.id}}">{{loc.nombre}}</option>
                     {% endfor %}

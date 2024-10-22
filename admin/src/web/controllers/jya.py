@@ -110,17 +110,17 @@ def add_jinete():
         # Asociar las discapacidades seleccionadas al jinete
         nuevo_jinete.discapacidades.extend(discapacidades_db)
         
-        localidad = jya.get_localidad_by_id(form.localidad_familiar.data)
-        provincia = jya.get_provincia_by_id(form.provincia_familiar.data)
+        #localidad = jya.get_localidad_by_id(form.localidad_familiar.data)
+        #provincia = jya.get_provincia_by_id(form.provincia_familiar.data)
         # Crear el familiar asociado al jinete
         nuevo_familiar = jya.add_familiar(
             parentesco_familiar=form.parentesco_familiar.data,
             nombre_familiar=form.nombre_familiar.data,
             apellido_familiar=form.apellido_familiar.data,
             dni_familiar=form.dni_familiar.data,
-            direccion_familiar=form.direccion_familiar.data,
-            localidad_familiar=localidad,
-            provincia_familiar=provincia,
+            domicilio_familiar=nuevo_domicilio,
+            #localidad_familiar=localidad,
+            #provincia_familiar=provincia,
             celular_familiar=form.celular_familiar.data,
             email_familiar=form.email_familiar.data,
             nivel_escolaridad_familiar=form.nivel_escolaridad_familiar.data,
@@ -197,8 +197,8 @@ def cargar_choices_form(form):
     form.institucion_direccion_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]  
     form.institucion_direccion_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
     
-    form.localidad_familiar.choices = [(l.id, l.nombre) for l in jya.list_localidades()]
-    form.provincia_familiar.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
+    form.domicilio_familiar_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]
+    form.domicilio_familiar_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
         
     form.caballo.choices = [(ecuestre.id, ecuestre.nombre) for ecuestre in list_ecuestre()]
     form.profesor_o_terapeuta.choices = [(emp.id, f"{emp.apellido}, {emp.nombre}") for emp in list_terapeutas_y_profesores()]

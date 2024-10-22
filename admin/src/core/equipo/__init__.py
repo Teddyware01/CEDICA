@@ -70,10 +70,10 @@ def list_empleados(sort_by=None, id_puesto_laboral=None, search=None,page=1, per
     if search:
         query = query.filter(
             or_(
-                Empleado.nombre.like(f"%{search}%"),
-                Empleado.apellido.like(f"%{search}%"),
-                Empleado.dni.like(f"%{search}%"),
-                Empleado.email.like(f"%{search}%"),
+                Empleado.nombre.ilike(f"%{search}%"),
+                Empleado.apellido.ilike(f"%{search}%"),
+                Empleado.dni.ilike(f"%{search}%"),
+                Empleado.email.ilike(f"%{search}%"),
             )
         )
     if sort_by:

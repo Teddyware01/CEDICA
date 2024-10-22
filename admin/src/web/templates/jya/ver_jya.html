@@ -54,7 +54,9 @@
 
         <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
         <p><strong>Nombre de la Institución: </strong> {{ jinete.nombre_institucion }}</p>
-        <p><strong>Dirección: </strong> <strong>Calle: </strong>{{ jinete.domicilio.calle }}, <strong>numero: </strong>{{ jinete.domicilio.numero }}, {{ jinete.domicilio.localidad.nombre }}, {{ jinete.domicilio.provincia.nombre }}</p>
+        <p><strong>Dirección: </strong> <strong>Calle: </strong>{{ jinete.direccion.calle }}, 
+            <strong>numero: </strong>{{ jinete.direccion.numero }}, 
+            {{ jinete.direccion.localidad.nombre }}, {{ jinete.direccion.provincia.nombre }}</p>
         <p><strong>Teléfono: </strong> {{ jinete.telefono_institucion }}</p>
         <p><strong>Grado / año actual: </strong> {{ jinete.grado }}</p>           
         <p><strong>Observaciones:</strong> {{ jinete.observaciones_institucion }}</p>
@@ -68,9 +70,10 @@
                     <p><strong>Nombre:</strong> {{ familiar.nombre_familiar }}</p>
                     <p><strong>Apellido:</strong> {{ familiar.apellido_familiar }}</p>
                     <p><strong>DNI:</strong> {{ familiar.dni_familiar }}</p>
-                    <p><strong>Domicilio:</strong> {{ familiar.direccion_familiar }}</p>
-                    <p><strong>Provincia:</strong> {{ familiar.provincia_familiar.nombre }}</p>
-                    <p><strong>Localidad:</strong> {{ familiar.localidad_familiar.nombre }}</p>
+                    <p><strong>Domicilio actual:</strong> Calle: {{ familiar.domicilio_familiar.calle }}, 
+                        numero: {{ familiar.domicilio_familiar.numero }}, piso: {{ familiar.domicilio_familiar.piso | default('-', true) }}, 
+                        departamento: {{ familiar.domicilio_familiar.departamento | default('-', true) }}, 
+                        {{ familiar.domicilio_familiar.localidad.nombre }}, {{ familiar.domicilio_familiar.provincia.nombre }}</p>
                     <p><strong>Celular:</strong> {{ familiar.celular_familiar }}</p>
                     <p><strong>Email:</strong> {{ familiar.email_familiar }}</p>
                     <p><strong>Escolaridad:</strong> {{ familiar.nivel_escolaridad_familiar }}</p>

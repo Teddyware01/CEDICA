@@ -8,10 +8,10 @@ class RegistroCobroForm(FlaskForm):
     jinete = SelectField("Jinete o Amazona", choices=[], coerce=int, validators=[DataRequired()])
     fecha_pago = DateField("Fecha de Pago", format='%Y-%m-%d', validators=[DataRequired()])
     medio_pago = SelectField("Medio de Pago", 
-                             choices=[('efectivo', 'Efectivo'), 
-                                      ('tarjeta_credito', 'Tarjeta de Crédito'), 
-                                      ('tarjeta_debito', 'Tarjeta de Débito')],
-                             validators=[DataRequired()])
+                            choices=[('efectivo', 'Efectivo'), 
+                                    ('tarjeta_credito', 'Tarjeta de Crédito'), 
+                                    ('tarjeta_debito', 'Tarjeta de Débito')],
+                            validators=[DataRequired()])
     monto = DecimalField("Monto", validators=[DataRequired()])
     recibido_por = SelectField("Recibido por", choices=[], coerce=int, validators=[DataRequired()])
     observaciones = TextAreaField("Observaciones (Opcional)", validators=[Optional(), Length(max=200)])

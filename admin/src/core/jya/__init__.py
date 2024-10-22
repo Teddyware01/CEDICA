@@ -15,10 +15,10 @@ def list_jinetes(sort_by=None, search=None):
     if search:
         query = query.filter(
             or_(
-                Jinete.nombre.like(f"%{search}%"),
-                Jinete.apellido.like(f"%{search}%"),
-                Jinete.dni.like(f"%{search}%"),
-                Jinete.profesionales.like(f"%{search}%"),
+                Jinete.nombre.ilike(f"%{search}%"),
+                Jinete.apellido.ilike(f"%{search}%"),
+                Jinete.dni.ilike(f"%{search}%"),
+                Jinete.profesionales.ilike(f"%{search}%"),
             )
     )
         

@@ -15,7 +15,7 @@ from src.core.equipo.extra_models import Localidad
 from src.core.equipo.models import PuestoLaboral
 from wtforms.validators import DataRequired, Email, Length, Optional, Regexp, ValidationError, NumberRange
 from wtforms.widgets import DateInput, ListWidget, CheckboxInput
-from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum
+from .models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, TrabajoEnum, SedeEnum, EscolaridadEnum
 from src.core.ecuestre import list_ecuestre
 from src.core.equipo import list_terapeutas_y_profesores, list_auxiliares_pista, list_conductores_caballos
 
@@ -63,7 +63,7 @@ class AddJineteForm(FlaskForm):
     
     observaciones_becado = StringField(
         "Observaciones becado",
-        validators=[Optional(), Length(max=255, message="Las observaciones no deben exceder los 255 caracteres.")]
+        validators=[Optional()]
     )
     
     certificado_discapacidad = BooleanField("Certificado de discapacidad")
@@ -163,10 +163,8 @@ class AddJineteForm(FlaskForm):
         ],
     )
     
-    ##agrego aca
     estado_pago = BooleanField("Estado de Pago (Marcar si está al día)", default=True)
-    ##agrego aca
-
+    
     curatela = BooleanField("Curatela", validators=[DataRequired("Indique si posee curatela")])
     
     observaciones_curatela = StringField("Observaciones curatela")
@@ -208,17 +206,17 @@ class AddJineteForm(FlaskForm):
     apellido_familiar = StringField("Apellido", validators=[Optional()])
     dni_familiar = StringField("DNI", validators=[Optional()])
     
-    #direccion_familiar_calle = StringField("Calle", validators=[DataRequired("Ingrese la calle")])
-    #direccion_familiar_numero = IntegerField("Número", validators=[DataRequired("Ingrese el número")])
-    #direccion_familiar_departamento = StringField("Departamento", validators=[Optional()])
-    #direccion_familiar_piso = IntegerField("Piso", validators=[Optional()])
-    
-    provincia_familiar = SelectField("Provincia", coerce=int, validators=[Optional()])
-    localidad_familiar = SelectField("Localidad", coerce=int, validators=[Optional()])
-    direccion_familiar = StringField("Direccion", validators=[Optional()])
+    domicilio_familiar_calle = StringField("Calle", validators=[Optional()])
+    domicilio_familiar_numero = IntegerField("Número", validators=[Optional()])
+    domicilio_familiar_departamento = StringField("Departamento", validators=[Optional()])
+    domicilio_familiar_piso = IntegerField("Piso", validators=[Optional()])  
+    domicilio_familiar_provincia = SelectField("Provincia", coerce=int, validators=[Optional()])
+    domicilio_familiar_localidad = SelectField("Localidad", coerce=int, validators=[Optional()])
+    #direccion_familiar = StringField("Direccion", validators=[Optional()])
     celular_familiar = StringField("Celular", validators=[Optional()])
     email_familiar = StringField('Email', validators=[Optional()])
-    nivel_escolaridad_familiar = SelectField('Nivel de escolaridad', choices=[('Primario', 'Primario'), ('Secundario', 'Secundario'), ('Terciario', 'Terciario'), ('Universitario', 'Universitario')], validators=[Optional()])
+    nivel_escolaridad_familiar = SelectField(
+        'Nivel de escolaridad', choices=[(esc.name, esc.value) for esc in EscolaridadEnum], validators=[Optional()])
     actividad_ocupacion_familiar = StringField('Actividad u ocupación', validators=[Optional()])
     
     trabajo_institucional = SelectField(
