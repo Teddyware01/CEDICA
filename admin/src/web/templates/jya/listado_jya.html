@@ -12,7 +12,7 @@
     <h1 class="text-center">Listado de jinetes</h1>
     
     <div class="actions">
-        <a href="{{ url_for('jya.add_jinete_form') }}" class="btn btn-add btn-primary" style="margin: 10px 0;">Agregar jinete</a>
+        <a href="{{ url_for('jya.add_jinete_form') }}" class="btn btn-add" style="margin: 10px 0;">Agregar jinete</a>
     </div>
     
     <!-- Formulario de búsqueda y ordenamiento -->
@@ -24,10 +24,10 @@
             <option value="apellido_asc">Apellido (Ascendente)</option>
             <option value="apellido_desc">Apellido (Descendente)</option>
         </select>
-        <button type="submit" class="btn btn-sort btn-secondary">Ordenar</button>
+        <button type="submit" class="btn btn-sort">Ordenar</button>
 
         <input type="text" id="search" name="search" placeholder="Nombre, apellido, dni o profesionales" value="{{ request.args.get('search', '') }}">
-        <button type="submit" class="btn btn-sort btn-secondary">Buscar</button>
+        <button type="submit" class="btn btn-sort">Buscar</button>
     </form>
         
     <!-- Lista de jinetes -->
@@ -61,9 +61,9 @@
                         </td>
                         <!-- agrego aca-->
                         <td>
-                            <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="btn btn-edit btn-primary">Ver jinete</a>
-                            <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit btn-secondary">Editar jinete</a>
-                            <a href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}" class="btn btn-delete btn-secondary">Eliminar jinete</a>
+                            <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="btn btn-view">Ver jinete</a>
+                            <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Modificar jinete</a>
+                            <a href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}" class="btn btn-delete">Eliminar jinete</a>
                         </td>
                     </tr>
                 {% endfor %}

@@ -5,7 +5,7 @@ from src.core.auth.permisos import Permisos
 from src.core.jya.models import (Jinete, Familiar, Dias, JineteDocumento,
                                 TiposDiscapacidadEnum, DiasEnum,DiagnosticoEnum, 
                                 AsignacionEnum,PensionEnum,TrabajoEnum,SedeEnum,
-                                TipoDiscapacidad)
+                                TipoDiscapacidad, EscolaridadEnum)
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad
 from sqlalchemy import String, cast, or_
 
@@ -304,6 +304,9 @@ def list_tipos_asignacion():
 
 def list_tipos_pensiones():
     return  [(pension.name, pension.value )for pension in PensionEnum]
+
+def list_nivel_escolaridad():
+    return  [(esc.name, esc.value )for esc in EscolaridadEnum]
     
 
 def list_familiares_por_jinete(jinete_id):

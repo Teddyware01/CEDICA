@@ -216,7 +216,8 @@ class AddJineteForm(FlaskForm):
     celular_familiar = StringField("Celular", validators=[Optional()])
     email_familiar = StringField('Email', validators=[Optional()])
     nivel_escolaridad_familiar = SelectField(
-        'Nivel de escolaridad', choices=[(esc.name, esc.value) for esc in EscolaridadEnum], validators=[Optional()])
+        'Nivel de escolaridad', choices=[(esc.name, esc.value) for esc in EscolaridadEnum], 
+        validators=[Optional()])        
     actividad_ocupacion_familiar = StringField('Actividad u ocupación', validators=[Optional()])
     
     trabajo_institucional = SelectField(
@@ -244,7 +245,7 @@ class AddJineteForm(FlaskForm):
     caballo = SelectField(
         "Caballo",
         choices=[],
-        validators=[DataRequired(message="El tipo de pension es obligatorio")],
+        validators=[DataRequired(message="El caballo es obligatorio")],
     )
 
     profesor_o_terapeuta = SelectField(

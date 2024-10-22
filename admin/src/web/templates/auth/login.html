@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %} Inicio de sesion {% endblock %}
+{% block title %}Inicio de sesión{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -14,18 +14,22 @@
     
     {{ super() }}
     
-    <div class="container-fluid" style="align-items: center; display: inline; justify-content: center;">
-        <h1 class="sesion_iniciada">{% if 'user' in session %}Sesión activa, {{ session.user }}{% else %}Iniciar sesión{% endif %}</h1>
-        <img id="cedica" src="{{ url_for('static', filename='images/cedica.jpg') }}" title="cedica" style="height: 20em;">
+    <div class="sesion-centrada">
+        <h1>{% if 'user' in session %}Sesión activa, {{ session.user }}{% else %}Iniciar sesión{% endif %}</h1>
+        <img id="cedica" src="{{ url_for('static', filename='images/cedica.jpg') }}" alt="cedica" title="cedica" style="height: 10em;">
     </div>
     <!-- Mostrar el formulario de inicio de sesión solo si no hay sesión activa -->
-    {% if 'user' not in session %}
-    <form action="{{ url_for('auth.authenticate') }}" method="POST" class="client-form">
-        <input type="email" name="email" placeholder="Correo" required />
-        <input type="password" name="password" placeholder="Contraseña" required />
-        <input type="submit" value="Login" />
-    </form>
-    {% endif %}
+    <div class="sesion-centrada">
+        {% if 'user' not in session %}
+        <form action="{{ url_for('auth.authenticate') }}" method="POST" class="client-form">
+            <input type="email" name="email" placeholder="Correo" required />
+            <input type="password" name="password" placeholder="Contraseña" required />
+            <input type="submit" value="Login" />
+        </form>
+        {% endif %}
+    </div>
 </section>
 {% endblock %}
+
+
 

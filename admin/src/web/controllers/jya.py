@@ -8,7 +8,7 @@ from src.core import jya
 from src.core import equipo
 from src.core.database import db
 from src.core.jya.forms import AddJineteForm
-from src.core.jya.models import Jinete, PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, Dias, DiasEnum, Familiar, JineteDocumento, TipoDiscapacidad
+from src.core.jya.models import Jinete, PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, Dias, DiasEnum, Familiar, JineteDocumento, TipoDiscapacidad, EscolaridadEnum
 from src.core.equipo import list_terapeutas_y_profesores, list_auxiliares_pista, list_conductores_caballos
 from src.core.ecuestre import list_ecuestre
 
@@ -221,7 +221,7 @@ def cargar_choices_form(form):
 
     form.discapacidades.choices = [(tipo.name, tipo.value) for tipo in TiposDiscapacidadEnum]
     form.dias.choices = [(dia.name, dia.value) for dia in DiasEnum]
-
+    form.nivel_escolaridad_familiar.choices = [(esc.name, esc.value) for esc in EscolaridadEnum]
 
 @bp.get("/editar_jinete/<int:jinete_id>")
 @login_required

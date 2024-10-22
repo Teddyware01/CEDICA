@@ -14,7 +14,8 @@
         
         <form action="{{ url_for('jya.editar_jinete', jinete_id=jinete.id) }}" method="POST">
             {{ form.hidden_tag() }}
-
+            <div class="caja">
+            <h2><strong> DATOS PERSONALES DEL JINETE O AMAZONA </strong></h2>
             <div class="form-group">
                 <label for="nombre">Nombre/s:</label>
                 <input type="text" id="nombre" name="nombre" value="{{ jinete.nombre }}" required>
@@ -276,7 +277,6 @@
                 <label for="pension_no">No</label>
             </div>
 
-
             <div class="form-group">
                 <label for="pension">Pensión:</label>
                 <select id="pension" name="pension" {% if not jinete.beneficiario_pension %}disabled{% endif %}>
@@ -304,9 +304,10 @@
                     });
                 });
             </script>
+            </div>
 
             <h2><strong> SITUACIÓN PREVISIONAL </strong></h2>
-            
+            <div class="caja">
             <div class="form-group">
                 <label for="obra_social">Obra social:</label>
                 <input type="text" id="obra_social" name="obra_social" value="{{ jinete.obra_social }}" required>
@@ -333,7 +334,8 @@
                 <label for="observaciones_curatela">Observaciones:</label>
                 <input type="text" id="observaciones_curatela" name="observaciones_curatela" value="{{ jinete.observaciones_curatela or '' }}">
             </div>
-
+            </div>
+            <div class="caja">
             <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
             
             <div class="form-group">
@@ -405,7 +407,8 @@
                 <label for="profesionales">PROFESIONALES que lo ATIENDEN:</label>
                 <input type="text" id="profesionales" name="profesionales" value="{{ jinete.profesionales }}">
             </div>
-
+            </div>
+            <div class="caja">
             <h2><strong> DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
 
             {%if  familiares %}
@@ -492,7 +495,8 @@
                     </div>
                 {% endfor %}
             {% else %}
-                
+            </div>
+            <div class="caja">
             <h2><strong> (OPCIONAL: ) AGREGAR DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
             <div class="form-group">
                 <label for="nuevo_familiar.parentesco_familiar">Parentesco:</label>
@@ -576,10 +580,12 @@
             </div>
             
         {% endif %}
-
+        </div>
         
+        <div class="caja">
+            <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN </strong></h2>
         <div class="form-group">
-            <label for="trabajo_institucional">Trabajo institucional:</label>
+            <label for="trabajo_institucional">Propuesta de trabajo institucional:</label>
             <select id="trabajo_institucional" name="trabajo_institucional">
                 {% for trabajo in trabajos_institucionales %}
                 <option value="{{ trabajo[0] }}" {% if trabajo[0] == jinete.trabajo_institucional.value %}selected{% endif %}>
@@ -666,10 +672,10 @@
                 {% endfor %}
             </select>
         </div>        
-    
+        </div>  
             <div>
-                <button type="submit" style="margin: 10px;" class="btn btn-submit">Guardar Cambios</button>
-                <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
+                <button type="submit" style="margin: 10px;" class="btn btn-add">Guardar Cambios</button>
+                <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-back">Cancelar</a>
             </div>
         </form>
     </div>
