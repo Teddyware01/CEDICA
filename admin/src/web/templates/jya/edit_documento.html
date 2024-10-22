@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Editar Jinete{% endblock %}
+{% block title %}Editar documento{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -10,15 +10,15 @@
 {% block content %}
     {{ super() }}
     <div>
-        <h1 class="text-center">Editar Jinete</h1>
+        <h1 class="text-center">Editar Documento del Jinete</h1>
         
         <form method="POST" action="{{ url_for('jya.editar_documento', jinete_id=jinete_id, documento_id=documento.id) }}" enctype="multipart/form-data" class="mb-3">
             <div class="form-group">
 
-                <label for="titulo_documento"><strong>Titulo del archivo:</strong></label>
-                <input type="text" id="titulo_documento" name="titulo_documento" class="form-control" required>
+                <label for="titulo_documento"><strong>Titulo del archivo: </strong></label>
+                <input type="text" id="titulo_documento" name="titulo_documento" class="form-control" value="{{ documento.titulo_documento }}" required>
                 <label for="tipo_documento"><strong>Tipo de Archivo:</strong></label>
-                <select id="tipo_documento" name="tipo_documento" class="form-control">
+                <select id="tipo_documento" name="tipo_documento" class="form-control" required>
                     <option value="evaluacion">Evaluación</option>
                     <option value="entrevista">Entrevista</option>
                     <option value="planificaciones">Planificaciones</option>
@@ -28,7 +28,7 @@
                 </select>
             </div>
             <fieldset>
-                <label for="titulo_documento"><strong> Nombre del archivo: </strong>{{ documento.titulo_documento }}</label>
+                <label for="titulo_documento"><strong> Nombre del archivo: </strong>{{ documento.nombre_archivo }}</label>
             </fieldset>
             <input type="submit" value="Guardar">
         </form>

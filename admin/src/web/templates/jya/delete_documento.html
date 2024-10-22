@@ -13,7 +13,7 @@
         <div class="document-details">
             <p><strong>Título:</strong> {{ doc.titulo_documento }}</p>
             <p><strong>Fecha de subida:</strong> {{ doc.fecha_subida_documento.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-            <p><strong>Tipo:</strong> {{ doc.tipo_documento }}</p>
+            <p><strong>Tipo:</strong> {{ doc.tipo_documento.value }}</p>
         </div>
         <div class="form-actions">
             <form action="{{ url_for('jya.eliminar_documento', jinete_id=jinete.id, documento_id=doc.id) }}" method="POST" style="display: inline;">

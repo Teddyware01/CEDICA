@@ -117,12 +117,12 @@ jinete_familiar = db.Table('jinete_familiar',
 )
 
 class TipoDocumentoEnum(Enum):
-    entrevista="entrevista"
-    evaluacion="evaluacion"
-    planificaciones="planificaciones"
-    evolucion="evolución"
-    cronicas="crónicas"
-    documental="documental"
+    entrevista="Entrevista"
+    evaluacion="Evaluación"
+    planificaciones="Planificaciones"
+    evolucion="Evolución"
+    cronicas="Crónicas"
+    documental="Documental"
     
 class JineteDocumento(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
