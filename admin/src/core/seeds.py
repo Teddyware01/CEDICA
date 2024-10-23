@@ -662,29 +662,33 @@ def run():
 
     jya.associate_jinete_familiar(2, 2)
     
-    jya.add_dias(
-        dias=DiasEnum.lunes,
-    )
+    jya.add_dias(dias=DiasEnum.lunes)
+    jya.add_dias(dias=DiasEnum.martes)
+    jya.add_dias(dias=DiasEnum.miercoles)
+    jya.add_dias(dias=DiasEnum.jueves)
+    jya.add_dias(dias=DiasEnum.viernes)
+    jya.add_dias(dias=DiasEnum.sabado)
+    jya.add_dias(dias=DiasEnum.domingo)
+    
     
     jya.associate_jinete_dias(1, 1)
     
-    jya.add_dias(
-        dias=DiasEnum.martes,
-    )
     
     jya.associate_jinete_dias(1, 2)
     
-    jya.add_discapacidades(
-        tipos_discapacidad=TiposDiscapacidadEnum.motora,
-    )
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.mental)
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.motora)
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.sensorial)
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.visceral)
     
-    jya.associate_jinete_discapacidades(1, 1)
+    
+    jya.associate_jinete_discapacidad_id(1, 1)
     
     jya.add_discapacidades(
         tipos_discapacidad=TiposDiscapacidadEnum.sensorial,
     )
     
-    jya.associate_jinete_discapacidades(1, 2)
+    jya.associate_jinete_discapacidad_id(1, 2)
 
     '''# Modulo ecuestre
     sede1 = ecuestre.create_sede(

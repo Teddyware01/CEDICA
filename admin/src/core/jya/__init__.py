@@ -114,6 +114,19 @@ def add_familiar(**kwargs):
     db.session.commit()
     return familiar
 
+ 
+def edit_familiar(familiar_id, **kwargs):
+    familiar = Familiar.query.get(familiar_id)
+    for key, value in kwargs.items():
+        if hasattr(familiar, key):
+            setattr(familiar, key, value)
+    db.session.commit()
+
+def get_primer_familiar(jinete_id):
+    jinete = Jinete.query.get(jinete_id)
+    return jinete.familiares[0]
+
+
 def associate_jinete_familiar(jinete_id, familiar_id):
     # Obtener instancias de Jinete y Familiar
     jinete = Jinete.query.get(jinete_id)
@@ -145,6 +158,22 @@ def associate_jinete_dias(jinete_id, dias_id):
 
     jinete.dias.append(dias)
     db.session.commit()
+
+
+
+def associate_jinete_dias_name(jinete_id, dia_name):
+    jinete = traer_jinete(jinete_id)
+    dia = Dias.query.filter_by(dias=dia_name).first()
+
+    if not jinete :
+        raise ValueError("Jinete no encontrado")
+    if not dia:
+        raise ValueError("Dia no encontrado")
+
+    jinete.dias.append(dia)
+    db.session.commit()
+
+
     
 def add_discapacidades(**kwargs):
     discapacidades = TipoDiscapacidad(**kwargs)
@@ -152,14 +181,34 @@ def add_discapacidades(**kwargs):
     db.session.commit()
     return discapacidades
 
-def associate_jinete_discapacidades(jinete_id, discapacidades_id):
-    jinete = Jinete.query.get(jinete_id)
-    discapacidades = TipoDiscapacidad.query.get(discapacidades_id)
+def associate_jinete_discapacidad_id(jinete_id, discapacidad_id):
+    jinete = traer_jinete(jinete_id)
+    discapacidad = TipoDiscapacidad.query.get(discapacidad_id)
 
-    if not jinete or not discapacidades:
+    if not jinete or not discapacidad:
         raise ValueError("Jinete o discapacidades no encontrado")
 
-    jinete.discapacidades.append(discapacidades)
+    jinete.discapacidades.append(discapacidad)
+    db.session.commit()
+
+
+def associate_jinete_discapacidad_name(jinete_id, discapacidad_name):
+    jinete = traer_jinete(jinete_id)
+    discapacidad = TipoDiscapacidad.query.filter_by(tipos_discapacidad=discapacidad_name).first()
+
+    if not jinete :
+        raise ValueError("Jinete  no encontrado")
+    if not discapacidad:
+        raise ValueError("Discapacidad no encontrada")
+
+    jinete.discapacidades.append(discapacidad)
+    db.session.commit()
+
+
+
+def clear_jinete_discapacidades(jinete_id):
+    jinete = traer_jinete(jinete_id)
+    jinete.discapacidades = []
     db.session.commit()
 
 def get_jinete_dias(jinete_id):
@@ -174,6 +223,13 @@ def get_jinete_dias(jinete_id):
     assigned_dias = [dia.dias.value for dia in jinete.dias]  # Accessing the 'dias' Enum value
 
     return assigned_dias
+
+
+def clear_jinete_dias(jinete_id):
+    jinete = traer_jinete(jinete_id)
+    jinete.dias = []
+    db.session.commit()
+
 
 def add_documento(**kwargs):
     documento = JineteDocumento(**kwargs)
@@ -272,7 +328,7 @@ def delete_documento(documento_id):
 
 
 def list_discapacidades():
-    return [(tipo.value,tipo.name) for tipo in TiposDiscapacidadEnum]
+    return [(tipo.name,tipo.value) for tipo in TiposDiscapacidadEnum]
 
 
 def list_jinete_tipos_discapacidades(jinete_id):
@@ -290,14 +346,14 @@ def get_tipos_discapacidades(jinete_id):
     return assigned_discapacidades
 
 def list_dias_semana():
-    return  [(dia.value,dia.name) for dia in DiasEnum]
+    return  [(dia.name,dia.value) for dia in DiasEnum]
 
 def list_jinete_dias_semana(jinete_id):
     jinete = traer_jinete(jinete_id)
     return [{'name': dia.dias.name, 'value': dia.dias.value} for dia in jinete.dias]
 
 def list_tipos_diagnostico():
-    return  [diagnostico.value for diagnostico in DiagnosticoEnum]
+    return  [(diagnostico.name, diagnostico.value) for diagnostico in DiagnosticoEnum]
 
 def list_tipos_asignacion():
     return  [(asignacion.name, asignacion.value )for asignacion in AsignacionEnum]
