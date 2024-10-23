@@ -337,20 +337,20 @@ def editar_jinete(jinete_id):
         jinete.profesionales = form.get("profesionales") if form.get("profesionales") and form.get("profesionales") != "" else None
 
         #levanto campos del familiar:
-        parentezco_familiar = form.get("familiar.parentesco_familiar")
-        nombre_familiar = form.get("familiar.nombre_familiar")
-        apellido_familiar = form.get("familiar.apellido_familiar")
-        dni_familiar = form.get("familiar.dni_familiar")
-        domicilio_familiar_calle = form.get("domicilio_familiar.calle")
-        domicilio_familiar_numero = form.get("domicilio_familiar.numero")
-        domicilio_familiar_piso = form.get("domicilio_familiar.piso")
-        domicilio_familiar_departamento = form.get("domicilio_familiar.departamento")
-        domicilio_familiar_provincia_id = form.get("familiar.domicilio_familiar_provincia")
-        domicilio_familiar_localidad_id = form.get("familiar.domicilio_familiar_localidad")
-        celular_familiar = form.get("familiar.celular_familiar")
-        email_familiar = form.get("familiar.email_familiar")
-        nivel_escolaridad_familiar = form.get("familiar.nivel_escolaridad_familiar")
-        actividad_ocupacion_familiar = form.get("familiar.actividad_ocupacion_familiar")
+        parentezco_familiar = form.get("familiar.parentesco_familiar") or None
+        nombre_familiar = form.get("familiar.nombre_familiar") or None
+        apellido_familiar = form.get("familiar.apellido_familiar") or None
+        dni_familiar = form.get("familiar.dni_familiar") or None
+        domicilio_familiar_calle = form.get("domicilio_familiar.calle") or None
+        domicilio_familiar_numero = form.get("domicilio_familiar.numero") or None
+        domicilio_familiar_piso = form.get("domicilio_familiar.piso") or None
+        domicilio_familiar_departamento = form.get("domicilio_familiar.departamento") or None
+        domicilio_familiar_provincia_id = form.get("familiar.domicilio_familiar_provincia") or None
+        domicilio_familiar_localidad_id = form.get("familiar.domicilio_familiar_localidad") or None
+        celular_familiar = form.get("familiar.celular_familiar") or None
+        email_familiar = form.get("familiar.email_familiar") or None 
+        nivel_escolaridad_familiar = form.get("familiar.nivel_escolaridad_familiar") or None
+        actividad_ocupacion_familiar = form.get("familiar.actividad_ocupacion_familiar") or None
         
         if jinete.familiares:
             familiar_id= jya.get_primer_familiar(jinete_id).id
@@ -364,9 +364,9 @@ def editar_jinete(jinete_id):
 
 
         # trabajo en institucion:
-        jinete.trabajo_institucional = form["trabajo_institucional"]
+        jinete.trabajo_institucional = form.get("trabajo_institucional")
         jinete.condicion = (form["condicion"]  == "si")
-        jinete.sede = form["sede"]
+        jinete.sede = form.get("sede")
         # dias:
         jya.clear_jinete_dias(jinete_id)
         for dia_name in form.getlist("dias_semana"):
@@ -375,11 +375,11 @@ def editar_jinete(jinete_id):
 
 
 
-        jinete.profesor_o_terapeuta_id = form["profesor_o_terapeuta"]
-        jinete.conductor_caballo_id = form["conductor_caballo"]
-        jinete.caballo_id = form["caballo"]
-        jinete.auxiliar_pista_id = form["auxiliar_pista"]
-        
+        jinete.profesor_o_terapeuta_id = form.get("profesor_o_terapeuta")
+        jinete.conductor_caballo_id = form.get("conductor_caballo")
+        jinete.caballo_id = form.get("caballo")
+        jinete.auxiliar_pista_id = form.get("auxiliar_pista")
+
         flash("Jinete actualizado  exitosamente", "success")
         db.session.commit()
         return redirect(url_for("jya.view_jinete",jinete_id=jinete.id))

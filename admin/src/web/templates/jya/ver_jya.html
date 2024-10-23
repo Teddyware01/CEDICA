@@ -35,11 +35,19 @@
             <p><strong>Observaciones:</strong> {{ jinete.observaciones_becado }}</p>
             <p><strong>Posee certificado discapacidad:</strong> {{"SI" if jinete.certificado_discapacidad else "NO" }}</p>
             <p><strong>¿Con qué diagnóstico?</strong> {{ jinete.diagnostico.value if jinete.diagnostico.value else '-' }}</p>
-            <p><strong>Si es OTRO indique cuál:</strong> {{ jinete.otro if jinete.diagnostico.value == "otro" else '-' }}</p>
-            <p><strong>Tipo de Discapacidad:</strong> 
+            {% if jinete.diagnostico.name == "otro" %}
+                <p><strong>Si es OTRO indique cuál:</strong> {{ jinete.otro if jinete.otro else '-' }}</p>
+            {% endif %}
+
+
+            <p><strong>Tipo de Discapacidad:</strong>
+                {% if jinete.discapacidades %}
                 {% for tipo in jinete.discapacidades %}
                     <span>{{ tipo.tipos_discapacidad.value }}</span>{% if not loop.last %}, {% endif %}
                 {% endfor %}
+                {% else %}
+                Ninguna.
+                {% endif %}
             </p>
             <p><strong>¿Percibe alguna Asignación Familiar?</strong> {{"SI" if jinete.asignacion_familiar else "NO" }}</p>
             <p><strong>Asignaciones:</strong> {{ jinete.tipo_asignacion.value }}</p>
@@ -81,7 +89,7 @@
                             {{ familiar.domicilio_familiar.localidad.nombre }}, {{ familiar.domicilio_familiar.provincia.nombre }}</p>
                         <p><strong>Celular:</strong> {{ familiar.celular_familiar }}</p>
                         <p><strong>Email:</strong> {{ familiar.email_familiar }}</p>
-                        <p><strong>Escolaridad:</strong> {{ familiar.nivel_escolaridad_familiar }}</p>
+                        <p><strong>Escolaridad:</strong> {{ familiar.nivel_escolaridad_familiar.value }}</p>
                         <p><strong>Actividad / Ocupación:</strong> {{ familiar.actividad_ocupacion_familiar }}</p>
                     </div>
                 {% endfor %}
@@ -95,9 +103,37 @@
             <p><strong>Condición:</strong> {{ "REGULAR" if jinete.condicion else "DE BAJA" }}</p>
             <p><strong>SEDE:</strong> {{ jinete.sede.value }}</p>
             <p><strong>Días:</strong>
+                {% if jinete.dias %}
                 {% for d in jinete.dias %}
-                    <span>{{ d.dias.value }}</span>{% if not loop.last %}, {% endif %}
+                <span>{{ d.dias.value }}</span>{% if not loop.last %}, {% endif %}
                 {% endfor %}
+                {% else %}
+                No hay días asignados.
+                {% endif %}
+            </p>
+            
+            <p><strong>Profesor/a o Terapeuta:</strong> 
+                {% if jinete.profesor_o_terapeuta %}
+                    {{ jinete.profesor_o_terapeuta.apellido }} {{ jinete.profesor_o_terapeuta.nombre }}
+                {% else %}
+                    Ninguno asignado.
+                {% endif %}
+            </p>
+            <p><strong>Conductor/a del Caballo:</strong> 
+                {% if jinete.conductor_caballo %}
+                    {{ jinete.conductor_caballo.apellido }} {{ jinete.conductor_caballo.nombre }}
+                {% else %}
+                    Ninguno asignado.
+                {% endif %}
+            </p>
+            
+            <p><strong>Caballo:</strong> {{ jinete.caballo.nombre  or "Ninguno asignado."}}</p>
+            <p><strong>Auxiliar de Pista:</strong> 
+                {% if jinete.auxiliar_pista %}
+                    {{ jinete.auxiliar_pista.apellido }} {{ jinete.auxiliar_pista.nombre }}
+                {% else %}
+                    Ninguno asignado.
+                {% endif %}
             </p>
         </div>
 

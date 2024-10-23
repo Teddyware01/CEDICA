@@ -567,9 +567,10 @@
 
         <div class="form-group">
             <label for="profesor_o_terapeuta">Profesor/a o Terapeuta:</label>
-            <select id="profesor_o_terapeuta" name="profesor_o_terapeuta" value="{{jinete.profesor_o_terapeuta.id}}" required>
+            <select id="profesor_o_terapeuta" name="profesor_o_terapeuta">
+                <option value="" disabled selected>Seleccione un profesor/a o terapeuta</option> <!-- Opción vacía -->
                 {% for prof in list_profes_terapeutas %}
-                    <option value="{{prof.id}}">{{prof.apellido}} {{prof.nombre}}</option>
+                    <option value="{{prof.id}}"{% if prof.id == jinete.profesor_o_terapeuta_id %} selected {%endif%} >{{prof.apellido}} {{prof.nombre}}</option>
                 {% endfor %}
             </select>
         </div>
@@ -577,9 +578,11 @@
 
         <div class="form-group">
             <label for="conductor_caballo">Conductor/a del Caballo:</label>
-            <select id="conductor_caballo" name="conductor_caballo" value="{{jinete.conductor_caballo.id}}" required>
+            <select id="conductor_caballo" name="conductor_caballo">
+                <option value="" disabled selected>Seleccione conductor/a del caballo</option> <!-- Opción vacía -->
+
                 {% for conductor in list_conductores %}
-                <option value="{{conductor.id}}">{{conductor.apellido}}  {{conductor.nombre}}  </option>
+                <option value="{{conductor.id}}"{% if conductor.id == jinete.conductor_caballo.id %} selected {%endif%} >{{conductor.apellido}}  {{conductor.nombre}}  </option>
                 {% endfor %}
             </select>
         </div>
@@ -588,9 +591,10 @@
         
         <div class="form-group">
             <label for="caballo">Caballo:</label>
-            <select id="caballo" name="caballo" value="{{jinete.caballo.id}}" required>
+            <select id="caballo" name="caballo">
+                <option value="" disabled selected>Seleccione caballo</option> <!-- Opción vacía -->
                 {% for caballo in list_caballos %}
-                    <option value="{{caballo.id}}">{{caballo.nombre}}</option>
+                    <option value="{{caballo.id}}" {% if caballo.id == jinete.caballo.id %} selected {%endif%} >{{caballo.nombre}}</option>
                 {% endfor %}
             </select>
         </div>
@@ -599,9 +603,10 @@
         
         <div class="form-group">
             <label for="auxiliar_pista">Auxiliar de Pista:</label>
-            <select id="auxiliar_pista" name="auxiliar_pista" value="{{jinete.auxiliar_pista.id}}" required>
+            <select id="auxiliar_pista" name="auxiliar_pista">
+                <option value="" disabled selected>Seleccione auxiliar de pista</option> <!-- Opción vacía -->
                 {% for auxiliar in list_auxiliares_pista %}
-                    <option value="{{auxiliar.id}}">{{auxiliar.apellido}}  {{auxiliar.nombre}}  </option>
+                    <option value="{{auxiliar.id}}"{% if auxiliar.id == jinete.auxiliar_pista.id %} selected {%endif%} >{{auxiliar.apellido}}  {{auxiliar.nombre}}  </option>
                 {% endfor %}
             </select>
         </div>        

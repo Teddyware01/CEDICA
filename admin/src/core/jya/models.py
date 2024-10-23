@@ -195,7 +195,7 @@ class Jinete(db.Model):
     profesor_o_terapeuta = db.relationship('Empleado', foreign_keys=[profesor_o_terapeuta_id], backref='profesor_o_terapeuta_jinetes')
     conductor_caballo = db.relationship('Empleado', foreign_keys=[conductor_caballo_id], backref='conductor_caballo_jinetes')
     auxiliar_pista = db.relationship('Empleado', foreign_keys=[auxiliar_pista_id], backref='auxiliar_pista_jinetes')
-    caballo = db.relationship('Ecuestre', foreign_keys=[caballo_id], backref='auxiliar_pista_jinetes')
+    caballo = db.relationship('Ecuestre', foreign_keys=[caballo_id], backref='caballo_jinetes')
 
 
     #ids
