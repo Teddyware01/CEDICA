@@ -164,14 +164,14 @@ p {
 }
 
 .caja {
-    background-color: #e6f7ff; /* Un celeste muy suave */
-    border: 1px solid #b3daff; /* Borde más oscuro para definir la caja */
-    border-radius: 10px; /* Bordes redondeados para suavizar la apariencia */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para dar profundidad */
-    padding: 20px; /* Espacio dentro de la caja */
-    margin: 20px auto; /* Margen arriba y abajo, auto para centrar horizontalmente */
-    max-width: 900px; /* Ancho máximo para que no se extienda demasiado en pantallas grandes */
-    font-family: 'Arial', sans-serif; /* Tipografía legible */
+    background-color: #e6f7ff; 
+    border: 1px solid #b3daff; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    padding: 20px; 
+    margin: 20px auto; 
+    max-width: 900px; 
+    font-family: 'Arial', sans-serif; 
     color: #333;
 }
 .inline-link-1:hover {
@@ -536,6 +536,14 @@ p {
     .tab {
         padding: 5px 10px; 
     }
+
+    .btn-group {
+        display: none;
+    }
+
+    footer {
+        width: 100% !important;
+    }
 }
 
 /* Tablets: Entre 768px y 1024px */
@@ -566,6 +574,10 @@ p {
     .tab {
         padding: 10px 15px;
     }
+
+    .btn-group {
+        display: none;
+    }
 }
 
 /* portátiles y escritorio: Mas de 1025px */
@@ -591,6 +603,10 @@ p {
     
     .hamburger {
         display: none;  /* Asegura que el botón hamburguesa esté oculto en pantallas grandes */
+    }
+
+    .dropdown {
+        display: none;
     }
 
     .navbar-center {
