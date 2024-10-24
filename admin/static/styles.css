@@ -252,6 +252,7 @@ p {
 
 @media (max-width: 992px) {
     .navbar-nav {
+        overflow: visible;
         flex-direction: column;
         width: 100%;
     }
@@ -289,6 +290,7 @@ p {
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
+    overflow: visible;
 }
 
 .nav-item {
@@ -511,6 +513,10 @@ p {
 
 /* Móviles: Menos de 767px */
 @media (max-width: 767px) {
+    body {
+        overflow-x: auto;
+    }
+
     .container, .example-wrapper, .demo-wrapper {
         padding: 10px;
         width: 100%;
@@ -519,6 +525,7 @@ p {
     .nav-item, .navbar-nav {
         flex-direction: column;
         width: 100%;
+        overflow: visible;
     }
 
     .main, .footer, header {
@@ -554,8 +561,9 @@ p {
     }
 
     .nav-item, .navbar-nav {
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
+        overflow: visible;
     }
 
     .main, .footer, header {
@@ -563,7 +571,7 @@ p {
     }
 
     .navbar {
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-around;
     }
 
@@ -605,10 +613,9 @@ p {
         display: none;  /* Asegura que el botón hamburguesa esté oculto en pantallas grandes */
     }
 
-    .dropdown {
-        display: none;
+    .action-dropdown {
+        display: none;  /* Solo oculta los dropdowns de acción en pantallas grandes */
     }
-
     .navbar-center {
         display: flex; 
         flex-direction: row;

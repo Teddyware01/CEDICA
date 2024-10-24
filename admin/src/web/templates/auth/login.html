@@ -15,7 +15,13 @@
     {{ super() }}
     
     <div class="sesion-centrada">
-        <h1>{% if 'user' in session %}Sesión activa, {{ session.user }}{% else %}Iniciar sesión{% endif %}</h1>
+        <div>
+            <h1>{% if 'user' in session %}Sesión activa, {{ session.user }}
+        </div>
+        <div>
+            <a href="{{ url_for("auth.logout") }}" role="button" class="btn btn-delete" style="margin-bottom: 2em;">Cerrar sesión</a>
+        </div>
+            {% else %}Iniciar sesión{% endif %}</h1>
         <img id="cedica" src="{{ url_for('static', filename='images/cedica.jpg') }}" alt="cedica" title="cedica" style="height: 10em;">
     </div>
     <!-- Mostrar el formulario de inicio de sesión solo si no hay sesión activa -->
@@ -24,7 +30,8 @@
         <form action="{{ url_for('auth.authenticate') }}" method="POST" class="client-form">
             <input type="email" name="email" placeholder="Correo" required />
             <input type="password" name="password" placeholder="Contraseña" required />
-            <input type="submit" value="Login" />
+            <input type="submit" value="Ingresar" class="btn btn-add" style="height: 2em; margin: 1em; padding: 0 1em;"/>
+
         </form>
         {% endif %}
     </div>

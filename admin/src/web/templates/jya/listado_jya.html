@@ -79,7 +79,7 @@
                                 <a href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}" class="btn btn-delete">Eliminar jinete</a>
                             </div>
                             <!-- Botón desplegable visible solo en pantallas pequeñas -->
-                            <div class="dropdown d-block d-lg-none">
+                            <div class="dropdown action-dropdown d-block d-lg-none">
                                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ jinete.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Acciones
                                 </button>
@@ -96,21 +96,21 @@
             </tbody>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    var actionButtons = document.querySelectorAll('.dropdown .dropdown-toggle');
-                    var actionMenus = document.querySelectorAll('.dropdown .dropdown-menu');
-            
+                    var actionButtons = document.querySelectorAll('.action-dropdown .dropdown-toggle');
+                    var actionMenus = document.querySelectorAll('.action-dropdown .dropdown-menu');
                     actionButtons.forEach(function(button, index) {
                         button.addEventListener('click', function(event) {
-                            event.stopPropagation(); 
+                            event.stopPropagation();
                             var currentMenu = actionMenus[index];
                             currentMenu.style.display = currentMenu.style.display === 'block' ? 'none' : 'block';
                         });
                     });
-            
                     window.onclick = function(event) {
-                        if (!event.target.matches('.dropdown .dropdown-toggle')) {
+                        if (!event.target.matches('.dropdown-toggle')) {
                             actionMenus.forEach(function(menu) {
-                                menu.style.display = 'none';
+                                if (menu.style.display === 'block') {
+                                    menu.style.display = 'none';
+                                }
                             });
                         }
                     };
