@@ -21,18 +21,18 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     """Development configuration."""
     # Config de Minio
-    MINIO_SERVER="localhost:9000"
-    MINIO_ACCESS_KEY = "t72c7MVDNIvv686yDHkm"
-    MINIO_SECRET_KEY = "CiYoF08qw3jB8fXcYkC9wZDj51KqSzIW2U8eg8F0"
+    MINIO_SERVER="192.168.1.40:9000"
+    MINIO_ACCESS_KEY = "crOnBZr4qHIukCC52lhY"
+    MINIO_SECRET_KEY = "fZi5OKO0v0m0DKiRAEE23ZNTjXMMAIDAe2zRvkyS"
     MINIO_SECURE = False
     # Config de postgres
     DB_USER = "postgres"
-    DB_PASSWORD = "admin"
+    DB_PASSWORD = "postgres"
     DB_HOST = "localhost"
     DB_PORT = "5432"
     DB_NAME = "grupo15"
     
-    
+    """
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
@@ -40,7 +40,7 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://postgres:admin@localhost:5432/grupo15"
     )
-    """
+    
     SQLALCHEMY_ENGINE_OPTIONS = {
         'connect_args': {
             'client_encoding': 'utf8'
