@@ -139,7 +139,7 @@
 
         <!-- Botones solo en Información general -->
         <div class="form-actions">
-            <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Editar jinete</a>
+            <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit" style="margin-right: 1em;">Editar jinete</a>
             <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-back">Lista de jinetes</a>
         </div>
     </div>
@@ -148,19 +148,32 @@
     <div id="documentos" class="tab-content {% if active_tab == 'documentos' %}active{% endif %}">
         <!-- Formulario de búsqueda y ordenamiento -->
         <form method="GET" action="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="mb-3">
-            <input type="hidden" name="tab" value="documentos">
-            <label for="sort_by">Ordenar por:</label>
-            <select name="sort_by" id="sort_by">
-                <option value="titulo_asc">Titulo (Ascendente)</option>
-                <option value="titulo_desc">Titulo (Descendente)</option>
-                <option value="fecha_asc">Fecha de subida (Ascendente)</option>
-                <option value="fecha_desc">Fecha de subida (Descendente)</option>
-            </select>
-            <button type="submit" class="btn btn-sort">Ordenar</button>
-    
-            <input type="text" id="search" name="search" placeholder="Titulo, o tipo" value="{{ request.args.get('search', '') }}">
-            <button type="submit" class="btn btn-sort">Buscar</button>
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <input type="hidden" name="tab" value="documentos">
+                    <label for="sort_by">Ordenar por:</label>
+                    <select name="sort_by" id="sort_by" class="form-control">
+                        <option value="titulo_asc">Titulo (Ascendente)</option>
+                        <option value="titulo_desc">Titulo (Descendente)</option>
+                        <option value="fecha_asc">Fecha de subida (Ascendente)</option>
+                        <option value="fecha_desc">Fecha de subida (Descendente)</option>
+                    </select>
+                </div>
+                <div class="form-group col-6">
+                    <label for="sort_by">Buscar:</label>
+                    <input type="text" id="search" name="search" placeholder="Titulo, o tipo" class="form-control" value="{{ request.args.get('search', '') }}">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <button type="submit" class="btn btn-sort">Ordenar</button>
+                </div>
+                <div class="form-group col-6">
+                    <button type="submit" class="btn btn-sort">Buscar</button>
+                </div>
+            </div>
         </form>
+
 
         <!-- Lista de documentos -->
         <h2>Documentos:</h2>
@@ -181,13 +194,15 @@
                             <td>{{ doc.fecha_subida_documento.strftime('%Y-%m-%d %H:%M:%S') }}</td>
                             <td>{{ doc.tipo_documento.value }}</td>
                             <td>
-                                <a href="{{ url_for('jya.mostrar_archivo', jinete_id=jinete.id, file_name=doc.nombre_archivo) }}" class="btn btn-primary" download>
+                                <a href="{{ url_for('jya.mostrar_archivo', jinete_id=jinete.id, file_name=doc.nombre_archivo) }}" class="btn btn-add" download>
                                     Descargar
                                 </a>
-                                <a href="{{ url_for('jya.edit_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-primary">
-                                    Editar
+                                <a href="{{ url_for('jya.edit_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-edit">
+                                    Modificar
                                 </a>
-                                <a href="{{ url_for('jya.eliminar_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" >Eliminar</a>
+                                <a href="{{ url_for('jya.eliminar_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-delete">
+                                    Eliminar
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -228,7 +243,7 @@
 
         <!-- Botones de acción solo para Documentos -->
         <div class="form-actions">
-            <a href="#" class="btn btn-enlace">+ Enlace</a>
+            <a href="#" class="btn btn-enlace" style="margin-right: 1em;">+ Enlace</a>
             <a href="{{ url_for('jya.add_documento_form', jinete_id=jinete.id) }}" class="btn btn-subir">↑ Subir</a>
         </div>
     </div>

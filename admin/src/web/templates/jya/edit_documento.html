@@ -30,7 +30,10 @@
             <fieldset>
                 <label for="titulo_documento"><strong> Nombre del archivo: </strong>{{ documento.nombre_archivo }}</label>
             </fieldset>
-            <input type="submit" value="Guardar">
+            <div class="form-actions">
+                <input type="submit" value="Guardar" class="btn btn-add" style="margin-right: 1em;">
+                <a href="{{ url_for('jya.view_jinete', jinete_id=jinete_id) }}" class="btn btn-back">Volver</a>
+            </div>
         </form>
     </div>
 {% endblock %}

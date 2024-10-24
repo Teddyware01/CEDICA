@@ -17,34 +17,32 @@
     
     <!-- Formulario de búsqueda y ordenamiento -->
     <form method="GET" action="{{ url_for('jya.listar_jinetes') }}" class="mb-3">
-        <form method="GET" action="{{ url_for('jya.listar_jinetes') }}" class="mb-3">
-            <div class="form-row">
-                <div class="form-group col-6">
-                    <label for="sort_by">Ordenar por:</label>
-                    <select name="sort_by" id="sort_by" class="form-control">
-                        <option value="nombre_asc">Nombre (Ascendente)</option>
-                        <option value="nombre_desc">Nombre (Descendente)</option>
-                        <option value="apellido_asc">Apellido (Ascendente)</option>
-                        <option value="apellido_desc">Apellido (Descendente)</option>
-                    </select>
-                </div>
-                <div class="form-group col-6">
-                    <label for="sort_by">Buscar:</label>
-                    <input type="text" id="search" name="search" placeholder="Nombre, apellido, dni o profesionales" class="form-control" value="{{ request.args.get('search', '') }}">
-                </div>
+        <div class="form-row">
+            <div class="form-group col-6">
+                <label for="sort_by">Ordenar por:</label>
+                <select name="sort_by" id="sort_by" class="form-control">
+                    <option value="nombre_asc">Nombre (Ascendente)</option>
+                    <option value="nombre_desc">Nombre (Descendente)</option>
+                    <option value="apellido_asc">Apellido (Ascendente)</option>
+                    <option value="apellido_desc">Apellido (Descendente)</option>
+                </select>
             </div>
-            <div class="form-row">
-                <div class="form-group col-6">
-                    <button type="submit" class="btn btn-sort">Ordenar</button>
-                </div>
-                <div class="form-group col-6">
-                    <button type="submit" class="btn btn-sort">Buscar</button>
-                </div>
+            <div class="form-group col-6">
+                <label for="sort_by">Buscar:</label>
+                <input type="text" id="search" name="search" placeholder="Nombre, apellido, dni o profesionales" class="form-control" value="{{ request.args.get('search', '') }}">
             </div>
-        </form>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-6">
+                <button type="submit" class="btn btn-sort">Ordenar</button>
+            </div>
+            <div class="form-group col-6">
+                <button type="submit" class="btn btn-sort">Buscar</button>
+            </div>
+        </div>
+    </form>
         
     <!-- Lista de jinetes -->
-    <p>Jinetes:</p>
     {% if jinetes %}
         <table class="table">
             <thead>
@@ -121,14 +119,11 @@
             <ul class="pagination">
                 {% if jinetes.has_prev %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.prev_num) }}">Anterior</a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link">Anterior</a>
+                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.prev_num, sort_by=sort_by, search=search) }}"aria-label="Next">
+                        <span aria-hidden="true">&laquo;</span></a>
                     </li>
                 {% endif %}
-        
+                        
                 {% for page_num in jinetes.iter_pages() %}
                     {% if page_num %}
                         <li class="page-item {% if page_num == jinetes.page %}active{% endif %}">
@@ -141,11 +136,8 @@
         
                 {% if jinetes.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.next_num) }}">Siguiente</a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link">Siguiente</a>
+                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.next_num, sort_by=sort_by, search=search) }}"aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span></a>
                     </li>
                 {% endif %}
             </ul>
