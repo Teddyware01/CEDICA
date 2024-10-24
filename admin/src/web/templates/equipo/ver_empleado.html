@@ -92,13 +92,18 @@
                             <td>{% if doc.is_enlace %}
                                     ENLACE
                                   {% else %}
-                                  {{doc.tipo.value}} 
+                                  {{doc.tipo_documento.value}} 
                                   {% endif %} </td>
                             <td>
                                 {% if doc.is_enlace %}
                                 <a href="{{doc.url_enlace}}">Abrir enlace</a>
                                 {% else %}
                                 <a href="{{ url_for('equipo.descargar_archivo',empleado_id=empleado.id, file_name=doc.titulo) }}">Descargar</a>
+                                {% endif %}
+                                {% if doc.is_enlace %}
+                                    <a href="{{ url_for('equipo.edit_enlace_form', empleado_id=empleado.id, documento_id=doc.id) }}" >Editar</a>
+                                {% else %}
+                                    <a href="{{ url_for('equipo.edit_documento_form', empleado_id=empleado.id, documento_id=doc.id) }}" >Editar</a>
                                 {% endif %}
                                 <a href="{{ url_for('equipo.eliminar_documento_form', empleado_id=empleado.id, documento_id=doc.id) }}" >Eliminar</a>
                             </td>

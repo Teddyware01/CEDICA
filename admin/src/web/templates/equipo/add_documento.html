@@ -16,10 +16,10 @@
             <!-- Formulario de búsqueda y ordenamiento -->
             <form method="POST" action="{{ url_for('equipo.agregar_documento', empleado_id=empleado.id) }}" enctype="multipart/form-data" class="mb-3">
                 <div class="form-group">
-                    <label for="nombre_asignado">Nombre del enlace:</label>
+                    <label for="nombre_asignado">Nombre del archivo:</label>
                     <input type="text" id="nombre_asignado" name="nombre_asignado"  class="form-control" required>
-                    <label for="tipo_archivo">Tipo de Archivo:</label>
-                    <select id="tipo_archivo" name="tipo_archivo" class="form-control" required>
+                    <label for="tipo_documento">Tipo de Archivo:</label>
+                    <select id="tipo_documento" name="tipo_documento" class="form-control" required>
                         <option value="TITULO">Titulo</option>
                         <option value="COPIA_DNI">Copia DNI</option>
                         <option value="CV_ACTUALIZADO">CV actualizado</option>

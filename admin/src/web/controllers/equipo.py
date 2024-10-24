@@ -317,7 +317,7 @@ def agregar_documento(empleado_id):
         equipo.crear_documento(
             nombre_asignado=request.form["nombre_asignado"],
             titulo=file.filename,
-            tipo=request.form["tipo_archivo"], 
+            tipo_documento=request.form["tipo_documento"], 
             empleado_id=empleado_id
         ) 
     return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id))
@@ -358,3 +358,67 @@ def eliminar_documento_form(empleado_id, documento_id):
 def eliminar_documento(empleado_id, documento_id):
     equipo.delete_documento(documento_id)
     return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id, tab='documentos'))
+
+
+
+
+# EDITAR ARCHIVO GET
+@bp.get("/editar_empleado/<int:empleado_id>/documentos/<int:documento_id>/editar")
+@login_required
+@check("empleado_update")
+def edit_documento_form(empleado_id, documento_id):
+    documento = equipo.traer_documento_por_id(documento_id)
+    return render_template("equipo/edit_documento.html", documento=documento, empleado_id=empleado_id)
+
+
+# EDITAR ARCHIVO POST
+@bp.post("/editar_empleado/<int:empleado_id>/documentos/<int:documento_id>/editar")
+@login_required
+@check("empleado_update")
+def editar_documento(empleado_id, documento_id):
+    nombre_asignado = request.form.get("nombre_asignado")
+    tipo_documento = request.form.get("tipo_documento")
+
+    if not nombre_asignado:
+        flash("Debe ingresar un titulo de documento.", "error")
+        return redirect(url_for("equipo.edit_documento_form", form=request.form, documento_id=documento_id))
+    
+    if not tipo_documento:
+        flash("Debe seleccionar un tipo de documento.", "error")
+        return redirect(url_for("equipo.edit_documento_form", form=request.form, documento_id=documento_id))
+    
+    equipo.edit_documento(documento_id=documento_id,empleado_id=empleado_id, nombre_asignado=nombre_asignado, tipo_documento=tipo_documento)
+    flash("Documento editado exitosamente", "success")
+    return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id))
+
+
+
+
+# EDITAR enlace GET
+@bp.get("/editar_empleado/<int:empleado_id>/enlace/<int:documento_id>/editar")
+@login_required
+@check("empleado_update")
+def edit_enlace_form(empleado_id, documento_id):
+    documento = equipo.traer_documento_por_id(documento_id)
+    return render_template("equipo/edit_enlace.html", documento=documento, empleado_id=empleado_id)
+
+
+# EDITAR enlace POST
+@bp.post("/editar_empleado/<int:empleado_id>/enlace/<int:documento_id>/editar")
+@login_required
+@check("empleado_update")
+def editar_enlace(empleado_id, documento_id):
+    nombre_asignado = request.form.get("nombre_asignado")
+    url_enlace = request.form.get("url_enlace")
+
+    if not nombre_asignado:
+        flash("Debe ingresar un titulo de documento.", "error")
+        return redirect(url_for("equipo.edit_enlace_form", form=request.form, documento_id=documento_id))
+    
+    if not url_enlace:
+        flash("Debe ingresar una url para el enlace.", "error")
+        return redirect(url_for("equipo.edit_enlace_form", form=request.form, documento_id=documento_id))
+    
+    equipo.edit_documento(documento_id=documento_id,empleado_id=empleado_id, nombre_asignado=nombre_asignado, url_enlace=url_enlace)
+    flash("Documento editado exitosamente", "success")
+    return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id))

@@ -38,6 +38,14 @@ def delete_documento(documento_id):
     db.session.commit()
 
 
+def edit_documento(documento_id, **kwargs):
+    documento = traer_documento_por_id(documento_id)
+    for key, value in kwargs.items():
+        if hasattr(documento, key):
+            setattr(documento, key, value)
+    db.session.commit()    
+
+
 
 
 def crear_documento_tipo_enlace(**kwargs):

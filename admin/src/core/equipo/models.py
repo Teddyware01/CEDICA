@@ -80,7 +80,7 @@ class Empleado_docs(db.Model):
     nombre_asignado = db.Column(db.String(100), nullable=False) # esto escrito a mano
     titulo = db.Column(db.String(100), nullable=True) #este va en minio
     fecha_subida = db.Column(db.DateTime, default=datetime.now)
-    tipo = db.Column(db.Enum(TiposDocumentosEnum), nullable=True)
+    tipo_documento = db.Column(db.Enum(TiposDocumentosEnum), nullable=True)
     is_enlace =  db.Column(db.Boolean, default=False, nullable=False)
     url_enlace = db.Column(db.String(255), nullable=True)
 
