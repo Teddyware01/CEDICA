@@ -28,9 +28,9 @@
         <p>DNI: {{empleado.dni}}</p>
         <p>Email: {{empleado.email}}</p>
         <p>Telefono: {{empleado.telefono}}</p>
-        <p>Fecha de inicio: {{empleado.fecha_inicio}}</p>
-        <p>Fecha de cese: {{empleado.fecha_cese if empleado.fecha_cese else "Ninguna asignada."}}</p>
-        <p>Condicion: {{empleado.condicion}}</p>
+        <p>Fecha de inicio: {{empleado.fecha_inicio.strftime('%d/%m/%Y')}}</p>
+        <p>Fecha de cese: {{empleado.fecha_cese.strftime('%d/%m/%Y') if empleado.fecha_cese else "Ninguna asignada."}}</p>
+        <p>Condicion: {{empleado.condicion.value}}</p>
         <p>Activo: {{"SI" if empleado.activo else "NO" }}</p>
         <p>Profesion: {{empleado.profesion.nombre}}</p>
         <p>Puesto laboral: {{empleado.puesto_laboral.nombre}}</p>
@@ -73,13 +73,13 @@
             <button type="submit" class="btn btn-sort btn-secondary">Buscar</button>
         </form>
             
-        <!-- Lista de documentos -->
-        <h2>Documentos:</h2>
+        <!-- Lista de documentos y enlaces -->
+        <h2>Documentos y enlaces:</h2>
         {% if documentos_paginated %}
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Titulo</th>
+                        <th>Nombre asignado</th>
                         <th>Fecha subida</th>
                         <th>Tipo</th>
                     </tr>
@@ -87,11 +87,19 @@
                 <tbody>
                     {% for doc in documentos_paginated %}
                         <tr>
-                            <td>{{ doc.titulo }}</td>
-                            <td>{{ doc.fecha_subida }}</td>
-                            <td>{{ doc.tipo.value }}</td>
+                            <td>{{ doc.nombre_asignado }}</td>
+                            <td>{{ doc.fecha_subida.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td>{% if doc.is_enlace %}
+                                    ENLACE
+                                  {% else %}
+                                  {{doc.tipo.value}} 
+                                  {% endif %} </td>
                             <td>
-                                <a href="{{ url_for('equipo.descargar_archivo',empleado_id=empleado.id, file_name=doc.titulo) }}" >Descargar</a>
+                                {% if doc.is_enlace %}
+                                <a href="{{doc.url_enlace}}">Abrir enlace</a>
+                                {% else %}
+                                <a href="{{ url_for('equipo.descargar_archivo',empleado_id=empleado.id, file_name=doc.titulo) }}">Descargar</a>
+                                {% endif %}
                                 <a href="{{ url_for('equipo.eliminar_documento_form', empleado_id=empleado.id, documento_id=doc.id) }}" >Eliminar</a>
                             </td>
                         </tr>
@@ -131,8 +139,7 @@
         
         <!-- Botones de acción en Documentos -->
         <div class="form-actions">
-            <a href="#" class="btn btn-enlace">+ Enlace</a>
-            <!-- CORREGIR ESTE LINK -->
+            <a href="{{ url_for('equipo.subir_enlace_form', empleado_id=empleado.id) }}" class="btn btn-enlace">+ Enlace</a>
             <a href="{{ url_for('equipo.subir_archivo_form', empleado_id=empleado.id) }}" class="btn btn-subir">↑ Subir</a>
         </div>
     </div>

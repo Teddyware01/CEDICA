@@ -66,9 +66,9 @@ def add_empleado_form():
 @login_required
 @check("empleado_show")
 def show_empleado(empleado_id):
-    empleado = equipo.Empleado.query.get(empleado_id)
+    empleado = equipo.traer_empleado(empleado_id)
     page = request.args.get('page', 1, type=int)
-    documentos_paginated = equipo.traerdocumentos(empleado_id, page=page)
+    documentos_paginated = equipo.traer_documentos(empleado_id, page=page)
     active_tab = request.args.get('tab', 'general')
 
     return render_template(
@@ -80,14 +80,14 @@ def show_empleado(empleado_id):
 @login_required
 @check("empleado_destroy")
 def delete_empleado(empleado_id):
-    empleado = Empleado.query.get_or_404(empleado_id)
+    empleado = equipo.traer_empleado(empleado_id)
+      
     return render_template("equipo/delete_empleado.html", empleado=empleado)
 
 @bp.post("/eliminar_empleado/<int:empleado_id>")
 @login_required
 @check("empleado_destroy")
 def destroy_empleado(empleado_id):
-    empleado = Empleado.query.get_or_404(empleado_id)
     try:
         equipo.delete_empleado(empleado_id)
         flash("Empleado eliminado exitosamente.", "success")
@@ -174,7 +174,7 @@ def cargar_choices_form(form):
 @login_required
 @check("empleado_update")
 def edit_empleado_form(empleado_id):
-    empleado = Empleado.query.get_or_404(empleado_id)  # Obtener el empleado
+    empleado = equipo.traer_empleado(empleado_id)
     form = AddEmpleadoForm(obj=empleado) 
 
     form.nombre.data = empleado.nombre
@@ -214,7 +214,7 @@ def edit_empleado_form(empleado_id):
 @login_required
 @check("empleado_update")
 def update_empleado(empleado_id):
-    empleado = Empleado.query.get_or_404(empleado_id)  # Obtener el empleado
+    empleado = equipo.traer_empleado(empleado_id)
     # Poblar el formulario con los datos del empleado
     form = AddEmpleadoForm(obj=empleado)  
     form.obj=empleado
@@ -262,8 +262,18 @@ def update_empleado(empleado_id):
 @check("empleado_update")
 @bp.get("/editar_empleado/<int:empleado_id>/documentos")
 def subir_archivo_form(empleado_id):    
-    empleado = equipo.Empleado.query.get_or_404(empleado_id)
+    empleado = equipo.traer_empleado(empleado_id)
     return render_template("equipo/add_documento.html", empleado=empleado)
+
+
+@login_required
+@check("empleado_update")
+@bp.get("/editar_empleado/<int:empleado_id>/enlace")
+def subir_enlace_form(empleado_id):    
+    empleado = equipo.traer_empleado(empleado_id)
+
+    return render_template("equipo/add_enlace.html", empleado=empleado)
+
 
 
 ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'}
@@ -305,10 +315,23 @@ def agregar_documento(empleado_id):
         size = fstat(file.fileno()).st_size
         client.put_object("grupo15", file.filename, file, size, content_type=file.content_type)
         equipo.crear_documento(
+            nombre_asignado=request.form["nombre_asignado"],
             titulo=file.filename,
             tipo=request.form["tipo_archivo"], 
             empleado_id=empleado_id
         ) 
+    return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id))
+
+
+@login_required
+@check("empleado_update")
+@bp.post("/editar_empleado/<int:empleado_id>/enlace/")
+def agregar_enlace(empleado_id):
+    equipo.crear_documento_tipo_enlace(
+        empleado_id=empleado_id,
+        url_enlace = request.form["url_enlace"],
+        nombre_asignado=request.form["nombre_asignado"]
+    ) 
     return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id))
 
 
@@ -324,8 +347,8 @@ def descargar_archivo(empleado_id, file_name):
 @check("empleado_update")
 @bp.get("/editar_empleado/<int:empleado_id>/documentos/<int:documento_id>/eliminar")
 def eliminar_documento_form(empleado_id, documento_id):
-    empleado = equipo.Empleado.query.get_or_404(empleado_id)
-    documento = equipo.traerdocumentoporid(documento_id)
+    empleado = equipo.traer_empleado(empleado_id)
+    documento = equipo.traer_documento_por_id(documento_id)
     return render_template("equipo/delete_documento.html", empleado=empleado, doc=documento)
                     
      

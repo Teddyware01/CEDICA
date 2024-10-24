@@ -45,7 +45,6 @@ class Empleado(db.Model):
         back_populates="empleado",
     )
 
-#    documentos = db.relationship("Empleado_docs", back_populates="empleado")
     documentos = db.relationship("Empleado_docs", back_populates="empleado", cascade="all, delete-orphan")
 
     def __repr__(self):
@@ -78,9 +77,12 @@ class TiposDocumentosEnum(Enum):
 
 class Empleado_docs(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    titulo = db.Column(db.String(100), nullable=False)
+    nombre_asignado = db.Column(db.String(100), nullable=False) # esto escrito a mano
+    titulo = db.Column(db.String(100), nullable=True) #este va en minio
     fecha_subida = db.Column(db.DateTime, default=datetime.now)
-    tipo = db.Column(db.Enum(TiposDocumentosEnum), nullable=False)
+    tipo = db.Column(db.Enum(TiposDocumentosEnum), nullable=True)
+    is_enlace =  db.Column(db.Boolean, default=False, nullable=False)
+    url_enlace = db.Column(db.String(255), nullable=True)
 
     empleado_id = db.Column(db.Integer, db.ForeignKey("empleado.id"), nullable=False)
     empleado = db.relationship("Empleado", back_populates="documentos")
