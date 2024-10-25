@@ -17,88 +17,129 @@
 
     <!-- Información general -->
     <div id="general" class="tab-content {% if active_tab == 'general' %}active{% endif %}">
-        <h2><strong> DATOS PERSONALES DEL JINETE O AMAZONA </strong></h2>
+        <div class="caja">
+            <h2><strong> DATOS PERSONALES DEL JINETE O AMAZONA </strong></h2>
 
-        <p><strong>Nombre/s:</strong> {{ jinete.nombre }}</p>
-        <p><strong>Apellido/s:</strong> {{ jinete.apellido }}</p>
-        <p><strong>DNI:</strong> {{ jinete.dni }}</p>
-        <p><strong>Edad:</strong> {{ jinete.edad }}</p>
-        <p><strong>Fecha de nacimiento:</strong> {{ jinete.fecha_nacimiento.strftime('%d/%m/%Y') }}</p>
-        <p><strong>Lugar de nacimiento:</strong> {{ jinete.provincia_nacimiento.nombre }}, {{ jinete.localidad_nacimiento.nombre }}</p> 
-        <p><strong>Domicilio actual:</strong> Calle: {{ jinete.domicilio.calle }}, numero: {{ jinete.domicilio.numero }}, piso: {{ jinete.domicilio.piso | default('-', true) }}, departamento: 
-            {{ jinete.domicilio.departamento | default('-', true) }}, {{ jinete.domicilio.localidad.nombre }}, {{ jinete.domicilio.provincia.nombre }}</p>
-        <p><strong>Teléfono actual:</strong> {{ jinete.telefono }}</p>
-        <p><strong>Contacto de emergencia: </strong>  {{ jinete.contacto_emergencia.nombre }}, {{ jinete.contacto_emergencia.apellido }}. 
-            <strong>Teléfono:</strong> {{ jinete.contacto_emergencia.telefono }}</p>
-        <p><strong>BECADO:</strong> {{"SI" if jinete.becado else "NO" }}</p>
-        <p><strong>Observaciones:</strong> {{ jinete.observaciones_becado }}</p>
-        <p><strong>Posee certificado discapacidad:</strong> {{"SI" if jinete.certificado_discapacidad else "NO" }}</p>
-        <p><strong>¿Con qué diagnóstico?</strong> {{ jinete.diagnostico.value if jinete.diagnostico.value else '-' }}</p>
-        <p><strong>Si es OTRO indique cuál:</strong> {{ jinete.otro if jinete.diagnostico.value == "otro" else '-' }}</p>
-        <p><strong>Tipo de Discapacidad:</strong> 
-            {% for tipo in jinete.discapacidades %}
-                <span>{{ tipo.tipos_discapacidad.value }}</span>{% if not loop.last %}, {% endif %}
-            {% endfor %}
-        </p>
-        <p><strong>¿Percibe alguna Asignación Familiar?</strong> {{"SI" if jinete.asignacion_familiar else "NO" }}</p>
-        <p><strong>Asignaciones:</strong> {{ jinete.tipo_asignacion.value }}</p>
-        <p><strong>¿Es beneficiario de alguna pensión?</strong>  {{"SI" if jinete.beneficiario_pension else "NO" }}</p>
-        {% if jinete.beneficiario_pension %}
-            <p><strong>¿Cuál? </strong> {{ jinete.pension.value }}</p>
-        {% endif  %}
+            <p><strong>Nombre/s:</strong> {{ jinete.nombre }}</p>
+            <p><strong>Apellido/s:</strong> {{ jinete.apellido }}</p>
+            <p><strong>DNI:</strong> {{ jinete.dni }}</p>
+            <p><strong>Edad:</strong> {{ jinete.edad }}</p>
+            <p><strong>Fecha de nacimiento:</strong> {{ jinete.fecha_nacimiento.strftime('%d/%m/%Y') }}</p>
+            <p><strong>Lugar de nacimiento:</strong> {{ jinete.provincia_nacimiento.nombre }}, {{ jinete.localidad_nacimiento.nombre }}</p> 
+            <p><strong>Domicilio actual:</strong> Calle: {{ jinete.domicilio.calle }}, numero: {{ jinete.domicilio.numero }}, piso: {{ jinete.domicilio.piso | default('-', true) }}, departamento: 
+                {{ jinete.domicilio.departamento | default('-', true) }}, {{ jinete.domicilio.localidad.nombre }}, {{ jinete.domicilio.provincia.nombre }}</p>
+            <p><strong>Teléfono actual:</strong> {{ jinete.telefono }}</p>
+            <p><strong>Contacto de emergencia: </strong>  {{ jinete.contacto_emergencia.nombre }}, {{ jinete.contacto_emergencia.apellido }}. 
+                <strong>Teléfono:</strong> {{ jinete.contacto_emergencia.telefono }}</p>
+            <p><strong>BECADO:</strong> {{"SI" if jinete.becado else "NO" }}</p>
+            <p><strong>Observaciones:</strong> {{ jinete.observaciones_becado }}</p>
+            <p><strong>Posee certificado discapacidad:</strong> {{"SI" if jinete.certificado_discapacidad else "NO" }}</p>
+            <p><strong>¿Con qué diagnóstico?</strong> {{ jinete.diagnostico.value if jinete.diagnostico.value else '-' }}</p>
+            {% if jinete.diagnostico.name == "otro" %}
+                <p><strong>Si es OTRO indique cuál:</strong> {{ jinete.otro if jinete.otro else '-' }}</p>
+            {% endif %}
+
+
+            <p><strong>Tipo de Discapacidad:</strong>
+                {% if jinete.discapacidades %}
+                {% for tipo in jinete.discapacidades %}
+                    <span>{{ tipo.tipos_discapacidad.value }}</span>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+                {% else %}
+                Ninguna.
+                {% endif %}
+            </p>
+            <p><strong>¿Percibe alguna Asignación Familiar?</strong> {{"SI" if jinete.asignacion_familiar else "NO" }}</p>
+            <p><strong>Asignaciones:</strong> {{ jinete.tipo_asignacion.value }}</p>
+            <p><strong>¿Es beneficiario de alguna pensión?</strong>  {{"SI" if jinete.beneficiario_pension else "NO" }}</p>
+            {% if jinete.beneficiario_pension %}
+                <p><strong>¿Cuál? </strong> {{ jinete.pension.value }}</p>
+            {% endif  %}
+        </div>
+        <div class="caja">
         <h2><strong> SITUACIÓN PREVISIONAL </strong></h2>
-        <p><strong>Obra social del alumno:</strong> {{ jinete.obra_social }}</p>
-        <p><strong>N° afiliado:</strong> {{ jinete.nro_afiliado }}</p>
-        <p><strong>¿Posee curatela?</strong> {{"SI" if jinete.curatela else "NO" }}</p>
-        <p><strong>Observaciones:</strong> {{ jinete.observaciones_curatela }}</p>
-
-        <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
-        <p><strong>Nombre de la Institución: </strong> {{ jinete.nombre_institucion }}</p>
-        <p><strong>Dirección: </strong> <strong>Calle: </strong>{{ jinete.direccion.calle }}, 
-            <strong>numero: </strong>{{ jinete.direccion.numero }}, 
-            {{ jinete.direccion.localidad.nombre }}, {{ jinete.direccion.provincia.nombre }}</p>
-        <p><strong>Teléfono: </strong> {{ jinete.telefono_institucion }}</p>
-        <p><strong>Grado / año actual: </strong> {{ jinete.grado }}</p>           
-        <p><strong>Observaciones:</strong> {{ jinete.observaciones_institucion }}</p>
-        <p><strong>PROFESIONALES que lo ATIENDEN: </strong> {{ jinete.profesionales }}</p>
-        
-        <h2><strong> DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
-        {% if jinete.familiares %}
-            {% for familiar in jinete.familiares %}
-                <div>
-                    <p><strong>Parentesco:</strong> {{ familiar.parentesco_familiar }}</p>
-                    <p><strong>Nombre:</strong> {{ familiar.nombre_familiar }}</p>
-                    <p><strong>Apellido:</strong> {{ familiar.apellido_familiar }}</p>
-                    <p><strong>DNI:</strong> {{ familiar.dni_familiar }}</p>
-                    <p><strong>Domicilio actual:</strong> Calle: {{ familiar.domicilio_familiar.calle }}, 
-                        numero: {{ familiar.domicilio_familiar.numero }}, piso: {{ familiar.domicilio_familiar.piso | default('-', true) }}, 
-                        departamento: {{ familiar.domicilio_familiar.departamento | default('-', true) }}, 
-                        {{ familiar.domicilio_familiar.localidad.nombre }}, {{ familiar.domicilio_familiar.provincia.nombre }}</p>
-                    <p><strong>Celular:</strong> {{ familiar.celular_familiar }}</p>
-                    <p><strong>Email:</strong> {{ familiar.email_familiar }}</p>
-                    <p><strong>Escolaridad:</strong> {{ familiar.nivel_escolaridad_familiar }}</p>
-                    <p><strong>Actividad / Ocupación:</strong> {{ familiar.actividad_ocupacion_familiar }}</p>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p>No hay familiares registrados.</p>
-        {% endif %}         
-
-
-        <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN </strong></h2>
-        <p><strong>Propuesta de trabajo institucional:</strong> {{ jinete.trabajo_institucional.value }}</p>
-        <p><strong>Condición:</strong> {{ "REGULAR" if jinete.condicion else "DE BAJA" }}</p>
-        <p><strong>SEDE:</strong> {{ jinete.sede.value }}</p>
-        <p><strong>Días:</strong>
-            {% for d in jinete.dias %}
+            <p><strong>Obra social del alumno:</strong> {{ jinete.obra_social }}</p>
+            <p><strong>N° afiliado:</strong> {{ jinete.nro_afiliado }}</p>
+            <p><strong>¿Posee curatela?</strong> {{"SI" if jinete.curatela else "NO" }}</p>
+            <p><strong>Observaciones:</strong> {{ jinete.observaciones_curatela }}</p>
+        </div>
+        <div class="caja">
+            <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
+            <p><strong>Nombre de la Institución: </strong> {{ jinete.nombre_institucion }}</p>
+            <p><strong>Dirección: </strong> <strong>Calle: </strong>{{ jinete.direccion.calle }}, 
+                <strong>numero: </strong>{{ jinete.direccion.numero }}, 
+                {{ jinete.direccion.localidad.nombre }}, {{ jinete.direccion.provincia.nombre }}</p>
+            <p><strong>Teléfono: </strong> {{ jinete.telefono_institucion }}</p>
+            <p><strong>Grado / año actual: </strong> {{ jinete.grado }}</p>           
+            <p><strong>Observaciones:</strong> {{ jinete.observaciones_institucion }}</p>
+            <p><strong>PROFESIONALES que lo ATIENDEN: </strong> {{ jinete.profesionales }}</p>
+        </div>
+        <div class="caja">
+            <h2><strong> DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
+            {% if jinete.familiares %}
+                {% for familiar in jinete.familiares %}
+                    <div>
+                        <p><strong>Parentesco:</strong> {{ familiar.parentesco_familiar }}</p>
+                        <p><strong>Nombre:</strong> {{ familiar.nombre_familiar }}</p>
+                        <p><strong>Apellido:</strong> {{ familiar.apellido_familiar }}</p>
+                        <p><strong>DNI:</strong> {{ familiar.dni_familiar }}</p>
+                        <p><strong>Domicilio actual:</strong> Calle: {{ familiar.domicilio_familiar.calle }}, 
+                            numero: {{ familiar.domicilio_familiar.numero }}, piso: {{ familiar.domicilio_familiar.piso | default('-', true) }}, 
+                            departamento: {{ familiar.domicilio_familiar.departamento | default('-', true) }}, 
+                            {{ familiar.domicilio_familiar.localidad.nombre }}, {{ familiar.domicilio_familiar.provincia.nombre }}</p>
+                        <p><strong>Celular:</strong> {{ familiar.celular_familiar }}</p>
+                        <p><strong>Email:</strong> {{ familiar.email_familiar }}</p>
+                        <p><strong>Escolaridad:</strong> {{ familiar.nivel_escolaridad_familiar.value }}</p>
+                        <p><strong>Actividad / Ocupación:</strong> {{ familiar.actividad_ocupacion_familiar }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No hay familiares registrados.</p>
+            {% endif %}         
+        </div>
+        <div class="caja">
+            <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN </strong></h2>
+            <p><strong>Propuesta de trabajo institucional:</strong> {{ jinete.trabajo_institucional.value }}</p>
+            <p><strong>Condición:</strong> {{ "REGULAR" if jinete.condicion else "DE BAJA" }}</p>
+            <p><strong>SEDE:</strong> {{ jinete.sede.value }}</p>
+            <p><strong>Días:</strong>
+                {% if jinete.dias %}
+                {% for d in jinete.dias %}
                 <span>{{ d.dias.value }}</span>{% if not loop.last %}, {% endif %}
-            {% endfor %}
-        </p>
-        
+                {% endfor %}
+                {% else %}
+                No hay días asignados.
+                {% endif %}
+            </p>
+            
+            <p><strong>Profesor/a o Terapeuta:</strong> 
+                {% if jinete.profesor_o_terapeuta %}
+                    {{ jinete.profesor_o_terapeuta.apellido }} {{ jinete.profesor_o_terapeuta.nombre }}
+                {% else %}
+                    Ninguno asignado.
+                {% endif %}
+            </p>
+            <p><strong>Conductor/a del Caballo:</strong> 
+                {% if jinete.conductor_caballo %}
+                    {{ jinete.conductor_caballo.apellido }} {{ jinete.conductor_caballo.nombre }}
+                {% else %}
+                    Ninguno asignado.
+                {% endif %}
+            </p>
+            
+            <p><strong>Caballo:</strong> {{ jinete.caballo.nombre  or "Ninguno asignado."}}</p>
+            <p><strong>Auxiliar de Pista:</strong> 
+                {% if jinete.auxiliar_pista %}
+                    {{ jinete.auxiliar_pista.apellido }} {{ jinete.auxiliar_pista.nombre }}
+                {% else %}
+                    Ninguno asignado.
+                {% endif %}
+            </p>
+        </div>
 
         <!-- Botones solo en Información general -->
         <div class="form-actions">
-            <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Editar jinete</a>
+            <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit" style="margin-right: 1em;">Editar jinete</a>
             <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-back">Lista de jinetes</a>
         </div>
     </div>
@@ -107,19 +148,32 @@
     <div id="documentos" class="tab-content {% if active_tab == 'documentos' %}active{% endif %}">
         <!-- Formulario de búsqueda y ordenamiento -->
         <form method="GET" action="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="mb-3">
-            <input type="hidden" name="tab" value="documentos">
-            <label for="sort_by">Ordenar por:</label>
-            <select name="sort_by" id="sort_by">
-                <option value="titulo_asc">Titulo (Ascendente)</option>
-                <option value="titulo_desc">Titulo (Descendente)</option>
-                <option value="fecha_asc">Fecha de subida (Ascendente)</option>
-                <option value="fecha_desc">Fecha de subida (Descendente)</option>
-            </select>
-            <button type="submit" class="btn btn-sort btn-secondary">Ordenar</button>
-    
-            <input type="text" id="search" name="search" placeholder="Titulo, o tipo" value="{{ request.args.get('search', '') }}">
-            <button type="submit" class="btn btn-sort btn-secondary">Buscar</button>
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <input type="hidden" name="tab" value="documentos">
+                    <label for="sort_by">Ordenar por:</label>
+                    <select name="sort_by" id="sort_by" class="form-control">
+                        <option value="titulo_asc">Titulo (Ascendente)</option>
+                        <option value="titulo_desc">Titulo (Descendente)</option>
+                        <option value="fecha_asc">Fecha de subida (Ascendente)</option>
+                        <option value="fecha_desc">Fecha de subida (Descendente)</option>
+                    </select>
+                </div>
+                <div class="form-group col-6">
+                    <label for="sort_by">Buscar:</label>
+                    <input type="text" id="search" name="search" placeholder="Titulo, o tipo" class="form-control" value="{{ request.args.get('search', '') }}">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <button type="submit" class="btn btn-sort">Ordenar</button>
+                </div>
+                <div class="form-group col-6">
+                    <button type="submit" class="btn btn-sort">Buscar</button>
+                </div>
+            </div>
         </form>
+
 
         <!-- Lista de documentos -->
         <h2>Documentos:</h2>
@@ -127,7 +181,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Título</th>
+                        <th>Nombre</th>
                         <th>Fecha subida</th>
                         <th>Tipo</th>
                         <th>Acciones</th>
@@ -136,17 +190,25 @@
                 <tbody>
                     {% for doc in documentos %}
                         <tr>
-                            <td>{{ doc.titulo_documento }}</td>
+                            <td>{{ doc.nombre_archivo }}</td>
                             <td>{{ doc.fecha_subida_documento.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                            <td>{{ doc.tipo_documento.value }}</td>
+                            <td>{% if doc.is_enlace %}
+                                ENLACE
+                              {% else %}
+                              {{doc.tipo_documento.value}} 
+                              {% endif %} </td>
                             <td>
-                                <a href="{{ url_for('jya.mostrar_archivo', jinete_id=jinete.id, file_name=doc.nombre_archivo) }}" class="btn btn-primary" download>
-                                    Descargar
-                                </a>
-                                <a href="{{ url_for('jya.edit_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-primary">
-                                    Editar
-                                </a>
-                                <a href="{{ url_for('jya.eliminar_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" >Eliminar</a>
+                                {% if doc.is_enlace %}
+                                    <a href="{{doc.url_enlace}}" class="btn btn-add">Abrir enlace</a>
+                                    {% else %}
+                                    <a href="{{ url_for('jya.mostrar_archivo', jinete_id=jinete.id, file_name=doc.nombre_archivo) }}" class="btn btn-add" download>Descargar</a>
+                                {% endif %}
+                                {% if doc.is_enlace %}
+                                    <a href="{{ url_for('jya.edit_enlace_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-edit" >Editar</a>
+                                    {% else %}
+                                    <a href="{{ url_for('jya.edit_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-edit" >Editar</a>
+                                {% endif %}
+                                <a href="{{ url_for('jya.eliminar_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-delete">Eliminar</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -187,7 +249,7 @@
 
         <!-- Botones de acción solo para Documentos -->
         <div class="form-actions">
-            <a href="#" class="btn btn-enlace">+ Enlace</a>
+            <a href="{{ url_for('jya.subir_enlace_form', jinete_id=jinete.id) }}" class="btn btn-enlace">+ Enlace</a>
             <a href="{{ url_for('jya.add_documento_form', jinete_id=jinete.id) }}" class="btn btn-subir">↑ Subir</a>
         </div>
     </div>

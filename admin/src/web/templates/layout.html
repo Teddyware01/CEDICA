@@ -52,7 +52,7 @@
                         </li>
                     </ul>
                 </div>
-                <!-- Contenedor derecho para dropdown -->
+                <!-- Contenedor para dropdown -->
                 <div class="navbar-right">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
@@ -83,7 +83,7 @@
                     dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
                 };
     
-                // Opcional: Cerrar el dropdown si se hace clic fuera de él
+                // Cerrar el dropdown si se hace clic fuera de él
                 window.onclick = function(event) {
                     if (!event.target.matches('.dropdown-toggle')) {
                         var dropdowns = document.querySelectorAll(".dropdown-menu");
@@ -97,27 +97,26 @@
                 };
             });
         </script>
+        
         <script>
+            // boton para la barra de navegación
             document.addEventListener('DOMContentLoaded', function() {
                 var hamburger = document.querySelector('.hamburger');
                 var navMenu = document.querySelector('.navbar-center');
-            
                 hamburger.addEventListener('click', function() {
-                    navMenu.style.display = navMenu.style.display === 'block' ? 'none' : 'block';
+                    navMenu.classList.toggle('d-block'); // Alternar la visibilidad usando una clase
+                    navMenu.classList.toggle('d-none');  // Alternar la visibilidad usando una clase
                 });
                 window.addEventListener('resize', function() {
                     if (window.innerWidth > 1024) {
-                        navMenu.style.display = ''; 
+                        navMenu.classList.remove('d-block', 'd-none'); // Restablecer a las clases predeterminadas
                     }
                 });
                 window.onclick = function(event) {
                     if (!event.target.matches('.hamburger') && !event.target.matches('.nav-link')) {
-                        var dropdowns = document.querySelectorAll(".navbar-nav");
-                        for (var i = 0; i < dropdowns.length; i++) {
-                            var openDropdown = dropdowns[i];
-                            if (openDropdown.style.display === 'block') {
-                                openDropdown.style.display = 'none';
-                            }
+                        if (navMenu.classList.contains('d-block')) {
+                            navMenu.classList.add('d-none');
+                            navMenu.classList.remove('d-block');
                         }
                     }
                 };
@@ -125,22 +124,22 @@
         </script>
     <!-- Contenido principal -->
     <div id="content">
-    {% block content %}
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flash-messages">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        {% endwith %}
-    {% endblock %}
+        {% block content %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% endwith %}
+        {% endblock %}
     </div>
     <!-- Footer -->
     <footer>

@@ -38,7 +38,7 @@ class DevelopmentConfig(Config):
     )
     """
     SQLALCHEMY_DATABASE_URI = (
-        f"postgresql://postgres:postgres@localhost:5432/grupo15"
+        f"postgresql://postgres:admin@localhost:5432/grupo15"
     )
     
     SQLALCHEMY_ENGINE_OPTIONS = {

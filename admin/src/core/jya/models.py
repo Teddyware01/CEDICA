@@ -108,7 +108,7 @@ class Familiar(db.Model):
     #provincia_familiar = db.relationship("Provincia", back_populates="familiares")  
     celular_familiar = db.Column(db.String(15), nullable=True)
     email_familiar = db.Column(db.String(255), nullable=True)
-    nivel_escolaridad_familiar = db.Column(db.String(255), nullable=True)  # Podría ser Enum si prefieres
+    nivel_escolaridad_familiar = db.Column(db.Enum(EscolaridadEnum), nullable=True)
     actividad_ocupacion_familiar = db.Column(db.String(255), nullable=True)
 
 jinete_familiar = db.Table('jinete_familiar',
@@ -126,11 +126,14 @@ class TipoDocumentoEnum(Enum):
     
 class JineteDocumento(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    titulo_documento = db.Column(db.String(100), nullable=False)
-    nombre_archivo = db.Column(db.String(255), nullable=False)
+    titulo_documento = db.Column(db.String(100), nullable=True) #el que usa minio
+    nombre_archivo = db.Column(db.String(255), nullable=False) #escrito a mano("nombre_asignado")
     fecha_subida_documento = db.Column(db.DateTime, default=datetime.now)
-    tipo_documento = db.Column(db.Enum(TipoDocumentoEnum), nullable=False)
+    tipo_documento = db.Column(db.Enum(TipoDocumentoEnum), nullable=True)
     
+    is_enlace =  db.Column(db.Boolean, default=False, nullable=False)
+    url_enlace = db.Column(db.String(255), nullable=True)
+
     jinete_id = db.Column(db.Integer, db.ForeignKey("jinete.id"), nullable=False)
     jinete = db.relationship("Jinete", back_populates="documentos")
     
@@ -176,21 +179,13 @@ class Jinete(db.Model):
     grado = db.Column(db.Integer, nullable=False)
     observaciones_institucion = db.Column(db.String(255), nullable=True)
     profesionales = db.Column(db.String(255), nullable=True)
-    ##agrego aca
     estado_pago = db.Column(db.Boolean, default=True)
-    ##agrego aca
     trabajo_institucional=db.Column(db.Enum(TrabajoEnum), nullable=False)
     condicion=db.Column(db.Boolean, nullable=False) # true regular, false de baja
     sede=db.Column(db.Enum(SedeEnum), nullable=False)
     dias = db.relationship('Dias', secondary=jinete_dias, back_populates='jinetes')
-    #profesor si puesto laboral = Terapeuta o profesion = profesor.
-    #conductor_caballo dado de alta al sistema.
-    #caballo dado de alta al sistema.
-    #auxiliar_pista dado de alta al sistema.
-    # sin tabla intermedia: familiares = db.relationship('Familiar', backref='jinete')
     familiares = db.relationship('Familiar', secondary='jinete_familiar', back_populates='jinetes')
     documentos = db.relationship("JineteDocumento", back_populates="jinete", cascade="all, delete-orphan")
-
 
     # Relaciones con tres empleados diferentes:
     #ids:
@@ -203,7 +198,7 @@ class Jinete(db.Model):
     profesor_o_terapeuta = db.relationship('Empleado', foreign_keys=[profesor_o_terapeuta_id], backref='profesor_o_terapeuta_jinetes')
     conductor_caballo = db.relationship('Empleado', foreign_keys=[conductor_caballo_id], backref='conductor_caballo_jinetes')
     auxiliar_pista = db.relationship('Empleado', foreign_keys=[auxiliar_pista_id], backref='auxiliar_pista_jinetes')
-    caballo = db.relationship('Ecuestre', foreign_keys=[caballo_id], backref='auxiliar_pista_jinetes')
+    caballo = db.relationship('Ecuestre', foreign_keys=[caballo_id], backref='caballo_jinetes')
 
 
     #ids

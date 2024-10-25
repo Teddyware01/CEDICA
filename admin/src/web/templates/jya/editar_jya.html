@@ -13,8 +13,9 @@
         <h1 class="text-center">Editar Jinete</h1>
         
         <form action="{{ url_for('jya.editar_jinete', jinete_id=jinete.id) }}" method="POST">
-            {{ form.hidden_tag() }}
-
+            
+            <div class="caja">
+            <h2><strong> DATOS PERSONALES DEL JINETE O AMAZONA </strong></h2>
             <div class="form-group">
                 <label for="nombre">Nombre/s:</label>
                 <input type="text" id="nombre" name="nombre" value="{{ jinete.nombre }}" required>
@@ -69,7 +70,6 @@
             </div>
 
             <div><strong> Domicilio actual: </strong></div>
-            
 
             <div class="form-group">
                 <label for="domicilio.calle">Calle:</label>
@@ -85,13 +85,13 @@
             
             <div class="form-group">
                 <label for="domicilio.piso">Piso:</label>
-                <input type="text" id="domicilio.piso" name="domicilio.piso" value="{{ jinete.domicilio.piso }}" required>
+                <input type="text" id="domicilio.piso" name="domicilio.piso" value="{{ jinete.domicilio.piso or ''  }}" >
             </div>
 
             
             <div class="form-group">
                 <label for="domicilio.departamento">Departamento:</label>
-                <input type="text" id="domicilio.departamento" name="domicilio.departamento" value="{{ jinete.domicilio.departamento }}" required>
+                <input type="text" id="domicilio.departamento" name="domicilio.departamento" value="{{ jinete.domicilio.departamento or '' }}" >
             </div>
 
             
@@ -201,12 +201,13 @@
                 });
             </script>
             
-            
             <div class="form-group">
                 <label for="diagnostico">Diagnóstico:</label>
-                <select id="diagnostico" name="diagnostico" value="{{jinete.diagnostico}}" required>
+                <select id="diagnostico" name="diagnostico" value="{{jinete.diagnostico.name}}" required>
                     {% for diagnostico in tipos_diagnostico %}
-                    <option value="{{diagnostico.name}}">{{diagnostico}}</option>
+                    <option value="{{ diagnostico[0] }}" {% if jinete.diagnostico and jinete.diagnostico.name == diagnostico[0] %} selected {% endif %}>
+                        {{ diagnostico[1] }}
+                    </option>
                     {% endfor %}
                 </select>
             </div>
@@ -220,12 +221,13 @@
                 <label>Tipo de Discapacidad:</label>
                 {% for tipo in tipos_discapacidad %}
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="{{ tipo }}" name="tipos_discapacidad" value="{{ tipo }}"
-                            {% if tipo[1] in tipos_discapacidad_name %} checked {% endif %}>
-                        <label class="form-check-label" for="{{ tipo }}">{{ tipo[0] }}</label>
+                        <input class="form-check-input" type="checkbox" id="{{ tipo[0] }}" name="tipos_discapacidad[]" value="{{ tipo[0] }}"
+                            {% if tipo[0] in jinete_tipos_discapacidad_name %} checked {% endif %}>
+                        <label class="form-check-label" for="{{ tipo[0] }}">{{ tipo[1] }}</label>
                     </div>
                 {% endfor %}
             </div>
+            
 
             <div>
                 <label for="asignacion_familiar" class="form-element">¿Percibe alguna asignación familiar?</label>
@@ -267,7 +269,7 @@
     
 
             <div>
-                <label for="beneficiario_pension" class="form-element">¿Es beneficiario de alguna pensión?</label>
+                <label for="beneficiario_pension" class="form-element" required>¿Es beneficiario de alguna pensión?</label>
                 <input type="radio" id="pension_si" name="beneficiario_pension" value="si"
                 {% if jinete.beneficiario_pension == True %}checked{% endif %}>
                 <label for="pension_si">Sí</label>
@@ -275,7 +277,6 @@
                 {% if jinete.beneficiario_pension == False %}checked{% endif %}>
                 <label for="pension_no">No</label>
             </div>
-
 
             <div class="form-group">
                 <label for="pension">Pensión:</label>
@@ -304,9 +305,10 @@
                     });
                 });
             </script>
+            </div>
 
+            <div class="caja">
             <h2><strong> SITUACIÓN PREVISIONAL </strong></h2>
-            
             <div class="form-group">
                 <label for="obra_social">Obra social:</label>
                 <input type="text" id="obra_social" name="obra_social" value="{{ jinete.obra_social }}" required>
@@ -333,7 +335,9 @@
                 <label for="observaciones_curatela">Observaciones:</label>
                 <input type="text" id="observaciones_curatela" name="observaciones_curatela" value="{{ jinete.observaciones_curatela or '' }}">
             </div>
+            </div>
 
+            <div class="caja">
             <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
             
             <div class="form-group">
@@ -405,139 +409,66 @@
                 <label for="profesionales">PROFESIONALES que lo ATIENDEN:</label>
                 <input type="text" id="profesionales" name="profesionales" value="{{ jinete.profesionales }}">
             </div>
-
-            <h2><strong> DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
-
-            {%if  familiares %}
-                {% for familiar in familiares %}
-                    <div class="form-group">
-                        <label for="familiar.parentesco_familiar">Parentesco:</label>
-                        <input type="text" id="familiar.parentesco_familiar" name="familiar.parentesco_familiar" value="{{ familiar.parentesco_familiar }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="familiar.nombre_familiar">Nombre:</label>
-                        <input type="text" id="familiar.nombre_familiar" name="familiar.nombre_familiar" value="{{ familiar.nombre_familiar }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="familiar.apellido_familiar">Apellido:</label>
-                        <input type="text" id="familiar.apellido_familiar" name="familiar.apellido_familiar" value="{{ familiar.apellido_familiar }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="familiar.dni_familiar">DNI:</label>
-                        <input type="text" id="familiar.dni_familiar" name="familiar.dni_familiar" value="{{ familiar.dni_familiar }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="domicilio_familiar.calle">Calle:</label>
-                        <input type="text" id="domicilio_familiar.calle" name="domicilio_familiar.calle" value="{{ familiar.domicilio_familiar.calle }}" required>
-                    </div>
-                    
-                    
-                    <div class="form-group">
-                        <label for="domicilio_familiar.numero">Número:</label>
-                        <input type="text" id="domicilio_familiar.numero" name="domicilio_familiar.numero" value="{{ familiar.domicilio_familiar.numero }}" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="domicilio_familiar.piso">Piso:</label>
-                        <input type="text" id="domicilio_familiar.piso" name="domicilio_familiar.piso" value="{{ familiar.domicilio_familiar.piso or '' }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="domicilio_familiar.departamento">Departamento:</label>
-                        <input type="text" id="domicilio_familiar.departamento" name="domicilio_familiar.departamento" value="{{ familiar.domicilio_familiar.departamento or '' }}">
-                    </div>
-                
-                            
-                    <div class="form-group">
-                        <label for="familiar.domicilio_familiar_provincia">Provincia:</label>
-                        <select id="familiar.domicilio_familiar_provincia" name="familiar.domicilio_familiar_provincia" value="{{familiar.domicilio_familiar_provincia_id}}">
-                            {% for prov in provincias %}
-                                <option value="{{prov.id}}">{{prov.nombre}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="familiar.domicilio_familiar_localidad">Localidad:</label>
-                        <select id="familiar.domicilio_familiar_localidad" name="familiar.domicilio_familiar_localidad" value="{{familiar.domicilio_familiar_localidad_id}}">
-                            {% for loc in localidades %}
-                                <option value="{{loc.id}}">{{loc.nombre}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                            
-                    <div class="form-group">
-                        <label for="familiar.celular_familiar">Celular:</label>
-                        <input type="text" id="familiar.celular_familiar" name="familiar.celular_familiar" value="{{ familiar.celular_familiar }}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="familiar.email_familiar">Email:</label>
-                        <input type="text" id="familiar.email_familiar" name="familiar.email_familiar" value="{{ familiar.email_familiar }}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="familiar.nivel_escolaridad_familiar">Nivel de escolaridad:</label>
-                        <input type="text" id="familiar.nivel_escolaridad_familiar" name="familiar.nivel_escolaridad_familiar" value="{{ familiar.nivel_escolaridad_familiar }}">
-                    </div>
-                    
-                    
-                    <div class="form-group">
-                        <label for="familiar.actividad_ocupacion_familiar">Actividad u ocupación:</label>
-                        <input type="text" id="familiar.actividad_ocupacion_familiar" name="familiar.actividad_ocupacion_familiar" value="{{ familiar.actividad_ocupacion_familiar }}">
-                    </div>
-                {% endfor %}
+        </div>
+        <div class="caja">
+            
+            {% if familiar %}
+                <h2><strong> EDITAR DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
             {% else %}
-                
-            <h2><strong> (OPCIONAL: ) AGREGAR DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
+                <h2><strong> AGREGAR DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s (no tiene ninguno asignado) </strong></h2>
+            {% endif %}
+
             <div class="form-group">
-                <label for="nuevo_familiar.parentesco_familiar">Parentesco:</label>
-                <input type="text" id="nuevo_familiar.parentesco_familiar" name="nuevo_familiar.parentesco_familiar" value="">
+                <label for="familiar.parentesco_familiar">Parentesco:</label>
+                <input type="text" id="familiar.parentesco_familiar" name="familiar.parentesco_familiar" value="{{ familiar.parentesco_familiar or ''}}">
             </div>
             
             <div class="form-group">
-                <label for="nuevo_familiar.nombre_familiar">Nombre:</label>
-                <input type="text" id="nuevo_familiar.nombre_familiar" name="nuevo_familiar.nombre_familiar" value="">
+                <label for="familiar.nombre_familiar">Nombre:</label>
+                <input type="text" id="familiar.nombre_familiar" name="familiar.nombre_familiar" value="{{ familiar.nombre_familiar  or ''}}">
             </div>
             
             <div class="form-group">
-                <label for="nuevo_familiar.apellido_familiar">Apellido:</label>
-                <input type="text" id="nuevo_familiar.apellido_familiar" name="nuevo_familiar.apellido_familiar" value="">
+                <label for="familiar.apellido_familiar">Apellido:</label>
+                <input type="text" id="familiar.apellido_familiar" name="familiar.apellido_familiar" value="{{ familiar.apellido_familiar or '' }}">
             </div>
             
             <div class="form-group">
-                <label for="nuevo_familiar.dni_familiar">DNI:</label>
-                <input type="text" id="nuevo_familiar.dni_familiar" name="nuevo_familiar.dni_familiar" value="">
-            </div>
-            
-            <div class="form-group">
-                <label for="nuevo_familiar.domicilio_familiar.calle">Calle:</label>
-                <input type="text" id="nuevo_familiar.domicilio_familiar.calle" name="nuevo_familiar.domicilio_familiar.calle" value="">
+                <label for="familiar.dni_familiar">DNI:</label>
+                <input type="text" id="familiar.dni_familiar" name="familiar.dni_familiar" value="{{ familiar.dni_familiar or '' }}">
             </div>
             
             
             <div class="form-group">
-                <label for="nuevo_familiar.domicilio_familiar.numero">Número:</label>
-                <input type="text" id="nuevo_familiar.domicilio_familiar.numero" name="nuevo_familiar.domicilio_familiar.numero" value="">
+                <label for="domicilio_familiar.calle">Calle:</label>
+                <input type="text" id="domicilio_familiar.calle" name="domicilio_familiar.calle" 
+                    value="{{ familiar.domicilio_familiar.calle if familiar and familiar.domicilio_familiar else '' }}">
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="domicilio_familiar.numero">Número:</label>
+                <input type="text" id="domicilio_familiar.numero" name="domicilio_familiar.numero" 
+                    value="{{ familiar.domicilio_familiar.numero if familiar and familiar.domicilio_familiar else '' }}">
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="domicilio_familiar.piso">Piso:</label>
+                <input type="text" id="domicilio_familiar.piso" name="domicilio_familiar.piso" 
+                    value="{{ familiar.domicilio_familiar.piso if familiar and familiar.domicilio_familiar else '' }}">
             </div>
             
             <div class="form-group">
-                <label for="nuevo_familiar.domicilio_familiar.piso">Piso:</label>
-                <input type="text" id="nuevo_familiar.domicilio_familiar.piso" name="nuevo_familiar.domicilio_familiar.piso" value="">
+                <label for="domicilio_familiar.departamento">Departamento:</label>
+                <input type="text" id="domicilio_familiar.departamento" name="domicilio_familiar.departamento" 
+                    value="{{ familiar.domicilio_familiar.departamento if familiar and familiar.domicilio_familiar else '' }}">
             </div>
             
+                    
             <div class="form-group">
-                <label for="nuevo_familiar.domicilio_familiar.departamento">Departamento:</label>
-                <input type="text" id="nuevo_familiar.domicilio_familiar.departamento" name="nuevo_familiar.domicilio_familiar.departamento" value="">
-            </div>
-            
-            <div class="form-group">
-                <label for="nuevo_familiar.domicilio_familiar_provincia">nuevo_familiar.domicilio_familiar_provincia</label>
-                <select id="nuevo_familiar.domicilio_familiar_provincia" name="nuevo_familiar.domicilio_familiar_provincia" value="">
+                <label for="familiar.domicilio_familiar_provincia">Provincia:</label>
+                <select id="familiar.domicilio_familiar_provincia" name="familiar.domicilio_familiar_provincia" value="{{ familiar.domicilio_familiar.provincia_id if familiar and familiar.domicilio_familiar else '' }}">
                     {% for prov in provincias %}
                         <option value="{{prov.id}}">{{prov.nombre}}</option>
                     {% endfor %}
@@ -545,44 +476,52 @@
             </div>
 
             <div class="form-group">
-                <label for="nuevo_familiar.domicilio_familiar_localidad">nuevo_familiar.domicilio_familiar_localidad</label>
-                <select id="nuevo_familiar.domicilio_familiar_localidad" name="nuevo_familiar.domicilio_familiar_localidad" value="">
+                <label for="familiar.domicilio_familiar_localidad">Localidad:</label>
+                <select id="familiar.domicilio_familiar_localidad" name="familiar.domicilio_familiar_localidad" value="{{ familiar.domicilio_familiar.localidad_id if familiar and familiar.domicilio_familiar else ''}}">
                     {% for loc in localidades %}
                         <option value="{{loc.id}}">{{loc.nombre}}</option>
                     {% endfor %}
-
                 </select>
             </div>
-            
+                    
+            <div class="form-group">
+                <label for="familiar.celular_familiar">Celular:</label>
+                <input type="text" id="familiar.celular_familiar" name="familiar.celular_familiar" value="{{ familiar.celular_familiar  or ''}}">
+            </div>
 
             <div class="form-group">
-                <label for="nuevo_familiar.celular_familiar">Celular:</label>
-                <input type="text" id="nuevo_familiar.celular_familiar" name="nuevo_familiar.celular_familiar" value="">
-            </div>
-            <div class="form-group">
-                <label for="nuevo_familiar.nivel_escolaridad_familiar">Nivel de escolaridad:</label>
-                <input type="text" id="nuevo_familiar.nivel_escolaridad_familiar" name="nuevo_familiar.nivel_escolaridad_familiar" value="">
+                <label for="familiar.email_familiar">Email:</label>
+                <input type="text" id="familiar.email_familiar" name="familiar.email_familiar" value="{{ familiar.email_familiar or '' }}">
             </div>
             
-            <div class="form-group">
-                <label for="nuevo_familiar.email_familiar">Email:</label>
-                <input type="text" id="nuevo_familiar.email_familiar" name="nuevo_familiar.email_familiar" value="">
-            </div>
             
             <div class="form-group">
-                <label for="nuevo_familiar.actividad_ocupacion_familiar">Actividad u ocupación:
-                </label>
-                <input type="text" id="nuevo_familiar.actividad_ocupacion_familiar" name="nuevo_familiar.actividad_ocupacion_familiar" value="">
+                <label for="familiar.nivel_escolaridad_familiar">Nivel de escolaridad:</label>
+                <select id="familiar.nivel_escolaridad_familiar" name="familiar.nivel_escolaridad_familiar">
+                    {% for nivel in list_nivel_escolaridad %}
+                    <option value="{{ nivel[0] }}" {% if familiar and familiar.nivel_escolaridad_familiar and nivel[0] == familiar.nivel_escolaridad_familiar.name %}selected{% endif %}>
+                        {{ nivel[1] }}
+                    </option>
+                    {% endfor %}
+                </select>
             </div>
-            
-        {% endif %}
-
         
+
+            <div class="form-group">
+                <label for="familiar.actividad_ocupacion_familiar">Actividad u ocupación:</label>
+                <input type="text" id="familiar.actividad_ocupacion_familiar" name="familiar.actividad_ocupacion_familiar" value="{{ familiar.actividad_ocupacion_familiar or '' }}">
+            </div>
+            
+            
+        </div>
+        
+        <div class="caja">
+            <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN </strong></h2>
         <div class="form-group">
-            <label for="trabajo_institucional">Trabajo institucional:</label>
+            <label for="trabajo_institucional">Propuesta de trabajo institucional:</label>
             <select id="trabajo_institucional" name="trabajo_institucional">
                 {% for trabajo in trabajos_institucionales %}
-                <option value="{{ trabajo[0] }}" {% if trabajo[0] == jinete.trabajo_institucional.value %}selected{% endif %}>
+                <option value="{{ trabajo[0] }}" {% if trabajo[0] == jinete.trabajo_institucional.name %}selected{% endif %}>
                     {{ trabajo[1] }}
                 </option>
                 {% endfor %}
@@ -606,7 +545,7 @@
             <label for="sede">Sede:</label>
             <select id="sede" name="sede">
                 {% for sede in list_sedes %}
-                <option value="{{ sede[0] }}" {% if sede[0] == jinete.sede.value %}selected{% endif %}>
+                <option value="{{ sede[0] }}" {% if sede[0] == jinete.sede.name %}selected{% endif %}>
                     {{ sede[1] }}
                 </option>
                 {% endfor %}
@@ -618,9 +557,9 @@
             <label>Días:</label>
             {% for dia in dias_semana %}
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="{{ dia }}" name="dias_semana" value="{{ dia }}"
-                        {% if dia[1] in jinete_dias_name %} checked {% endif %}>
-                    <label class="form-check-label" for="{{ dia }}">{{ dia[0] }}</label>
+                    <input class="form-check-input" type="checkbox" id="{{ dia }}" name="dias_semana" value="{{ dia[0] }}"
+                        {% if dia[0] in jinete_dias_name %} checked {% endif %}>
+                    <label class="form-check-label" for="{{ dia }}">{{ dia[1] }}</label>
                 </div>
             {% endfor %}
         </div>
@@ -628,9 +567,10 @@
 
         <div class="form-group">
             <label for="profesor_o_terapeuta">Profesor/a o Terapeuta:</label>
-            <select id="profesor_o_terapeuta" name="profesor_o_terapeuta" value="{{jinete.profesor_o_terapeuta.id}}" required>
+            <select id="profesor_o_terapeuta" name="profesor_o_terapeuta">
+                <option value="" disabled selected>Seleccione un profesor/a o terapeuta</option> <!-- Opción vacía -->
                 {% for prof in list_profes_terapeutas %}
-                    <option value="{{prof.id}}">{{prof.apellido}} {{prof.nombre}}</option>
+                    <option value="{{prof.id}}"{% if prof.id == jinete.profesor_o_terapeuta_id %} selected {%endif%} >{{prof.apellido}} {{prof.nombre}}</option>
                 {% endfor %}
             </select>
         </div>
@@ -638,9 +578,11 @@
 
         <div class="form-group">
             <label for="conductor_caballo">Conductor/a del Caballo:</label>
-            <select id="conductor_caballo" name="conductor_caballo" value="{{jinete.conductor_caballo.id}}" required>
+            <select id="conductor_caballo" name="conductor_caballo">
+                <option value="" disabled selected>Seleccione conductor/a del caballo</option> <!-- Opción vacía -->
+
                 {% for conductor in list_conductores %}
-                <option value="{{conductor.id}}">{{conductor.apellido}}  {{conductor.nombre}}  </option>
+                <option value="{{conductor.id}}"{% if conductor.id == jinete.conductor_caballo.id %} selected {%endif%} >{{conductor.apellido}}  {{conductor.nombre}}  </option>
                 {% endfor %}
             </select>
         </div>
@@ -649,9 +591,10 @@
         
         <div class="form-group">
             <label for="caballo">Caballo:</label>
-            <select id="caballo" name="caballo" value="{{jinete.caballo.id}}" required>
+            <select id="caballo" name="caballo">
+                <option value="" disabled selected>Seleccione caballo</option> <!-- Opción vacía -->
                 {% for caballo in list_caballos %}
-                    <option value="{{caballo.id}}">{{caballo.nombre}}</option>
+                    <option value="{{caballo.id}}" {% if caballo.id == jinete.caballo.id %} selected {%endif%} >{{caballo.nombre}}</option>
                 {% endfor %}
             </select>
         </div>
@@ -660,16 +603,17 @@
         
         <div class="form-group">
             <label for="auxiliar_pista">Auxiliar de Pista:</label>
-            <select id="auxiliar_pista" name="auxiliar_pista" value="{{jinete.auxiliar_pista.id}}" required>
+            <select id="auxiliar_pista" name="auxiliar_pista">
+                <option value="" disabled selected>Seleccione auxiliar de pista</option> <!-- Opción vacía -->
                 {% for auxiliar in list_auxiliares_pista %}
-                    <option value="{{auxiliar.id}}">{{auxiliar.apellido}}  {{auxiliar.nombre}}  </option>
+                    <option value="{{auxiliar.id}}"{% if auxiliar.id == jinete.auxiliar_pista.id %} selected {%endif%} >{{auxiliar.apellido}}  {{auxiliar.nombre}}  </option>
                 {% endfor %}
             </select>
         </div>        
-    
-            <div>
-                <button type="submit" style="margin: 10px;" class="btn btn-submit">Guardar Cambios</button>
-                <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
+        </div>  
+            <div class="form-actions">
+                <button type="submit" style="margin-right: 1em;" class="btn btn-add">Guardar Cambios</button>
+                <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-back">Cancelar</a>
             </div>
         </form>
     </div>

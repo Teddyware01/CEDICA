@@ -21,8 +21,8 @@
             <option value="fecha_ingreso_desc">Fecha de Ingreso (Descendente)</option>
         </select>
         <input type="text" id="search" name="search" placeholder="Nombre">
-        <button type="submit" class="btn btn-sort">Ordenar</button>
-        <a href="{{ url_for('ecuestre.add_ecuestre_form') }}" class="btn btn-edit">Agregar</a>
+        <button type="submit" class="btn btn-ordenar">Ordenar/Buscar</button>
+        <a href="{{ url_for('ecuestre.add_ecuestre_form') }}" class="btn btn-agregar">Agregar</a>
     </form>
     
     {% if ecuestre %}
@@ -51,7 +51,7 @@
                 <td>
                     <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}" class="btn btn-view">Ver</a>
                     <a href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-edit">Modificar</a>
-                    <a href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-edit">Eliminar</a>
+                    <a href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-delete">Eliminar</a>
                 </td>
             </tr>
         {% endfor %}

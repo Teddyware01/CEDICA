@@ -4,7 +4,7 @@
     --secondary-color: #fff;
     --shadow-dark: 0 -1px 1px rgba(0,0,0,0.7);
     --font-size-large: 22px;
-    --background-light: #ece6e6;
+    --background-light: ##e6f7ff;
     --border-radius-large: 20px;
     --text-color-default: #333;
     --link-hover-background: #53A7EA;
@@ -32,14 +32,21 @@ body {
     padding: 0%;
 }
 
+.sesion-centrada {
+    text-align: center;
+    margin: 20px; 
+    max-width: 100%; 
+    height: auto;  
+}
+
 h1 {
     font-family: 'Montserrat', sans-serif !important;
     font-weight: 700;
-    font-size: 2.5rem;
+    font-size: 2.5em;
 }
 
 h2 {
-    font-family: 'Merriweather', serif;
+    font-family: 'Merriweather', Arial, Helvetica, sans-serif;
     font-weight: 400;
     font-size: 1.5rem;
 }
@@ -122,6 +129,7 @@ footer {
 p {
     margin-top: 0;
     margin-bottom: 2px; 
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .example-wrapper, .demo-wrapper {
@@ -155,6 +163,17 @@ p {
     transition: all 0.3s ease-out;
 }
 
+.caja {
+    background-color: #e6f7ff; 
+    border: 1px solid #b3daff; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    padding: 20px; 
+    margin: 20px auto; 
+    max-width: 900px; 
+    font-family: 'Arial', sans-serif; 
+    color: #333;
+}
 .inline-link-1:hover {
     background: var(--link-hover-background);
 }
@@ -209,8 +228,8 @@ p {
     display: grid;
     place-items: center;
     min-height: 60vh;
-    margin-top: 5em;
-    margin-bottom: 2em;
+    margin-top: 2em;
+    margin-bottom: 5em;
 }
 
 .navbar-class {
@@ -233,6 +252,7 @@ p {
 
 @media (max-width: 992px) {
     .navbar-nav {
+        overflow: visible;
         flex-direction: column;
         width: 100%;
     }
@@ -270,6 +290,7 @@ p {
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
+    overflow: visible;
 }
 
 .nav-item {
@@ -338,6 +359,7 @@ p {
     display: flex;
     border-bottom: 2px solid #ccc;
     margin-bottom: 20px;
+    margin-top: 3em;
 }
 
 .tab {
@@ -363,20 +385,54 @@ p {
 }
 
 .form-actions {
-    margin-top: 20px;
+    margin-top: 3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* Botones de acciones comunes */
 .btn {
-    padding: 8px 16px;
-    text-decoration: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 4px;
-    margin-right: 10px;
+    padding: 8px 16px; /* Tamaño estándar de padding */
+    text-decoration: none; /* Elimina cualquier subrayado */
+    color: white; /* Texto en blanco para contraste */
+    border-radius: 4px; /* Esquinas redondeadas */
+    cursor: pointer; /* Cursor en forma de mano */
+    transition: background-color 0.3s ease; /* Transición suave al cambiar color */
+    border: none; /* No border */
+    font-size: 16px; /* Tamaño de fuente legible */
 }
 
-.btn-edit {
+/* Botón Agregar en verde */
+.btn-add {
     background-color: #28a745;
+}
+.btn-add:hover {
+    background-color: #218838; /* Oscurecer el color al hacer hover */
+}
+
+/* Botón Ver en verde */
+.btn-view {
+    background-color: #28a745;
+}
+.btn-edit:hover {
+    background-color: #218838; /* Oscurecer el color al hacer hover */
+}
+
+/* Botón Editar en amarillo */
+.btn-edit {
+    background-color: #ffc107;
+}
+.btn-edit:hover {
+    background-color: #e0a800; /* Oscurecer el color al hacer hover */
+}
+
+/* Botón Eliminar en rojo */
+.btn-delete {
+    background-color: #dc3545;
+}
+.btn-delete:hover {
+    background-color: #c82333; /* Oscurecer el color al hacer hover */
 }
 
 .btn-back {
@@ -390,6 +446,17 @@ p {
 .btn-subir {
     background-color: #ffc107;
 }
+.btn-sort {
+    padding: 6px 12px; 
+    line-height: normal; 
+    background-color: #007bff; 
+    transition: background-color 0.3s ease;
+}
+
+.btn-ordenar:hover, .btn-buscar:hover {
+    background-color: #0069d9;
+}
+
 
 .image-container {
     display: flex;
@@ -450,6 +517,10 @@ p {
 
 /* Móviles: Menos de 767px */
 @media (max-width: 767px) {
+    body {
+        overflow-x: auto;
+    }
+
     .container, .example-wrapper, .demo-wrapper {
         padding: 10px;
         width: 100%;
@@ -458,6 +529,7 @@ p {
     .nav-item, .navbar-nav {
         flex-direction: column;
         width: 100%;
+        overflow: visible;
     }
 
     .main, .footer, header {
@@ -468,12 +540,30 @@ p {
         flex-direction: column;
     }
 
-    h1, h2 {
-        font-size: smaller; 
+    h1 {
+        font-size: 2em;
+        margin-top: 2em; 
     }
 
+    h2 {
+        font-size: 1.5em;
+        margin-top: 2em; 
+    }
+
+    h3 {
+        font-size: 1em;
+        margin-top: 2em; 
+    }
     .tab {
         padding: 5px 10px; 
+    }
+
+    .btn-group {
+        display: none;
+    }
+
+    footer {
+        width: 100% !important;
     }
 }
 
@@ -485,8 +575,9 @@ p {
     }
 
     .nav-item, .navbar-nav {
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
+        overflow: visible;
     }
 
     .main, .footer, header {
@@ -494,7 +585,7 @@ p {
     }
 
     .navbar {
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-around;
     }
 
@@ -504,6 +595,10 @@ p {
 
     .tab {
         padding: 10px 15px;
+    }
+
+    .btn-group {
+        display: none;
     }
 }
 
@@ -532,6 +627,9 @@ p {
         display: none;  /* Asegura que el botón hamburguesa esté oculto en pantallas grandes */
     }
 
+    .action-dropdown {
+        display: none;  /* Solo oculta los dropdowns de acción en pantallas grandes */
+    }
     .navbar-center {
         display: flex; 
         flex-direction: row;
