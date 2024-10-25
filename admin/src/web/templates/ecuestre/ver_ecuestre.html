@@ -79,7 +79,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Título</th>
+                        <th>Nombre asignado</th>
                         <th>Fecha subida</th>
                         <th>Tipo</th>
                         <th>Acciones</th>
@@ -88,13 +88,25 @@
                 <tbody>
                     {% for doc in documentos %}
                         <tr>
-                            <td>{{ doc.titulo }}</td>
+                            <td>{{ doc.nombre_asignado }}</td>
                             <td>{{ doc.fecha_subida.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                            <td>{{ doc.tipo }}</td>
+                            <td>{% if doc.is_enlace %}
+                                ENLACE
+                                {% else %}
+                                {{doc.tipo}} 
+                                {% endif %}
+                            </td>
                             <td>
-                                <a href="{{ url_for('ecuestre.mostrar_archivo', ecuestre_id=ecuestre.id, file_name=doc.titulo) }}" class="btn btn-primary" download>
-                                    Descargar 
-                                </a>
+                                {% if doc.is_enlace %}
+                                <a href="{{doc.url_enlace}}" target="_blank">Abrir enlace</a>
+                                {% else %}
+                                <a href="{{ url_for('ecuestre.mostrar_archivo', ecuestre_id=ecuestre.id, file_name=doc.titulo) }}" class="btn btn-primary" download>Descargar</a>
+                                {% endif %}
+                                {% if doc.is_enlace %}
+                                    <a href="{{ url_for('ecuestre.edit_enlace_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" >Editar</a>
+                                {% else %}
+                                    <a href="{{ url_for('ecuestre.edit_documento_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" >Editar</a>
+                                {% endif %}
                                 <a href="{{ url_for('ecuestre.eliminar_documento_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" >Eliminar</a>
                             </td>
                         </tr>
@@ -136,7 +148,7 @@
         
         <!-- Botones de acción en Documentos -->
         <div class="form-actions">
-            <a href="#" class="btn btn-enlace">+ Enlace</a>
+            <a href="{{ url_for('ecuestre.subir_enlace_form', ecuestre_id=ecuestre.id) }}" class="btn btn-enlace">+ Enlace</a>
             <a href="{{ url_for('ecuestre.subir_archivo_form', ecuestre_id=ecuestre.id) }}" class="btn btn-subir">↑ Subir</a>
         </div>
     </div>

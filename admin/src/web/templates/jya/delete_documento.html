@@ -11,26 +11,24 @@
     <div class="delete-confirmation">
         <h2>¿Estás seguro de que deseas eliminar este documento?</h2>
         <div class="document-details">
-            <p><strong>Nombre asignado:</strong> {{ doc.nombre_asignado }}</p>
+            <p><strong>Nombre asignado:</strong> {{ doc.nombre_archivo }}</p>
             {% if not doc.is_enlace %}
-                <p><strong>Nombre de archivo subido:</strong> {{ doc.titulo }}</p>
+                <p><strong>Nombre de archivo subido:</strong> {{ doc.titulo_documento }}</p>
             {% endif %}
-            <p><strong>Fecha de subida:</strong> {{ doc.fecha_subida.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            <p><strong>Fecha de subida:</strong> {{ doc.fecha_subida_documento.strftime('%Y-%m-%d %H:%M:%S') }}</p>
             <p><strong>Tipo:</strong>
                 {% if doc.is_enlace %}
                     ENLACE
                     {% else %}
-                    {{doc.tipo}} 
+                    {{doc.tipo_documento.value}} 
                     {% endif %}
             </p>
         </div>
         <div class="form-actions">
-            <form action="{{ url_for('ecuestre.eliminar_documento', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" method="POST" style="display: inline;">
+            <form action="{{ url_for('jya.eliminar_documento', jinete_id=jinete.id, documento_id=doc.id) }}" method="POST" style="display: inline;">
                 <button type="submit" class="btn btn-danger">Confirmar</button>
             </form>
-            <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id, tab='documentos') }}" class="btn btn-secondary">Cancelar</a>
+            <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id, tab='documentos') }}" class="btn btn-secondary">Cancelar</a>
         </div>
     </div>
 {% endblock %}
-
-

@@ -179,15 +179,16 @@ def agregar_documento(ecuestre_id):
     if(existe):
         flash(f"El archivo ya se encuentra almacenado")
         return subir_archivo_form(ecuestre_id)
-    nuevo_nombre_archivo = f"{ecuestre_id}_{file.filename}"
+    nuevo_nombre_archivo = f"ecuestre_{ecuestre_id}_{file.filename}"
     client = current_app.storage.client
     client.put_object("grupo15", nuevo_nombre_archivo, file, size, content_type=file.content_type)    
     ecuestre.crear_documento(
         titulo=file.filename,
+        nombre_asignado=request.form["nombre_asignado"], 
         tipo=request.form["tipo_archivo"], 
         ecuestre_id=ecuestre_id
     )  
-    return ver_ecuestre(ecuestre_id)
+    return redirect(url_for("ecuestre.ver_ecuestre",ecuestre_id=ecuestre_id))
 
 
 
@@ -196,7 +197,7 @@ def agregar_documento(ecuestre_id):
 @login_required
 @check("ecuestre_show")
 def mostrar_archivo(ecuestre_id, file_name):
-    nuevo_nombre_archivo = f"{ecuestre_id}_{file_name}"
+    nuevo_nombre_archivo = f"ecuestre_{ecuestre_id}_{file_name}"
     expiration = timedelta(seconds=120)
     client = current_app.storage.client
     url =  client.presigned_get_object("grupo15", nuevo_nombre_archivo, expires=expiration) # Esto sirve para archivos sensibles como documento de jya.
@@ -207,8 +208,10 @@ def mostrar_archivo(ecuestre_id, file_name):
 @check("ecuestre_update")
 def eliminar_documento(ecuestre_id, documento_id):
     documento = ecuestre.traerdocumentoporid(documento_id)
-    client = current_app.storage.client
-    client.remove_object("grupo15", documento.titulo)
+    if not documento.is_enlace:
+        client = current_app.storage.client
+        nuevo_nombre_archivo = f"ecuestre_{ecuestre_id}_{documento.titulo}"
+        client.remove_object("grupo15", nuevo_nombre_archivo)
     ecuestre.eliminar_documento(documento_id)
     flash("Documento eliminado correctamente.", "success")
     return redirect(url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre_id, tab='documentos'))
@@ -233,3 +236,90 @@ def validate_fields(fields):
             flash(f"El campo '{field_name}' con valor '{field_value}' solo puede contener letras.", "error")
             return False
     return True
+
+
+
+
+
+# EDITAR ARCHIVO GET
+@bp.get("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/editar")
+@login_required
+@check("ecuestre_update")
+def edit_documento_form(ecuestre_id, documento_id):
+    documento = ecuestre.traerdocumentoporid(documento_id)
+    return render_template("ecuestre/edit_documento.html", documento=documento, ecuestre_id=ecuestre_id)
+
+
+# EDITAR ARCHIVO POST
+@bp.post("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/editar")
+@login_required
+@check("ecuestre_update")
+def editar_documento(ecuestre_id, documento_id):
+    nombre_asignado = request.form.get("nombre_asignado")
+    tipo = request.form.get("tipo_archivo")
+
+    if not nombre_asignado:
+        flash("Debe ingresar un titulo de documento.", "error")
+        return redirect(url_for("ecuestre.edit_documento_form", form=request.form, documento_id=documento_id))
+    
+    if not tipo:
+        flash("Debe seleccionar un tipo de documento.", "error")
+        return redirect(url_for("ecuestre.edit_documento_form", form=request.form, documento_id=documento_id))
+    
+    ecuestre.edit_documento(documento_id=documento_id,ecuestre_id=ecuestre_id, nombre_asignado=nombre_asignado, tipo=tipo)
+    flash("Documento editado exitosamente", "success")
+    return redirect(url_for("ecuestre.ver_ecuestre", ecuestre_id=ecuestre_id))
+
+
+
+# ENLACES
+# agregar enlace GET
+@bp.get("/ecuestre/<int:ecuestre_id>/enlace")
+@login_required
+@check("ecuestre_update")
+def subir_enlace_form(ecuestre_id):    
+    ecu = ecuestre.traer_ecuestre(ecuestre_id=ecuestre_id)
+
+    return render_template("ecuestre/add_enlace.html", ecuestre=ecu)
+
+# agregar enlace POST
+@login_required
+@check("ecuestre_update")
+@bp.post("/ecuestre/<int:ecuestre_id>/enlace")
+def agregar_enlace(ecuestre_id):
+    ecuestre.crear_documento_tipo_enlace(
+        ecuestre_id=ecuestre_id,
+        url_enlace = request.form["url_enlace"],
+        nombre_asignado=request.form["nombre_asignado"]
+    ) 
+    return redirect(url_for("ecuestre.ver_ecuestre", ecuestre_id=ecuestre_id))
+
+
+
+# EDITAR enlace GET
+@bp.get("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/editar")
+@login_required
+@check("ecuestre_update")
+def edit_enlace_form(ecuestre_id, documento_id):
+    documento = ecuestre.traerdocumentoporid(documento_id)
+    return render_template("ecuestre/edit_enlace.html", documento=documento, ecuestre_id=ecuestre_id)
+
+# EDITAR enlace POST
+@bp.post("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/editar")
+@login_required
+@check("ecuestre_update")
+def editar_enlace(ecuestre_id, documento_id):
+    nombre_asignado = request.form.get("nombre_asignado")
+    url_enlace = request.form.get("url_enlace")
+
+    if not nombre_asignado:
+        flash("Debe ingresar un titulo de documento.", "error")
+        return redirect(url_for("ecuestre.edit_enlace_form", form=request.form, documento_id=documento_id))
+    
+    if not url_enlace:
+        flash("Debe ingresar una url para el enlace.", "error")
+        return redirect(url_for("ecuestre.edit_enlace_form", form=request.form, documento_id=documento_id))
+    
+    ecuestre.edit_documento(documento_id=documento_id,ecuestre_id=ecuestre_id, nombre_asignado=nombre_asignado, url_enlace=url_enlace)
+    flash("Documento editado exitosamente", "success")
+    return redirect(url_for("ecuestre.ver_ecuestre", ecuestre_id=ecuestre_id))
