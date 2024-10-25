@@ -23,7 +23,7 @@ def authenticate():
 
     session["user"] = user.email
     flash("Sesion iniciada correctamente!", "success")
-    return redirect(url_for("equipo.listar_empleados"))
+    return redirect(url_for("auth.login"))
 
 @bp.get("/logout")
 def logout():
