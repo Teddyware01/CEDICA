@@ -140,6 +140,7 @@
         <!-- Botones solo en Información general -->
         <div class="form-actions">
             <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit" style="margin-right: 1em;">Editar jinete</a>
+            <a href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}" class="btn btn-delete" style="margin-right: 1em;">Eliminar jinete</a>
             <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-back">Lista de jinetes</a>
         </div>
     </div>
@@ -176,7 +177,7 @@
 
 
         <!-- Lista de documentos -->
-        <h2>Documentos:</h2>
+        <h2>Documentos y enlaces:</h2>
         {% if documentos %}
             <table class="table">
                 <thead>
@@ -194,30 +195,72 @@
                             <td>{{ doc.fecha_subida_documento.strftime('%Y-%m-%d %H:%M:%S') }}</td>
                             <td>{% if doc.is_enlace %}
                                 ENLACE
-                              {% else %}
-                              {{doc.tipo_documento.value}} 
-                              {% endif %} </td>
+                            {% else %}
+                                {{doc.tipo_documento.value}} 
+                            {% endif %} </td>
                             <td>
-                                {% if doc.is_enlace %}
-                                    <a href="{{doc.url_enlace}}" class="btn btn-add">Abrir enlace</a>
-                                    {% else %}
-                                    <a href="{{ url_for('jya.mostrar_archivo', jinete_id=jinete.id, file_name=doc.nombre_archivo) }}" class="btn btn-add" download>Descargar</a>
-                                {% endif %}
-                                {% if doc.is_enlace %}
-                                    <a href="{{ url_for('jya.edit_enlace_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-edit" >Editar</a>
-                                    {% else %}
-                                    <a href="{{ url_for('jya.edit_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-edit" >Editar</a>
-                                {% endif %}
-                                <a href="{{ url_for('jya.eliminar_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-delete">Eliminar</a>
+                                <div class="btn-group d-none d-lg-block">
+                                    {% if doc.is_enlace %}
+                                        <a href="{{doc.url_enlace}}" class="btn btn-add">Abrir enlace</a>
+                                        {% else %}
+                                        <a href="{{ url_for('jya.mostrar_archivo', jinete_id=jinete.id, file_name=doc.nombre_archivo) }}" class="btn btn-add" download>Descargar</a>
+                                    {% endif %}
+                                    {% if doc.is_enlace %}
+                                        <a href="{{ url_for('jya.edit_enlace_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-edit" >Editar</a>
+                                        {% else %}
+                                        <a href="{{ url_for('jya.edit_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-edit" >Editar</a>
+                                    {% endif %}
+                                    <a href="{{ url_for('jya.eliminar_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-delete">Eliminar</a>
+                            </div>
+                            <div class="dropdown action-dropdown d-block d-lg-none">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ jinete.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Acciones
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ jinete.id }}">
+                                    {% if doc.is_enlace %}
+                                        <a class="dropdown-item" href="{{doc.url_enlace}}">Abrir enlace</a>
+                                        {% else %}
+                                        <a class="dropdown-item" href="{{ url_for('jya.mostrar_archivo', jinete_id=jinete.id, file_name=doc.nombre_archivo) }}"download>Descargar</a>
+                                    {% endif %}
+                                    {% if doc.is_enlace %}
+                                        <a class="dropdown-item" href="{{ url_for('jya.edit_enlace_form', jinete_id=jinete.id, documento_id=doc.id) }}">Editar</a>
+                                        {% else %}
+                                        <a class="dropdown-item" href="{{ url_for('jya.edit_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}">Editar</a>
+                                    {% endif %}
+                                    <a class="dropdown-item" href="{{ url_for('jya.eliminar_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}">Eliminar</a>
+                                </div>
+                            </div>
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var actionButtons = document.querySelectorAll('.action-dropdown .dropdown-toggle');
+                        var actionMenus = document.querySelectorAll('.action-dropdown .dropdown-menu');
+                        actionButtons.forEach(function(button, index) {
+                            button.addEventListener('click', function(event) {
+                                event.stopPropagation();
+                                var currentMenu = actionMenus[index];
+                                currentMenu.style.display = currentMenu.style.display === 'block' ? 'none' : 'block';
+                            });
+                        });
+                        window.onclick = function(event) {
+                            if (!event.target.matches('.dropdown-toggle')) {
+                                actionMenus.forEach(function(menu) {
+                                    if (menu.style.display === 'block') {
+                                        menu.style.display = 'none';
+                                    }
+                                });
+                            }
+                        };
+                    });
+                </script>
             </table>
             
             <!-- Paginación -->
             <nav aria-label="Page navigation">
-                <ul class="pagination">
+                <ul class="pagination justify-content-center">
                     {% if documentos.has_prev %}
                         <li class="page-item">
                             <a class="page-link" href="{{ url_for('jya.view_jinete', jinete_id=jinete.id, page=documentos.prev_num, tab='documentos') }}" aria-label="Anterior">
@@ -249,7 +292,7 @@
 
         <!-- Botones de acción solo para Documentos -->
         <div class="form-actions">
-            <a href="{{ url_for('jya.subir_enlace_form', jinete_id=jinete.id) }}" class="btn btn-enlace">+ Enlace</a>
+            <a href="{{ url_for('jya.subir_enlace_form', jinete_id=jinete.id) }}" class="btn btn-enlace" style="margin-right: 1em;">+ Enlace</a>
             <a href="{{ url_for('jya.add_documento_form', jinete_id=jinete.id) }}" class="btn btn-subir">↑ Subir</a>
         </div>
     </div>

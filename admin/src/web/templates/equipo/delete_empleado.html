@@ -4,26 +4,26 @@
 
 {% block content %}
     <h1 class="text-center">Eliminar empleado</h1>
+    <div class="caja">
+        <p><strong>Apellido:</strong> {{empleado.apellido}}</p>
+        <p><strong>Nombre:</strong> {{empleado.nombre}}</p>
+        <p><strong>DNI:</strong> {{empleado.dni}}</p>
+        <p><strong>Email:</strong> {{empleado.email}}</p>
+        <p><strong>Telefono:</strong> {{empleado.telefono}}</p>
+        <p><strong>Fecha de inicio:</strong> {{empleado.fecha_inicio}}</p>
+        <p><strong>Fecha de cese:</strong> {{empleado.fecha_cese if empleado.fecha_cese else "Ninguna asignada."}}</p>
+        <p><strong>Condicion:</strong> {{empleado.condicion}}</p>
+        <p><strong>Activo:</strong> {{"SI" if empleado.activo else "NO" }}</p>
+        <p><strong>Profesion:</strong> {{empleado.profesion.nombre}}</p>
+        <p><strong>Puesto laboral:</strong> {{empleado.puesto_laboral.nombre}}</p>
+    </div>
 
-    <p>Apellido: {{empleado.apellido}}</p>
-    <p>Nombre: {{empleado.nombre}}</p>
-    <p>DNI: {{empleado.dni}}</p>
-    <p>Email: {{empleado.email}}</p>
-    <p>Telefono: {{empleado.telefono}}</p>
-    <p>Fecha de inicio: {{empleado.fecha_inicio}}</p>
-    <p>Fecha de cese: {{empleado.fecha_cese if empleado.fecha_cese else "Ninguna asignada."}}</p>
-    <p>Condicion: {{empleado.condicion}}</p>
-    <p>Activo: {{"SI" if empleado.activo else "NO" }}</p>
-    <p>Profesion: {{empleado.profesion.nombre}}</p>
-    <p>Puesto laboral: {{empleado.puesto_laboral.nombre}}</p>
-    
-
-    <p>¿Estás seguro de que deseas eliminar este empleado?</p>
+    <h3><strong>¿Estás seguro de que deseas eliminar este empleado?</strong></h3>
 
     <div class="form-actions">
         <form action="{{ url_for('equipo.destroy_empleado', empleado_id=empleado.id) }}" method="POST">
-            <button type="submit" class="btn btn-danger">Confirmar</button>
-            <a href="{{ url_for('equipo.show_empleado', empleado_id=empleado.id) }}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-delete" style="margin-right: 1em;">Confirmar</button>
+            <a href="{{ url_for('equipo.show_empleado', empleado_id=empleado.id) }}" class="btn btn-back">Cancelar</a>
         </form>
     </div>
 {% endblock %}

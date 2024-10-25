@@ -14,6 +14,7 @@
     <form method="POST" action="{{ url_for('equipo.add_empleado') }}">
         {{ form.hidden_tag() }}
         <div class="caja">
+            <h3>Datos del empleado:</h3>
             <div>
                 <label for="nombre">Nombre:</label>
                 {{ form.nombre(class_="form-control") }}
@@ -68,8 +69,10 @@
                 <label for="puesto_laboral_id">Puesto Laboral:</label>
                 {{ form.puesto_laboral_id(class_="form-control") }}
             </div>
+        </div>
+        <div class="caja">
+            <h3>Datos de la obra social:</h3>
 
-            
             <div>
                 <label for="obra_social">Obra Social:</label>
                 {{ form.obra_social(class_="form-control") }}
@@ -79,7 +82,9 @@
                 <label for="nro_afiliado">Numero Afiliado:</label>
                 {{ form.nro_afiliado(class_="form-control") }}
             </div>
-
+        </div>
+        <div class="caja">
+            <h3>Domicilio del empleado:</h3>
             <div>
                 <label for="domicilio_calle">Calle:</label>
                 {{ form.domicilio_calle(class_="form-control") }}
@@ -109,8 +114,9 @@
                 <label for="domicilio_localidad">Localidad:</label>
                 {{ form.domicilio_localidad(class_="form-control") }}
             </div>
-            
-            
+        </div>
+        <div class="caja">
+            <h3>Contacto de emergencia:</h3>
             <div>
                 <label for="contacto_emergencia_nombre">Nombre contacto de Emergencia:</label>
                 {{ form.contacto_emergencia_nombre(class_="form-control") }}
@@ -125,7 +131,8 @@
                 <label for="contacto_emergencia_telefono">Telefono contacto de Emergencia:</label>
                 {{ form.contacto_emergencia_telefono(class_="form-control") }}
             </div>
-
+        </div>
+        
             <div class="form-actions">
                 <button type="submit" class="btn btn-add" style="margin-right: 1em;">Agregar empleado</button>
                 <a href="{{ url_for('equipo.listar_empleados') }}" class="btn btn-back">Cancelar</a>
