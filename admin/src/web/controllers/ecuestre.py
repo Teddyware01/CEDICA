@@ -197,11 +197,12 @@ def agregar_documento(ecuestre_id):
 @login_required
 @check("ecuestre_show")
 def mostrar_archivo(ecuestre_id, file_name):
+    client = current_app.storage.client
     nuevo_nombre_archivo = f"ecuestre_{ecuestre_id}_{file_name}"
     expiration = timedelta(seconds=120)
-    client = current_app.storage.client
     url =  client.presigned_get_object("grupo15", nuevo_nombre_archivo, expires=expiration) # Esto sirve para archivos sensibles como documento de jya.
-    return False
+    return redirect(url)
+
 
 @bp.post("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/eliminar")
 @login_required

@@ -203,7 +203,7 @@
                                     {% if doc.is_enlace %}
                                         <a href="{{doc.url_enlace}}" class="btn btn-add">Abrir enlace</a>
                                         {% else %}
-                                        <a href="{{ url_for('jya.mostrar_archivo', jinete_id=jinete.id, file_name=doc.nombre_archivo) }}" class="btn btn-add" download>Descargar</a>
+                                        <a href="{{ url_for('jya.mostrar_archivo', jinete_id=jinete.id, file_name=doc.titulo_documento) }}" class="btn btn-add" download>Descargar</a>
                                     {% endif %}
                                     {% if doc.is_enlace %}
                                         <a href="{{ url_for('jya.edit_enlace_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-edit" >Editar</a>
