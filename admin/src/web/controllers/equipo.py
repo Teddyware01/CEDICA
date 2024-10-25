@@ -7,6 +7,7 @@ from src.core.equipo.forms import AddEmpleadoForm
 from src.core import equipo
 from src.core import auth
 
+from datetime import timedelta
 
 from flask import current_app
 from os import fstat
@@ -341,7 +342,9 @@ def agregar_enlace(empleado_id):
 @bp.get("/editar_empleado/<int:empleado_id>/documentos/<string:file_name>")
 def descargar_archivo(empleado_id, file_name):
     client = current_app.storage.client
-    url = client.presigned_get_object("grupo15", file_name, ExpiresIn=10800)  # 3 horas en segundos
+    nuevo_nombre_archivo = f"empleado_{empleado_id}_{file_name}"
+    expiration = timedelta(seconds=120)
+    url = client.presigned_get_object("grupo15", nuevo_nombre_archivo, expires=expiration)
     return redirect(url)
 
 @login_required

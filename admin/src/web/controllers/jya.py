@@ -12,6 +12,8 @@ from src.core.jya.models import Jinete, PensionEnum, DiagnosticoEnum, TiposDisca
 from src.core.equipo import list_terapeutas_y_profesores, list_auxiliares_pista, list_conductores_caballos
 from src.core.ecuestre import list_ecuestre
 
+from datetime import timedelta
+
 bp = Blueprint("jya", __name__, url_prefix="/jinetes")
 
 
@@ -486,8 +488,12 @@ def agregar_documento(jinete_id):
 @check("jya_show")
 def mostrar_archivo(jinete_id, file_name):
     client = current_app.storage.client
-    url = client.presigned_get_object("grupo15", file_name, ExpiresIn=10800)  # 3 horas en segundos
+    nuevo_nombre_archivo = f"jya_{jinete_id}_{file_name}"
+    expiration = timedelta(seconds=120)
+    url =  client.presigned_get_object("grupo15", nuevo_nombre_archivo, expires=expiration) # Esto sirve para archivos sensibles como documento de jya.
     return redirect(url)
+
+
 
 # ELIMINAR ARCHIVO GET
 @bp.get("/editar_jinete/<int:jinete_id>/documentos/<int:documento_id>/eliminar")

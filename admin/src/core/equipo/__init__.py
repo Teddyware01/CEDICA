@@ -80,7 +80,7 @@ def get_localidad_by_id(localidad_id):
 
 
 # Tabla Empleado
-def list_empleados(sort_by=None, id_puesto_laboral=None, search=None,page=1, per_page=5):
+def list_empleados(sort_by=None, id_puesto_laboral=None, search=None,page=1, per_page=3):
     query = Empleado.query
     if id_puesto_laboral and id_puesto_laboral != "cualquiera":
         query = query.filter(Empleado.puesto_laboral_id == id_puesto_laboral)

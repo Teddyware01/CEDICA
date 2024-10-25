@@ -8,21 +8,38 @@
 
 {% block content %}
     {{ super() }}
-    <h1 class="text-center">Listado de Caballos</h1>
+    <h1 class="text-center">Listado de caballos</h1>
 
+    <div class="actions">
+      <a href="{{ url_for('ecuestre.add_ecuestre_form') }}" class="btn btn-add"  style="margin: 10px 0;">Agregar ecuestre</a>
+    </div>
+    
     <form method="GET" action="{{ url_for('ecuestre.listar_ecuestre') }}" class="mb-3">
-        <label for="sort_by">Ordenar por:</label>
-        <select name="sort_by" id="sort_by">
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label for="sort_by">Ordenar por:</label>
+          <select name="sort_by" id="sort_by"  class="form-control">
             <option value="nombre_asc">Nombre (Ascendente)</option>
             <option value="nombre_desc">Nombre (Descendente)</option>
             <option value="fecha_nacimiento_asc">Fecha de Nacimiento (Ascendente)</option>
             <option value="fecha_nacimiento_desc">Fecha de Nacimiento (Descendente)</option>
             <option value="fecha_ingreso_asc">Fecha de Ingreso (Ascendente)</option>
             <option value="fecha_ingreso_desc">Fecha de Ingreso (Descendente)</option>
-        </select>
-        <input type="text" id="search" name="search" placeholder="Nombre">
-        <button type="submit" class="btn btn-ordenar">Ordenar/Buscar</button>
-        <a href="{{ url_for('ecuestre.add_ecuestre_form') }}" class="btn btn-agregar">Agregar</a>
+          </select>
+        </div>
+        <div class="form-group col-6">
+            <label for="sort_by">Buscar:</label>
+            <input type="text" id="search" name="search" placeholder="Nombre" class="form-control" value="{{ request.args.get('search', '') }}">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-6">
+          <button type="submit" class="btn btn-sort">Ordenar</button>
+        </div>
+        <div class="form-group col-6">
+          <button type="submit" class="btn btn-sort">Buscar</button>
+        </div>
+      </div>
     </form>
     
     {% if ecuestre %}
@@ -49,13 +66,48 @@
                 <td>{{ ecuestre.raza }}</td>
                 <td>{{ ecuestre.pelaje }}</td>
                 <td>
-                    <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}" class="btn btn-view">Ver</a>
-                    <a href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-edit">Modificar</a>
-                    <a href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-delete">Eliminar</a>
-                </td>
+                  <div class="btn-group d-none d-lg-block">
+                    <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}" class="btn btn-view">Ver ecuestre</a>
+                    <a href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-edit">Modificar ecuestre</a>
+                    <a href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-delete">Eliminar ecuestre</a>
+                </div>
+                <div class="dropdown action-dropdown d-block d-lg-none">
+                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ ecuestre.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Acciones
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ ecuestre.id }}">
+                      <a class="dropdown-item" href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}">Ver ecuestre</a>
+                      <a class="dropdown-item" href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}">Modificar ecuestre</a>
+                      <a class="dropdown-item" href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}">Eliminar ecuestre</a>
+                  </div>
+              </div>
+
+              </td>
             </tr>
         {% endfor %}
         </tbody>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+              var actionButtons = document.querySelectorAll('.action-dropdown .dropdown-toggle');
+              var actionMenus = document.querySelectorAll('.action-dropdown .dropdown-menu');
+              actionButtons.forEach(function(button, index) {
+                  button.addEventListener('click', function(event) {
+                      event.stopPropagation();
+                      var currentMenu = actionMenus[index];
+                      currentMenu.style.display = currentMenu.style.display === 'block' ? 'none' : 'block';
+                  });
+              });
+              window.onclick = function(event) {
+                  if (!event.target.matches('.dropdown-toggle')) {
+                      actionMenus.forEach(function(menu) {
+                          if (menu.style.display === 'block') {
+                              menu.style.display = 'none';
+                          }
+                      });
+                  }
+              };
+          });
+      </script>
     </table>
     <nav aria-label="Page navigation">
         <ul class="pagination">

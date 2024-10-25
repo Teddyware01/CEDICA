@@ -26,9 +26,9 @@
         </div>
         <div class="form-actions">
             <form action="{{ url_for('equipo.eliminar_documento', empleado_id=empleado.id, documento_id=doc.id) }}" method="POST" style="display: inline;">
-                <button type="submit" class="btn btn-danger">Confirmar</button>
+                <button type="submit" class="btn btn-delete" style="margin-right: 1em;">Confirmar</button>
             </form>
-            <a href="{{ url_for('equipo.show_empleado', empleado_id=empleado.id, tab='documentos') }}" class="btn btn-secondary">Cancelar</a>
+            <a href="{{ url_for('equipo.show_empleado', empleado_id=empleado.id, tab='documentos') }}" class="btn btn-back">Cancelar</a>
         </div>
     </div>
 {% endblock %}
