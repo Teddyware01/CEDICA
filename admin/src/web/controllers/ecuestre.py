@@ -179,7 +179,7 @@ def agregar_documento(ecuestre_id):
     if(existe):
         flash(f"El archivo ya se encuentra almacenado")
         return subir_archivo_form(ecuestre_id)
-    nuevo_nombre_archivo = f"{ecuestre_id}_{file.filename}"
+    nuevo_nombre_archivo = f"ecuestre_{ecuestre_id}_{file.filename}"
     client = current_app.storage.client
     client.put_object("grupo15", nuevo_nombre_archivo, file, size, content_type=file.content_type)    
     ecuestre.crear_documento(
@@ -197,7 +197,7 @@ def agregar_documento(ecuestre_id):
 @login_required
 @check("ecuestre_show")
 def mostrar_archivo(ecuestre_id, file_name):
-    nuevo_nombre_archivo = f"{ecuestre_id}_{file_name}"
+    nuevo_nombre_archivo = f"ecuestre_{ecuestre_id}_{file_name}"
     expiration = timedelta(seconds=120)
     client = current_app.storage.client
     url =  client.presigned_get_object("grupo15", nuevo_nombre_archivo, expires=expiration) # Esto sirve para archivos sensibles como documento de jya.
@@ -210,7 +210,7 @@ def eliminar_documento(ecuestre_id, documento_id):
     documento = ecuestre.traerdocumentoporid(documento_id)
     if not documento.is_enlace:
         client = current_app.storage.client
-        nuevo_nombre_archivo = f"{ecuestre_id}_{documento.titulo}"
+        nuevo_nombre_archivo = f"ecuestre_{ecuestre_id}_{documento.titulo}"
         client.remove_object("grupo15", nuevo_nombre_archivo)
     ecuestre.eliminar_documento(documento_id)
     flash("Documento eliminado correctamente.", "success")
