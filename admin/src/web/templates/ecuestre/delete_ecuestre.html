@@ -40,12 +40,12 @@
         <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ ecuestre.fecha_nacimiento.strftime('%Y-%m-%d') }}" readonly>
     </div>
 
-    <p>¿Estás seguro de que deseas eliminar este ecuestre?</p>
+    <h3>¿Estás seguro de que deseas eliminar este ecuestre?</h3>
 
     <div class="form-actions">
         <form action="{{ url_for('ecuestre.delete_ecuestre', ecuestre_id=ecuestre.id) }}" method="POST">
-            <button type="submit" class="btn btn-danger">Confirmar</button>
+            <button type="submit" class="btn btn-delete" style="margin-right: 1em;">Confirmar</button>
         </form>
-        <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-secondary">Cancelar</a>
+        <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-back">Cancelar</a>
     </div>
 {% endblock %}

@@ -16,17 +16,18 @@
             <form method="POST" action="{{ url_for('ecuestre.agregar_enlace', ecuestre_id=ecuestre.id) }}" enctype="multipart/form-data" class="mb-3">
                 <div class="form-group">
                     <label for="nombre_asignado">Nombre del enlace:</label>
-                    <input type="text" id="nombre_asignado" name="nombre_asignado" required>
+                    <input type="text" id="nombre_asignado" name="nombre_asignado" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="url_enlace">URL del enlace:</label>
-                    <input type="url" id="url_enlace" name="url_enlace" required>
+                    <input type="url" id="url_enlace" name="url_enlace" class="form-control" required>
                 </div>
-                <input type="submit" value="Guardar">
+                <div class="form-actions">
+                    <input type="submit" value="Guardar" class="btn btn-add" style="margin-right: 1em;">
+                    <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}" class="btn btn-back">Volver al ecuestre</a>
+                </div>
             </form>
 
         </div>
     </article>
-
-    <a class="secondary" href="{{ url_for('home') }}">Volver al inicio</a>
 {% endblock %}
