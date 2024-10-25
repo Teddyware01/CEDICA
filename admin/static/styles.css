@@ -457,6 +457,13 @@ p {
     background-color: #0069d9;
 }
 
+.btn-block {
+    background-color: #fd7e14; 
+}
+
+.btn-block:hover {
+    background-color: #e76a10; 
+}
 
 .image-container {
     display: flex;
