@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}Editar documento{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <div>
+        <h1 class="text-center">Editar Documento del ecuestre</h1>
+        
+        <form method="POST" action="{{ url_for('ecuestre.editar_documento', ecuestre_id=ecuestre_id, documento_id=documento.id) }}" enctype="multipart/form-data" class="mb-3">
+            <div class="form-group">
+                <label for="nombre_asignado">Nombre del archivo:</label>
+                <input type="text" id="nombre_asignado" name="nombre_asignado"  class="form-control" value="{{documento.nombre_asignado}}" required>
+                <label for="tipo_archivo"><strong>Tipo de Archivo:</strong></label>
+                <select id="tipo_archivo" name="tipo_archivo" class="form-control">
+                    <option value="Ficha general">Ficha general</option>
+                    <option value="Planificación de Entrenamiento">Planificación de Entrenamiento</option>
+                    <option value="Informe de Evolución">Informe de Evolución</option>
+                    <option value="Carga de Imágenes">Carga de Imágenes</option>
+                    <option value="Registro veterinario">Registro veterinario</option>
+                </select>
+            </div>
+
+            
+            <fieldset>
+                <label for="titulo_documento"><strong> Nombre del archivo: </strong>{{ documento.titulo }}</label>
+            </fieldset>
+            <input type="submit" value="Guardar">
+        </form>
+    </div>
+{% endblock %}

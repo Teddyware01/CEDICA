@@ -24,8 +24,10 @@
             <!-- Formulario de búsqueda y ordenamiento -->
             <form method="POST" action="{{ url_for('ecuestre.agregar_documento',  ecuestre_id=ecuestre.id) }}" enctype="multipart/form-data" class="mb-3">
                 <div class="form-group">
+                    <label for="nombre_asignado">Nombre del archivo:</label>
+                    <input type="text" id="nombre_asignado" name="nombre_asignado" required>
                     <label for="tipo_archivo">Tipo de Archivo:</label>
-                    <select id="tipo_archivo" name="tipo_archivo" class="form-control">
+                    <select id="tipo_archivo" name="tipo_archivo" class="form-control" required>
                         <option value="Ficha general">Ficha general</option>
                         <option value="Planificación de Entrenamiento">Planificación de Entrenamiento</option>
                         <option value="Informe de Evolución">Informe de Evolución</option>
@@ -35,7 +37,7 @@
                 </div>
                 <fieldset>
                     <label>
-                        <input type="file" name="documento">
+                        <input type="file" name="documento" required>
                     </label>
                 </fieldset>
                 <input type="submit" value="Guardar">
