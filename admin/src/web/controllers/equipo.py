@@ -311,9 +311,10 @@ def agregar_documento(empleado_id):
             flash("El archivo excede el tamaño máximo permitido de 5 MB.", "error")
             return redirect(url_for("equipo.subir_archivo_form", empleado_id=empleado_id))
 
+        nuevo_nombre_archivo = f"empleado_{empleado_id}_{file.filename}"
         client = current_app.storage.client
         size = fstat(file.fileno()).st_size
-        client.put_object("grupo15", file.filename, file, size, content_type=file.content_type)
+        client.put_object("grupo15", nuevo_nombre_archivo, file, size, content_type=file.content_type)
         equipo.crear_documento(
             nombre_asignado=request.form["nombre_asignado"],
             titulo=file.filename,
@@ -356,7 +357,13 @@ def eliminar_documento_form(empleado_id, documento_id):
 @check("empleado_update")               
 @bp.post("/editar_empleado/<int:empleado_id>/documentos/<int:documento_id>/eliminar")
 def eliminar_documento(empleado_id, documento_id):
+    documento = equipo.traer_documento_por_id(documento_id)
+    if not documento.is_enlace:
+        client = current_app.storage.client
+        nuevo_nombre_archivo = f"empleado_{empleado_id}_{documento.titulo}"
+        client.remove_object("grupo15", nuevo_nombre_archivo)
     equipo.delete_documento(documento_id)
+    flash("Documento eliminado correctamente.", "success")
     return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id, tab='documentos'))
 
 
