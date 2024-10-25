@@ -467,7 +467,9 @@ def agregar_documento(jinete_id):
             return redirect(url_for("jya.add_documento_form", form=request.form, jinete_id=jinete_id))
         client = current_app.storage.client
         size = fstat(file.fileno()).st_size
-        client.put_object("grupo15", file.filename, file, size, content_type=file.content_type)
+        
+        nuevo_nombre_archivo = f"jya_{jinete_id}_{file.filename}"
+        client.put_object("grupo15", nuevo_nombre_archivo, file, size, content_type=file.content_type)
         jya.add_documento(
             titulo_documento=file.filename,
             nombre_archivo=request.form["nombre_archivo"],
@@ -501,8 +503,17 @@ def eliminar_documento_form(jinete_id, documento_id):
 @login_required
 @check("jya_destroy")
 def eliminar_documento(jinete_id, documento_id):
+    documento = jya.traer_documento_id(documento_id)
+    if not documento.is_enlace:
+        client = current_app.storage.client
+        nuevo_nombre_archivo = f"jya_{jinete_id}_{documento.titulo_documento}"
+        client.remove_object("grupo15", nuevo_nombre_archivo)
     jya.delete_documento(documento_id)
+    flash("Documento eliminado correctamente.", "success")
     return redirect(url_for("jya.view_jinete", jinete_id=jinete_id, tab='documentos'))
+
+
+
 
 # EDITAR ARCHIVO GET
 @bp.get("/editar_jinete/<int:jinete_id>/documentos/<int:documento_id>/editar")

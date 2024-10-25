@@ -11,9 +11,18 @@
     <div class="delete-confirmation">
         <h2>¿Estás seguro de que deseas eliminar este documento?</h2>
         <div class="document-details">
-            <p><strong>Nombre:</strong> {{ doc.nombre_archivo }}</p>
+            <p><strong>Nombre asignado:</strong> {{ doc.nombre_archivo }}</p>
+            {% if not doc.is_enlace %}
+                <p><strong>Nombre de archivo subido:</strong> {{ doc.titulo_documento }}</p>
+            {% endif %}
             <p><strong>Fecha de subida:</strong> {{ doc.fecha_subida_documento.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-            <p><strong>Tipo:</strong> {{ doc.tipo_documento.value }}</p>
+            <p><strong>Tipo:</strong>
+                {% if doc.is_enlace %}
+                    ENLACE
+                    {% else %}
+                    {{doc.tipo_documento.value}} 
+                    {% endif %}
+            </p>
         </div>
         <div class="form-actions">
             <form action="{{ url_for('jya.eliminar_documento', jinete_id=jinete.id, documento_id=doc.id) }}" method="POST" style="display: inline;">
