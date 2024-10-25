@@ -39,9 +39,6 @@
                             {% if is_authenticated(session) and check_permission(session,"jya_index") %}
                                 <a class="nav-link" href="{{ url_for('jya.listar_jinetes') }}">J&A</a>
                             {% endif %}
-                            {% if is_authenticated(session) and check_permission(session,"equipo_index") %}
-                                <a class="nav-link" href="{{ url_for('equipo.listar_empleados') }}">Equipo</a>
-                            {% endif %}
                             {% if is_authenticated(session) and check_permission(session,"pago_index") %}
                             <a class="nav-link" href="{{ url_for('pagos.listar_pagos') }}">Pagos</a>
                             {% endif %}

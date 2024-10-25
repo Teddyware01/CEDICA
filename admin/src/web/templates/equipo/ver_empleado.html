@@ -105,7 +105,7 @@
                                     {% if doc.is_enlace %}
                                     <a href="{{doc.url_enlace}}" class="btn btn-add">Abrir enlace</a>
                                     {% else %}
-                                    <a href="{{ url_for('equipo.descargar_archivo',empleado_id=empleado.id, file_name=doc.titulo) }}">Descargar</a>
+                                    <a href="{{ url_for('equipo.descargar_archivo',empleado_id=empleado.id, file_name=doc.titulo) }}" class="btn btn-add">Descargar</a>
                                     {% endif %}
                                     {% if doc.is_enlace %}
                                         <a href="{{ url_for('equipo.edit_enlace_form', empleado_id=empleado.id, documento_id=doc.id) }}" class="btn btn-edit">Editar</a>
