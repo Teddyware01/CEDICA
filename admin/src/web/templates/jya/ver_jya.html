@@ -181,7 +181,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Título</th>
+                        <th>Nombre</th>
                         <th>Fecha subida</th>
                         <th>Tipo</th>
                         <th>Acciones</th>
@@ -190,19 +190,25 @@
                 <tbody>
                     {% for doc in documentos %}
                         <tr>
-                            <td>{{ doc.titulo_documento }}</td>
+                            <td>{{ doc.nombre_archivo }}</td>
                             <td>{{ doc.fecha_subida_documento.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                            <td>{{ doc.tipo_documento.value }}</td>
+                            <td>{% if doc.is_enlace %}
+                                ENLACE
+                              {% else %}
+                              {{doc.tipo_documento.value}} 
+                              {% endif %} </td>
                             <td>
-                                <a href="{{ url_for('jya.mostrar_archivo', jinete_id=jinete.id, file_name=doc.nombre_archivo) }}" class="btn btn-add" download>
-                                    Descargar
-                                </a>
-                                <a href="{{ url_for('jya.edit_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-edit">
-                                    Modificar
-                                </a>
-                                <a href="{{ url_for('jya.eliminar_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-delete">
-                                    Eliminar
-                                </a>
+                                {% if doc.is_enlace %}
+                                    <a href="{{doc.url_enlace}}" class="btn btn-add">Abrir enlace</a>
+                                    {% else %}
+                                    <a href="{{ url_for('jya.mostrar_archivo', jinete_id=jinete.id, file_name=doc.nombre_archivo) }}" class="btn btn-add" download>Descargar</a>
+                                {% endif %}
+                                {% if doc.is_enlace %}
+                                    <a href="{{ url_for('jya.edit_enlace_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-edit" >Editar</a>
+                                    {% else %}
+                                    <a href="{{ url_for('jya.edit_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-edit" >Editar</a>
+                                {% endif %}
+                                <a href="{{ url_for('jya.eliminar_documento_form', jinete_id=jinete.id, documento_id=doc.id) }}" class="btn btn-delete">Eliminar</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -243,7 +249,7 @@
 
         <!-- Botones de acción solo para Documentos -->
         <div class="form-actions">
-            <a href="#" class="btn btn-enlace" style="margin-right: 1em;">+ Enlace</a>
+            <a href="{{ url_for('jya.subir_enlace_form', jinete_id=jinete.id) }}" class="btn btn-enlace">+ Enlace</a>
             <a href="{{ url_for('jya.add_documento_form', jinete_id=jinete.id) }}" class="btn btn-subir">↑ Subir</a>
         </div>
     </div>

@@ -17,8 +17,8 @@
             <form method="POST" action="{{ url_for('jya.agregar_documento', jinete_id=jinete.id) }}" enctype="multipart/form-data" class="mb-3">
                 <div class="form-group">
 
-                    <label for="titulo_documento">Titulo del archivo:</label>
-                    <input type="text" id="titulo_documento" name="titulo_documento" class="form-control" required>
+                    <label for="nombre_archivo">Nombre a asignar:</label>
+                    <input type="text" id="nombre_archivo" name="nombre_archivo" class="form-control" required>
                     <label for="tipo_documento">Tipo de Archivo:</label>
                     <select id="tipo_documento" name="tipo_documento" class="form-control">
                         <option value="evaluacion">Evaluación</option>

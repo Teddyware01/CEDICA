@@ -469,8 +469,8 @@ def agregar_documento(jinete_id):
         size = fstat(file.fileno()).st_size
         client.put_object("grupo15", file.filename, file, size, content_type=file.content_type)
         jya.add_documento(
-            nombre_archivo=file.filename,
-            titulo_documento=request.form["titulo_documento"],
+            titulo_documento=file.filename,
+            nombre_archivo=request.form["nombre_archivo"],
             tipo_documento=request.form["tipo_documento"], 
             jinete_id=jinete_id
         ) 
@@ -521,7 +521,7 @@ def editar_documento(jinete_id, documento_id):
     documento = jya.traer_documento_id(documento_id)
 
     tipo_documento = request.form.get("tipo_documento")
-    titulo_documento = request.form.get("titulo_documento")
+    nombre_archivo = request.form.get("nombre_archivo")
 
     if not tipo_documento:
         flash("Debe ingresar un titulo de documento.", "error")
@@ -531,6 +531,60 @@ def editar_documento(jinete_id, documento_id):
         flash("Debe seleccionar un tipo de archivo.", "error")
         return redirect(url_for("jya.edit_documento_form", form=request.form, documento_id=documento_id))
     
-    jya.edit_documento(jinete_id=jinete_id, tipo_documento=tipo_documento, titulo_documento=titulo_documento)
+    jya.edit_documento(jinete_id=jinete_id, tipo_documento=tipo_documento, nombre_archivo=nombre_archivo)
+    flash("Documento editado exitosamente", "success")
+    return redirect(url_for("jya.view_jinete", jinete_id=jinete_id))
+
+
+# ENLACES
+# agregar enlace GET
+@login_required
+@check("jya_update")
+@bp.get("/editar_jinete/<int:jinete_id>/enlace")
+def subir_enlace_form(jinete_id):    
+    jinete = jya.traer_jinete(jinete_id)
+
+    return render_template("jya/add_enlace.html", jinete=jinete)
+
+# agregar enlace POST
+@login_required
+@check("jya_update")
+@bp.post("/editar_jinete/<int:jinete_id>/enlace")
+def agregar_enlace(jinete_id):
+    jya.add_documento_tipo_enlace(
+        jinete_id=jinete_id,
+        url_enlace = request.form["url_enlace"],
+        nombre_archivo=request.form["nombre_asignado"]
+    ) 
+    return redirect(url_for("jya.view_jinete", jinete_id=jinete_id))
+
+
+
+# EDITAR enlace GET
+@bp.get("/editar_jinete/<int:jinete_id>/enlace/<int:documento_id>/editar")
+@login_required
+@check("jya_update")
+def edit_enlace_form(jinete_id, documento_id):
+    documento = jya.get_documento(documento_id)
+    return render_template("jya/edit_enlace.html", documento=documento, jinete_id=jinete_id)
+
+
+# EDITAR enlace POST
+@bp.post("/editar_jinete/<int:jinete_id>/enlace/<int:documento_id>/editar")
+@login_required
+@check("jya_update")
+def editar_enlace(jinete_id, documento_id):
+    nombre_archivo = request.form.get("nombre_asignado")
+    url_enlace = request.form.get("url_enlace")
+
+    if not nombre_archivo:
+        flash("Debe ingresar un titulo de documento.", "error")
+        return redirect(url_for("jya.edit_enlace_form", form=request.form, documento_id=documento_id))
+    
+    if not url_enlace:
+        flash("Debe ingresar una url para el enlace.", "error")
+        return redirect(url_for("jya.edit_enlace_form", form=request.form, documento_id=documento_id))
+    
+    jya.edit_documento(documento_id=documento_id,jinete_id=jinete_id, nombre_archivo=nombre_archivo, url_enlace=url_enlace)
     flash("Documento editado exitosamente", "success")
     return redirect(url_for("jya.view_jinete", jinete_id=jinete_id))
