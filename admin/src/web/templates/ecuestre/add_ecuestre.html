@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="text-center">Agregar Nuevo Ecuestre</h1>
+    <h1 class="text-center">Agregar ecuestre</h1>
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
             <ul class="flashes">
@@ -27,73 +27,77 @@
         {% endif %}
     {% endwith %}
     <form action="{{ url_for('ecuestre.add_ecuestre') }}" method="POST" class="ecuestre-form">
-        <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" required>
-        </div>
+        <div class="caja">
+            <h3>Datos del ecuestre:</h3>
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
 
-        <div class="form-group">
-            <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
-        </div>
+            <div class="form-group">
+                <label for="fecha_nacimiento">Fecha de nacimiento:</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+            </div>
 
-        <div class="form-group">
-            <label for="sexo">Sexo</label>
-            <select id="sexo" name="sexo" required>
-                <option value="MACHO">MACHO</option>
-                <option value="HEMBRA">HEMBRA</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="sexo">Sexo:</label>
+                <select id="sexo" name="sexo" required>
+                    <option value="MACHO">MACHO</option>
+                    <option value="HEMBRA">HEMBRA</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="raza">Raza</label>
-            <input type="text" id="raza" name="raza" required>
-        </div>
+            <div class="form-group">
+                <label for="raza">Raza:</label>
+                <input type="text" id="raza" name="raza" required>
+            </div>
 
-        <div class="form-group">
-            <label for="pelaje">Pelaje</label>
-            <input type="text" id="pelaje" name="pelaje" required>
-        </div>
+            <div class="form-group">
+                <label for="pelaje">Pelaje:</label>
+                <input type="text" id="pelaje" name="pelaje" required>
+            </div>
 
-        <div class="form-group">
-            <label for="fecha_ingreso">Fecha de Ingreso</label>
-            <input type="date" id="fecha_ingreso" name="fecha_ingreso" required>
-        </div>
+            <div class="form-group">
+                <label for="fecha_ingreso">Fecha de ingreso:</label>
+                <input type="date" id="fecha_ingreso" name="fecha_ingreso" required>
+            </div>
 
-        <div class="form-group">
-            <label for="sede">Sede</label>
-            <select id="sede" name="sede" required>
-                <option value="1">CASJ</option>
-                <option value="2">HLP</option>
-                <option value="3">OTRO</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="sede">Sede:</label>
+                <select id="sede" name="sede" required>
+                    <option value="1">CASJ</option>
+                    <option value="2">HLP</option>
+                    <option value="3">OTRO</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="tipoJyA">Tipo de JyA Asignados:</label>
-            <select id="tipoJyA" name="tipoJyA" required>
-                <option value="HIPOTERAPIA">Hipoterapia</option>
-                <option value="MONTA_TERAPEUTICA">Monta Terapéutica</option>
-                <option value="DEPORTE_EQUESTRE_ADAPTADO">Deporte Ecuestre Adaptado</option>
-                <option value="ACTIVIDADES_RECREATIVAS">Actividades Recreativas</option>
-                <option value="EQUITACION">Equitación</option>
-            </select>
+            <div class="form-group">
+                <label for="tipoJyA">Tipo de JyA Asignados:</label>
+                <select id="tipoJyA" name="tipoJyA" required>
+                    <option value="HIPOTERAPIA">Hipoterapia</option>
+                    <option value="MONTA_TERAPEUTICA">Monta Terapéutica</option>
+                    <option value="DEPORTE_EQUESTRE_ADAPTADO">Deporte Ecuestre Adaptado</option>
+                    <option value="ACTIVIDADES_RECREATIVAS">Actividades Recreativas</option>
+                    <option value="EQUITACION">Equitación</option>
+                </select>
+            </div>
         </div>
-        
-        <h3>Seleccionar Entrenadores y Conductores</h3>
-        <div class="form-group">
-            {% for empleado in empleados %}
-                <div>
-                    <input type="checkbox" id="empleado_{{ empleado.id }}" name="entrenadores_asignados" value="{{ empleado.id }}"
-                        {% if empleado.id in entrenadores|map(attribute='id') %}checked{% endif %}>
-                    <label for="empleado_{{ empleado.id }}">{{ empleado.nombre }} - DNI: {{ empleado.dni }}</label>
-                </div>
-            {% endfor %}
+        <div class="caja">
+            <h3>Seleccionar Entrenadores y Conductores:</h3>
+            <div class="form-group">
+                {% for empleado in empleados %}
+                    <div>
+                        <input type="checkbox" id="empleado_{{ empleado.id }}" name="entrenadores_asignados" value="{{ empleado.id }}"
+                            {% if empleado.id in entrenadores|map(attribute='id') %}checked{% endif %}>
+                        <label for="empleado_{{ empleado.id }}">{{ empleado.nombre }} - DNI: {{ empleado.dni }}</label>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-submit">Agregar Ecuestre</button>
-            <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-cancel">Cancelar</a>
+            <button type="submit" class="btn btn-add" style="margin-right: 1em;">Guardar</button>
+            <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-back">Cancelar</a>
         </div>
     </form>
 

@@ -6,10 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    
+    <script script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    
     <title>{% block title %}{% endblock %} - CEDICA</title>
     {% endblock %}
 </head>
 <body>    
+    
     <!-- Barra de navegación superior -->
     <header>
         <nav class="navbar-class navbar-expand-lg">
@@ -38,9 +43,6 @@
                             {% endif %}
                             {% if is_authenticated(session) and check_permission(session,"jya_index") %}
                                 <a class="nav-link" href="{{ url_for('jya.listar_jinetes') }}">J&A</a>
-                            {% endif %}
-                            {% if is_authenticated(session) and check_permission(session,"equipo_index") %}
-                                <a class="nav-link" href="{{ url_for('equipo.listar_empleados') }}">Equipo</a>
                             {% endif %}
                             {% if is_authenticated(session) and check_permission(session,"pago_index") %}
                             <a class="nav-link" href="{{ url_for('pagos.listar_pagos') }}">Pagos</a>

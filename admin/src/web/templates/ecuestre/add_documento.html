@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %} Editar jinete {% endblock %}
+{% block title %} Subir documento {% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -25,7 +25,7 @@
             <form method="POST" action="{{ url_for('ecuestre.agregar_documento',  ecuestre_id=ecuestre.id) }}" enctype="multipart/form-data" class="mb-3">
                 <div class="form-group">
                     <label for="nombre_asignado">Nombre del archivo:</label>
-                    <input type="text" id="nombre_asignado" name="nombre_asignado" required>
+                    <input type="text" id="nombre_asignado" name="nombre_asignado" class="form-control" required>
                     <label for="tipo_archivo">Tipo de Archivo:</label>
                     <select id="tipo_archivo" name="tipo_archivo" class="form-control" required>
                         <option value="Ficha general">Ficha general</option>
@@ -40,13 +40,12 @@
                         <input type="file" name="documento" required>
                     </label>
                 </fieldset>
-                <input type="submit" value="Guardar">
+                <div class="form-actions">
+                    <input type="submit" value="Guardar" class="btn btn-add" style="margin-right: 1em;">
+                    <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}" class="btn btn-back">Volver al ecuestre</a>
+                </div>
             </form>
-            <form method="GET" action="{{ url_for('ecuestre.ver_ecuestre',  ecuestre_id=ecuestre.id) }}"  class="mb-3">
-                <input type="submit" value="Cancelar">
-            </form>
+
         </div>
     </article>
-
-    <a class="secondary" href="{{ url_for('home') }}">Volver al inicio</a>
 {% endblock %}

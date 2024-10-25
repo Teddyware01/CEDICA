@@ -21,7 +21,10 @@
                 <label for="url_enlace">URL del enlace:</label>
                 <input type="url" id="url_enlace" name="url_enlace" value="{{documento.url_enlace}}" required>
             </div>
-            <input type="submit" value="Guardar">
+            <div class="form-actions">
+                <input type="submit" value="Guardar" class="btn btn-add" style="margin-right: 1em;">
+                <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre_id) }}" class="btn btn-back">Volver</a>
+            </div>
         </form>
     </div>
 {% endblock %}

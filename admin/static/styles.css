@@ -164,7 +164,7 @@ p {
 }
 
 .caja {
-    background-color: #e6f7ff; 
+    background-color: #b3e0f5; 
     border: 1px solid #b3daff; 
     border-radius: 10px; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
@@ -457,6 +457,13 @@ p {
     background-color: #0069d9;
 }
 
+.btn-block {
+    background-color: #fd7e14; 
+}
+
+.btn-block:hover {
+    background-color: #e76a10; 
+}
 
 .image-container {
     display: flex;

@@ -25,10 +25,10 @@
             </p>
         </div>
         <div class="form-actions">
-            <form action="{{ url_for('ecuestre.eliminar_documento', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" method="POST" style="display: inline;">
-                <button type="submit" class="btn btn-danger">Confirmar</button>
+            <form action="{{ url_for('ecuestre.eliminar_documento', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" method="POST" style="display: inline; margin-right: 1em;">
+                <button type="submit" class="btn btn-delete">Confirmar</button>
             </form>
-            <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id, tab='documentos') }}" class="btn btn-secondary">Cancelar</a>
+            <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id, tab='documentos') }}" class="btn btn-back">Cancelar</a>
         </div>
     </div>
 {% endblock %}

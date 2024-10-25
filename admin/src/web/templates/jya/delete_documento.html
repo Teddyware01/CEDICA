@@ -25,7 +25,7 @@
             </p>
         </div>
         <div class="form-actions">
-            <form action="{{ url_for('jya.eliminar_documento', jinete_id=jinete.id, documento_id=doc.id) }}" method="POST" style="display: inline;">
+            <form action="{{ url_for('jya.eliminar_documento', jinete_id=jinete.id, documento_id=doc.id) }}" method="POST" style="display: inline; margin-right: 1em;">
                 <button type="submit" class="btn btn-danger">Confirmar</button>
             </form>
             <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id, tab='documentos') }}" class="btn btn-secondary">Cancelar</a>

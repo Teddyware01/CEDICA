@@ -16,64 +16,98 @@
 
     <!-- Información general -->
     <div id="general" class="tab-content {% if active_tab == 'general' %}active{% endif %}">
-        <table class="table">
-            <tr>
-                <th>Nombre</th>
-                <td>{{ ecuestre.nombre }}</td>
-            </tr>
-            <tr>
-                <th>Fecha de Nacimiento</th>
-                <td>{{ ecuestre.fecha_nacimiento }}</td>
-            </tr>
-            <tr>
-                <th>Sexo</th>
-                <td>{{ "Macho" if ecuestre.sexo else "Hembra" }}</td>
-            </tr>
-            <tr>
-                <th>Raza</th>
-                <td>{{ ecuestre.raza }}</td>
-            </tr>
-            <tr>
-                <th>Pelaje</th>
-                <td>{{ ecuestre.pelaje }}</td>
-            </tr>
-            <tr>
-                <th>Fecha de Ingreso</th>
-                <td>{{ ecuestre.fecha_ingreso }}</td>
-            </tr>
-            <tr>
-                <th>Tipo de JyA</th>
-                <td>
-                    {% set tipo_jya_dict = {
-                        'HIPOTERAPIA': 'Hipoterapia',
-                        'MONTA_TERAPEUTICA': 'Monta Terapéutica',
-                        'DEPORTE_EQUESTRE': 'Deporte Ecuestre Adaptado',
-                        'ACTIVIDADES_RECREATIVAS': 'Actividades Recreativas',
-                        'EQUITACION': 'Equitación'
-                    } %}
-                    {{ tipo_jya_dict[ecuestre.tipoJyA] if ecuestre.tipoJyA in tipo_jya_dict else 'Desconocido' }}
-                </td>
-            </tr>
-            <tr>
-                <th>Sede</th>
-                <td>{{ sede.nombre }}</td>
-            </tr>
-            <tr>
-                <th>Entrenadores y Conductores</th>
-                <td>
-                    <ul>
-                    {% for entrenador in entrenadores %}
-                        <li>{{ entrenador.nombre }} - DNI: {{ entrenador.dni }}</li>
-                    {% endfor %}
-                    </ul>
-                </td>
-            </tr>
-        </table>
+        <div class="caja">
+            <h3>Datos del ecuestre:</h3>
+            <table class="table">
+                <tr>
+                    <th>Nombre</th>
+                    <td>{{ ecuestre.nombre }}</td>
+                </tr>
+                <tr>
+                    <th>Fecha de Nacimiento</th>
+                    <td>{{ ecuestre.fecha_nacimiento }}</td>
+                </tr>
+                <tr>
+                    <th>Sexo</th>
+                    <td>{{ "Macho" if ecuestre.sexo else "Hembra" }}</td>
+                </tr>
+                <tr>
+                    <th>Raza</th>
+                    <td>{{ ecuestre.raza }}</td>
+                </tr>
+                <tr>
+                    <th>Pelaje</th>
+                    <td>{{ ecuestre.pelaje }}</td>
+                </tr>
+                <tr>
+                    <th>Fecha de Ingreso</th>
+                    <td>{{ ecuestre.fecha_ingreso }}</td>
+                </tr>
+                <tr>
+                    <th>Tipo de JyA</th>
+                    <td>
+                        {% set tipo_jya_dict = {
+                            'HIPOTERAPIA': 'Hipoterapia',
+                            'MONTA_TERAPEUTICA': 'Monta Terapéutica',
+                            'DEPORTE_EQUESTRE': 'Deporte Ecuestre Adaptado',
+                            'ACTIVIDADES_RECREATIVAS': 'Actividades Recreativas',
+                            'EQUITACION': 'Equitación'
+                        } %}
+                        {{ tipo_jya_dict[ecuestre.tipoJyA] if ecuestre.tipoJyA in tipo_jya_dict else 'Desconocido' }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Sede</th>
+                    <td>{{ sede.nombre }}</td>
+                </tr>
+                <tr>
+                    <th>Entrenadores y Conductores</th>
+                    <td>
+                        <ul>
+                        {% for entrenador in entrenadores %}
+                            <li>{{ entrenador.nombre }} - DNI: {{ entrenador.dni }}</li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="form-actions">
+            <a href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-edit" style="margin-right: 1em;">Editar ecuestre</a>
+            <a href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-delete" style="margin-right: 1em;">Eliminar ecuestre</a>
+            <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-back">Lista de ecuestres</a>
+        </div>
     </div>
 
     <!-- Documentos -->
     <div id="documentos" class="tab-content {% if active_tab == 'documentos' %}active{% endif %}">
         <!-- Lista de documentos -->
+        <form method="GET" action="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}" class="mb-3">
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <input type="hidden" name="tab" value="documentos">
+                    <label for="sort_by">Ordenar por:</label>
+                    <select name="sort_by" id="sort_by" class="form-control">
+                        <option value="titulo_asc">Titulo (Ascendente)</option>
+                        <option value="titulo_desc">Titulo (Descendente)</option>
+                        <option value="fecha_asc">Fecha de subida (Ascendente)</option>
+                        <option value="fecha_desc">Fecha de subida (Descendente)</option>
+                    </select>
+                </div>
+                <div class="form-group col-6">
+                    <label for="sort_by">Buscar:</label>
+                    <input type="text" id="search" name="search" placeholder="Título o tipo" class="form-control" value="{{ request.args.get('search', '') }}">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <button type="submit" class="btn btn-sort">Ordenar</button>
+                </div>
+                <div class="form-group col-6">
+                    <button type="submit" class="btn btn-sort">Buscar</button>
+                </div>
+            </div>
+        </form>
         <h2>Documentos:</h2>
         {% if documentos %}
             <table class="table">
@@ -97,26 +131,67 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if doc.is_enlace %}
-                                <a href="{{doc.url_enlace}}" target="_blank">Abrir enlace</a>
-                                {% else %}
-                                <a href="{{ url_for('ecuestre.mostrar_archivo', ecuestre_id=ecuestre.id, file_name=doc.titulo) }}" class="btn btn-primary" download>Descargar</a>
-                                {% endif %}
-                                {% if doc.is_enlace %}
-                                    <a href="{{ url_for('ecuestre.edit_enlace_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" >Editar</a>
-                                {% else %}
-                                    <a href="{{ url_for('ecuestre.edit_documento_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" >Editar</a>
-                                {% endif %}
-                                <a href="{{ url_for('ecuestre.eliminar_documento_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" >Eliminar</a>
+                                <div class="btn-group d-none d-lg-block">
+                                    {% if doc.is_enlace %}
+                                        <a href="{{doc.url_enlace}}" class="btn btn-add" target="_blank">Abrir enlace</a>
+                                    {% else %}
+                                        <a href="{{ url_for('ecuestre.mostrar_archivo', ecuestre_id=ecuestre.id, file_name=doc.titulo) }}" class="btn btn-add" download>Descargar</a>
+                                    {% endif %}
+                                    {% if doc.is_enlace %}
+                                        <a href="{{ url_for('ecuestre.edit_enlace_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" class="btn btn-edit">Editar</a>
+                                    {% else %}
+                                        <a href="{{ url_for('ecuestre.edit_documento_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" class="btn btn-edit">Editar</a>
+                                    {% endif %}
+                                    <a href="{{ url_for('ecuestre.eliminar_documento_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" class="btn btn-delete">Eliminar</a>
+                                </div>
+                                <div class="dropdown action-dropdown d-block d-lg-none">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ ecuestre.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Acciones
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ ecuestre.id }}">
+                                        {% if doc.is_enlace %}
+                                            <a class="dropdown-item" href="{{doc.url_enlace}}">Abrir enlace</a>
+                                        {% else %}
+                                            <a class="dropdown-item" href="{{ url_for('ecuestre.mostrar_archivo', ecuestre_id=ecuestre.id, file_name=doc.titulo) }}" download>Descargar</a>
+                                        {% endif %}
+                                        {% if doc.is_enlace %}
+                                            <a class="dropdown-item" href="{{ url_for('ecuestre.edit_enlace_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}">Editar</a>    
+                                        {% else %}
+                                            <a class="dropdown-item" href="{{ url_for('ecuestre.edit_documento_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}">Editar</a>
+                                        {% endif %}
+                                        <a class="dropdown-item" href="{{ url_for('ecuestre.eliminar_documento_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" class="btn btn-delete">Eliminar</a>
+                                    </div>
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var actionButtons = document.querySelectorAll('.action-dropdown .dropdown-toggle');
+                        var actionMenus = document.querySelectorAll('.action-dropdown .dropdown-menu');
+                        actionButtons.forEach(function(button, index) {
+                            button.addEventListener('click', function(event) {
+                                event.stopPropagation();
+                                var currentMenu = actionMenus[index];
+                                currentMenu.style.display = currentMenu.style.display === 'block' ? 'none' : 'block';
+                            });
+                        });
+                        window.onclick = function(event) {
+                            if (!event.target.matches('.dropdown-toggle')) {
+                                actionMenus.forEach(function(menu) {
+                                    if (menu.style.display === 'block') {
+                                        menu.style.display = 'none';
+                                    }
+                                });
+                            }
+                        };
+                    });
+                </script>
             </table>
             
             <!-- Paginación -->
             <nav aria-label="Page navigation">
-                <ul class="pagination">
+                <ul class="pagination justify-content-center">
                     {% if pagination.has_prev %}
                         <li class="page-item">
                             <a class="page-link" href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id, page=pagination.prev_num, tab='documentos') }}" aria-label="Anterior">
@@ -148,13 +223,9 @@
         
         <!-- Botones de acción en Documentos -->
         <div class="form-actions">
-            <a href="{{ url_for('ecuestre.subir_enlace_form', ecuestre_id=ecuestre.id) }}" class="btn btn-enlace">+ Enlace</a>
+            <a href="{{ url_for('ecuestre.subir_enlace_form', ecuestre_id=ecuestre.id) }}" class="btn btn-enlace" style="margin-right: 1em;">+ Enlace</a>
             <a href="{{ url_for('ecuestre.subir_archivo_form', ecuestre_id=ecuestre.id) }}" class="btn btn-subir">↑ Subir</a>
         </div>
-    </div>
-
-    <div class="actions">
-        <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-back">Volver al Listado</a>
     </div>
 
     <script>
