@@ -297,7 +297,7 @@ def agregar_enlace(ecuestre_id):
 
 
 # EDITAR enlace GET
-@bp.get("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/editar")
+@bp.get("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/editar_enlace")
 @login_required
 @check("ecuestre_update")
 def edit_enlace_form(ecuestre_id, documento_id):
@@ -305,7 +305,7 @@ def edit_enlace_form(ecuestre_id, documento_id):
     return render_template("ecuestre/edit_enlace.html", documento=documento, ecuestre_id=ecuestre_id)
 
 # EDITAR enlace POST
-@bp.post("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/editar")
+@bp.post("/ecuestre/<int:ecuestre_id>/documento/<int:documento_id>/editar_enlace")
 @login_required
 @check("ecuestre_update")
 def editar_enlace(ecuestre_id, documento_id):
