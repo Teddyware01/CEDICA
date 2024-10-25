@@ -97,3 +97,12 @@ def buscar_cobros(
 
 def obtener_todos(query):
     return query
+
+def guardar_cobros_seeds(cobro1, cobro2, cobro3, cobro4, cobro5):
+    db.session.add(cobro1)
+    db.session.add(cobro2)
+    db.session.add(cobro3)
+    db.session.add(cobro4)
+    db.session.add(cobro5)
+
+    db.session.commit()

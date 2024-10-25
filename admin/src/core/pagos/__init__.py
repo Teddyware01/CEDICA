@@ -40,3 +40,15 @@ def buscar_pagos(tipo_pago, fecha_inicio, fecha_fin):
         query = query.filter(Pagos.fecha_pago.between(fecha_inicio, fecha_fin))
 
     return query
+
+def guardar_pagos_seeds (pagos_datos):
+    for pago in pagos_datos:
+        nuevo_pago = Pagos(
+            beneficiario=pago["beneficiario"],
+            monto=pago["monto"],
+            fecha_pago=pago["fecha_pago"],
+            tipo_pago=pago["tipo_pago"],
+            descripcion=pago["descripcion"],
+        )
+        db.session.add(nuevo_pago)
+    db.session.commit()
