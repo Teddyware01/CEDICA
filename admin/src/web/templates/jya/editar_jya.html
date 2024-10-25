@@ -13,127 +13,170 @@
         <h1 class="text-center">Editar Jinete</h1>
         
         <form action="{{ url_for('jya.editar_jinete', jinete_id=jinete.id) }}" method="POST">
-            {{ form.hidden_tag() }}
             
+            <div class="caja">
             <h2><strong> DATOS PERSONALES DEL JINETE O AMAZONA </strong></h2>
+            <div class="form-group">
+                <label for="nombre">Nombre/s:</label>
+                <input type="text" id="nombre" name="nombre" value="{{ jinete.nombre }}" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="apellido">Apellido/s:</label>
+                <input type="text" id="apellido" name="apellido" value="{{ jinete.apellido }}" required>
+            </div>
+
+            
+            <div class="form-group">
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" name="dni" value="{{ jinete.dni }}" required>
+            </div>
+
+            
+            <div class="form-group">
+                <label for="edad">Edad:</label>
+                <input type="edad" id="edad" name="edad" value="{{ jinete.edad }}" required>
+            </div>
+
                 
-            <div>
-                <label for="nombre" class="form-element">Nombre/s:</label>
-                {{ form.nombre }}
+            <div class="form-group">
+                <label for="fecha_nacimiento">Fecha nacimiento:</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ fecha_nacimiento }}" required>
             </div>
-            
-            <div>
-                <label for="apellido" class="form-element">Apellido/s:</label>
-                {{ form.apellido }}
-            </div>
-    
-            <div>
-                <label for="dni" class="form-element">DNI:</label>
-                {{ form.dni }}
-            </div>
-            
-            <div>
-                <label for="edad" class="form-element">Edad:</label>
-                {{ form.edad }}
-            </div>
-    
-            <div>
-                <label for="fecha_nacimiento" class="form-element">Fecha de Nacimiento:</label>
-                {{ form.fecha_nacimiento }}
-            </div>
-            
+
+
             <div><strong> Lugar de nacimiento: </strong></div>
 
-            <div>
-                <label for="provincia_nacimiento" class="form-element">Provincia:</label>
-                {{ form.provincia_nacimiento }}
-            </div>
-
-            <div>
-                <label for="localidad_nacimiento" class="form-element">Localidad:</label>
-                {{ form.localidad_nacimiento }}
-            </div>
-
-    
-            <div><strong> Domicilio actual: </strong></div>
-            <div>
-                <label for="domicilio_calle" class="form-element">Calle:</label>
-                {{ form.domicilio_calle }}
-            </div>
-            
-            <div>
-                <label for="domicilio_numero" class="form-element">Numero:</label>
-                {{ form.domicilio_numero }}
-            </div>
-            
-            <div>
-                <label for="domicilio_departamento" class="form-element">Departamento:</label>
-                {{ form.domicilio_departamento }}
-            </div>
-            
-            <div>
-                <label for="domicilio_piso" class="form-element">Piso:</label>
-                {{ form.domicilio_piso }}
-            </div>
-            
-            <div>
-                <label for="domicilio_provincia" class="form-element">Provincia:</label>
-                {{ form.domicilio_provincia }}
-            </div>
-            
-            <div>
-                <label for="domicilio_localidad" class="form-element">Localidad:</label>
-                {{ form.domicilio_localidad }}
-            </div>
-    
-            <div>
-                <label for="telefono" class="form-element">Teléfono actual:</label>
-                {{ form.telefono }}
-            </div>
-    
-            <div>
-                <label for="contacto_emergencia_nombre" class="form-element">Nombre contacto de emergencia:</label>
-                {{ form.contacto_emergencia_nombre }}
-            </div>
-            
-            <div>
-                <label for="contacto_emergencia_apellido" class="form-element">Apellido contacto de emergencia:</label>
-                {{ form.contacto_emergencia_apellido }}
-            </div>
-            
-            <div>
-                <label for="contacto_emergencia_telefono" class="form-element">Teléfono contacto de Emergencia:</label>
-                {{ form.contacto_emergencia_telefono }}
-            </div>
-
-            <!-- aca modifico -->
+                
             <div class="form-group">
-                {{ form.estado_pago.label(class="form-label") }}
-                {{ form.estado_pago(class="form-control") }}
+                <label for="provincia_nacimiento">Provincia de nacimiento:</label>
+                <select id="provincia_nacimiento" name="provincia_nacimiento" value="{{jinete.provincia_nacimiento.id}}" required>
+                    {% for prov in provincias %}
+                        <option value="{{prov.id}}">{{prov.nombre}}</option>
+                    {% endfor %}
+
+                </select>
             </div>
-            <!-- aca modifico -->        
-        
+
+                
+            <div class="form-group">
+                <label for="localidad_nacimiento">Localidad de nacimiento:</label>
+                <select id="localidad_nacimiento" name="localidad_nacimiento" value="{{jinete.localidad_nacimiento.id}}" required>
+                    {% for loc in localidades %}
+                        <option value="{{loc.id}}">{{loc.nombre}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+            <div><strong> Domicilio actual: </strong></div>
+
+            <div class="form-group">
+                <label for="domicilio.calle">Calle:</label>
+                <input type="text" id="domicilio.calle" name="domicilio.calle" value="{{ jinete.domicilio.calle }}" required>
+            </div>
+
+            
+            <div class="form-group">
+                <label for="domicilio.numero">Numero:</label>
+                <input type="text" id="domicilio.numero" name="domicilio.numero" value="{{ jinete.domicilio.numero }}" required>
+            </div>
+
+            
+            <div class="form-group">
+                <label for="domicilio.piso">Piso:</label>
+                <input type="text" id="domicilio.piso" name="domicilio.piso" value="{{ jinete.domicilio.piso or ''  }}" >
+            </div>
+
+            
+            <div class="form-group">
+                <label for="domicilio.departamento">Departamento:</label>
+                <input type="text" id="domicilio.departamento" name="domicilio.departamento" value="{{ jinete.domicilio.departamento or '' }}" >
+            </div>
+
+            
+            <div class="form-group">
+                <label for="domicilio.provincia">Provincia:</label>
+                <select id="domicilio.provincia" name="domicilio.provincia" value="{{jinete.domicilio.provincia.id}}" required>
+                    {% for prov in provincias %}
+                        <option value="{{prov.id}}">{{prov.nombre}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+                
+            <div class="form-group">
+                <label for="domicilio.localidad">Localidad:</label>
+                <select id="domicilio.localidad" name="domicilio.localidad" value="{{jinete.domicilio.localidad.id}}" required>
+                    {% for loc in localidades %}
+                        <option value="{{loc.id}}">{{loc.nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="telefono">Teléfono:</label>
+                <input type="telefono" id="telefono" name="telefono" value="{{ jinete.telefono }}" required>
+            </div>
+
+            <div><strong> Contacto de emergencia: </strong></div>
+            
+            <div class="form-group">
+                <label for="contacto_emergencia.nombre">Nombre:</label>
+                <input type="text" id="contacto_emergencia.nombre" name="contacto_emergencia.nombre" value="{{ jinete.contacto_emergencia.nombre }}" required>
+            </div>
+
+            
+            
+            <div class="form-group">
+                <label for="contacto_emergencia.apellido">Apellido:</label>
+                <input type="text" id="contacto_emergencia.apellido" name="contacto_emergencia.apellido" value="{{ jinete.contacto_emergencia.apellido }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="contacto_emergencia.telefono">Teléfono:</label>
+                <input type="text" id="contacto_emergencia.telefono" name="contacto_emergencia.telefono" value="{{ jinete.contacto_emergencia.telefono }}" required>
+            </div>
+            
             <div>
-                <label for="becado" class="form-element">Becado:</label>
-                <input type="radio" id="becado_si" name="becado" value="si" {{ 'checked' if form.becado.data else '' }}>
+                <label for="estado_pago" class="form-element">¿Está al día?</label>
+                <input type="radio" id="estado_pago_si" name="estado_pago" value="si" 
+                    {% if jinete.estado_pago == True %}checked{% endif %}>
+                <label for="estado_pago_si">Sí</label>
+                <input type="radio" id="estado_pago_no" name="estado_pago" value="no" 
+                    {% if jinete.estado_pago == False %}checked{% endif %}>
+                <label for="estado_pago_no">No</label>
+            </div>
+            
+            <div>
+                <label for="becado" class="form-element">Está becado:</label>
+                <input type="radio" id="becado_si" name="becado" value="si" 
+                    {% if jinete.becado == True %}checked{% endif %}>
                 <label for="becado_si">Sí</label>
-                <input type="radio" id="becado_no" name="becado" value="no" {{ 'checked' if not form.becado.data else '' }}>
+                <input type="radio" id="becado_no" name="becado" value="no" 
+                    {% if jinete.becado == False %}checked{% endif %}>
                 <label for="becado_no">No</label>
             </div>
-    
-            <div>
-                <label for="observaciones" class="form-element">observaciones:</label>
-                {{ form.observaciones_becado() }}
+
+            <div class="form-group">
+                <label for="observaciones_becado">Observaciones:</label>
+                <input type="text" id="observaciones_becado" name="observaciones_becado" value="{{ jinete.observaciones_becado }}" required>
             </div>
-    
+
+
+            
             <div>
                 <label for="certificado_discapacidad" class="form-element">
                     ¿Posee certificado<br>
                     de discapacidad?
                 </label>
-                <input type="radio" id="certificado_si" name="certificado" value="si" {{ 'checked' if form.certificado_discapacidad.data else '' }}>
+                <input type="radio" id="certificado_si" name="certificado" value="si"
+                    {% if jinete.certificado_discapacidad == True %}checked{% endif %}>
                 <label for="certificado_si">Sí</label>
-                <input type="radio" id="certificado_no" name="certificado" value="no" {{ 'checked' if not form.certificado_discapacidad.data else '' }}>
+                <input type="radio" id="certificado_no" name="certificado" value="no"
+                    {% if jinete.certificado_discapacidad == False %}checked{% endif %}>
                 <label for="certificado_no">No</label>
             </div>
     
@@ -142,8 +185,7 @@
                     const radioButtons = document.querySelectorAll('input[name="certificado"]');
                     const selectDiagnostico = document.getElementById('diagnostico');
                     const selectOtro = document.getElementById('otro');
-    
-                
+                    
                     radioButtons.forEach(radio => {
                         radio.addEventListener('change', function() {
                             // Habilita el desplegable si la opción "Sí" está seleccionada
@@ -159,47 +201,58 @@
                 });
             </script>
             
-            <div>
-                <label for="diagnostico" class="form-element">tipo diagnostico:</label>
-                {{ form.diagnostico }}
-            </div>
-    
-            <div>
-                <label for="otro" class="form-element">Si es otro indique cuál:</label>
-                {{ form.otro }}
-            </div>
-    
-                
             <div class="form-group">
-                <label for="tipos_discapacidad">Tipos de Discapacidad:</label>
-                {% for value, label in form.tipos_discapacidad.choices %}
-                <input type="checkbox" id="tipo_{{ loop.index0 }}" name="tipos_discapacidad[]"
-                    value="{{ value }}" 
-                    {% if label in form.tipos_discapacidad.data %} checked {% endif %}>
-                <label for="tipo_{{ loop.index0 }}">{{ label }}</label>
+                <label for="diagnostico">Diagnóstico:</label>
+                <select id="diagnostico" name="diagnostico" value="{{jinete.diagnostico.name}}" required>
+                    {% for diagnostico in tipos_diagnostico %}
+                    <option value="{{ diagnostico[0] }}" {% if jinete.diagnostico and jinete.diagnostico.name == diagnostico[0] %} selected {% endif %}>
+                        {{ diagnostico[1] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div>
+                <label for="otro" class="form-element">Si es otro, indique cuál:</label>
+                <input type="text" id="otro" name="otro" value="{{ jinete.otro or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de Discapacidad:</label>
+                {% for tipo in tipos_discapacidad %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="{{ tipo[0] }}" name="tipos_discapacidad[]" value="{{ tipo[0] }}"
+                            {% if tipo[0] in jinete_tipos_discapacidad_name %} checked {% endif %}>
+                        <label class="form-check-label" for="{{ tipo[0] }}">{{ tipo[1] }}</label>
+                    </div>
                 {% endfor %}
             </div>
-            
-            <label for="becado" class="form-element">Becado:</label>
-            <input type="radio" id="becado_si" name="becado" value="si" {{ 'checked' if form.becado.data else '' }}>
-
-
-            
             
 
             <div>
                 <label for="asignacion_familiar" class="form-element">¿Percibe alguna asignación familiar?</label>
-                <input type="radio" id="asignacion_si" name="asignacion" value="si" {{ 'checked' if form.asignacion_familiar.data else '' }}>
+                <input type="radio" id="asignacion_si" name="asignacion" value="si"
+                {% if jinete.asignacion_familiar == True %}checked{% endif %}>
                 <label for="asignacion_si">Sí</label>
-                <input type="radio" id="asignacion_no" name="asignacion" value="no" {{ 'checked' if not form.asignacion_familiar.data else '' }}>
+
+                <input type="radio" id="asignacion_no" name="asignacion" value="no"
+                {% if jinete.asignacion_familiar == False %}checked{% endif %}>
                 <label for="asignacion_no">No</label>
             </div>
+
     
-            <div>
-                <label for="tipo_asignacion" class="form-element">Tipo de asignación:</label>
-                {{ form.tipo_asignacion(id="tipo_asignacion") }}
+            <div class="form-group">
+                <label for="tipo_asignacion">Tipo de Asignación:</label>
+                <select id="tipo_asignacion" name="tipo_asignacion">
+                    {% for tipo in tipos_de_asignacion %}
+                    <option value="{{ tipo[0] }}" {% if tipo[0] == jinete.tipo_asignacion.name %}selected{% endif %}>
+                        <p> {{ tipo[1]}}</p>
+                    </option>
+                    {% endfor %}
+                </select>
             </div>
-    
+                
+
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const radioButtons = document.querySelectorAll('input[name="asignacion"]');
@@ -214,24 +267,36 @@
                 });
             </script>
     
+
             <div>
-                <label for="beneficiario_pension" class="form-element">¿Es beneficiario de alguna pensión?</label>
-                <input type="radio" id="pension_si" name="beneficiario_pension" value="si" {{ 'checked' if form.beneficiario_pension.data else '' }}>
+                <label for="beneficiario_pension" class="form-element" required>¿Es beneficiario de alguna pensión?</label>
+                <input type="radio" id="pension_si" name="beneficiario_pension" value="si"
+                {% if jinete.beneficiario_pension == True %}checked{% endif %}>
                 <label for="pension_si">Sí</label>
-                <input type="radio" id="pension_no" name="beneficiario_pension" value="no" {{ 'checked' if not form.beneficiario_pension.data else '' }}>
+                <input type="radio" id="pension_no" name="beneficiario_pension" value="no"
+                {% if jinete.beneficiario_pension == False %}checked{% endif %}>
                 <label for="pension_no">No</label>
             </div>
-    
-            <div>
-                <label for="pension" class="form-element">tipo pension:</label>
-                {{ form.pension(id="tipo_pension") }}
+
+            <div class="form-group">
+                <label for="pension">Pensión:</label>
+                <select id="pension" name="pension" {% if not jinete.beneficiario_pension %}disabled{% endif %}>
+                    {% for pension in tipos_pensiones %}
+                    <option value="{{ pension[0] }}" {% if pension[0] == jinete.pension.value %}selected{% endif %}>
+                        {{ pension[1] }}
+                    </option>
+                    {% endfor %}
+                </select>
             </div>
-    
+            
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const radioButtons = document.querySelectorAll('input[name="beneficiario_pension"]');
-                    const selectPension = document.getElementById('tipo_pension');
-                
+                    const selectPension = document.getElementById('pension');
+            
+                    // Inicializa el estado del select basado en la opción seleccionada
+                    selectPension.disabled = !document.getElementById('pension_si').checked;
+            
                     radioButtons.forEach(radio => {
                         radio.addEventListener('change', function() {
                             // Habilita o deshabilita el elemento según si la opción "Sí" está seleccionada
@@ -240,124 +305,315 @@
                     });
                 });
             </script>
-    
+            </div>
+
+            <div class="caja">
             <h2><strong> SITUACIÓN PREVISIONAL </strong></h2>
-    
-            <div>
-                <label for="obra_social" class="form-element">Obra Social:</label>
-                {{ form.obra_social }}
+            <div class="form-group">
+                <label for="obra_social">Obra social:</label>
+                <input type="text" id="obra_social" name="obra_social" value="{{ jinete.obra_social }}" required>
             </div>
             
-            <div>
-                <label for="nro_afiliado" class="form-element">Numero afiliado:</label>
-                {{ form.nro_afiliado }}
+            
+            <div class="form-group">
+                <label for="nro_afiliado">Nº afiliado:</label>
+                <input type="text" id="nro_afiliado" name="nro_afiliado" value="{{ jinete.nro_afiliado }}" required>
             </div>
-    
+
             <div>
                 <label for="curatela" class="form-element"> ¿Posee curatela? </label>
-                <input type="radio" id="curatela_si" name="curatela" value="si" {{ 'checked' if form.curatela.data else '' }}>
+                <input type="radio" id="curatela_si" name="curatela" value="si"
+                {% if jinete.curatela == True %}checked{% endif %}>
                 <label for="curatela_si">Sí</label>
-                <input type="radio" id="curatela_no" name="curatela" value="no" {{ 'checked' if not form.curatela.data else '' }}>
+                <input type="radio" id="curatela_no" name="curatela" value="no"
+                {% if jinete.curatela == False %}checked{% endif %}>
                 <label for="curatela_no">No</label>
             </div>
             
-            <div>
-                <label for="observaciones" class="form-element">observaciones:</label>
-                {{ form.observaciones }}
-            </div>
-    
-            <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
-    
-            <div>
-                <label for="nombre_institucion" class="form-element">Nombre de la Institución:</label>
-                {{ form.nombre_institucion }}
-            </div>
-    
-            <div>
-                <label for="telefono_institucion" class="form-element">Teléfono:</label>
-                {{ form.telefono_institucion }}
-            </div>
-    
             
-            <div>
-                <label for="institucion_direccion_calle" class="form-element">Calle:</label>
-                {{ form.institucion_direccion_calle }}
-            </div>
-            
-            <div>
-                <label for="institucion_direccion_numero" class="form-element">Numero:</label>
-                {{ form.institucion_direccion_numero }}
-            </div>
-             
-            <div>
-                <label for="institucion_direccion_departamento" class="form-element">Calle:</label>
-                {{ form.institucion_direccion_departamento }}
-            </div>
-            
-            <div>
-                <label for="institucion_direccion_piso" class="form-element">Numero:</label>
-                {{ form.institucion_direccion_piso }}
-            </div>
-            
-            <div>
-                <label for="institucion_direccion_provincia" class="form-element">Provincia:</label>
-                {{ form.institucion_direccion_provincia }}
-            </div>
-            
-            <div>
-                <label for="institucion_direccion_localidad" class="form-element">Localidad:</label>
-                {{ form.institucion_direccion_localidad }}
-            </div>
-    
-            <div>
-                <label for="grado" class="form-element">Grado / año actual:</label>
-                {{ form.grado }}
-            </div>
-    
-            <div>
-                <label for="observaciones_institucion" class="form-element">Observaciones:</label>
-                {{ form.observaciones }}
-            </div>
-    
-            <div>
-                <label for="profesionales" class="form-element">PROFESIONALES que lo ATIENDEN:</label>
-                {{ form.profesionales }}
-            </div>
-
-            <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN: </strong></h2>
-
-            <div>
-                <label for="trabajo_institucional" class="form-element">Propuesta de trabajo Institucional:</label>
-                {{ form.trabajo_institucional(id="trabajo_institucional") }}
-            </div>
-    
-            <div>
-                <label for="condicion" class="form-element">Condición:</label>
-                <input type="radio" id="condicion_si" name="condicion" value="si" {{ 'checked' if form.condicion.data else '' }}>
-                <label for="condicion_si">Regular</label>
-                <input type="radio" id="condicion_no" name="condicion" value="no" {{ 'checked' if not form.condicion.data else '' }}>
-                <label for="condicion_no">De baja</label>
-            </div>
-    
-            <div>
-                <label for="sede" class="form-element">SEDE:</label>
-                {{ form.sede }}
-            </div>
-    
             <div class="form-group">
-                <label for="dia">DÍA:</label>
-                <div class="checkbox-group">
-                    {% for d in form.dia %}
-                        <input type="checkbox" id="dia_{{ loop.index0 }}" name="{{ d.name }}" value="{{ d.data }}"
-                            {{ 'checked' if d.data in form.dia.data else '' }}>
-                        <label for="dia_{{ loop.index0 }}">{{ d.label.text }}</label>
-                    {% endfor %}
-                </div>
+                <label for="observaciones_curatela">Observaciones:</label>
+                <input type="text" id="observaciones_curatela" name="observaciones_curatela" value="{{ jinete.observaciones_curatela or '' }}">
             </div>
+            </div>
+
+            <div class="caja">
+            <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
+            
+            <div class="form-group">
+                <label for="nombre_institucion">Nombre de la institución:</label>
+                <input type="text" id="nombre_institucion" name="nombre_institucion" value="{{ jinete.nombre_institucion }}" required>
+            </div>
+            
+            <div><strong>Dirección de la institución:</strong></div>
+
+            <div class="form-group">
+                <label for="direccion.calle">Calle:</label>
+                <input type="text" id="direccion.calle" name="direccion.calle" value="{{ jinete.direccion.calle }}" required>
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="direccion.numero">Número:</label>
+                <input type="text" id="direccion.numero" name="direccion.numero" value="{{ jinete.direccion.numero }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="direccion.piso">Piso:</label>
+                <input type="text" id="direccion.piso" name="direccion.piso" value="{{ jinete.direccion.piso or '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="direccion.departamento">Departamento:</label>
+                <input type="text" id="direccion.departamento" name="direccion.departamento" value="{{ jinete.direccion.departamento or '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="direccion.provincia">Provincia:</label>
+                <select id="direccion.provincia" name="direccion.provincia" value="{{jinete.direccion.provincia.id}}" required>
+                    {% for prov in provincias %}
+                    <option value="{{prov.id}}">{{prov.nombre}}</option>
+                    {% endfor %}
+                    
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="direccion.localidad">Localidad:</label>
+                <select id="direccion.localidad" name="direccion.localidad" value="{{jinete.direccion.localidad.id}}" required>
+                    {% for loc in localidades %}
+                    <option value="{{loc.id}}">{{loc.nombre}}</option>
+                    {% endfor %}
+                    
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="telefono_institucion">Teléfono:</label>
+                <input type="text" id="telefono_institucion" name="telefono_institucion" value="{{ jinete.telefono_institucion }}" required>
+            </div>
+            
+
+            <div class="form-group">
+                <label for="grado">Grado:</label>
+                <input type="text" id="grado" name="grado" value="{{ jinete.grado }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="observaciones_institucion">Observaciones:</label>
+                <input type="text" id="observaciones_institucion" name="observaciones_institucion" value="{{ jinete.observaciones_institucion }}">
+            </div>
+
+            
+            <div class="form-group">
+                <label for="profesionales">PROFESIONALES que lo ATIENDEN:</label>
+                <input type="text" id="profesionales" name="profesionales" value="{{ jinete.profesionales }}">
+            </div>
+        </div>
+        <div class="caja">
+            
+            {% if familiar %}
+                <h2><strong> EDITAR DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
+            {% else %}
+                <h2><strong> AGREGAR DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s (no tiene ninguno asignado) </strong></h2>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="familiar.parentesco_familiar">Parentesco:</label>
+                <input type="text" id="familiar.parentesco_familiar" name="familiar.parentesco_familiar" value="{{ familiar.parentesco_familiar or ''}}">
+            </div>
+            
+            <div class="form-group">
+                <label for="familiar.nombre_familiar">Nombre:</label>
+                <input type="text" id="familiar.nombre_familiar" name="familiar.nombre_familiar" value="{{ familiar.nombre_familiar  or ''}}">
+            </div>
+            
+            <div class="form-group">
+                <label for="familiar.apellido_familiar">Apellido:</label>
+                <input type="text" id="familiar.apellido_familiar" name="familiar.apellido_familiar" value="{{ familiar.apellido_familiar or '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="familiar.dni_familiar">DNI:</label>
+                <input type="text" id="familiar.dni_familiar" name="familiar.dni_familiar" value="{{ familiar.dni_familiar or '' }}">
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="domicilio_familiar.calle">Calle:</label>
+                <input type="text" id="domicilio_familiar.calle" name="domicilio_familiar.calle" 
+                    value="{{ familiar.domicilio_familiar.calle if familiar and familiar.domicilio_familiar else '' }}">
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="domicilio_familiar.numero">Número:</label>
+                <input type="text" id="domicilio_familiar.numero" name="domicilio_familiar.numero" 
+                    value="{{ familiar.domicilio_familiar.numero if familiar and familiar.domicilio_familiar else '' }}">
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="domicilio_familiar.piso">Piso:</label>
+                <input type="text" id="domicilio_familiar.piso" name="domicilio_familiar.piso" 
+                    value="{{ familiar.domicilio_familiar.piso if familiar and familiar.domicilio_familiar else '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="domicilio_familiar.departamento">Departamento:</label>
+                <input type="text" id="domicilio_familiar.departamento" name="domicilio_familiar.departamento" 
+                    value="{{ familiar.domicilio_familiar.departamento if familiar and familiar.domicilio_familiar else '' }}">
+            </div>
+            
+                    
+            <div class="form-group">
+                <label for="familiar.domicilio_familiar_provincia">Provincia:</label>
+                <select id="familiar.domicilio_familiar_provincia" name="familiar.domicilio_familiar_provincia" value="{{ familiar.domicilio_familiar.provincia_id if familiar and familiar.domicilio_familiar else '' }}">
+                    {% for prov in provincias %}
+                        <option value="{{prov.id}}">{{prov.nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="familiar.domicilio_familiar_localidad">Localidad:</label>
+                <select id="familiar.domicilio_familiar_localidad" name="familiar.domicilio_familiar_localidad" value="{{ familiar.domicilio_familiar.localidad_id if familiar and familiar.domicilio_familiar else ''}}">
+                    {% for loc in localidades %}
+                        <option value="{{loc.id}}">{{loc.nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+                    
+            <div class="form-group">
+                <label for="familiar.celular_familiar">Celular:</label>
+                <input type="text" id="familiar.celular_familiar" name="familiar.celular_familiar" value="{{ familiar.celular_familiar  or ''}}">
+            </div>
+
+            <div class="form-group">
+                <label for="familiar.email_familiar">Email:</label>
+                <input type="text" id="familiar.email_familiar" name="familiar.email_familiar" value="{{ familiar.email_familiar or '' }}">
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="familiar.nivel_escolaridad_familiar">Nivel de escolaridad:</label>
+                <select id="familiar.nivel_escolaridad_familiar" name="familiar.nivel_escolaridad_familiar">
+                    {% for nivel in list_nivel_escolaridad %}
+                    <option value="{{ nivel[0] }}" {% if familiar and familiar.nivel_escolaridad_familiar and nivel[0] == familiar.nivel_escolaridad_familiar.name %}selected{% endif %}>
+                        {{ nivel[1] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        
+
+            <div class="form-group">
+                <label for="familiar.actividad_ocupacion_familiar">Actividad u ocupación:</label>
+                <input type="text" id="familiar.actividad_ocupacion_familiar" name="familiar.actividad_ocupacion_familiar" value="{{ familiar.actividad_ocupacion_familiar or '' }}">
+            </div>
+            
+            
+        </div>
+        
+        <div class="caja">
+            <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN </strong></h2>
+        <div class="form-group">
+            <label for="trabajo_institucional">Propuesta de trabajo institucional:</label>
+            <select id="trabajo_institucional" name="trabajo_institucional">
+                {% for trabajo in trabajos_institucionales %}
+                <option value="{{ trabajo[0] }}" {% if trabajo[0] == jinete.trabajo_institucional.name %}selected{% endif %}>
+                    {{ trabajo[1] }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        
+        <div>
+            <label for="condicion" class="form-element">Condición:</label>
+            <input type="radio" id="condicion_si" name="condicion" value="si" 
+                {% if jinete.condicion == True %}checked{% endif %}>
+            <label for="condicion_si">Sí</label>
+            
+            <input type="radio" id="condicion_no" name="condicion" value="no" 
+                {% if jinete.condicion == False %}checked{% endif %}>
+            <label for="condicion_no">No</label>
+        </div>
+
+        
+        <div class="form-group">
+            <label for="sede">Sede:</label>
+            <select id="sede" name="sede">
+                {% for sede in list_sedes %}
+                <option value="{{ sede[0] }}" {% if sede[0] == jinete.sede.name %}selected{% endif %}>
+                    {{ sede[1] }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+
+        <div class="form-group">
+            <label>Días:</label>
+            {% for dia in dias_semana %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="{{ dia }}" name="dias_semana" value="{{ dia[0] }}"
+                        {% if dia[0] in jinete_dias_name %} checked {% endif %}>
+                    <label class="form-check-label" for="{{ dia }}">{{ dia[1] }}</label>
+                </div>
+            {% endfor %}
+        </div>
+        
+
+        <div class="form-group">
+            <label for="profesor_o_terapeuta">Profesor/a o Terapeuta:</label>
+            <select id="profesor_o_terapeuta" name="profesor_o_terapeuta">
+                <option value="" disabled selected>Seleccione un profesor/a o terapeuta</option> <!-- Opción vacía -->
+                {% for prof in list_profes_terapeutas %}
+                    <option value="{{prof.id}}"{% if prof.id == jinete.profesor_o_terapeuta_id %} selected {%endif%} >{{prof.apellido}} {{prof.nombre}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="conductor_caballo">Conductor/a del Caballo:</label>
+            <select id="conductor_caballo" name="conductor_caballo">
+                <option value="" disabled selected>Seleccione conductor/a del caballo</option> <!-- Opción vacía -->
+
+                {% for conductor in list_conductores %}
+                <option value="{{conductor.id}}"{% if conductor.id == jinete.conductor_caballo.id %} selected {%endif%} >{{conductor.apellido}}  {{conductor.nombre}}  </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        
+        
+        <div class="form-group">
+            <label for="caballo">Caballo:</label>
+            <select id="caballo" name="caballo">
+                <option value="" disabled selected>Seleccione caballo</option> <!-- Opción vacía -->
+                {% for caballo in list_caballos %}
+                    <option value="{{caballo.id}}" {% if caballo.id == jinete.caballo.id %} selected {%endif%} >{{caballo.nombre}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
     
-            <div>
-                <button type="submit" style="margin: 10px;" class="btn btn-submit">Guardar Cambios</button>
-                <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-cancel">Cancelar</a>
+        
+        <div class="form-group">
+            <label for="auxiliar_pista">Auxiliar de Pista:</label>
+            <select id="auxiliar_pista" name="auxiliar_pista">
+                <option value="" disabled selected>Seleccione auxiliar de pista</option> <!-- Opción vacía -->
+                {% for auxiliar in list_auxiliares_pista %}
+                    <option value="{{auxiliar.id}}"{% if auxiliar.id == jinete.auxiliar_pista.id %} selected {%endif%} >{{auxiliar.apellido}}  {{auxiliar.nombre}}  </option>
+                {% endfor %}
+            </select>
+        </div>        
+        </div>  
+            <div class="form-actions">
+                <button type="submit" style="margin-right: 1em;" class="btn btn-add">Guardar Cambios</button>
+                <a href="{{ url_for('jya.listar_jinetes') }}" class="btn btn-back">Cancelar</a>
             </div>
         </form>
     </div>

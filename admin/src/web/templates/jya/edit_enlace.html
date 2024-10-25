@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}Editar enlace{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <div>
+        <h1 class="text-center">Editar enlace del jinete</h1>
+        
+        <form method="POST" action="{{ url_for('jya.editar_enlace', jinete_id=jinete_id, documento_id=documento.id) }}" enctype="multipart/form-data" class="mb-3">
+            <div class="form-group">
+                <label for="nombre_asignado">Nombre del enlace:</label>
+                <input type="text" id="nombre_asignado" name="nombre_asignado" value="{{documento.nombre_archivo}}" required>
+            </div>
+            <div class="form-group">
+                <label for="url_enlace">URL del enlace:</label>
+                <input type="url" id="url_enlace" name="url_enlace" value="{{documento.url_enlace}}" required>
+            </div>
+            <input type="submit" value="Guardar">
+        </form>
+    </div>
+{% endblock %}

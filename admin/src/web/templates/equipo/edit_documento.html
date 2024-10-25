@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}Editar documento{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <div>
+        <h1 class="text-center">Editar Documento del Empleado</h1>
+        
+        <form method="POST" action="{{ url_for('equipo.editar_documento', empleado_id=empleado_id, documento_id=documento.id) }}" enctype="multipart/form-data" class="mb-3">
+            <div class="form-group">
+                <label for="nombre_asignado">Nombre del archivo:</label>
+                <input type="text" id="nombre_asignado" name="nombre_asignado"  class="form-control" value="{{documento.nombre_asignado}}" required>
+                <label for="tipo_documento"><strong>Tipo de Archivo:</strong></label>
+                <select id="tipo_documento" name="tipo_documento" class="form-control" value="{{documento.tipo_documento}}" required>
+                    <option value="TITULO" {%if documento.tipo_documento.name =="TITULO" %} selected {% endif %}>Titulo</option>
+                    <option value="COPIA_DNI" {%if documento.tipo_documento.name =="COPIA_DNI" %} selected {% endif %}>Copia DNI</option>
+                    <option value="CV_ACTUALIZADO" {%if documento.tipo_documento.name =="CV_ACTUALIZADO" %} selected {% endif %}>CV actualizado</option>
+                </select>
+            </div>
+            <fieldset>
+                <label for="nombre_archivo"><strong> Nombre del archivo: </strong>{{ documento.titulo }}</label>
+            </fieldset>
+            <input type="submit" value="Guardar">
+        </form>
+    </div>
+{% endblock %}

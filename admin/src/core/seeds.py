@@ -7,7 +7,7 @@ from src.core.equipo.extra_models import Provincia,Localidad, Domicilio
 from src.core.equipo.models import CondicionEnum
 from src.core.pagos.models import Pago
 from src.core.cobros.models import RegistroCobro
-from src.core.jya.models import PensionEnum, DiagnosticoEnum, TiposDiscapacidadEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum
+from src.core.jya.models import PensionEnum, DiagnosticoEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum, TiposDiscapacidadEnum, EscolaridadEnum
 from datetime import datetime
 
 from src.core.auth import Permisos
@@ -17,8 +17,7 @@ from pathlib import Path
 
 from src.core.database import db
 from sqlalchemy import text
-from src.core.jya import legajo
-from src.core.jya.legajo.models import TipoDocumentoEnum
+from src.core.jya.models import TipoDocumentoEnum
 
 from src.core import ecuestre
 from src.core.auth import Roles
@@ -232,32 +231,68 @@ def run():
         localidad_id=15,
         provincia_id=12,
     )
+    
+    domicilio_ej4 = equipo.add_domiclio(
+        calle="Diagonal 73",
+        numero=1214,
+        departamento="A",
+        piso=5,
+        localidad_id=232,
+        provincia_id=2,
+    )
+        
+    domicilio_ej5 = equipo.add_domiclio(
+        calle="San Martin",
+        numero=452,
+        piso=1,
+        localidad_id=101,
+        provincia_id=8,
+    )
+        
+    domicilio_ej6 = equipo.add_domiclio(
+        calle="Belgrano",
+        numero=23,
+        departamento="C",
+        localidad_id=531,
+        provincia_id=18,
+    )
+    
+    domicilio_ej7 = equipo.add_domiclio(
+        calle="Av. 1",
+        numero=12,
+        departamento="E",
+        piso=4,
+        localidad_id=123,
+        provincia_id=12,
+    )
 
     # Contactos de Emergencia
     contacto_emergencia_ej1 = equipo.add_contacto_emergencia(
-        nombre="juan", apellido="perez", telefono="1010101010"
+        nombre="Juan", apellido="Perez", telefono="2216546782"
     )
 
     contacto_emergencia_ej2 = equipo.add_contacto_emergencia(
-        nombre="jj", apellido="lopez", telefono="1422222222222"
+        nombre="Pedro", apellido="Lopez", telefono="01112943232"
     )
 
     contacto_emergencia_ej3 = equipo.add_contacto_emergencia(
-        nombre="diego", apellido="marado", telefono="153333333333333"
+        nombre="Diego", apellido="Diaz", telefono="0542234545"
     )
+    
+    
 
     empleado1 = equipo.create_empleado(
-        nombre="Juan",
-        apellido="Pérez",
-        dni="12345678901",
-        email="juan.perez@example.com",
-        telefono="1123456789",
+        nombre="Ernesto",
+        apellido="Gamboa",
+        dni="25125945",
+        email="ernesto.gamoa@gmail.com",
+        telefono="549221692358",
         fecha_inicio=datetime(2020, 5, 1),
         fecha_cese=None,
         condicion=CondicionEnum.VOLUNTARIO,
         activo=True,
         obra_social="OSDE",
-        nro_afiliado=123456,
+        nro_afiliado=39463,
         profesion_id=1,
         puesto_laboral_id=2,
         domicilio=domicilio_ej1,
@@ -267,15 +302,15 @@ def run():
     empleado2 = equipo.create_empleado(
         nombre="María",
         apellido="Gómez",
-        dni="10987654321",
-        email="maria.gomez@example.com",
-        telefono="1139876543",
+        dni="32859360",
+        email="maria.gomez@hotmail.com",
+        telefono="01139876543",
         fecha_inicio=datetime(2019, 3, 15),
         fecha_cese=datetime(2024, 3, 15),
         condicion=CondicionEnum.PERSONAL_RENTADO,
         activo=True,
         obra_social="Swiss Medical",
-        nro_afiliado=654321,
+        nro_afiliado=59842,
         profesion_id=2,
         puesto_laboral_id=3,
         domicilio=domicilio_ej2,
@@ -285,15 +320,15 @@ def run():
     empleado3 = equipo.create_empleado(
         nombre="Carlos",
         apellido="López",
-        dni="12121212121",
-        email="carlos.lopez@example.com",
+        dni="40294658",
+        email="carlos.lopez@yahoo.com",
         telefono="1156784321",
         fecha_inicio=datetime(2021, 7, 22),
         fecha_cese=None,
         condicion=CondicionEnum.PERSONAL_RENTADO,
         activo=True,
         obra_social="PAMI",
-        nro_afiliado=112233,
+        nro_afiliado=30284,
         profesion_id=3,
         puesto_laboral_id=7,
         domicilio=domicilio_ej3,
@@ -305,7 +340,7 @@ def run():
         apellido="Martínez",
         dni="23456789012",
         email="ana.martinez@example.com",
-        telefono="1145678932",
+        telefono="025419313",
         fecha_inicio=datetime(2018, 9, 30),
         fecha_cese=None,
         condicion=CondicionEnum.VOLUNTARIO,
@@ -314,7 +349,7 @@ def run():
         nro_afiliado=789654,
         profesion_id=4,
         puesto_laboral_id=5,
-        domicilio_id=2,
+        domicilio_id=4,
         contacto_emergencia_id=1,
     )
 
@@ -322,16 +357,16 @@ def run():
         nombre="Lucía",
         apellido="Fernández",
         dni="34567890123",
-        email="lucia.fernandez@example.com",
+        email="lucia.fernandez@gmail.com",
         telefono="1167895432",
         fecha_inicio=datetime(2022, 1, 10),
         condicion=CondicionEnum.PERSONAL_RENTADO,
         activo=True,
         obra_social="Galeno",
-        nro_afiliado=998877,
+        nro_afiliado=979871,
         profesion_id=5,
         puesto_laboral_id=4,
-        domicilio_id=3,
+        domicilio_id=1,
         contacto_emergencia_id=2,
     )
 
@@ -370,20 +405,6 @@ def run():
         db.session.add(nuevo_pago)
     db.session.commit()
 
-    direccion_1 = jya.add_direccion(
-        calle="Olazabal",
-        numero=4321,
-        localidad_id=9,
-        provincia_id=4,
-    )
-    
-    direccion_2 = jya.add_direccion(
-        calle="Diagonal 73",
-        numero=1234,
-        localidad_id=5,
-        provincia_id=5,
-    )
-    
 
     # Tema permisos y roles (esto debe quedar definido. No se borra.)
     # Permisos
@@ -489,110 +510,19 @@ def run():
     auth.assign_permiso(rol_ecuestre, ecuestre_create)
     auth.assign_permiso(rol_ecuestre, ecuestre_destroy)
     
-    direccion_1 = jya.add_direccion(
+    jya.add_direccion(
         calle="Olazabal",
-        numero=4321,
+        numero=3241,
         localidad_id=9,
         provincia_id=4,
     )
     
-    direccion_2 = jya.add_direccion(
-        calle="Diagonal 73",
-        numero=1234,
+    jya.add_direccion(
+        calle="Diagonal 77",
+        numero=957,
         localidad_id=5,
         provincia_id=5,
     )
-    
-    nacimiento_1 = jya.add_nacimiento(
-        localidad_id=1,
-        provincia_id=1,
-    )
-    
-    nacimiento_2 = jya.add_nacimiento(
-        localidad_id=2,
-        provincia_id=2,
-    )
-        
-    jya.create_jinete(
-        nombre="Martin",
-        apellido="Diaz",
-        dni="12345678",
-        edad=10,
-        fecha_nacimiento=datetime(2020, 5, 1),
-        #nacimiento=nacimiento_1,
-        localidad_nacimiento_id=1,
-        provincia_nacimiento_id=1,
-        domicilio_id=1,
-        telefono="12345654321",
-        contacto_emergencia=contacto_emergencia_ej1,
-        becado=True,
-        observaciones_becado="Esto es el plan.",
-        certificado_discapacidad=False,
-        pension=PensionEnum.provincial,
-        diagnostico=DiagnosticoEnum.otro,
-        tipos_discapacidad=["mental","motora"],
-        asignacion_familiar=False,
-        tipo_asignacion=AsignacionEnum.por_discapacidad,
-        obra_social="OSDE",
-        nro_afiliado=123456,
-        curatela=False,
-        observaciones_curatela="Hace 1 mes.",
-        nombre_institucion = "Anexa",
-        direccion_id =1,
-        telefono_institucion = "1234567890",
-        grado = "2024",
-        observaciones_institucion = "Nada.",
-        profesionales = "Psicologa y maestra",
-        trabajo_institucional=TrabajoEnum.deporte,
-        condicion=False,
-        sede=SedeEnum.casj,
-        dia=["jueves", "viernes"],
-    )
-    
-    jya.create_jinete(
-        nombre="Carlos",
-        apellido="Lopez",
-        dni="987654321",
-        edad=10,
-        fecha_nacimiento=datetime(2020, 5, 1),
-        domicilio_id=3,
-        #nacimiento=nacimiento_2,
-        localidad_nacimiento_id=1,
-        provincia_nacimiento_id=1,
-        telefono="12345654321",
-        contacto_emergencia=contacto_emergencia_ej2,
-        becado=True,
-        observaciones_becado="Esto es el plan.",
-        certificado_discapacidad=True,
-        pension=PensionEnum.nacional,
-        diagnostico=DiagnosticoEnum.ecne,
-        tipos_discapacidad=["mental","sensorial"],
-        asignacion_familiar=True,
-        tipo_asignacion=AsignacionEnum.por_hijo,
-        obra_social="IOMA",
-        nro_afiliado=112233,
-        curatela=True,
-        observaciones_curatela="Ninguna.",
-        nombre_institucion = "Liceo Victor Mercante",
-        direccion_id = 2,
-        telefono_institucion = "0987654321",
-        grado = "2020",
-        observaciones_institucion = "ASDF.",
-        profesionales = "Terapeuta y docente",
-        trabajo_institucional=TrabajoEnum.hipoterapia,
-        condicion=True,
-        sede=SedeEnum.hlp,
-        dia=["lunes"],
-    )
-    
-    legajo.create_documento(
-        titulo="Curriculum Vitae",
-        tipo=TipoDocumentoEnum.evaluacion,
-        jinete_id=1,
-    )
-
-
-    # Modulo ecuestre
     sede1 = ecuestre.create_sede(
         nombre = "CASJ",
     )
@@ -602,6 +532,7 @@ def run():
     sede3 = ecuestre.create_sede(
         nombre = "OTRO",
     )
+    
     caballo1 = ecuestre.create_ecuestre(
         nombre="Relámpago",
         fecha_nacimiento="2015-04-10",
@@ -623,6 +554,173 @@ def run():
         sede_id=2,
         tipoJyA ="HIPOTERAPIA"  # Asignando un tipo
     )
+    
+    jya.create_jinete(
+        nombre="Martin",
+        apellido="Diaz",
+        dni="37549102",
+        edad=28,
+        fecha_nacimiento=datetime(1996, 12, 1),
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=10,
+        domicilio_id=6,
+        telefono="54911495620",
+        contacto_emergencia=contacto_emergencia_ej1,
+        becado=True,
+        observaciones_becado="Becado desde el 28-04-2023.",
+        certificado_discapacidad=False,
+        beneficiario_pension=False,
+        diagnostico=DiagnosticoEnum.otro,
+        otro="escoliosis grave",
+        asignacion_familiar=False,
+        tipo_asignacion=AsignacionEnum.por_discapacidad,
+        obra_social="OSDE",
+        nro_afiliado=30576,
+        curatela=False,
+        observaciones_curatela="Hace 1 mes.",
+        nombre_institucion = "Anexa",
+        direccion_id=1,
+        telefono_institucion = "4660228",
+        grado = 2024,
+        profesionales = "Psicologo y maestro",
+        trabajo_institucional=TrabajoEnum.deporte,
+        condicion=False,
+        sede=SedeEnum.casj,
+        profesor_o_terapeuta=empleado1,
+        conductor_caballo=empleado2,
+        auxiliar_pista=empleado3,
+        caballo=caballo1,
+    )
+    
+
+        
+    jya.create_jinete(
+        nombre="Carlos",
+        apellido="Lopez",
+        dni="987654321",
+        edad=10,
+        fecha_nacimiento=datetime(2020, 5, 1),
+        domicilio_id=3,
+        #nacimiento=nacimiento_2,
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=1,
+        telefono="12345654321",
+        contacto_emergencia=contacto_emergencia_ej2,
+        becado=True,
+        observaciones_becado="Esto es el plan.",
+        certificado_discapacidad=True,
+        beneficiario_pension=True,
+        pension=PensionEnum.nacional,
+        diagnostico=DiagnosticoEnum.ecne,
+        #tipos_discapacidad=[TiposDiscapacidadEnum.mental,TiposDiscapacidadEnum.motora],
+        asignacion_familiar=True,
+        tipo_asignacion=AsignacionEnum.por_hijo,
+        obra_social="IOMA",
+        nro_afiliado=112233,
+        curatela=True,
+        observaciones_curatela="Ninguna.",
+        nombre_institucion = "Liceo Victor Mercante",
+        direccion_id = 2,
+        telefono_institucion = "0987654321",
+        grado = "2020",
+        observaciones_institucion = "ASDF.",
+        profesionales = "Terapeuta y docente",
+        trabajo_institucional=TrabajoEnum.hipoterapia,
+        condicion=True,
+        sede=SedeEnum.hlp,
+        profesor_o_terapeuta=empleado3,
+        conductor_caballo=empleado5,
+        auxiliar_pista=empleado4,
+        caballo=caballo2,
+    )
+    
+    jya.add_familiar( 
+        parentesco_familiar="Tio",
+        nombre_familiar="Juan",
+        apellido_familiar="Diaz",
+        dni_familiar="3498452",
+        domicilio_familiar_id=3,
+        celular_familiar="23446753",
+        email_familiar="juan@diaz.com",
+        nivel_escolaridad_familiar=EscolaridadEnum.primario,
+        actividad_ocupacion_familiar="Empleado comercial"
+    )
+
+    jya.associate_jinete_familiar(1, 1)
+
+    jya.add_familiar( 
+        parentesco_familiar="Abuela",
+        nombre_familiar="Alejandra",
+        apellido_familiar="Gutierrez",
+        dni_familiar="15203531",
+        domicilio_familiar_id=5,
+        celular_familiar="23446753",
+        email_familiar="alegutierrez@gmail.com",
+        nivel_escolaridad_familiar=EscolaridadEnum.universitario,
+        actividad_ocupacion_familiar="Ingeniera"
+    )
+
+    jya.associate_jinete_familiar(2, 2)
+    
+    jya.add_dias(dias=DiasEnum.lunes)
+    jya.add_dias(dias=DiasEnum.martes)
+    jya.add_dias(dias=DiasEnum.miercoles)
+    jya.add_dias(dias=DiasEnum.jueves)
+    jya.add_dias(dias=DiasEnum.viernes)
+    jya.add_dias(dias=DiasEnum.sabado)
+    jya.add_dias(dias=DiasEnum.domingo)
+    
+    
+    jya.associate_jinete_dias(1, 1)
+    
+    
+    jya.associate_jinete_dias(1, 2)
+    
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.mental)
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.motora)
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.sensorial)
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.visceral)
+    
+    
+    jya.associate_jinete_discapacidad_id(1, 1)
+    
+    jya.add_discapacidades(
+        tipos_discapacidad=TiposDiscapacidadEnum.sensorial,
+    )
+    
+    jya.associate_jinete_discapacidad_id(1, 2)
+
+    '''# Modulo ecuestre
+    sede1 = ecuestre.create_sede(
+        nombre = "CASJ",
+    )
+    sede2 = ecuestre.create_sede(
+        nombre = "HLP",
+    )
+    sede3 = ecuestre.create_sede(
+        nombre = "OTRO",
+    )'''
+    '''caballo1 = ecuestre.create_ecuestre(
+        nombre="Relámpago",
+        fecha_nacimiento="2015-04-10",
+        sexo=True,
+        raza="Pura Sangre",
+        pelaje="Negro",
+        fecha_ingreso="2020-06-15",
+        sede_id=3,
+        tipoJyA ="MONTA_TERAPEUTICA"  # Asignando un tipo
+    )
+
+    caballo2 = ecuestre.create_ecuestre(
+        nombre="Luna",
+        fecha_nacimiento="2017-09-25",
+        sexo=False,
+        raza="Andaluz",
+        pelaje="Blanco",
+        fecha_ingreso="2021-03-10",
+        sede_id=2,
+        tipoJyA ="HIPOTERAPIA"  # Asignando un tipo
+    )'''
 
     caballo3 = ecuestre.create_ecuestre(
         nombre="Tormenta",

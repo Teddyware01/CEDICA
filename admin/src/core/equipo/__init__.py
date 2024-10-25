@@ -15,28 +15,46 @@ from sqlalchemy import or_
 # DOCUMENTOS de EMPLEADOS:
 
 def crear_documento(**kwargs):
-    documento = Empleado_docs(**kwargs)
+    is_enlace=False
+    documento = Empleado_docs(is_enlace=is_enlace,**kwargs)
     db.session.add(documento)
     db.session.commit()
     return documento
 
 
-def traerdocumentos(empleado_id, page=1, per_page=1):
+def traer_documentos(empleado_id, page=1, per_page=3):
     documentos = Empleado_docs.query.filter(Empleado_docs.empleado_id == empleado_id).paginate(page=page, per_page=per_page, error_out=False)
     return documentos
 
-def traerdocumentoporid(documento_id):
+def traer_documento_por_id(documento_id):
     documento = Empleado_docs.query.get_or_404(documento_id)
     return documento
 
 
 
 def delete_documento(documento_id):
-    documento = traerdocumentoporid(documento_id)
+    documento = traer_documento_por_id(documento_id)
     db.session.delete(documento)
     db.session.commit()
 
 
+def edit_documento(documento_id, **kwargs):
+    documento = traer_documento_por_id(documento_id)
+    for key, value in kwargs.items():
+        if hasattr(documento, key):
+            setattr(documento, key, value)
+    db.session.commit()    
+
+
+
+
+def crear_documento_tipo_enlace(**kwargs):
+    is_enlace=True
+    titulo=None
+    documento = Empleado_docs(is_enlace=is_enlace, titulo=titulo, **kwargs)
+    db.session.add(documento)
+    db.session.commit()
+    return documento
 
 
 # Tabla Provincia
@@ -70,10 +88,10 @@ def list_empleados(sort_by=None, id_puesto_laboral=None, search=None,page=1, per
     if search:
         query = query.filter(
             or_(
-                Empleado.nombre.like(f"%{search}%"),
-                Empleado.apellido.like(f"%{search}%"),
-                Empleado.dni.like(f"%{search}%"),
-                Empleado.email.like(f"%{search}%"),
+                Empleado.nombre.ilike(f"%{search}%"),
+                Empleado.apellido.ilike(f"%{search}%"),
+                Empleado.dni.ilike(f"%{search}%"),
+                Empleado.email.ilike(f"%{search}%"),
             )
         )
     if sort_by:
@@ -93,6 +111,36 @@ def list_empleados(sort_by=None, id_puesto_laboral=None, search=None,page=1, per
     paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
     return paginated_query
 
+
+def list_auxiliares_pista():
+    auxiliar = PuestoLaboral.query.filter_by(nombre="Auxiliar de pista").first()
+    if auxiliar:
+        return Empleado.query.filter_by(puesto_laboral_id=auxiliar.id).all()
+    return []
+
+def list_conductores_caballos():
+    conductor = PuestoLaboral.query.filter_by(nombre="Conductor").first()
+    if conductor:
+        return Empleado.query.filter_by(puesto_laboral_id=conductor.id).all()
+    return []
+
+def list_terapeutas_y_profesores():
+    terapeuta = PuestoLaboral.query.filter_by(nombre="Terapeuta").first()
+    profesor = PuestoLaboral.query.filter_by(nombre="Profesor/a").first()
+    
+    empleados = []
+    
+    if terapeuta:
+        empleados += Empleado.query.filter(Empleado.puesto_laboral_id == terapeuta.id).all()
+    if profesor:
+        empleados += Empleado.query.filter(Empleado.puesto_laboral_id == profesor.id).all()
+    
+    return empleados
+
+
+def traer_empleado(empleado_id):
+    return  Empleado.query.get_or_404(empleado_id)
+    
 def create_empleado(**kwargs):
     empleado = Empleado(**kwargs)
     db.session.add(empleado)

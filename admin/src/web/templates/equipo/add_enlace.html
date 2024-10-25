@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %} Agregar enlace a empleado {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <article class="form-container">
+        <div>
+            <h1 class="text-center">Cargar enlace</h1>
+                
+            <form method="POST" action="{{ url_for('equipo.agregar_enlace', empleado_id=empleado.id) }}" enctype="multipart/form-data" class="mb-3">
+                <div class="form-group">
+                    <label for="nombre_asignado">Nombre del enlace:</label>
+                    <input type="text" id="nombre_asignado" name="nombre_asignado" required>
+                </div>
+                <div class="form-group">
+                    <label for="url_enlace">URL del enlace:</label>
+                    <input type="url" id="url_enlace" name="url_enlace" required>
+                </div>
+                <input type="submit" value="Guardar">
+            </form>
+
+        </div>
+    </article>
+
+    <a class="secondary" href="{{ url_for('home') }}">Volver al inicio</a>
+{% endblock %}
