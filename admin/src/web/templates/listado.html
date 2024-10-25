@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %} Listado de Clientes {% endblock %}
+{% block title %} Listado de usuarios {% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -25,27 +25,39 @@
             </ul>
         {% endif %}
     {% endwith %}
-    <h1 class="text-center">Listado de Clientes</h1>
+    <h1 class="text-center">Listado de usuarios</h1>
 
     <div class="actions">
-        <a href="{{ url_for('users.add_client_form') }}" class="btn btn-add" style="margin: 10px 0;">Agregar Cliente</a>
+        <a href="{{ url_for('users.add_client_form') }}" class="btn btn-add" style="margin: 10px 0;">Agregar Usuario</a>
     </div>
 
     <form method="GET" action="{{ url_for('users.listar_usuarios') }}" class="mb-3">
-      <div>
-        <label for="sort_by">Ordenar por:</label>
-        <select name="sort_by" id="sort_by" class="form-control">
-            <option value="email_asc">Email (Ascendente)</option>
-            <option value="email_desc">Email (Descendente)</option>
-            <option value="created_at_asc">Fecha de Creación (Ascendente)</option>
-            <option value="created_at_desc">Fecha de Creación (Descendente)</option>
-        </select>
+      <div class="form-row">
+          <div class="form-group col-6">
+              <label for="sort_by">Ordenar por:</label>
+              <select name="sort_by" id="sort_by" class="form-control">
+                <option value="email_asc" {% if request.args.get('sort_by') == 'email_asc' %}selected{% endif %}>Email (Ascendente)</option>
+                <option value="email_desc" {% if request.args.get('sort_by') == 'email_desc' %}selected{% endif %}>Email (Descendente)</option>
+                <option value="created_at_asc" {% if request.args.get('sort_by') == 'created_at_asc' %}selected{% endif %}>Fecha de Creación (Ascendente)</option>
+                <option value="created_at_desc" {% if request.args.get('sort_by') == 'created_at_desc' %}selected{% endif %}>Fecha de Creación (Descendente)</option>
+              </select>
+          </div>
+          <div class="form-group col-6">
+              <label for="sort_by">Buscar:</label>
+              <input type="text" id="search" name="search" placeholder="Email" class="form-control" value="{{ request.args.get('search', '') }}">
+          </div>
       </div>
-      <div>
-        <button type="submit" class="btn btn-sort" style="margin-top: 1em;">Ordenar</button>
+      <div class="form-row">
+          <div class="form-group col-6">
+              <button type="submit" class="btn btn-sort">Ordenar</button>
+          </div>
+          <div class="form-group col-6">
+              <button type="submit" class="btn btn-sort">Buscar</button>
+          </div>
       </div>
-    </form>
+  </form>
 
+    {% if usuarios %}
     <table class="table">
         <thead>
             <tr>
@@ -128,53 +140,46 @@
       </script>
     </table>
     <nav aria-label="Page navigation">
-        <ul class="pagination">
-          <!-- Botón para retroceder (solo si hay página anterior) -->
-          {% if usuarios.has_prev %}
-            <li class="page-item">
-              <a class="page-link" href="{{ url_for('users.listar_usuarios', page=usuarios.prev_num, sort_by=sort_by) }}" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-          {% endif %}
-      
-          <!-- Mostrar página anterior (si no es la primera página) -->
-          {% if usuarios.page > 1 %}
-            <li class="page-item">
-              <a class="page-link" href="{{ url_for('users.listar_usuarios', page=usuarios.page - 1, sort_by=sort_by) }}">
-                {{ usuarios.page - 1 }}
-              </a>
-            </li>
-          {% endif %}
-      
-          <!-- Mostrar página actual -->
-          <li class="page-item active">
-            <a class="page-link">{{ usuarios.page }}</a>
+      <ul class="pagination">
+        
+        {% if usuarios.has_prev %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('users.listar_usuarios', page=usuarios.prev_num, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
           </li>
-      
-          <!-- Mostrar página siguiente (si no es la última página) -->
-          {% if usuarios.page < usuarios.pages %}
-            <li class="page-item">
-              <a class="page-link" href="{{ url_for('users.listar_usuarios', page=usuarios.page + 1, sort_by=sort_by) }}">
-                {{ usuarios.page + 1 }}
-              </a>
-            </li>
-          {% endif %}
-      
-          <!-- Botón para avanzar (solo si hay una página siguiente) -->
-          {% if usuarios.has_next %}
-            <li class="page-item">
-              <a class="page-link" href="{{ url_for('users.listar_usuarios', page=usuarios.next_num, sort_by=sort_by) }}" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          {% endif %}
-        </ul>
-      </nav>      
-{% endblock %}
-
-{% block footer %}
-    <footer>
-        <p>&copy; 2024 Listado de Clientes</p>
-    </footer>
+        {% endif %}
+  
+        {% if usuarios.page > 1 %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('users.listar_usuarios', page=usuarios.page - 1, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}">
+              {{ usuarios.page - 1 }}
+            </a>
+          </li>
+        {% endif %}
+  
+        <li class="page-item active">
+          <a class="page-link">{{ usuarios.page }}</a>
+        </li>
+  
+        {% if usuarios.page < usuarios.pages %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('users.listar_usuarios', page=usuarios.page + 1, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}">
+              {{ usuarios.page + 1 }}
+            </a>
+          </li>
+        {% endif %}
+  
+        {% if usuarios.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('users.listar_usuarios', page=usuarios.next_num, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+  </nav>    
+      {% else %}
+          <p>No hay usuarios para mostrar.</p>
+      {% endif %}
 {% endblock %}
