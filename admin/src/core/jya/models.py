@@ -126,11 +126,14 @@ class TipoDocumentoEnum(Enum):
     
 class JineteDocumento(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    titulo_documento = db.Column(db.String(100), nullable=False)
-    nombre_archivo = db.Column(db.String(255), nullable=False)
+    titulo_documento = db.Column(db.String(100), nullable=True) #el que usa minio
+    nombre_archivo = db.Column(db.String(255), nullable=False) #escrito a mano("nombre_asignado")
     fecha_subida_documento = db.Column(db.DateTime, default=datetime.now)
-    tipo_documento = db.Column(db.Enum(TipoDocumentoEnum), nullable=False)
+    tipo_documento = db.Column(db.Enum(TipoDocumentoEnum), nullable=True)
     
+    is_enlace =  db.Column(db.Boolean, default=False, nullable=False)
+    url_enlace = db.Column(db.String(255), nullable=True)
+
     jinete_id = db.Column(db.Integer, db.ForeignKey("jinete.id"), nullable=False)
     jinete = db.relationship("Jinete", back_populates="documentos")
     

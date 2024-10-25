@@ -15,8 +15,8 @@
         <form method="POST" action="{{ url_for('jya.editar_documento', jinete_id=jinete_id, documento_id=documento.id) }}" enctype="multipart/form-data" class="mb-3">
             <div class="form-group">
 
-                <label for="titulo_documento"><strong>Titulo del archivo: </strong></label>
-                <input type="text" id="titulo_documento" name="titulo_documento" class="form-control" value="{{ documento.titulo_documento }}" required>
+                <label for="nombre_archivo"><strong>Nombre asignado: </strong></label>
+                <input type="text" id="nombre_archivo" name="nombre_archivo" class="form-control" value="{{ documento.nombre_archivo }}" required>
                 <label for="tipo_documento"><strong>Tipo de Archivo:</strong></label>
                 <select id="tipo_documento" name="tipo_documento" class="form-control" required>
                     <option value="evaluacion">Evaluación</option>
@@ -28,7 +28,7 @@
                 </select>
             </div>
             <fieldset>
-                <label for="titulo_documento"><strong> Nombre del archivo: </strong>{{ documento.nombre_archivo }}</label>
+                <label for="titulo_documento"><strong> Nombre del archivo: </strong>{{ documento.titulo_documento }}</label>
             </fieldset>
             <div class="form-actions">
                 <input type="submit" value="Guardar" class="btn btn-add" style="margin-right: 1em;">

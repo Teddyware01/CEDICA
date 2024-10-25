@@ -143,6 +143,15 @@ def crear_documento(**kwargs):
     
     return False
 
+def crear_documento_tipo_enlace(**kwargs):
+    is_enlace=True
+    titulo=None
+    documento = Ecuestre_docs(is_enlace=is_enlace, titulo=titulo, **kwargs)
+    db.session.add(documento)
+    db.session.commit()
+    return documento
+
+
 
 def traerdocumento(ecuestre_id, page=1, per_page=5):
     documentos = Ecuestre_docs.query.filter(Ecuestre_docs.ecuestre_id == ecuestre_id).paginate(page=page, per_page=per_page, error_out=False)
@@ -160,6 +169,12 @@ def eliminar_documento(documento_id):
         return True
     return False
 
+def edit_documento(documento_id, **kwargs):
+    documento = traerdocumentoporid(documento_id)
+    for key, value in kwargs.items():
+        if hasattr(documento, key):
+            setattr(documento, key, value)
+    db.session.commit()
 
 def ya_tiene_ese_documento(ecuestre_id, name):
     documento = Ecuestre_docs.query.filter(

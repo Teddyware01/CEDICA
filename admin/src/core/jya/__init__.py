@@ -232,26 +232,37 @@ def clear_jinete_dias(jinete_id):
 
 
 def add_documento(**kwargs):
-    documento = JineteDocumento(**kwargs)
+    is_enlace=False
+    documento = JineteDocumento(is_enlace=is_enlace,**kwargs)
     db.session.add(documento)
     db.session.commit()
-
     return documento
+
+
+def add_documento_tipo_enlace(**kwargs):
+    is_enlace=True
+    titulo_documento=None
+    documento = JineteDocumento(is_enlace=is_enlace, titulo_documento=titulo_documento, **kwargs)
+    db.session.add(documento)
+    db.session.commit()
+    return documento
+
+
 
 def delete_documento(documento_id):
     documento = get_documento(documento_id)
     db.session.delete(documento)
     db.session.commit()
     
-def edit_documento(jinete_id, **kwargs):
-    documento = get_documento(jinete_id)
+def edit_documento(documento_id, **kwargs):
+    documento = get_documento(documento_id)
     for key, value in kwargs.items():
         if hasattr(documento, key):
             setattr(documento, key, value)
     db.session.commit()
     
-def get_documento(jinete_id): 
-    documento = JineteDocumento.query.get(jinete_id)
+def get_documento(documento_id): 
+    documento = JineteDocumento.query.get(documento_id)
     return documento
 
 def associate_jinete_documento(jinete_id, documento_id):
@@ -298,16 +309,16 @@ def traer_documentos(jinete_id, page=1, per_page=10, sort_by=None, search=None):
     # Agregar la funcionalidad de búsqueda si existe un término de búsqueda
     if search:
         query = query.filter(
-            JineteDocumento.titulo_documento.like(f"%{search}%") |
+            JineteDocumento.nombre_archivo.like(f"%{search}%") |
             cast(JineteDocumento.tipo_documento, String).like(f"%{search}%")
         )
 
     # Agregar la funcionalidad de ordenamiento basada en el valor de sort_by
     if sort_by:
         if sort_by == "titulo_asc":
-            query = query.order_by(JineteDocumento.titulo_documento.asc())
+            query = query.order_by(JineteDocumento.nombre_archivo.asc())
         elif sort_by == "titulo_desc":
-            query = query.order_by(JineteDocumento.titulo_documento.desc())
+            query = query.order_by(JineteDocumento.nombre_archivo.desc())
         elif sort_by == "fecha_asc":
             query = query.order_by(JineteDocumento.fecha_subida_documento.asc())
         elif sort_by == "fecha_desc":
