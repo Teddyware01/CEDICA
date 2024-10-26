@@ -3,9 +3,10 @@ from src.core import board
 from src.core import auth
 from src.core import jya
 from src.core import equipo
+from src.core import cobros
 from src.core.equipo.extra_models import Provincia,Localidad, Domicilio
 from src.core.equipo.models import CondicionEnum
-from src.core.pagos.models import Pago
+from src.core import pagos
 from src.core.cobros.models import RegistroCobro
 from src.core.jya.models import PensionEnum, DiagnosticoEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum, TiposDiscapacidadEnum, EscolaridadEnum
 from datetime import datetime
@@ -392,18 +393,16 @@ def run():
             "tipo_pago": "Gastos_varios",
             "descripcion": "Pago por servicios de mantenimiento",
         },
+        {
+            "beneficiario": "Ana Martínez",
+            "monto": 1500.0,
+            "fecha_pago": datetime(2024, 10, 23),
+            "tipo_pago": "Gastos_varios",
+            "descripcion": "Pagos varios",
+        },
     ]
 
-    for pago in pagos_datos:
-        nuevo_pago = Pago(
-            beneficiario=pago["beneficiario"],
-            monto=pago["monto"],
-            fecha_pago=pago["fecha_pago"],
-            tipo_pago=pago["tipo_pago"],
-            descripcion=pago["descripcion"],
-        )
-        db.session.add(nuevo_pago)
-    db.session.commit()
+    pagos.guardar_pagos_seeds(pagos_datos)
 
 
     # Tema permisos y roles (esto debe quedar definido. No se borra.)
@@ -850,11 +849,25 @@ def run():
         observaciones="Pago de honorarios."
     )
 
-    db.session.add(cobro1)
-    db.session.add(cobro2)
-    db.session.add(cobro3)
+    cobro4 = RegistroCobro(
+        jinete_id=1,  
+        fecha_pago=datetime(2024, 6, 20),
+        medio_pago='tarjeta_credito',
+        monto=1000.0,
+        recibido_por=2,  
+        observaciones="Pago de Correspondiente a junio"
+    )
 
-    db.session.commit()
+    cobro5 = RegistroCobro(
+        jinete_id=2,  
+        fecha_pago=datetime(2024, 7, 27),
+        medio_pago='tarjeta_credito',
+        monto=3000.0,
+        recibido_por=2,  
+        observaciones="Pago de Correspondiente a julio"
+    )
+
+    cobros.guardar_cobros_seeds(cobro1, cobro2, cobro3, cobro4, cobro5)
 
     # Super_user que tiene todos los permisos. Utililizable para probar la pagina comodamente
     super_user = auth.create_user(
