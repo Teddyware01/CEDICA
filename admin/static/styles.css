@@ -275,6 +275,14 @@ p {
     color: #555;
 }
 
+.navbar-right .dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    transform: translateY(10px);
+    z-index: 1000;
+}
+
 .bg-light {
     background-color: #f8f9fa;
 }
@@ -323,7 +331,8 @@ p {
 .dropdown-menu {
     position:absolute;
     top: 100%;
-    left: 0;
+    left: auto;
+    right: 0;
     z-index: 1000;
     display: none;
     float: left;
@@ -640,11 +649,11 @@ p {
     }
     
     .hamburger {
-        display: none;  /* Asegura que el botón hamburguesa esté oculto en pantallas grandes */
+        display: none; 
     }
 
     .action-dropdown {
-        display: none;  /* Solo oculta los dropdowns de acción en pantallas grandes */
+        display: none; 
     }
     .navbar-center {
         display: flex; 
