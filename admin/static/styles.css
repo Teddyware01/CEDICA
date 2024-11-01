@@ -186,6 +186,7 @@ p {
     font-family: 'Arial', sans-serif; 
     color: #333;
 }
+
 .inline-link-1:hover {
     background: var(--link-hover-background);
 }
@@ -436,6 +437,7 @@ p {
 /* Botón Ver en verde */
 .btn-view {
     background-color: #28a745;
+    padding: 1%;
 }
 .btn-edit:hover {
     background-color: #218838; /* Oscurecer el color al hacer hover */
@@ -444,6 +446,7 @@ p {
 /* Botón Editar en amarillo */
 .btn-edit {
     background-color: #ffc107;
+    padding: 1%;
 }
 .btn-edit:hover {
     background-color: #e0a800; /* Oscurecer el color al hacer hover */
@@ -452,6 +455,7 @@ p {
 /* Botón Eliminar en rojo */
 .btn-delete {
     background-color: #dc3545;
+    padding: 1%;
 }
 .btn-delete:hover {
     background-color: #c82333; /* Oscurecer el color al hacer hover */
@@ -589,6 +593,19 @@ p {
 
     footer {
         width: 100% !important;
+    }
+
+
+    .caja-separadora {
+        background-color: white; 
+        border: 1px solid; 
+        border-radius: 10px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        padding: 20px; 
+        margin: 20px auto; 
+        max-width: 900px; 
+        font-family: 'Arial', sans-serif; 
+        color: #333;
     }
 }
 

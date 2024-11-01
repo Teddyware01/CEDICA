@@ -22,10 +22,13 @@ bp = Blueprint("jya", __name__, url_prefix="/jinetes")
 @check("jya_index")
 def listar_jinetes():
     sort_by = request.args.get("sort_by")
-    search = request.args.get('search', '')
+    nombre = request.args.get("nombre", '')
+    apellido = request.args.get("apellido", '')
+    dni = request.args.get("dni", '')
+    profesionales = request.args.get("profesionales", '')
     page = request.args.get('page', 1, type=int)
     per_page = 3  
-    jinetes = jya.list_jinetes(sort_by=sort_by, search=search).paginate(page=page, per_page=per_page)
+    jinetes = jya.list_jinetes(sort_by=sort_by, nombre=nombre, apellido=apellido, dni=dni, profesionales=profesionales).paginate(page=page, per_page=per_page)    
 
     return render_template("jya/listado_jya.html", jinetes=jinetes)
 

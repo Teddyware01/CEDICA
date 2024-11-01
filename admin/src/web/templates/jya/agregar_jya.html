@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Carga de nuevo jinete{% endblock %}
+{% block title %}Agregar jinete{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -18,7 +18,7 @@
 {% block content %}
 {{ super() }}
 
-    <h1 class="text-center">Carga de jinete</h1>
+    <h1 class="text-center">agregar jinete</h1>
     
     <form action="{{ url_for('jya.add_jinete') }}" method="POST">
         {{ form.hidden_tag() }}
