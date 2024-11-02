@@ -80,11 +80,16 @@ def add_jinete():
         discapacidades_seleccionadas = form.discapacidades.data  # Esto trae los IDs seleccionados en el formulario
         discapacidades_db = TipoDiscapacidad.query.filter(TipoDiscapacidad.tipos_discapacidad.in_(discapacidades_seleccionadas)).all()
 
+        dni= request.form["dni"]
+        if jya.jinete_dni_exists(dni):
+            flash("El DNI ya está registrado. Por favor elige otro.", "error")
+            return redirect(url_for("jya.add_jinete_form"))
+        
         # Crear el nuevo jinete con todos los datos
         nuevo_jinete = jya.create_jinete(
             nombre=form.nombre.data,
             apellido=form.apellido.data,
-            dni=form.dni.data,
+            dni=dni,
             edad=form.edad.data,
             fecha_nacimiento=form.fecha_nacimiento.data,
             localidad_nacimiento=localidad,
@@ -326,7 +331,7 @@ def editar_jinete(jinete_id):
         jinete.obra_social = form["obra_social"]
         jinete.nro_afiliado = form["nro_afiliado"]
         jinete.curatela = (form["curatela"] == "si")
-        jinete.observaciones_curatela = form.get("observaciones_curatela") if form.get("observaciones_curatela") and form.get("observaciones_curatela") != "" else None
+        jinete.observaciones_curatela = form["observaciones_curatela"]
 
         #Institucion escolar:
         jinete.nombre_institucion = form["nombre_institucion"]
@@ -338,7 +343,7 @@ def editar_jinete(jinete_id):
         jinete.direccion.localidad_id = form["direccion.localidad"]
         jinete.telefono_institucion = form["telefono_institucion"]
         jinete.grado = form["grado"]
-        jinete.observaciones_institucion = form.get("observaciones_institucion") if form.get("observaciones_institucion") and form.get("observaciones_institucion") != "" else None
+        jinete.observaciones_institucion = form["observaciones_institucion"]
         jinete.profesionales = form.get("profesionales") if form.get("profesionales") and form.get("profesionales") != "" else None
 
         #levanto campos del familiar:

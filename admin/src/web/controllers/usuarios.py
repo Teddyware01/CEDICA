@@ -54,7 +54,7 @@ def add_client():
         system_admin=request.form.get("is_admin") is not None,
         activo=request.form.get("is_active") is not None,
     )
-    flash("Cliente agregado exitosamente", "success")
+    flash("Cliente agregado exitosamente", "flashes-success")
     return redirect(url_for("users.listar_usuarios"))
 
 

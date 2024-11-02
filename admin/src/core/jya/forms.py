@@ -167,8 +167,8 @@ class AddJineteForm(FlaskForm):
     
     curatela = BooleanField("Curatela", validators=[DataRequired("Indique si posee curatela")])
     
-    observaciones_curatela = StringField("Observaciones curatela")
-    
+    observaciones_curatela = StringField("Observaciones curatela", validators=[Optional()])
+
     nombre_institucion = StringField(
         "Nombre institucion",
         validators=[DataRequired(message="El número de afiliado de obra social es obligatorio")],
@@ -192,7 +192,7 @@ class AddJineteForm(FlaskForm):
 
     grado = IntegerField("Grado", validators=[DataRequired("Ingrese el grado / año actual")])
     
-    observaciones_institucion = StringField("Observaciones institucion")
+    observaciones_institucion = StringField("Observaciones institucion", validators=[Optional()])
     
     profesionales = StringField(
         "Profesionales",

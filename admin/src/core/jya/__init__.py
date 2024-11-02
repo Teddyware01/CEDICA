@@ -40,6 +40,12 @@ def create_jinete(**kwargs):
 
     return jinete
 
+def jinete_dni_exists(dni, jinete_id=None):
+    query = Jinete.query.filter_by(dni=dni)
+    if jinete_id:
+        query = query.filter(Jinete.id != jinete_id)
+    return query.first() is not None
+    
 def delete_jinete(id):
     jinete = Jinete.query.get(id)
     if jinete:

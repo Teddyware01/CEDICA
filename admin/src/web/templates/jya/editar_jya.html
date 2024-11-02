@@ -162,7 +162,7 @@
 
             <div class="form-group">
                 <label for="observaciones_becado">Observaciones:</label>
-                <input type="text" id="observaciones_becado" name="observaciones_becado" value="{{ jinete.observaciones_becado }}" required>
+                <input type="text" id="observaciones_becado" name="observaciones_becado" value="{{ jinete.observaciones_becado or '' }}">
             </div>
 
 
@@ -401,7 +401,7 @@
 
             <div class="form-group">
                 <label for="observaciones_institucion">Observaciones:</label>
-                <input type="text" id="observaciones_institucion" name="observaciones_institucion" value="{{ jinete.observaciones_institucion }}">
+                <input type="text" id="observaciones_institucion" name="observaciones_institucion" value="{{ jinete.observaciones_institucion or '' }}">
             </div>
 
             
