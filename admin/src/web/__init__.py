@@ -16,6 +16,7 @@ from src.web.controllers.auth import bp as auth_blueprint
 from flask_session import Session
 from src.web.handlers.auth import is_authenticated, check_permission
 from src.web.controllers.jya import bp as jya_bp
+from src.web.api.issues import bp as issues_api_bp
 
 session= Session()
 
@@ -33,6 +34,10 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(ecuestre_bp)
     app.register_blueprint(equipo_blueprint)
     app.register_blueprint(auth_blueprint)
+    app.register_blueprint(jya_bp)
+    
+    app.register_blueprint(issues_api_bp)
+    
     
     @app.route("/")
     def home():
@@ -56,7 +61,6 @@ def create_app(env="development", static_folder="../../static"):
     app.jinja_env.globals.update(check_permission=check_permission)
 
 
-    app.register_blueprint(jya_bp)
 
     app.jinja_env.globals.update(avatar_url=helpers.avatar_url)
     
