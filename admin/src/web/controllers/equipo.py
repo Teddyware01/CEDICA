@@ -150,7 +150,7 @@ def add_empleado():
             for error in errors:
                 flash(
                     f"Error en el campo {getattr(form, field).label.text}: {error}",
-                    "danger",
+                    "error",
                 )
 
         return render_template("equipo/agregar_empleado.html", form=form)
@@ -252,7 +252,7 @@ def update_empleado(empleado_id):
         flash("Por favor corrija los errores en el formulario:", "error")
         for field, errors in form.errors.items():
             for error in errors:
-                flash(f"Error en el campo {field}: {error}", "danger")
+                flash(f"Error en el campo {field}: {error}", "error")
         return render_template("equipo/edit_empleado.html", form=form, empleado=empleado)
 
 

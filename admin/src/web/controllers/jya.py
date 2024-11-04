@@ -108,7 +108,8 @@ def add_jinete():
             tipo_asignacion=form.tipo_asignacion.data,
             obra_social=form.obra_social.data,
             nro_afiliado=form.nro_afiliado.data,
-            curatela=form.curatela.data,
+            #curatela=form.curatela.data,
+            curatela = True if form.curatela.data == 'si' else False,
             observaciones_curatela=form.observaciones_curatela.data,
             nombre_institucion=form.nombre_institucion.data,
             direccion=nuevo_domicilio,
@@ -147,6 +148,11 @@ def add_jinete():
         # Añadir el familiar a la lista de familiares del jinete
         nuevo_jinete.familiares.append(nuevo_familiar)
 
+        nuevo_jinete.profesor_o_terapeuta_id = form.profesor_o_terapeuta.data
+        nuevo_jinete.conductor_caballo_id = form.conductor_caballo.data
+        nuevo_jinete.caballo_id = form.caballo.data
+        nuevo_jinete.auxiliar_pista_id = form.auxiliar_pista.data
+
         # Guardar todo en la base de datos
         db.session.commit()
 
@@ -157,8 +163,8 @@ def add_jinete():
         flash("Por favor corrija los errores en el formulario:", "error")
         for field, errors in form.errors.items():
             for error in errors:
-                flash(f"Error en el campo {field}: {error}", "danger")
-
+                flash(f"Error en el campo {field}: {error}", "error")
+                
     return render_template("jya/agregar_jya.html", form=form)
 
 
@@ -315,7 +321,7 @@ def editar_jinete(jinete_id):
         jinete.estado_pago = (form["estado_pago"] == "si") 
         jinete.becado = (form["becado"] == "si")
         jinete.observaciones_becado = form["observaciones_becado"]
-        jinete.certificado = (form["certificado"] == "si")
+        jinete.certificado_discapacidad = (form["certificado_discapacidad"] == "si")
         jinete.diagnostico = form["diagnostico"] if  (form["diagnostico"] and form["diagnostico"] !="") else None
         jinete.otro = form["otro"]  if (form["otro"] and form["otro"] !="") else None
 

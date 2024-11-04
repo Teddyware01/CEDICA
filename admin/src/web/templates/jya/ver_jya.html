@@ -31,6 +31,7 @@
             <p><strong>Teléfono actual:</strong> {{ jinete.telefono }}</p>
             <p><strong>Contacto de emergencia: </strong>  {{ jinete.contacto_emergencia.nombre }}, {{ jinete.contacto_emergencia.apellido }}. 
                 <strong>Teléfono:</strong> {{ jinete.contacto_emergencia.telefono }}</p>
+            <p><strong>¿Está al día?</strong> {{"SI" if jinete.estado_pago else "NO" }}</p>
             <p><strong>BECADO:</strong> {{"SI" if jinete.becado else "NO" }}</p>
             <p><strong>Observaciones:</strong> {{ jinete.observaciones_becado }}</p>
             <p><strong>Posee certificado discapacidad:</strong> {{"SI" if jinete.certificado_discapacidad else "NO" }}</p>

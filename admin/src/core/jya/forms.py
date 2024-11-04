@@ -59,14 +59,14 @@ class AddJineteForm(FlaskForm):
     )
 
     
-    becado = BooleanField("Becado")
+    becado = BooleanField("Becado", validators=[DataRequired("Indique si esta becado")])
     
     observaciones_becado = StringField(
         "Observaciones becado",
         validators=[Optional()]
     )
     
-    certificado_discapacidad = BooleanField("Certificado de discapacidad")
+    certificado_discapacidad = BooleanField("Certificado de discapacidad", validators=[DataRequired("Indique si tiene certificado de discapacidad")])
     
     otro = StringField("Otro")
     
@@ -76,7 +76,7 @@ class AddJineteForm(FlaskForm):
         validators=[Optional()],
     )
     
-    beneficiario_pension = BooleanField("Es beneficiario de una pension?")
+    beneficiario_pension = BooleanField("Es beneficiario de una pension?", validators=[DataRequired("Indique si esta becado")])
     
     pension = SelectField(
         "Tipo pension",
@@ -142,7 +142,7 @@ class AddJineteForm(FlaskForm):
         if localidad.provincia_id != provincia_id_seleccionada:
             raise ValidationError("La localidad seleccionada no corresponde a la provincia elegida.")
         
-    asignacion_familiar = BooleanField("Asignacion familiar")
+    asignacion_familiar = BooleanField("Asignacion familiar", validators=[DataRequired("Indique si tiene asignacion familiar")])
         
     tipo_asignacion = SelectField(
         "Asignacion familiar", 
@@ -226,7 +226,7 @@ class AddJineteForm(FlaskForm):
         validators=[DataRequired(message="Los profesionales son obligatorios")],
     )
     
-    condicion=BooleanField("Condicion")
+    condicion=BooleanField("Condicion", validators=[DataRequired("Indique la condición del jinete")])
 
     sede=SelectField("Sede",
         choices=[(sede.name, sede.value) for sede in SedeEnum],

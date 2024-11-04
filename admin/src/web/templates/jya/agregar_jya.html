@@ -116,20 +116,20 @@
             <div>
                 <label for="estado_pago" class="form-element">¿Está al día?</label>
                 <input type="radio" id="estado_pago_si" name="estado_pago" value="si" 
-                    {% if form.estado_pago == True %}checked{% endif %}>
+                    {% if form.estado_pago.data == True %}checked{% endif %}>
                 <label for="estado_pago_si">Sí</label>
                 <input type="radio" id="estado_pago_no" name="estado_pago" value="no" 
-                    {% if form.estado_pago == False %}checked{% endif %}>
+                    {% if form.estado_pago.data == False %}checked{% endif %}>
                 <label for="estado_pago_no">No</label>
             </div>
 
             <div>
                 <label for="becado" class="form-element">Becado:</label>
                 <input type="radio" id="becado_si" name="becado" value="si"
-                {% if form.becado == True %}checked{% endif %}>
+                {% if form.becado.data == True %}checked{% endif %}>
                 <label for="becado_si">Sí</label>
                 <input type="radio" id="becado_no" name="becado" value="no"
-                {% if form.becado == False %}checked{% endif %}>
+                {% if form.becado.data == False %}checked{% endif %}>
                 <label for="becado_no">No</label>
             </div>
 
@@ -140,14 +140,13 @@
 
             <div>
                 <label for="certificado_discapacidad" class="form-element">
-                    ¿Posee certificado<br>
-                    de discapacidad?
+                    ¿Posee certificado de discapacidad?
                 </label>
-                <input type="radio" id="certificado_si" name="certificado" value="si"
-                {% if form.certificado_discapacidad == True %}checked{% endif %}>
+                <input type="radio" id="certificado_si" name="certificado_discapacidad" value="si"
+                    {% if form.certificado_discapacidad.data == True %}checked{% endif %}>
                 <label for="certificado_si">Sí</label>
-                <input type="radio" id="certificado_no" name="certificado" value="no"
-                {% if form.certificado_discapacidad == False %}checked{% endif %}>
+                <input type="radio" id="certificado_no" name="certificado_discapacidad" value="no"
+                {% if form.certificado_discapacidad.data == False %}checked{% endif %}>
                 <label for="certificado_no">No</label>
             </div>
 
@@ -196,10 +195,10 @@
             <div>
                 <label for="asignacion_familiar" class="form-element">¿Percibe alguna asignación familiar?</label>
                 <input type="radio" id="asignacion_si" name="asignacion" value="si"
-                {% if form.asignacion_familiar == True %}checked{% endif %}>
+                {% if form.asignacion_familiar.data == True %}checked{% endif %}>
                 <label for="asignacion_si">Sí</label>
                 <input type="radio" id="asignacion_no" name="asignacion" value="no"
-                {% if form.asignacion_familiar == False %}checked{% endif %}>
+                {% if form.asignacion_familiar.data == False %}checked{% endif %}>
                 <label for="asignacion_no">No</label>
             </div>
 
@@ -225,10 +224,10 @@
             <div>
                 <label for="beneficiario_pension" class="form-element">¿Es beneficiario de alguna pensión?</label>
                 <input type="radio" id="pension_si" name="beneficiario_pension" value="si"
-                {% if form.beneficiario_pension == True %}checked{% endif %}>
+                {% if form.beneficiario_pension.data == True %}checked{% endif %}>
                 <label for="pension_si">Sí</label>
                 <input type="radio" id="pension_no" name="beneficiario_pension" value="no"
-                {% if form.beneficiario_pension == False %}checked{% endif %}>
+                {% if form.beneficiario_pension.data == False %}checked{% endif %}>
                 <label for="pension_no">No</label>
             </div>
 
@@ -268,13 +267,13 @@
             <div>
                 <label for="curatela" class="form-element"> ¿Posee curatela? </label>
                 <input type="radio" id="curatela_si" name="curatela" value="si"
-                {% if form.curatela == True %}checked{% endif %}>
+                {% if form.curatela.data == True %}checked{% endif %}>
                 <label for="curatela_si">Sí</label>
                 <input type="radio" id="curatela_no" name="curatela" value="no"
-                {% if form.curatela == False %}checked{% endif %}>
+                {% if form.curatela.data == False %}checked{% endif %}>
                 <label for="curatela_no">No</label>
             </div>
-            
+
             <div>
                 <label for="observaciones_curatela" class="form-element">observaciones:</label>
                 {{ form.observaciones_curatela }}
@@ -426,10 +425,10 @@
             <div>
                 <label for="condicion" class="form-element">Condición:</label>
                 <input type="radio" id="condicion_si" name="condicion" value="si"
-                {% if form.condicion == True %}checked{% endif %}>
+                {% if form.condicion.data == True %}checked{% endif %}>
                 <label for="condicion_si">Regular</label>
                 <input type="radio" id="condicion_no" name="condicion" value="no"
-                {% if form.condicion == False %}checked{% endif %}>
+                {% if form.condicion.data == False %}checked{% endif %}>
                 <label for="condicion_no">De baja</label>
             </div>
 
