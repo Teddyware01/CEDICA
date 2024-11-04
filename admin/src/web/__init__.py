@@ -1,3 +1,4 @@
+#import logging
 from flask import Flask
 from flask import render_template, redirect,url_for
 from src.web.handlers import error
@@ -19,6 +20,10 @@ from src.web.controllers.jya import bp as jya_bp
 from src.web.api.issues import bp as issues_api_bp
 
 session= Session()
+
+#logging.basicConfig()
+#logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
+
 
 def create_app(env="development", static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)

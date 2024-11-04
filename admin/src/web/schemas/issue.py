@@ -21,7 +21,9 @@ class SimpleIssueSchema(Schema):
 class CreateIssueSchema(Schema):
     email = fields.Email(required=True)
     title = fields.Str(required=True)
-    
+    description = fields.Str(required=True)
+    user_id = fields.Int(required=True)
+        
     
 issue_schema = IssueSchema()
 issues_schema = IssueSchema(many=True)
