@@ -1,33 +1,18 @@
 import {defineStore} from "pinia"
-export const useIssues = defineStore('issues', {
+import  axios from "axios"
+export const useIssues = defineStore('issuesStore', {
     state:() => ({
         issues: [],
+        loading: false,
+        error: null,
     }),
     actions:{
         async fetchIssues(){
             try {
                 this.loading=true
                 this.error=null
-                this.issues = [
-                    {
-                        id:1,
-                        tittle: "issue 1",
-                        description: "description 1",
-                        user: {email: "user1@example.com"},
-                    },
-                    {
-                        id:2,
-                        tittle: "issue 2",
-                        description: "description 2",
-                        user: {email: "user2@example.com"},
-                    },
-                    {
-                        id:3,
-                        tittle: "issue 3",
-                        description: "description 3",
-                        user: {email: "user3@example.com"},
-                    },
-                ]                
+                const response = await axios.get("http://localhost:5000/api/consultas")  //cambiar esto para que deje de estar hardcodead (separar dev de deploy):
+                this.issues = response.data
             } catch (error){
                 this.error = "Error al obtener los issues"
             } finally {

@@ -18,6 +18,7 @@ from flask_session import Session
 from src.web.handlers.auth import is_authenticated, check_permission
 from src.web.controllers.jya import bp as jya_bp
 from src.web.api.issues import bp as issues_api_bp
+from flask_cors import CORS
 
 session= Session()
 
@@ -69,6 +70,9 @@ def create_app(env="development", static_folder="../../static"):
 
     app.jinja_env.globals.update(avatar_url=helpers.avatar_url)
     
+
+    #ENABLE CORS
+    CORS(app)
 
     @app.cli.command(name="reset-db")
     def reset_db():

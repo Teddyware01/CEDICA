@@ -23,7 +23,10 @@ def index():
                 "updated_at": issue.updated_at,
             }
     )'''
-    
+    print("TODOS:")
+    print(jsonify(data))
+
+    print(jsonify(data))
     return jsonify(data), 200
 
 
