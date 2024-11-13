@@ -10,8 +10,30 @@ def find_user_by_email_and_password(email, password):
 def find_user_by_email(email):
     user = Users.query.filter_by(email=email).first()
     return user
+
 def list_users(sort_by=None, search=None, page=1, per_page=5):
     query = Users.query
+    if search:
+        query = query.filter(
+                Users.email.like(f"%{search}%"),   
+        )
+    if sort_by:
+        if sort_by == "email_asc":
+            query = query.order_by(Users.email.asc())
+        elif sort_by == "email_desc":
+            query = query.order_by(Users.email.desc())
+        elif sort_by == "created_at_asc":
+            query = query.order_by(Users.fecha_creacion.asc())
+        elif sort_by == "created_at_desc":
+            query = query.order_by(Users.fecha_creacion.desc())
+
+    paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
+    return paginated_query
+
+
+# pendientes de aceptacion!.
+def list_users_pending(sort_by=None, search=None, page=1, per_page=5):
+    query = Users.query.filter(Users.is_accept_pending == True)
     if search:
         query = query.filter(
                 Users.email.like(f"%{search}%"),   
@@ -34,7 +56,6 @@ def create_user(**kwargs):
     User = Users(**kwargs)
     db.session.add(User)
     db.session.commit()
-
     return User
 
 
