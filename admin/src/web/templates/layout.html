@@ -30,7 +30,7 @@
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             
-                            <a class="nav-link" href="{{ url_for('home') }}">Inicio</a>
+                            <a class="nav-link" href="{{ url_for('auth.home') }}">Inicio</a>
                             {% if is_authenticated(session) and check_permission(session, "user_index") %}
                                 <a class="nav-link" href="{{ url_for('users.listar_usuarios') }}">Usuarios</a>
                             {% endif %}

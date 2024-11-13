@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block title %} Aceptacion de usuario pendiente. {% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Aceptacion pendiente. </h1>
+
+    <form action="{{ url_for('users.accept_user', user_id=user.id) }}" method="POST" onsubmit="return validateRoles()">
+
+        {% if user.is_google_auth %}
+            Usuario registrado con Google. (No tiene contraseña y el email sera el suministrado a la cuenta con la que se registro).
+            <br>
+        {% endif %}
+        <p>
+            <label for="name">Email:</label>{{user.email}}
+        </p>
+        <div class="form-group">
+            <label for="alias">Alias:</label>
+            <input type="text" id="alias" name="alias" value="{{ user.alias }}" required>
+        </div>
+        <div class="form-group">
+            <label for="is_admin">¿Es administrador del sistema?</label>
+            <input type="checkbox" id="is_admin" name="is_admin" {% if user.system_admin %}checked{% endif %}>
+        </div>
+
+        <div class="form-group">
+            <label for="is_active">¿Está activo?</label>
+            <input type="checkbox" id="is_active" name="is_active" {% if user.activo %}checked{% endif %}>
+        </div>
+
+        <div class="form-group">
+            <label for="empleado_asignado">Empleado asignado:</label>
+            <select class="form-control" id="empleado_asignado" name="empleado_asignado">
+                <option value="">Selecciona un empleado</option>
+                {% for empleado in empleados_asignables %}
+                    <option value="{{ empleado.id }}" {% if empleado_ya_asignado and empleado.id == empleado_ya_asignado.id %}selected{% endif %}>
+                        {{ empleado.nombre }} {{ empleado.apellido }} {{ empleado.dni }} {{ empleado.profesion.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="roles">Roles (debe tener al menos uno):</label>
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" name="roles" value="Tecnica" {% if 'Tecnica' in roles %}checked{% endif %}>
+                    Técnica
+                </label>
+                <label>
+                    <input type="checkbox" name="roles" value="Encuestre" {% if 'Encuestre' in roles %}checked{% endif %}>
+                    Ecuestre
+                </label>
+                <label>
+                    <input type="checkbox" name="roles" value="Voluntariado" {% if 'Voluntariado' in roles %}checked{% endif %}>
+                    Voluntariado
+                </label>
+                <label>
+                    <input type="checkbox" name="roles" value="Administracion" {% if 'Administracion' in roles %}checked{% endif %}>
+                    Administración
+                </label>
+            </div>
+            <small class="form-text text-muted">Debe seleccionar al menos un rol.</small>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-add" style="margin-right: 1em;">Aceptar Usuario</button>
+            <a href="{{ url_for('users.listar_usuarios_pendientes') }}" class="btn btn-back">Cancelar</a>
+        </div>
+    </form>
+
+    <script>
+        function validateRoles() {
+            // Obtiene todos los checkboxes de roles
+            const checkboxes = document.querySelectorAll('input[name="roles"]');
+            // Revisa si al menos uno está marcado
+            let isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+            if (!isChecked) {
+                alert("Debe seleccionar al menos un rol.");
+                return false; // Evita que se envíe el formulario
+            }
+            return true; // Permite el envío del formulario
+        }
+    </script>
+{% endblock %}

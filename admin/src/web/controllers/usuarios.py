@@ -9,13 +9,65 @@ from src.core.equipo.models import Empleado
 bp = Blueprint("users", __name__, url_prefix="/listado_De_usuarios")
 
 
+
+
+@bp.get("/pending/")
+@login_required
+#@check("user_accept") o algo asi
+def listar_usuarios_pendientes():    
+    sort_by = request.args.get("sort_by")
+    search = request.args.get("search")
+    page = request.args.get("page", type=int, default=1) 
+    
+    pending_users = auth.list_users_pending(sort_by=sort_by, search=search, page=page)
+    return render_template("listado_pendientes.html", usuarios=pending_users)
+
+
+@bp.get("/pending/<int:user_id>")
+@login_required
+#@check("user_accept") o algo asi
+def atender_pending_user(user_id):
+    user = auth.traer_usuario(user_id)
+    if user:
+        roles = user.roles
+        roles_nombres = [rol.nombre for rol in roles]
+    roles = auth.traer_roles(user_id)
+    empleados_asignables = Empleado.query.filter(Empleado.usuario_asignado == None ).all() #los disponibles(sin asignar)
+
+    # Si tiene uno asignado, que lo muestre en la lista de opciones
+    empleado_ya_asignado = user.empleado_asignado
+    if empleado_ya_asignado:
+        empleados_asignables.append(empleado_ya_asignado)
+    
+    return render_template("accepting_user.html", user=user, roles=roles, roles_nombres=roles_nombres, empleados_asignables=empleados_asignables, empleado_ya_asignado=empleado_ya_asignado)
+
+
+@bp.post("/pending/<int:user_id>")
+@login_required
+#@check("user_accept") o algo asi
+def accept_user(user_id):
+    auth.edit_user(
+        user_id,
+        alias=request.form["alias"],
+        empleado_id=request.form["empleado_asignado"],
+        system_admin=request.form.get("is_admin") is not None,
+        activo=request.form.get("is_active") is not None, 
+        is_accept_pending=False, 
+    )
+    selected_roles = request.form.getlist('roles')
+    auth.actualizar_roles(user_id,selected_roles)
+
+    flash("Solicitud de 'usuario pendiente' atendida exitosamente", "success")
+    return redirect(url_for("users.listar_usuarios_pendientes"))
+
+
 @bp.get("/")
 @login_required
 @check("user_index")
 def listar_usuarios():    
     sort_by = request.args.get("sort_by")
     search = request.args.get("search")
-    page = request.args.get("page", type=int, default=1) 
+    page = request.args.get("page", type=int, default=1 ) 
     
     users = auth.list_users(sort_by=sort_by, search=search, page=page)
     return render_template("listado.html", usuarios=users)
