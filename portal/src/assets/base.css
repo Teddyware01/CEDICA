@@ -120,7 +120,11 @@ button:hover {
   background-color: #003580;
 }
 
-
+.g-recaptcha {
+  justify-content: center;
+  margin-top: 1em; 
+  display: flex;
+}
 
 @media (max-width: 600px) {
   form {

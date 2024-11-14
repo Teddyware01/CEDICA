@@ -1,74 +1,61 @@
 <template>
     <div class="contacto">
+        <h1>Contactanos</h1>
         <form @submit.prevent="submitForm">
             <input type="text" v-model="form.name" placeholder="Nombre completo" required>
             <input type="email" v-model="form.email" placeholder="Dirección de correo electrónico" required>
             <textarea v-model="form.message" placeholder="Cuerpo del mensaje" required></textarea>
-            <vue-recaptcha
-                ref="recaptcha"
-                @verify="onCaptchaVerified"
-                @expired="onCaptchaExpired"
-                sitekey="tu_clave_de_sitio_publica"
-            ></vue-recaptcha>
-            <button type="submit">Enviar</button>
+            <button type="submit" class="submit-button">Enviar</button>
+            <div class="g-recaptcha captcha" :data-sitekey="siteKey" data-callback="onCaptchaVerified"></div>
         </form>
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
-    import VueRecaptcha from 'vue-recaptcha';
-    
-    export default {
-        components: {
-            VueRecaptcha
-        },
-        data() {
-            return {
-                form: {
-                    name: '',
-                    email: '',
-                    message: ''
-                },
-                recaptchaVerified: false
-            };
-        },
-        methods: {
-            submitForm() {
-                const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-                    if (!emailRegex.test(this.form.email)) {
-                        alert('Por favor, introduce un correo electrónico válido.');
-                        return;
-                    }
-
-                if (!this.recaptchaVerified) {
-                    alert('Por favor, verifica que no eres un robot.');
-                    return;
-                }
-
-                axios.post('url_del_endpoint_de_tu_API', this.form)
-                .then(() => {
-                    alert('Mensaje enviado con éxito');
-                    this.resetForm();
-                })
-                .catch(error => {
-                    console.error('Error al enviar el mensaje:', error);
-                    alert('Error al enviar el mensaje');
-                });
+export default {
+    data() {
+        return {
+            form: {
+                name: '',
+                email: '',
+                message: ''
             },
-            resetForm() {
-                this.form.name = '';
-                this.form.email = '';
-                this.form.message = '';
-                this.recaptchaVerified = false;
-                this.$refs.recaptcha.reset(); // Resetea el reCAPTCHA
-            },
-            onCaptchaVerified(response) {
-                this.recaptchaVerified = true;
-            },
-            onCaptchaExpired() {
-                this.recaptchaVerified = false;
+            siteKey: '6LcD3n4qAAAAAOmTb-KAAnFAOjECmUzcHSkeM_87',
+            captchaVerified: false // Asegúrate de que esta propiedad está en tu componente
+        };
+    },
+    methods: {
+        submitForm() {
+            if (!this.captchaVerified) {
+                alert('Por favor, completa el captcha.');
+                return;
             }
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailRegex.test(this.form.email)) {
+                alert('Por favor, introduce un correo electrónico válido.');
+                return;
+            }
+            console.log("Enviando formulario con datos:", this.form);
+            alert('Mensaje enviado con éxito');
+            this.resetForm();
+        },
+        resetForm() {
+            this.form.name = '';
+            this.form.email = '';
+            this.form.message = '';
+            this.captchaVerified = false; // Reset captcha verification on form reset
+            grecaptcha.reset(); // Reset the reCAPTCHA widget
+        },
+        onCaptchaVerified() {
+            this.captchaVerified = true;
         }
-    };
+    },
+    mounted() {
+        const script = document.createElement('script');
+        script.src = 'https://www.google.com/recaptcha/api.js';
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+    }
+}
 </script>
