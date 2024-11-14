@@ -56,6 +56,10 @@ export default {
         script.async = true;
         script.defer = true;
         document.head.appendChild(script);
+
+        window.onCaptchaVerified = () => {
+            this.captchaVerified = true;
+        };
     }
 }
 </script>
