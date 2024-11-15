@@ -16,7 +16,7 @@
   </template>
   
   <script setup>
-  import { useNoticias } from '../stores/Noticias';
+  import { useNoticias } from '../stores/noticias';
   import { storeToRefs } from 'pinia';
   import { onMounted } from 'vue';
   
