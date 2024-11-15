@@ -1,15 +1,15 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import Footer from './components/Footer.vue'
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
+    <img alt="Vue logo" class="logo" src="@/assets/cedica.jpg" width="125" height="125" />
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
+      <!--HelloWorld msg="You did it!" /> -->
+      <h2 class="nav-titulo">Sitio web oficial del CEDICA.</h2>
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/contacto">Contacto</RouterLink>
@@ -20,14 +20,25 @@ import HelloWorld from './components/HelloWorld.vue'
       </nav>
     </div>
   </header>
-
-  <RouterView />
+  <div>
+    <RouterView />
+  </div>
+    
+  <Footer />
+    
 </template>
 
 <style scoped>
+
 header {
   line-height: 1.5;
   max-height: 100vh;
+}
+
+.nav-titulo {
+  text-align: center;
+  margin-top: 1rem;
+
 }
 
 .logo {
@@ -59,7 +70,6 @@ nav a {
 nav a:first-of-type {
   border: 0;
 }
-
 @media (min-width: 1024px) {
   header {
     display: flex;
@@ -86,4 +96,8 @@ nav a:first-of-type {
     margin-top: 1rem;
   }
 }
+
 </style>
+
+
+
