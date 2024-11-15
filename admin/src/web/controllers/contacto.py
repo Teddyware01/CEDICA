@@ -1,9 +1,19 @@
-from flask import Blueprint, request, jsonify, current_app
-from flask import request, jsonify
+from flask import Blueprint, render_template, request, jsonify, current_app
+from src.core import contacto
 from src.core.contacto.models import Contacto
 from src.core.database import db
 
 bp = Blueprint("contacto", __name__, url_prefix="/contacto")
+
+
+@bp.get("/")
+def listar_consultas():
+    sort_by = request.args.get("sort_by")
+    search = request.args.get("search")
+    page = request.args.get("page", type=int, default=1) 
+    consultas = contacto.list_consultas(sort_by=sort_by, search=search, page=page)
+    return render_template("contacto/listar_consultas.html", consultas=consultas)
+    
 
 @bp.post("/verify-captcha")
 def verify_captcha():

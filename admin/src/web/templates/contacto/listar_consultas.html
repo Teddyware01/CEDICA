@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+
+{% block title %} Listado de consultas {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <h1 class="text-center">Listado de consultas</h1>
+    
+
+    
+    <!-- Formulario de búsqueda y ordenamiento -->
+    <form method="GET" action="{{ url_for('contacto.listar_consultas') }}" class="mb-3">
+        <div class="form-row">
+            <div class="form-group col-6">
+                <label for="sort_by">Ordenar por:</label>
+                <select name="sort_by" id="sort_by" class="form-control">
+                    <option value="fecha_asc">Fecha (Ascendente)</option>
+                    <option value="fecha_desc">Fecha (Descendente)</option>
+                </select>
+            </div>
+            <div class="form-group col-6">
+                <label for="sort_by">Buscar:</label>
+                <input type="text" id="search" name="search" placeholder="estado" class="form-control" value="{{ request.args.get('search', '') }}">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-6">
+                <button type="submit" class="btn btn-sort">Ordenar</button>
+            </div>
+            <div class="form-group col-6">
+                <button type="submit" class="btn btn-sort">Buscar</button>
+            </div>
+        </div>
+    </form>
+        
+    <!-- Lista de consultas -->
+    {% if consultas %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Mensaje</th>
+                </tr>
+            </thead>            
+            <tbody>
+                {% for consulta in consultas %}
+                    <tr>
+                        <td>{{ consulta.nombre }}</td>
+                        <td>{{ consulta.email }}</td>
+                        <td>{{ consulta.mensaje }}</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var actionButtons = document.querySelectorAll('.action-dropdown .dropdown-toggle');
+                    var actionMenus = document.querySelectorAll('.action-dropdown .dropdown-menu');
+                    actionButtons.forEach(function(button, index) {
+                        button.addEventListener('click', function(event) {
+                            event.stopPropagation();
+                            var currentMenu = actionMenus[index];
+                            currentMenu.style.display = currentMenu.style.display === 'block' ? 'none' : 'block';
+                        });
+                    });
+                    window.onclick = function(event) {
+                        if (!event.target.matches('.dropdown-toggle')) {
+                            actionMenus.forEach(function(menu) {
+                                if (menu.style.display === 'block') {
+                                    menu.style.display = 'none';
+                                }
+                            });
+                        }
+                    };
+                });
+            </script>
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if consultas.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('contacto.listar_consultas', page=consultas.prev_num, sort_by=sort_by, search=search) }}"aria-label="Next">
+                        <span aria-hidden="true">&laquo;</span></a>
+                    </li>
+                {% endif %}
+                        
+                {% for page_num in consultas.iter_pages() %}
+                    {% if page_num %}
+                        <li class="page-item {% if page_num == consultas.page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('contacto.listar_consultas', page=page_num) }}">{{ page_num }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                    {% endif %}
+                {% endfor %}
+        
+                {% if consultas.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('contacto.listar_consultas', page=consultas.next_num, sort_by=sort_by, search=search) }}"aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span></a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% else %}
+        <p>No hay consultas para mostrar.</p>
+    {% endif %}
+{% endblock %}
