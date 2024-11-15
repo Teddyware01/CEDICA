@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, jsonify, current_app
+from src.core.contacto.forms import AddConsultaForm
+from flask import Blueprint, render_template, request, jsonify, current_app, redirect, flash, url_for
 from src.core import contacto
 from src.core.contacto.models import Contacto
 from src.core.database import db
@@ -13,7 +14,102 @@ def listar_consultas():
     page = request.args.get("page", type=int, default=1) 
     consultas = contacto.list_consultas(sort_by=sort_by, search=search, page=page)
     return render_template("contacto/listar_consultas.html", consultas=consultas)
+
+
+@bp.get("/agregar_consulta")
+def agregar_consulta():
+
+    form = AddConsultaForm()
+    return render_template("contacto/agregar_consulta.html", form=form)
+
+
+@bp.post("/agregar_consulta")
+def add_consulta():
+    form = AddConsultaForm(request.form)
+
+    if form.validate_on_submit():
+        contacto.create_consulta(
+            nombre=form.nombre.data,
+            email=form.email.data,
+            mensaje=form.mensaje.data,
+            estado=form.estado.data,
+            comentario=form.comentario.data,
+        )
+
+        # Guardar todo en la base de datos
+        db.session.commit()
+
+        flash("Consulta registrada exitosamente", "success")
+        return redirect(url_for("contacto.listar_consultas"))
+
+    else:
+        flash("Por favor corrija los errores en el formulario:", "error")
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"Error en el campo {field}: {error}", "danger")
+
+    return render_template("contacto/agregar_consulta.html", form=form)
+
+
+@bp.get("/ver_consulta/<int:consulta_id>")
+def view_consulta(consulta_id):
+    consulta = contacto.traer_consulta(consulta_id)
+    page=request.args.get("page", 1, type=int)
+    active_tab=request.args.get("tab", "general")
+    sort_by = request.args.get("sort_by")
+    search = request.args.get("search")
+    return render_template("contacto/ver_consulta.html", consulta=consulta, active_tab=active_tab)
+
+
+@bp.get("/eliminar_consulta/<int:consulta_id>")
+def delete_consulta_form(consulta_id):
+    consulta = contacto.traer_consulta(consulta_id)
+    return render_template("contacto/eliminar_consulta.html", consulta=consulta)
+
+
+@bp.post("/eliminar_consulta/<int:consulta_id>")
+def delete_consulta(consulta_id):
+    contacto.delete_consulta(consulta_id)
     
+    return redirect(url_for("contacto.listar_consultas"))
+
+
+@bp.get("/editar_consulta/<int:consulta_id>")
+def edit_consulta_form(consulta_id):
+    consulta = contacto.traer_consulta(consulta_id)
+    form = AddConsultaForm(obj=consulta) 
+
+    form.nombre.data = consulta.nombre
+    form.email.data = consulta.email
+    form.mensaje.data = consulta.mensaje
+    form.estado.data = consulta.estado
+    estado_actual =  contacto.list_estados()
+    form.comentario.data = consulta.comentario
+
+    return render_template("contacto/editar_consulta.html", form=form, consulta=consulta, estado_actual=estado_actual)
+
+
+@bp.post("/editar_consulta/<int:consulta_id>")
+def editar_consulta(consulta_id):
+    consulta = contacto.traer_consulta(consulta_id)
+    form = AddConsultaForm(request.form, obj=consulta)
+
+    if form.validate_on_submit():
+        form.populate_obj(consulta)
+        db.session.commit()
+
+        flash("Consulta editada exitosamente", "success")
+        return redirect(url_for("contacto.view_consulta", consulta_id=consulta.id))
+
+    else:
+        flash("Por favor corrija los errores en el formulario:", "error")
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"Error en el campo {field}: {error}", "danger")
+
+    return render_template("contacto/editar_consulta.html", form=form, consulta=consulta)
+
+
 
 @bp.post("/verify-captcha")
 def verify_captcha():

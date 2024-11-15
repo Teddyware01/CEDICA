@@ -27,7 +27,7 @@ def list_consultas(sort_by=None, search=None, page=1, per_page=3):
 def traer_consulta(consulta_id):
     return  Contacto.query.get_or_404(consulta_id)
     
-def create_consulta(**kwargs):
+def add_consulta(**kwargs):
     consulta = Contacto(**kwargs)
     db.session.add(consulta)
     db.session.commit()
@@ -50,3 +50,6 @@ def edit_consulta(consulta_id, **kwargs):
         if hasattr(consulta, key):
             setattr(consulta, key, value)
     db.session.commit()
+    
+def list_estados():
+    return  [(est.name, est.value) for est in EstadoEnum]

@@ -11,6 +11,9 @@
     {{ super() }}
     <h1 class="text-center">Listado de consultas</h1>
     
+    <div class="actions">
+        <a href="{{ url_for('contacto.agregar_consulta') }}" class="btn btn-add" style="margin: 10px 0;">Agregar consulta</a>
+    </div>
 
     
     <!-- Formulario de búsqueda y ordenamiento -->
@@ -54,7 +57,27 @@
                         <td>{{ consulta.nombre }}</td>
                         <td>{{ consulta.email }}</td>
                         <td>{{ consulta.mensaje }}</td>
+                        <td>
+                            <!-- Botones visibles solo en pantallas grandes -->
+                            <div class="btn-group d-none d-lg-block">
+                                <a href="{{ url_for('contacto.view_consulta', consulta_id=consulta.id) }}" class="btn btn-view">Ver</a>
+                                <a href="{{ url_for('contacto.edit_consulta_form', consulta_id=consulta.id) }}" class="btn btn-edit">Modificar</a>
+                                <a href="{{ url_for('contacto.delete_consulta_form', consulta_id=consulta.id) }}" class="btn btn-delete">Eliminar</a>
 
+                            </div>
+                            <!-- Botón desplegable visible solo en pantallas pequeñas -->
+                            <div class="dropdown action-dropdown d-block d-lg-none">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ consulta.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Acciones
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ consulta.id }}">
+                                    <a class="dropdown-item" href="{{ url_for('contacto.view_consulta', consulta_id=consulta.id) }}">Ver</a>
+                                    <a class="dropdown-item" href="{{ url_for('contacto.edit_consulta_form', consulta_id=consulta.id) }}">Modificar</a>
+                                    <a class="dropdown-item" href="{{ url_for('contacto.delete_consulta_form', consulta_id=consulta.id) }}">Eliminar</a>
+                                </div>
+                            </div>
+
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

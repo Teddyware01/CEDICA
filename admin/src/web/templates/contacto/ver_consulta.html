@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}Ver consulta{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <div id="general" class="tab-content {% if active_tab == 'general' %}active{% endif %}">
+        <div class="caja">
+            <h2><strong>Consulta realizada</strong></h2>
+
+            <p><strong>Nombre:</strong> {{ consulta.nombre }}</p>
+            <p><strong>Email:</strong> {{ consulta.email }}</p>
+            <p><strong>Mensaje:</strong> {{ consulta.mensaje }}</p>
+            <p><strong>Estado:</strong> {{ consulta.estado.value }}</p>
+            <p><strong>Comentario:</strong> {{ consulta.comentario }}</p>
+        </div>
+        <div class="form-actions">
+            
+
+            <a href="{{ url_for('contacto.listar_consultas') }}" class="btn btn-back">Lista de consultas</a>
+        </div>
+    </div>
+{% endblock %}
