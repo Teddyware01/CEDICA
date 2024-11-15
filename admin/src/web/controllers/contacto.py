@@ -1,0 +1,41 @@
+from flask import Blueprint, request, jsonify, current_app
+from flask import request, jsonify
+from src.core.contacto.models import Contacto
+from src.core.database import db
+
+bp = Blueprint("contacto", __name__, url_prefix="/contacto")
+
+@bp.post("/verify-captcha")
+def verify_captcha():
+    secret_key = "6LcD3n4qAAAAAI1RssEtVWIAtuaBn25ebGctDRr5"
+    captcha_response = request.json.get("captchaResponse")
+
+    verification_url = "https://www.google.com/recaptcha/api/siteverify"
+    payload = {"secret": secret_key, "response": captcha_response}
+    response = request.post(verification_url, data=payload)
+    result = response.json()
+
+    if result.get("success"):
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "error": result.get("error-codes")})
+
+
+@bp.post('/submit_form')
+def submit_form():
+    if not request.json:
+        return jsonify({'error': 'Bad request'}), 400
+
+    try:
+        nombre = request.json.get('nombre')
+        email = request.json.get('email')
+        mensaje = request.json.get('mensaje')
+
+        nuevo_mensaje = Contacto(nombre=nombre, email=email, mensaje=mensaje)
+        db.session.add(nuevo_mensaje)
+        db.session.commit()
+
+        return jsonify({'mensaje': 'Mensaje enviado con éxito!'}), 200
+    except Exception as e:
+        current_app.logger.error(f'Failed to insert message: {e}')
+        return jsonify({'error': 'Internal server error'}), 500
