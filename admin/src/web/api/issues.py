@@ -32,7 +32,7 @@ def index():
 
 @bp.post("/")
 def create():
-    attrs = request.get_json()
+    attrs = request.get_json() #obtengo los parametros
     #new_issue = create_issue_schema.load(data)
     errors = create_issue_schema.validate(attrs)
         

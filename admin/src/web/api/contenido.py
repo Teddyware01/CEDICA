@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from src.core import contenido
-from src.core.contenido import list_contenido, create_contenido
+from src.core.contenido import list_contenido, create_contenido, update_contenido, delete_contenido
 from src.web.schemas.contenido import contenidos_schema, create_contenido_schema, contenido_schema
 
 
@@ -40,7 +40,7 @@ def create():
 
 #hacer la que trae el contenido en epseciipcio
 @bp.post("/{contenido_id}")
-def create():
+def create_porid():
     
     attrs = request.get_json()
 
@@ -57,3 +57,32 @@ def create():
     data = contenido_schema.dump(new_content)
 
     return jsonify(data), 201
+
+
+@bp.get("/<int:contenido_id>")
+def update(contenido_id):
+    attrs = request.get_json()
+
+    errors = contenido_schema.validate(attrs)
+    if errors:
+        return jsonify(errors), 400
+
+   
+    updated_contenido = update_contenido(contenido_id, **attrs)
+
+    if isinstance(updated_contenido, dict) and "error" in updated_contenido:
+        return jsonify(updated_contenido), 404
+
+    data = contenido_schema.dump(updated_contenido)
+    return jsonify(data), 200
+
+@bp.post("/ulr para eliminar")
+def delete(contenido_id):
+
+    response = delete_contenido(contenido_id)
+
+    if isinstance(response, dict) and "error" in response:
+        return jsonify(response), 404
+
+    return jsonify(response), 200
+
