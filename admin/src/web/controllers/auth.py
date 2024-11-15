@@ -70,7 +70,7 @@ def callback():
     # You can perform registration process using this information if needed.
     return redirect(url_for('auth.home')) 
 
-@bp.route("/authenticate")
+@bp.post("/authenticate")
 def authenticate(email=None):
     if request.method == "POST":
         params = request.form

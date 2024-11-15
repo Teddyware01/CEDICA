@@ -13,7 +13,7 @@ bp = Blueprint("users", __name__, url_prefix="/listado_De_usuarios")
 
 @bp.get("/pending/")
 @login_required
-#@check("user_accept") o algo asi
+@check("user_accept")
 def listar_usuarios_pendientes():    
     sort_by = request.args.get("sort_by")
     search = request.args.get("search")
@@ -25,7 +25,7 @@ def listar_usuarios_pendientes():
 
 @bp.get("/pending/<int:user_id>")
 @login_required
-#@check("user_accept") o algo asi
+@check("user_accept")
 def atender_pending_user(user_id):
     user = auth.traer_usuario(user_id)
     if user:
@@ -44,7 +44,7 @@ def atender_pending_user(user_id):
 
 @bp.post("/pending/<int:user_id>")
 @login_required
-#@check("user_accept") o algo asi
+@check("user_accept")
 def accept_user(user_id):
     auth.edit_user(
         user_id,
