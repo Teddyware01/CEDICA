@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, post_load
 from marshmallow.validate import OneOf
-from src.core.contenido import Contenido, TipoContenidoEnum, EstadoContenidoEnum
+from src.core.contenido.contenido import Contenido, TipoContenidoEnum, EstadoContenidoEnum
 
 class ContenidoSchema(Schema):
     id = fields.Int(dump_only=True)

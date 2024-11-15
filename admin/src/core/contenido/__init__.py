@@ -1,9 +1,10 @@
 from src.core.database import db
-from src.core.contenido import Contenido
+from .contenido import Contenido
 
 
 def list_contenido():
     contenido = Contenido.query.all()
+    print("SE LISTA TODO EL CONTENIDO, que son:",len(contenido))
     return contenido
 
 

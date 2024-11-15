@@ -5,12 +5,14 @@
       <p v-if="error">{{ error }}</p>
   
       <div v-if="!loading && noticias.length">
-          <div v-for="noticia in noticias" :key="noticia.id">
+          <div class="contenido" v-for="noticia in noticias" :key="noticia.id">
             <h1>{{ noticia.titulo }}</h1>
-            <p>{{ noticia.contenido }}</p>
+            <p>{{ noticia.copete }}</p>
+            <p>{{ noticia.published_at }}</p>
+            <router-link :to="'/contenido/' + noticia.id">Leer</router-link>
+
           </div>
       </div>
-  
       <p v-if="!loading && !noticias.length">No hay Noticias para mostrar.</p>
     </div>
   </template>
@@ -34,6 +36,12 @@
   </script>
   
   <style scoped>
+  .contenido {
+    background-color: rgba(0, 255, 255, 0.341);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+  }
   
   
   </style>

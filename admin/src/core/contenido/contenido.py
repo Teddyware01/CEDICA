@@ -1,6 +1,6 @@
 from datetime import datetime
 from src.core.database import db
-from sqlalchemy import Enum
+from enum import Enum
 
 
 # Pueden haber mas o ser cambiados...
