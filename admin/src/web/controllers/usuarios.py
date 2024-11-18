@@ -16,9 +16,13 @@ def listar_usuarios():
     sort_by = request.args.get("sort_by")
     search = request.args.get("search")
     page = request.args.get("page", type=int, default=1) 
-    
-    users = auth.list_users(sort_by=sort_by, search=search, page=page)
-    return render_template("listado.html", usuarios=users)
+    status_filter = request.args.get('status')
+    role_filter = request.args.getlist('roles')
+    exact_match = request.args.get('exact_match')
+    roles = auth.all_roles()
+    roles_nombres = [rol.nombre for rol in roles]
+    users = auth.list_users(status_filter=status_filter, role_filter=role_filter, exact_match=exact_match, sort_by=sort_by, search=search, page=page)
+    return render_template("listado.html", usuarios=users, roles=roles_nombres)
 
 @bp.get("/cliente/<int:user_id>")
 @login_required
