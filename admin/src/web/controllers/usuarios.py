@@ -26,9 +26,9 @@ def listar_usuarios():
 def mostrar_usuario(user_id):
     user = Users.query.get_or_404(user_id)  # Obtener el empleado
     if user:
-        roles = user.roles
-        roles_nombres = [rol.nombre for rol in roles]
-    return render_template("ver_cliente.html", user=user, roles_nombres=roles_nombres)
+        roles = auth.traer_roles(user_id)
+        roles_asignados = [rol.nombre for rol in roles]
+    return render_template("ver_cliente.html", user=user, roles_asignados=roles_asignados)
 
 @bp.get("/agregar_cliente")
 @login_required
@@ -64,13 +64,14 @@ def add_client():
 def edit_client_form(user_id):
     user = auth.traer_usuario(user_id)
     roles = auth.traer_roles(user_id)
+    roles_asignados = [rol.nombre for rol in roles]
     empleados_asignables = Empleado.query.filter(Empleado.usuario_asignado == None ).all() #los disponibles(sin asignar)
     empleado_ya_asignado = user.empleado_asignado
-
+    print(f"sus roles son: {roles}")
     # Si tiene uno asignado, que lo muestre en la lista de opciones
     if empleado_ya_asignado:
         empleados_asignables.append(empleado_ya_asignado)
-    return render_template("edit_client.html", user=user, roles=roles, empleados_asignables=empleados_asignables, empleado_ya_asignado=empleado_ya_asignado)
+    return render_template("edit_client.html", user=user, roles=roles_asignados, empleados_asignables=empleados_asignables, empleado_ya_asignado=empleado_ya_asignado)
 
 
 @bp.get("/eliminar_cliente/<int:user_id>")
@@ -99,11 +100,13 @@ def update_user(user_id):
     if auth.user_email_exists(email, user_id):
         flash("El email ya está en uso. Por favor elige otro.", "error")
         return redirect(url_for("users.edit_client_form", user_id=user_id))
+    empleado_id = request.form["empleado_asignado"]
+    empleado_id = None if empleado_id == "" else int(empleado_id)
     auth.edit_user(
         user_id,
         email=request.form["email"],
         alias=request.form["alias"],
-        empleado_id=request.form["empleado_asignado"],
+        empleado_id=empleado_id,
         password=request.form["password"],
         system_admin=request.form.get("is_admin") is not None,
         activo=request.form.get("is_active") is not None, 
