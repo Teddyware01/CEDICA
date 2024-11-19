@@ -16,6 +16,8 @@ from src.web.controllers.auth import bp as auth_blueprint
 from flask_session import Session
 from src.web.handlers.auth import is_authenticated, check_permission
 from src.web.controllers.jya import bp as jya_bp
+from src.web.controllers.graficos import graficos_bp
+from src.web.controllers.reportes import reportes_bp
 
 session= Session()
 
@@ -33,7 +35,9 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(ecuestre_bp)
     app.register_blueprint(equipo_blueprint)
     app.register_blueprint(auth_blueprint)
-    
+    app.register_blueprint(graficos_bp, url_prefix="/graficos")
+    app.register_blueprint(reportes_bp)
+
     @app.route("/")
     def home():
         return redirect(url_for("auth.login"))
