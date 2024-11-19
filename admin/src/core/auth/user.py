@@ -7,7 +7,7 @@ class Users(db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     alias = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255), nullable=True)
-    system_admin = db.Column(db.Boolean, default=True, nullable=False) #quedo en TRUE PARA DEBUGGEAR
+    system_admin = db.Column(db.Boolean, nullable=False)
     activo = db.Column(db.Boolean, default=True, nullable=False)
     fecha_creacion = db.Column(db.DateTime, default=datetime.now)
     update_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
