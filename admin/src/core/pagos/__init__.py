@@ -1,7 +1,7 @@
 from src.core.pagos.forms import Empleado
 from src.core.database import db
 from src.core.pagos.models import Pago as Pagos
-
+from datetime import datetime
 
 def obtener_empleado(form):
     return Empleado.query.get(form.beneficiario.data)
@@ -11,11 +11,23 @@ def agregar_empleado(nuevo_pago):
     db.session.add(nuevo_pago)
     db.session.commit()
 
+def ordenar_pagos(orden="asc", tipo_pago="", fecha_inicio=None, fecha_fin=None):
+    query = Pagos.query
 
-def ordenar_pagos(orden):
-    return Pagos.query.order_by(
-        Pagos.fecha_pago.asc() if orden == "asc" else Pagos.fecha_pago.desc()
-    ).all()
+    if tipo_pago:
+        query = query.filter(Pagos.tipo_pago == tipo_pago)
+    if fecha_inicio:
+        query = query.filter(Pagos.fecha_pago >= fecha_inicio)
+    if fecha_fin:
+        query = query.filter(Pagos.fecha_pago <= fecha_fin)
+
+    if orden == "asc":
+        query = query.order_by(Pagos.fecha_pago.asc())
+    else:
+        query = query.order_by(Pagos.fecha_pago.desc())
+
+    return query.all()
+
 
 
 def eliminar_pago(pago):

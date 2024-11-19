@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from src.core.database import db
 from src.core.pagos.models import Pago as Pagos
@@ -41,23 +42,33 @@ def registrar_pago():
     return render_template("registrar_pago.html", form=form)
 
 
-@pagos_bp.route("/listado", methods=["GET"])
+@pagos_bp.route("/listar", methods=["GET"])
 @login_required
 @check("pago_index")
 def listar_pagos():
     orden = request.args.get("orden", "asc")
-    page = request.args.get(
-        "page", 1, type=int
-    )  
+    page = request.args.get("page", 1, type=int)
     success = request.args.get("success")
+    tipo_pago = request.args.get("tipo_pago", "")
+    fecha_inicio = request.args.get("fecha_inicio", "")
+    fecha_fin = request.args.get("fecha_fin", "")
 
-    pagos_realizado = pagos.ordenar_pagos(orden)
-    total_paginas = (
-        len(pagos_realizado) + PAGOS_POR_PAGINA - 1
-    ) // PAGOS_POR_PAGINA 
-    pagos_pag = pagos_realizado[
-        (page - 1) * PAGOS_POR_PAGINA : page * PAGOS_POR_PAGINA
-    ]  
+    if fecha_inicio:
+        try:
+            fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()
+        except ValueError:
+            fecha_inicio = None 
+    if fecha_fin:
+        try:
+            fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d").date()
+        except ValueError:
+            fecha_fin = None
+
+    pagos_realizado = pagos.ordenar_pagos(orden, tipo_pago, fecha_inicio, fecha_fin)
+
+    PAGOS_POR_PAGINA = 5 
+    total_paginas = (len(pagos_realizado) + PAGOS_POR_PAGINA - 1) // PAGOS_POR_PAGINA
+    pagos_pag = pagos_realizado[(page - 1) * PAGOS_POR_PAGINA : page * PAGOS_POR_PAGINA]
 
     return render_template(
         "listado_pagos.html",
@@ -66,7 +77,12 @@ def listar_pagos():
         success=success,
         total_paginas=total_paginas,
         pagina_actual=page,
+        tipo_pago=tipo_pago,
+        fecha_inicio=fecha_inicio.strftime("%Y-%m-%d") if fecha_inicio else "",
+        fecha_fin=fecha_fin.strftime("%Y-%m-%d") if fecha_fin else "",
     )
+
+
 
 
 @pagos_bp.route("/eliminar/<int:id>", methods=["POST"])

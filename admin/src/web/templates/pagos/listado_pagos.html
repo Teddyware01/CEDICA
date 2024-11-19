@@ -3,105 +3,112 @@
 {% block title %} Listado de Pagos {% endblock %}
 
 {% block content %}
-    <h1>Listado de Pagos</h1>
+<h1>Listado de Pagos</h1>
 
-    {% if success %}
-    <div class="alert alert-success" role="alert">
-        {{ success }}
-    </div>
-    {% endif %}
+{% if success %}
+<div class="alert alert-success" role="alert">
+    {{ success }}
+</div>
+{% endif %}
 
-    {% if is_authenticated(session) and check_permission(session,"pago_create") %}
-    <div class="actions">
-        <a href="{{ url_for('pagos.registrar_pago') }}" class="btn btn-add">Registrar Pago</a>
-    </div>
-    {% endif %}
+{% if is_authenticated(session) and check_permission(session, "pago_create") %}
+<div class="actions">
+    <a href="{{ url_for('pagos.registrar_pago') }}" class="btn btn-add">Registrar Pago</a>
+</div>
+{% endif %}
 
-    <form method="GET" action="{{ url_for('pagos.buscar_pagos') }}" class="mb-3 search-form">
-        <div class="form-row">
-            <div class="form-group col-md-4"> 
-                <label for="tipo_pago">Tipo de Pago:</label>
-                <select id="tipo_pago" name="tipo_pago" class="form-control">
-                    <option value="">Todos</option>
-                    <option value="honorario">Honorarios</option>
-                    <option value="proveedor">Proveedor</option>
-                    <option value="gastos_varios">Gastos Varios</option>
-                </select>
-            </div>
-
-            <div class="form-group col-md-4"> 
-                <label for="fecha_inicio">Fecha Inicio:</label>
-                <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control">
-            </div>
-
-            <div class="form-group col-md-4"> 
-                <label for="fecha_fin">Fecha Fin:</label>
-                <input type="date" id="fecha_fin" name="fecha_fin" class="form-control">
-            </div>
-        </div>
-    
-        <div class="form-group text-center full-width">
-            <button type="submit" class="btn btn-primary">Buscar</button>
-        </div>
-    </form>
-
-    <form method="GET" action="{{ url_for('pagos.listar_pagos') }}">
-        <div class="form-group text-right">
-            <label for="orden">Ordenar por Fecha:</label>
-            <select id="orden" name="orden" class="form-control" onchange="this.form.submit();">
-                <option value="asc" {% if orden == 'asc' %}selected{% endif %}>Ascendente</option>
-                <option value="desc" {% if orden == 'desc' %}selected{% endif %}>Descendente</option>
+<form method="GET" action="{{ url_for('pagos.listar_pagos') }}" class="mb-3 search-form">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="tipo_pago">Tipo de Pago:</label>
+            <select id="tipo_pago" name="tipo_pago" class="form-control">
+                <option value="">Todos</option>
+                <option value="Honorario" {% if tipo_pago == 'Honorario' %}selected{% endif %}>Honorarios</option>
+                <option value="Proveedor" {% if tipo_pago == 'Proveedor' %}selected{% endif %}>Proveedor</option>
+                <option value="Gastos_varios" {% if tipo_pago == 'Gastos_varios' %}selected{% endif %}>Gastos Varios</option>
             </select>
         </div>
-    </form>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Beneficiario</th>
-                <th>Monto</th>
-                <th>Fecha de Pago</th>
-                <th>Tipo de Pago</th>
-                <th>Descripción</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for pago in pagos_realizado %}
-            <tr>
-                <td>{{ pago.beneficiario }}</td>
-                <td>{{ pago.monto }}</td>
-                <td>{{ pago.fecha_pago.strftime('%Y-%m-%d') }}</td>
-                <td>{{ pago.tipo_pago.capitalize() }}</td>
-                <td>{{ pago.descripcion }}</td>
-                <td>
-                    {% if is_authenticated(session) and check_permission(session,"pago_destroy") %}
-                    <form method="POST" action="{{ url_for('pagos.eliminar_pago', id=pago.id) }}" style="display:inline;">
-                        <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que deseas eliminar este pago?');">Eliminar</button>
-                    </form>
-                    {% endif %}
-                    {% if is_authenticated(session) and check_permission(session,"pago_update") %}
-                    <a href="{{ url_for('pagos.editar_pago', id=pago.id) }}" class="btn btn-edit">Editar</a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div class="pagination">
-        {% if pagina_actual > 1 %}
-            <a href="{{ url_for('pagos.buscar_pagos', page=pagina_actual - 1, orden=orden, tipo_pago=tipo_pago, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin) }}">Anterior</a>
-        {% endif %}
-        
-        {% for i in range(1, total_paginas + 1) %}
-            <a href="{{ url_for('pagos.buscar_pagos', page=i, orden=orden, tipo_pago=tipo_pago, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin) }}" 
-               {% if i == pagina_actual %}class="active"{% endif %}>
-               {{ i }}
-            </a>
-        {% endfor %}
-        
-        {% if pagina_actual < total_paginas %}
-            <a href="{{ url_for('pagos.buscar_pagos', page=pagina_actual + 1, orden=orden, tipo_pago=tipo_pago, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin) }}">Siguiente</a>
-        {% endif %}
+        <div class="form-group col-md-4">
+            <label for="fecha_inicio">Fecha Inicio:</label>
+            <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" value="{{ fecha_inicio }}">
+        </div>
+
+        <div class="form-group col-md-4">
+            <label for="fecha_fin">Fecha Fin:</label>
+            <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" value="{{ fecha_fin }}">
+        </div>
     </div>
+
+    <div class="form-group text-center full-width">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </div>
+</form>
+
+<form method="GET" action="{{ url_for('pagos.listar_pagos') }}">
+    <input type="hidden" name="tipo_pago" value="{{ tipo_pago }}">
+    <input type="hidden" name="fecha_inicio" value="{{ fecha_inicio }}">
+    <input type="hidden" name="fecha_fin" value="{{ fecha_fin }}">
+    <input type="hidden" name="page" value="{{ pagina_actual }}">
+
+    <div class="form-group text-right">
+        <label for="orden">Ordenar por Fecha:</label>
+        <select id="orden" name="orden" class="form-control" onchange="this.form.submit();">
+            <option value="asc" {% if orden == 'asc' %}selected{% endif %}>Ascendente</option>
+            <option value="desc" {% if orden == 'desc' %}selected{% endif %}>Descendente</option>
+        </select>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Beneficiario</th>
+            <th>Monto</th>
+            <th>Fecha de Pago</th>
+            <th>Tipo de Pago</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pago in pagos_realizado %}
+        <tr>
+            <td>{{ pago.beneficiario }}</td>
+            <td>{{ pago.monto }}</td>
+            <td>{{ pago.fecha_pago.strftime('%Y-%m-%d') }}</td>
+            <td>{{ pago.tipo_pago.capitalize() }}</td>
+            <td>{{ pago.descripcion }}</td>
+            <td>
+                {% if is_authenticated(session) and check_permission(session, "pago_destroy") %}
+                <form method="POST" action="{{ url_for('pagos.eliminar_pago', id=pago.id) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que deseas eliminar este pago?');">Eliminar</button>
+                </form>
+                {% endif %}
+                {% if is_authenticated(session) and check_permission(session, "pago_update") %}
+                <a href="{{ url_for('pagos.editar_pago', id=pago.id) }}" class="btn btn-edit">Editar</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Paginación -->
+<div class="pagination">
+    {% if pagina_actual > 1 %}
+    <a href="{{ url_for('pagos.listar_pagos', page=pagina_actual - 1, orden=orden, tipo_pago=tipo_pago, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin) }}">Anterior</a>
+    {% endif %}
+
+    {% for i in range(1, total_paginas + 1) %}
+    <a href="{{ url_for('pagos.listar_pagos', page=i, orden=orden, tipo_pago=tipo_pago, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin) }}"
+        {% if i == pagina_actual %}class="active"{% endif %}>
+        {{ i }}
+    </a>
+    {% endfor %}
+
+    {% if pagina_actual < total_paginas %}
+    <a href="{{ url_for('pagos.listar_pagos', page=pagina_actual + 1, orden=orden, tipo_pago=tipo_pago, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin) }}">Siguiente</a>
+    {% endif %}
+</div>
 {% endblock %}

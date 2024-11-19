@@ -5,6 +5,7 @@ from src.core.cobros.forms import RegistroCobroForm
 from src.core.equipo.models import Empleado
 from src.core import cobros
 from src.web.handlers.auth import login_required, check
+from sqlalchemy.orm import aliased
 
 cobros_bp = Blueprint("cobros", __name__, template_folder="../templates/cobros")
 
@@ -34,7 +35,6 @@ def registrar_cobro():
 
     return render_template("registrar_cobro.html", form=form)
 
-
 @cobros_bp.route("/listado", methods=["GET"])
 @login_required
 @check("cobro_index")
@@ -42,28 +42,49 @@ def listar_cobros():
     page = request.args.get("page", 1, type=int)
     per_page = 5
 
-    fecha_inicio = request.args.get("fecha_inicio")
-    fecha_fin = request.args.get("fecha_fin")
-    medio_pago = request.args.get("medio_pago")
-    nombre_recibido = request.args.get("nombre_recibido")
-    apellido_recibido = request.args.get("apellido_recibido")
+    fecha_inicio = request.args.get("fecha_inicio", "")
+    fecha_fin = request.args.get("fecha_fin", "")
+    medio_pago = request.args.get("medio_pago", "")
+    nombre_recibido = request.args.get("nombre_recibido", "")
+    apellido_recibido = request.args.get("apellido_recibido", "")
     orden = request.args.get("orden", "asc")
 
-    query = cobros.listar_cobros(
-        fecha_inicio, fecha_fin, medio_pago, nombre_recibido, apellido_recibido
+    empleado_alias = aliased(Empleado)
+
+    query = db.session.query(RegistroCobro).join(
+        empleado_alias, RegistroCobro.recibido_por == empleado_alias.id
     )
-    cobros_realizado = cobros.ordenar_fecha(orden, query).paginate(
-        page=page, per_page=per_page
+
+    if fecha_inicio and fecha_fin:
+        query = query.filter(RegistroCobro.fecha_pago.between(fecha_inicio, fecha_fin))
+    if medio_pago:
+        query = query.filter(RegistroCobro.medio_pago == medio_pago.lower())
+    if nombre_recibido:
+        query = query.filter(empleado_alias.nombre.ilike(f"%{nombre_recibido}%"))
+    if apellido_recibido:
+        query = query.filter(empleado_alias.apellido.ilike(f"%{apellido_recibido}%"))
+
+    query = query.order_by(
+        RegistroCobro.fecha_pago.asc() if orden == "asc" else RegistroCobro.fecha_pago.desc()
     )
+
+    cobros_realizado = query.paginate(page=page, per_page=per_page)
 
     success_cobro = request.args.get("success_cobro")
 
     return render_template(
         "listado_cobros.html",
         cobros_realizado=cobros_realizado.items,
-        success_cobro=success_cobro,
         pagination=cobros_realizado,
+        fecha_inicio=fecha_inicio,
+        fecha_fin=fecha_fin,
+        medio_pago=medio_pago,
+        nombre_recibido=nombre_recibido,
+        apellido_recibido=apellido_recibido,
+        orden=orden,
+        success_cobro=success_cobro,
     )
+
 
 
 @cobros_bp.route("/editar/<int:id>", methods=["GET", "POST"])
