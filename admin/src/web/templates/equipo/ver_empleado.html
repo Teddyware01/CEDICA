@@ -53,6 +53,18 @@
             <p><strong>Nombre:</strong> {{empleado.contacto_emergencia.nombre}}</p>
             <p><strong>Calle:</strong> {{empleado.contacto_emergencia.telefono}}</p>
         </div>
+        <div class="caja">
+            <h3>Roles</strong></h3>
+            {% if roles_asignados %}
+                <ul>
+                    {% for rol in roles_asignados %}
+                        <li>{{ rol }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <span>No tiene roles asignados.</span>
+            {% endif %}
+        </div>
         <div class="form-actions">
             <a href="{{url_for('equipo.edit_empleado_form', empleado_id=empleado.id )}}" class="btn btn-edit" style="margin-right: 1em;">Editar empleado</a>
             <a href="{{url_for('equipo.delete_empleado', empleado_id=empleado.id )}}" class="btn btn-delete" style="margin-right: 1em;">Eliminar empleado</a>
