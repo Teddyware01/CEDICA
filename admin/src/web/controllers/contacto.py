@@ -28,7 +28,7 @@ def add_consulta():
     form = AddConsultaForm(request.form)
 
     if form.validate_on_submit():
-        contacto.create_consulta(
+        contacto.add_consulta(
             nombre=form.nombre.data,
             email=form.email.data,
             mensaje=form.mensaje.data,

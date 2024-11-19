@@ -6,7 +6,7 @@ from src.core.database import db
 from src.web.handlers.auth import login_required, check
 from src.core.equipo.models import Empleado
 
-bp = Blueprint("users", __name__, url_prefix="/listado_De_usuarios")
+bp = Blueprint("users", __name__, url_prefix="/listado_de_usuarios")
 
 
 
