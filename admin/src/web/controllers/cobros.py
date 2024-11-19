@@ -49,24 +49,13 @@ def listar_cobros():
     apellido_recibido = request.args.get("apellido_recibido", "")
     orden = request.args.get("orden", "asc")
 
-    empleado_alias = aliased(Empleado)
+    empleado_alias = cobros.buscar_empleado()
 
-    query = db.session.query(RegistroCobro).join(
-        empleado_alias, RegistroCobro.recibido_por == empleado_alias.id
-    )
+    query = cobros.buscar_empleado_por_id(empleado_alias)
 
-    if fecha_inicio and fecha_fin:
-        query = query.filter(RegistroCobro.fecha_pago.between(fecha_inicio, fecha_fin))
-    if medio_pago:
-        query = query.filter(RegistroCobro.medio_pago == medio_pago.lower())
-    if nombre_recibido:
-        query = query.filter(empleado_alias.nombre.ilike(f"%{nombre_recibido}%"))
-    if apellido_recibido:
-        query = query.filter(empleado_alias.apellido.ilike(f"%{apellido_recibido}%"))
+    query = cobros.operaciones_filtro(fecha_inicio, fecha_fin, medio_pago, nombre_recibido, apellido_recibido, empleado_alias, query)
 
-    query = query.order_by(
-        RegistroCobro.fecha_pago.asc() if orden == "asc" else RegistroCobro.fecha_pago.desc()
-    )
+    query = cobros.ordenar_fecha(orden, query)
 
     cobros_realizado = query.paginate(page=page, per_page=per_page)
 
