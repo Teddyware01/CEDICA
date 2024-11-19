@@ -1,12 +1,12 @@
 <template>
-    <div>
-      <h2>Lista de Noticias</h2>
+    <div class="page">
+      <h1>LISTA DE NOTICIAS</h1>
       <p v-if="loading">Cargando noticias...</p>
       <p v-if="error">{{ error }}</p>
   
       <div v-if="!loading && noticias.length">
           <div class="contenido" v-for="noticia in noticias" :key="noticia.id">
-            <h1>{{ noticia.titulo }}</h1>
+            <h2>{{ noticia.titulo }}</h2>
             <p>{{ noticia.copete }}</p>
             <p>{{ noticia.published_at }}</p>
             <router-link :to="'/contenido/' + noticia.id">Leer</router-link>
@@ -43,5 +43,9 @@
     padding: 10px;
   }
   
+    h1 {
+      padding-top: 60px;
+      padding-bottom: 10px;
+  }
   
   </style>

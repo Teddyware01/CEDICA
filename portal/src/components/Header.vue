@@ -2,7 +2,9 @@
 <template>
     <header>
         <div class="left">
-            <img alt="Logo CEDICA" class="logo" src="@/assets/cedica.jpg" width="100" height="100">
+            <router-link to="/" class="link">
+                <img alt="Logo CEDICA" class="logo" src="@/assets/cedica.jpg" width="100" height="100" title="Logo CEDICA">
+            </router-link>
         </div>
         <div class="nav-container">
             <nav>
@@ -29,20 +31,28 @@
         position: fixed;
         top: 0;
         left: 0;
-        background-color: white;
         z-index: 1000;
-        padding: 10px 20px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        background-color: #e0f7fa;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        padding: 0 20px;
     }
-
+    
     .left {
         flex-shrink: 0;
+        padding: 0;
     }
+
+    .link {
+        background: none;
+    }
+
 
     .nav-container {
         flex-grow: 1; 
         display: flex;
         justify-content: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 25px;
     }
 
     nav {
@@ -51,6 +61,11 @@
     }
 
     .logo {
-        margin-right: 10px; 
+        margin-right: 10px;
+        padding-top: 0;
+    }
+
+    nav a {
+        padding: 5px 10px;
     }
 </style>

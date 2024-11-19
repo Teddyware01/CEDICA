@@ -1,17 +1,15 @@
 <template>
-    <div class="contacto">
-        <h1>Contactanos</h1>
+    <div class="page">
+        <h1>CONTÁCTANOS</h1>
         <form @submit.prevent="submitForm">
-            <input type="text" v-model="form.nombre" placeholder="Nombre completo" required>
-            <input type="email" v-model="form.email" placeholder="Dirección de correo electrónico" required>
-            <textarea v-model="form.mensaje" placeholder="Cuerpo del mensaje" required></textarea>
+            <input type="text" v-model="form.nombre" placeholder="Nombre completo" class="input" required>
+            <input type="email" v-model="form.email" placeholder="Dirección de correo electrónico" class="input" required>
+            <textarea v-model="form.mensaje" placeholder="Cuerpo del mensaje" class="input" required></textarea>
             <button type="submit" class="submit-button">Enviar</button>
             <div class="g-recaptcha captcha" :data-sitekey="siteKey" data-callback="onCaptchaVerified"></div>
         </form>
     </div>
 </template>
-
-
 
 <script>
 import axios from 'axios'
@@ -89,3 +87,10 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+h1 {
+    padding-top: 60px;
+    padding-bottom: 10px;
+}
+</style>
