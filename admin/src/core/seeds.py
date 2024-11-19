@@ -414,6 +414,7 @@ def run():
     user_destroy =  auth.create_permisos(nombre="user_destroy")
     user_update = auth.create_permisos(nombre="user_update")
     user_show = auth.create_permisos(nombre="user_show")
+    user_accept = auth.create_permisos(nombre="user_accept")
 
     # Modulo 4
     empleado_index = auth.create_permisos(nombre="empleado_index")
@@ -482,6 +483,10 @@ def run():
 
     auth.assign_permiso(rol_administracion, ecuestre_index)
     auth.assign_permiso(rol_administracion, ecuestre_show)
+
+    #Para el registro con google y la aceptacion de usuarios pebndientes:
+    auth.assign_permiso(rol_administracion, user_accept)
+
 
     
     # rol tecnica

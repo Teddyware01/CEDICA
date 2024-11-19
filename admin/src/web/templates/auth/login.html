@@ -14,6 +14,55 @@
     
     {{ super() }}
     
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          
+          body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+          }
+          
+          .login-container {
+            text-align: center;
+          }
+          
+          .google-btn {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            color: #4285f4;
+            background-color: #b5b2b2;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+          }
+          
+          .google-btn:hover {
+            background-color: #4285f4;
+            color: #b5b2b2;
+          }
+          
+          .google-logo {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+          }
+      </style>
+
+
     <div class="sesion-centrada">
         <div>
             <h1>{% if 'user' in session %}Sesión activa, {{ session.user }}
@@ -33,6 +82,17 @@
             <input type="submit" value="Ingresar" class="btn btn-add" style="height: 2em; margin: 1em; padding: 0 1em;"/>
 
         </form>
+        <div class="separator">
+          <span>- o -</span>
+        </div>
+        <div class="login-container">
+            <!-- Botón de inicio de sesión con Google -->
+            <a href="{{ url_for('auth.google_authenticate') }}" class="google-btn">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" class="google-logo">
+            Iniciar sesión con Google
+            </a>
+          </div>
+         
         {% endif %}
     </div>
 </section>

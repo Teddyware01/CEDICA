@@ -22,8 +22,9 @@ from src.web.api.issues import bp as issues_api_bp
 from src.web.api.contenido import bp as contenido_api_bp
 from flask_cors import CORS
 
-session= Session()
+from authlib.integrations.flask_client import OAuth
 
+session= Session()
 #logging.basicConfig()
 #logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
@@ -77,6 +78,20 @@ def create_app(env="development", static_folder="../../static"):
 
     #ENABLE CORS
     CORS(app)
+
+    # Configuracion para el oAuth
+    oauth = OAuth(app)
+    oauth.register(
+        name='google',
+        client_id=app.config.get("GOOGLE_CLIENT_ID"),  # Carga desde la configuración
+        client_secret=app.config.get("GOOGLE_CLIENT_SECRET"),  # Carga desde la configuración
+        server_metadata_url=app.config.get("CONF_URL"),
+        client_kwargs={
+        'scope': 'openid email profile'
+        }
+    )
+
+    app.oauth = oauth   #para añadirlo al contexto de la app y poder referenciarlo
 
     @app.cli.command(name="reset-db")
     def reset_db():

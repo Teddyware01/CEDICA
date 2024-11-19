@@ -16,7 +16,12 @@ class ProductionConfig(Config):
     MINIO_SECRET_KEY = environ.get("MINIO_SECRET_KEY")
     MINIO_SECURE = True
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
-    
+
+    # Valores que pueden no tener en sus maquinas, pero que ya cargué en vault:
+    GOOGLE_CLIENT_ID = environ.get('GOOGLE_CLIENT_ID')
+    GOOGLE_CLIENT_SECRET = environ.get('GOOGLE_CLIENT_SECRET')
+    CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
+
 
 class DevelopmentConfig(Config):
     """Development configuration."""
@@ -47,6 +52,12 @@ class DevelopmentConfig(Config):
             'client_encoding': 'utf8'
         }
     }
+
+    # Valores que pueden no tener en sus maquinas, pero que ya cargué en vault:
+    GOOGLE_CLIENT_ID = environ.get('GOOGLE_CLIENT_ID')
+    GOOGLE_CLIENT_SECRET = environ.get('GOOGLE_CLIENT_SECRET')
+    CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
+
     
 class TestingConfig(Config):
     """Testing configuration."""

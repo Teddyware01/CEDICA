@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}Inicio de sesión{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+
+    
+{% block content %}
+<section>
+    
+    {{ super() }}
+    
+
+
+
+    <!-- Mostrar el formulario de inicio de sesión solo si no hay sesión activa -->
+    <div class="sesion-centrada">
+      <h1>
+        Bienvenido!
+      </h1>
+      <h2>Tu alias es: {{ user.alias }}</h2>
+      <h2>Email: {{ user.email }}</h2>
+      <p>Te has autenticado correctamente, pero tu cuenta se encuentra pendiente de aprobación.</p>
+      <p>Hasta entonces no puedes utilizar la pagina web. Pronto un administrador te dará de alta en el sistema.</p>
+    </div>
+         
+</section>
+{% endblock %}
+
+
+
