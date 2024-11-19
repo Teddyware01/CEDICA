@@ -36,7 +36,7 @@
             
             <div class="form-group">
                 <label for="estado">Estado:</label>
-                <select id="estado" name="estado" value="{{consulta.estado.name}}" required>
+                <select id="estado" name="estado" value="{{consulta.estado.name}}">
                     {% for estado in estado_actual %}
                     <option value="{{ estado[0] }}" {% if consulta.estado and consulta.estado.name == estado[0] %} selected {% endif %}>
                         {{ estado[1] }}
@@ -47,13 +47,13 @@
                 
             <div class="form-group">
                 <label for="comentario">Comentario:</label>
-                <input type="text" id="comentario" name="comentario" value="{{ consulta.comentario }}" required>
+                <input type="text" id="comentario" name="comentario" value="{{ consulta.comentario }}">
             </div>
 
         </div>  
             <div class="form-actions">
                 <button type="submit" style="margin-right: 1em;" class="btn btn-add">Guardar Cambios</button>
-                <a href="{{ url_for('contacto.listar_contactos') }}" class="btn btn-back">Cancelar</a>
+                <a href="{{ url_for('contacto.listar_consultas') }}" class="btn btn-back">Cancelar</a>
             </div>
         </form>
     </div>
