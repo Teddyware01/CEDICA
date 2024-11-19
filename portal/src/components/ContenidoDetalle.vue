@@ -19,7 +19,6 @@ const route = useRoute();
 const noticia = ref({});
 
 onMounted(() => {
-  // Simula que obtienes la noticia desde la API o el store
   const id = route.params.id;
   fetch(`/api/noticias/${id}`)
     .then(response => response.json())
@@ -27,7 +26,3 @@ onMounted(() => {
     .catch(err => console.error(err));
 });
 </script>
-
-<style scoped>
-/* Estilos para la vista detallada */
-</style>
