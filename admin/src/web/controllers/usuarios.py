@@ -92,7 +92,7 @@ def delete_client_form(user_id):
 @check("user_destroy")
 def delete_client(user_id):
     auth.delete_user(user_id)
-    flash("Cliente eliminado exitosamente", "flashes-success")
+    flash("Usuario eliminado exitosamente", "flashes-success")
     return redirect(url_for("users.listar_usuarios"))
 
 

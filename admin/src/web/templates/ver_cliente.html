@@ -64,6 +64,16 @@
 
             <div class="form-actions">
                 <a href="{{ url_for('users.edit_client_form', user_id=user.id) }}" class="btn btn-edit">Editar</a>
+                {% if user.activo %}
+                    <form method="POST" action="{{ url_for('users.block_user', user_id=user.id) }}" style="display:inline-block;">
+                        <button type="submit" class="btn btn-block">Bloquear</button>
+                    </form>
+                {% else %}
+                    <form method="POST" action="{{ url_for('users.activate_user', user_id=user.id) }}" style="display:inline-block;">
+                        <button type="submit" class="btn btn-add">Activar</button>
+                    </form>
+                {% endif %}
+                <a href="{{ url_for('users.delete_client_form', user_id=user.id) }}" class="btn btn-delete">Eliminar</a>
                 <a href="{{ url_for('users.listar_usuarios') }}" class="btn btn-back">Volver</a>
             </div>
         </div>

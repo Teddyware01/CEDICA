@@ -20,7 +20,9 @@ def authenticate():
     if not user:
         flash("Usuario o contraseña incorrecta", "error")
         return redirect(url_for("auth.login"))
-
+    if not user.activo:
+        flash("Tu cuenta está bloqueada. No puedes iniciar sesión.", "error")
+        return redirect(url_for("auth.login"))
     session["user"] = user.email
     flash("Sesion iniciada correctamente!", "success")
     return redirect(url_for("auth.login"))
