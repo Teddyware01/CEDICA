@@ -4,6 +4,7 @@ from src.core import auth
 from src.core import jya
 from src.core import equipo
 from src.core import cobros
+from src.core import contacto
 from src.core.equipo.extra_models import Provincia,Localidad, Domicilio
 from src.core.equipo.models import CondicionEnum
 from src.core import pagos
@@ -885,3 +886,10 @@ def run():
         auth.assign_permiso(rol_system_admin, perm)
 
     auth.assign_rol(super_user, [rol_system_admin])
+
+
+    contacto.add_consulta( 
+        nombre="Juan Diaz",
+        email="juan@diaz.com",
+        mensaje="Quiero averiguar precios para tener una sesion"
+    )

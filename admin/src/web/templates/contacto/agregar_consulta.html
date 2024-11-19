@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}Carga de nueva consulta{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+
+    <h1 class="text-center">Carga de consulta</h1>
+    
+    <form action="{{ url_for('contacto.agregar_consulta') }}" method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="caja">
+            <h2><strong> NUEVA CONSULTA </strong></h2>
+                    
+            <div>
+                <label for="nombre" class="form-element">Nombre/s:</label>
+                {{ form.nombre }}
+            </div>
+            
+            <div>
+                <label for="email" class="form-element">Email:</label>
+                {{ form.email }}
+            </div>
+
+            <div>
+                <label for="mensaje" class="form-element">Mensaje:</label>
+                {{ form.mensaje }}
+            </div>
+            
+            <div>
+                <label for="estado" class="form-element">Estado:</label>
+                {{ form.estado }}
+            </div>
+
+            <div>
+                <label for="comentario" class="form-element">Comentario:</label>
+                {{ form.comentario }}
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-add" style="margin-right: 1em;">Agregar consulta</button>
+                <a href="{{ url_for('contacto.listar_consultas') }}" class="btn btn-back">Cancelar</a>
+            </div>
+    </form>
+{% endblock %}

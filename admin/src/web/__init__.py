@@ -14,6 +14,7 @@ from src.web.controllers.pagos import pagos_bp
 from src.web.controllers.cobros import cobros_bp
 from src.web.controllers.ecuestre import bp as ecuestre_bp
 from src.web.controllers.auth import bp as auth_blueprint
+from src.web.controllers.contacto import bp as contacto_bp
 from flask_session import Session
 from src.web.handlers.auth import is_authenticated, check_permission
 from src.web.controllers.jya import bp as jya_bp
@@ -42,6 +43,7 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(equipo_blueprint)
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(jya_bp)
+    app.register_blueprint(contacto_bp)
     
     app.register_blueprint(issues_api_bp)
     app.register_blueprint(contenido_api_bp)

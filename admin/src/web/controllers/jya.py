@@ -1,5 +1,4 @@
 from flask import abort, render_template, request, redirect, flash, url_for, current_app
-from flask import abort, render_template, request, redirect, flash, url_for, current_app
 from os import fstat
 from flask import Blueprint
 from src.web.handlers.auth import login_required, check
@@ -164,19 +163,8 @@ def view_jinete(jinete_id):
     sort_by = request.args.get("sort_by")
     search = request.args.get("search")
     documentos = jya.traer_documentos(jinete_id, page=page, sort_by=sort_by, search=search)
-    page=request.args.get("page", 1, type=int)
-    active_tab=request.args.get("tab", "general")
-    sort_by = request.args.get("sort_by")
-    search = request.args.get("search")
-    documentos = jya.traer_documentos(jinete_id, page=page, sort_by=sort_by, search=search)
-    #tipos_discapacidad_nombres = [tipo.name for tipo in jinete.tipos_discapacidad] if jinete.tipos_discapacidad else []
-    #dias_nombres = [d.name for d in jinete.dia] if jinete.dia else []
-    #return render_template("jya/ver_jya.html", jinete=jinete, tipos_discapacidad=tipos_discapacidad_nombres, dia=dias_nombres, documentos=documentos)
     return render_template("jya/ver_jya.html", jinete=jinete, documentos=documentos, active_tab=active_tab)
     
-
-
-
 
 @bp.get("/eliminar_jinete/<int:jinete_id>")
 @login_required
