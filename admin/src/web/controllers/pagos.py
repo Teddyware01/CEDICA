@@ -53,16 +53,8 @@ def listar_pagos():
     fecha_inicio = request.args.get("fecha_inicio", "")
     fecha_fin = request.args.get("fecha_fin", "")
 
-    if fecha_inicio:
-        try:
-            fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()
-        except ValueError:
-            fecha_inicio = None 
-    if fecha_fin:
-        try:
-            fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d").date()
-        except ValueError:
-            fecha_fin = None
+    fecha_inicio = pagos.validacion_fecha_inicio(fecha_inicio)
+    fecha_fin = pagos.validacion_fecha_fin(fecha_fin)
 
     pagos_realizado = pagos.ordenar_pagos(orden, tipo_pago, fecha_inicio, fecha_fin)
 
@@ -81,9 +73,6 @@ def listar_pagos():
         fecha_inicio=fecha_inicio.strftime("%Y-%m-%d") if fecha_inicio else "",
         fecha_fin=fecha_fin.strftime("%Y-%m-%d") if fecha_fin else "",
     )
-
-
-
 
 @pagos_bp.route("/eliminar/<int:id>", methods=["POST"])
 @login_required

@@ -64,3 +64,18 @@ def guardar_pagos_seeds (pagos_datos):
         )
         db.session.add(nuevo_pago)
     db.session.commit()
+
+def validacion_fecha_inicio(fecha_inicio):
+    if fecha_inicio:
+        try:
+            fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()
+        except ValueError:
+            fecha_inicio = None 
+    return fecha_inicio
+
+def validacion_fecha_fin(fecha_fin):
+    if fecha_fin:
+        try:
+            fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d").date()
+        except ValueError:
+            fecha_fin = None
