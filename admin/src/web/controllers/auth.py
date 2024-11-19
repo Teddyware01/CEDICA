@@ -12,7 +12,8 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 @bp.get("/")
 def home():
-    return render_template("auth/home.html")
+    user = auth.find_user_by_email(session.get("user"))
+    return render_template("auth/home.html",user=user)
 
 @login_required
 @bp.get("/pending_user")
@@ -22,7 +23,8 @@ def pending():
 
 @bp.get("/login")
 def login():
-    return render_template("auth/login.html")
+    user = auth.find_user_by_email(session.get("user"))
+    return render_template("auth/login.html",user=user)
 
 # redirect_uri = url_for('auth.callback', _external=True)
 # return current_app.oauth.google.authorize_redirect(redirect_uri)
