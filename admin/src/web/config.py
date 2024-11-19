@@ -18,8 +18,8 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
 
     # Valores que pueden no tener en sus maquinas, pero que ya cargué en vault:
-    GOOGLE_CLIENT_ID = environ.get('GOOGLE_CLIENT_ID')
-    GOOGLE_CLIENT_SECRET = environ.get('GOOGLE_CLIENT_SECRET')
+    OAUTH_GOOGLE_CLIENT_ID = environ.get('OAUTH_GOOGLE_CLIENT_ID')
+    OAUTH_GOOGLE_CLIENT_SECRET = environ.get('OAUTH_GOOGLE_CLIENT_SECRET')
     CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
 
 
@@ -54,8 +54,8 @@ class DevelopmentConfig(Config):
     }
 
     # Valores que pueden no tener en sus maquinas, pero que ya cargué en vault:
-    GOOGLE_CLIENT_ID = environ.get('GOOGLE_CLIENT_ID')
-    GOOGLE_CLIENT_SECRET = environ.get('GOOGLE_CLIENT_SECRET')
+    OAUTH_GOOGLE_CLIENT_ID = environ.get('OAUTH_GOOGLE_CLIENT_ID')
+    OAUTH_GOOGLE_CLIENT_SECRET = environ.get('OAUTH_GOOGLE_CLIENT_SECRET')
     CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
 
     

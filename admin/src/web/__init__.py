@@ -83,8 +83,8 @@ def create_app(env="development", static_folder="../../static"):
     oauth = OAuth(app)
     oauth.register(
         name='google',
-        client_id=app.config.get("GOOGLE_CLIENT_ID"),  # Carga desde la configuración
-        client_secret=app.config.get("GOOGLE_CLIENT_SECRET"),  # Carga desde la configuración
+        client_id=app.config.get("OAUTH_GOOGLE_CLIENT_ID"),  # Carga desde la configuración
+        client_secret=app.config.get("OAUTH_GOOGLE_CLIENT_SECRET"),  # Carga desde la configuración
         server_metadata_url=app.config.get("CONF_URL"),
         client_kwargs={
         'scope': 'openid email profile'
