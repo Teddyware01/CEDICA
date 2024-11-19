@@ -31,11 +31,10 @@
         <a href="{{ url_for('users.add_client_form') }}" class="btn btn-add" style="margin: 10px 0;">Agregar Usuario</a>
     </div>
 
-    <!-- Filtros de ordenación -->
     <form method="GET" action="{{ url_for('users.listar_usuarios') }}" class="mb-3">
         <div class="card">
             <div class="card-header">
-                <h5>Filtros de Ordenación</h5>
+                <h5>Filtros</h5>
             </div>
             <div class="card-body">
                 <div class="form-row">
@@ -56,48 +55,34 @@
                             <option value="inactive" {% if request.args.get('status') == 'inactive' %}selected{% endif %}>Inactivos</option>
                         </select>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <label for="roles">Filtrar por roles:</label>
-                            <div class="checkbox-group">
-                                {% for role in roles %}
-                                    <label>
-                                        <input type="checkbox" name="roles" value="{{ role }}" 
-                                        {% if role in request.args.getlist('roles') %}checked{% endif %}>
-                                        {{ role }}
-                                    </label><br>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="exact_match">Filtrar por roles exactos:</label>
-                            <input type="checkbox" name="exact_match" 
-                                   {% if request.args.get('exact_match') %}checked{% endif %}>
-                            <br>
-                        </div>
-                    </div>
-                    
-                    
-                </div>
-                <button type="submit" class="btn btn-sort">Ordenar</button>
-            </div>
-        </div>
-    </form>
-
-    <!-- Filtro de búsqueda -->
-    <form method="GET" action="{{ url_for('users.listar_usuarios') }}" class="mb-3">
-        <div class="card">
-            <div class="card-header">
-                <h5>Buscar por Email</h5>
-            </div>
-            <div class="card-body">
-                <div class="form-row">
-                    <div class="form-group col-12">
-                        <label for="search">Email:</label>
+                    <div class="form-group col-4">
+                        <label for="search">Buscar por Email:</label>
                         <input type="text" id="search" name="search" placeholder="Buscar por email" class="form-control" value="{{ request.args.get('search', '') }}">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-sort">Buscar</button>
+    
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        <label for="roles">Filtrar por roles:</label>
+                        <div class="checkbox-group">
+                            {% for role in roles %}
+                                <label>
+                                    <input type="checkbox" name="roles" value="{{ role }}" 
+                                           {% if role in request.args.getlist('roles') %}checked{% endif %}>
+                                    {{ role }}
+                                </label><br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="exact_match">Filtrar por roles exactos:</label>
+                        <input type="checkbox" name="exact_match" 
+                               {% if request.args.get('exact_match') %}checked{% endif %}>
+                        <br>
+                    </div>
+                </div>
+    
+                <button type="submit" class="btn btn-sort">Aplicar Filtros</button>
             </div>
         </div>
     </form>
@@ -156,19 +141,19 @@
             <ul class="pagination">
                 {% if usuarios.has_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('users.listar_usuarios', page=usuarios.prev_num, sort_by=request.args.get('sort_by', ''), status=request.args.get('status', ''), role=request.args.get('role', ''), search=request.args.get('search', '')) }}" aria-label="Previous">
+                    <a class="page-link" href="{{ url_for('users.listar_usuarios', page=usuarios.prev_num, sort_by=request.args.get('sort_by', ''), status=request.args.get('status', ''), roles=request.args.getlist('roles'), search=request.args.get('search', ''), exact_match=request.args.get('exact_match')) }}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
                 {% endif %}
-
+        
                 <li class="page-item active">
                     <a class="page-link">{{ usuarios.page }}</a>
                 </li>
-
+        
                 {% if usuarios.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('users.listar_usuarios', page=usuarios.next_num, sort_by=request.args.get('sort_by', ''), status=request.args.get('status', ''), role=request.args.get('role', ''), search=request.args.get('search', '')) }}" aria-label="Next">
+                    <a class="page-link" href="{{ url_for('users.listar_usuarios', page=usuarios.next_num, sort_by=request.args.get('sort_by', ''), status=request.args.get('status', ''), roles=request.args.getlist('roles'), search=request.args.get('search', ''), exact_match=request.args.get('exact_match')) }}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

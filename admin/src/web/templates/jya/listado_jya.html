@@ -39,10 +39,10 @@
             <div class="form-group col-lg-4 col-12">
                 <label for="sort_by">Ordenar por:</label>
                 <select name="sort_by" id="sort_by" class="form-control">
-                    <option value="nombre_asc">Nombre (Ascendente)</option>
-                    <option value="nombre_desc">Nombre (Descendente)</option>
-                    <option value="apellido_asc">Apellido (Ascendente)</option>
-                    <option value="apellido_desc">Apellido (Descendente)</option>
+                    <option value="nombre_asc" {% if request.args.get('sort_by') == 'nombre_asc' %}selected{% endif %}>Nombre (Ascendente)</option>
+                    <option value="nombre_desc" {% if request.args.get('sort_by') == 'nombre_desc' %}selected{% endif %}>Nombre (Descendente)</option>
+                    <option value="apellido_asc" {% if request.args.get('sort_by') == 'apellido_asc' %}selected{% endif %}>Apellido (Ascendente)</option>
+                    <option value="apellido_desc" {% if request.args.get('sort_by') == 'apellido_desc' %}selected{% endif %}>Apellido (Descendente)</option>
                 </select>
             </div>
             <div class="form-group col-lg-4 col-12 text-center" style="margin: auto;">
@@ -143,7 +143,7 @@
             <ul class="pagination justify-content-center">
                 {% if jinetes.has_prev %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.prev_num, sort_by=sort_by, search=search) }}"aria-label="Next">
+                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.prev_num, sort_by=request.args.get('sort_by', ''), nombre=request.args.get('nombre', ''), apellido=request.args.get('apellido', ''), dni=request.args.get('dni', ''), profesionales=request.args.get('profesionales', '') ) }}"aria-label="Next">
                         <span aria-hidden="true">&laquo;</span></a>
                     </li>
                 {% endif %}
@@ -151,7 +151,7 @@
                 {% for page_num in jinetes.iter_pages() %}
                     {% if page_num %}
                         <li class="page-item {% if page_num == jinetes.page %}active{% endif %}">
-                            <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=page_num) }}">{{ page_num }}</a>
+                            <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=page_num, sort_by=request.args.get('sort_by', ''), nombre=request.args.get('nombre', ''), apellido=request.args.get('apellido', ''), dni=request.args.get('dni', ''), profesionales=request.args.get('profesionales', '') ) }}">{{ page_num }}</a>
                         </li>
                     {% else %}
                         <li class="page-item disabled"><span class="page-link">…</span></li>
@@ -160,7 +160,7 @@
         
                 {% if jinetes.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.next_num, sort_by=sort_by, search=search) }}"aria-label="Next">
+                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.next_num, sort_by=request.args.get('sort_by', ''), nombre=request.args.get('nombre', ''), apellido=request.args.get('apellido', ''), dni=request.args.get('dni', ''), profesionales=request.args.get('profesionales', '') ) }}"aria-label="Next">
                             <span aria-hidden="true">&raquo;</span></a>
                     </li>
                 {% endif %}
