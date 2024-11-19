@@ -10,18 +10,18 @@ from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provinci
 from sqlalchemy import String, cast, or_
 
 
-def list_jinetes(sort_by=None, search=None):
+
+def list_jinetes(sort_by=None, nombre=None, apellido=None, dni=None, profesionales=None):
     query = Jinete.query
-    if search:
-        query = query.filter(
-            or_(
-                Jinete.nombre.ilike(f"%{search}%"),
-                Jinete.apellido.ilike(f"%{search}%"),
-                Jinete.dni.ilike(f"%{search}%"),
-                Jinete.profesionales.ilike(f"%{search}%"),
-            )
-    )
-        
+    if nombre:
+        query = query.filter(Jinete.nombre.ilike(f"%{nombre}%"))
+    if apellido:
+        query = query.filter(Jinete.apellido.ilike(f"%{apellido}%"))
+    if dni:
+        query = query.filter(Jinete.dni.ilike(f"%{dni}%"))
+    if profesionales:
+        query = query.filter(Jinete.profesionales.ilike(f"%{profesionales}%"))
+
     if sort_by:
         if sort_by == "nombre_asc":
             query = query.order_by(Jinete.nombre.asc())
@@ -33,7 +33,6 @@ def list_jinetes(sort_by=None, search=None):
             query = query.order_by(Jinete.apellido.desc())
     return query
 
-
 def create_jinete(**kwargs):
     jinete = Jinete(**kwargs)
     db.session.add(jinete)
@@ -41,6 +40,12 @@ def create_jinete(**kwargs):
 
     return jinete
 
+def jinete_dni_exists(dni, jinete_id=None):
+    query = Jinete.query.filter_by(dni=dni)
+    if jinete_id:
+        query = query.filter(Jinete.id != jinete_id)
+    return query.first() is not None
+    
 def delete_jinete(id):
     jinete = Jinete.query.get(id)
     if jinete:

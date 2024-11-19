@@ -106,7 +106,7 @@ def add_client():
         system_admin=request.form.get("is_admin") is not None,
         activo=request.form.get("is_active") is not None,
     )
-    flash("Cliente agregado exitosamente", "success")
+    flash("Cliente agregado exitosamente", "flashes-success")
     return redirect(url_for("users.listar_usuarios"))
 
 
@@ -139,6 +139,7 @@ def delete_client_form(user_id):
 @check("user_destroy")
 def delete_client(user_id):
     auth.delete_user(user_id)
+    flash("Cliente eliminado exitosamente", "flashes-success")
     return redirect(url_for("users.listar_usuarios"))
 
 
@@ -162,7 +163,7 @@ def update_user(user_id):
     selected_roles = request.form.getlist('roles')
     auth.actualizar_roles(user_id,selected_roles)
 
-    flash("Usuario actualizado exitosamente", "success")
+    flash("Usuario actualizado exitosamente", "flashes-success")
     return redirect(url_for("users.listar_usuarios"))
 
 
@@ -172,14 +173,14 @@ def update_user(user_id):
 def block_user(user_id):
     user = auth.traer_usuario(user_id)
     if user.system_admin:
-        flash("No se puede bloquear un usuario administrador")
+        flash("No se puede bloquear un usuario administrador", "flashes-error")
         return render_template("listado.html", usuarios=auth.list_users())
     if user:
         user.activo = False
         db.session.commit()
-        flash("Usuario bloqueado con éxito.", "success")
+        flash("Usuario bloqueado con éxito.", "flashes-success")
     else:
-        flash("Usuario no encontrado.", "danger")
+        flash("Usuario no encontrado.", "error")
     return redirect(url_for("users.listar_usuarios"))
 
 

@@ -21,10 +21,13 @@ bp = Blueprint("jya", __name__, url_prefix="/jinetes")
 @check("jya_index")
 def listar_jinetes():
     sort_by = request.args.get("sort_by")
-    search = request.args.get('search', '')
+    nombre = request.args.get("nombre", '')
+    apellido = request.args.get("apellido", '')
+    dni = request.args.get("dni", '')
+    profesionales = request.args.get("profesionales", '')
     page = request.args.get('page', 1, type=int)
     per_page = 3  
-    jinetes = jya.list_jinetes(sort_by=sort_by, search=search).paginate(page=page, per_page=per_page)
+    jinetes = jya.list_jinetes(sort_by=sort_by, nombre=nombre, apellido=apellido, dni=dni, profesionales=profesionales).paginate(page=page, per_page=per_page)    
 
     return render_template("jya/listado_jya.html", jinetes=jinetes)
 
@@ -76,11 +79,16 @@ def add_jinete():
         discapacidades_seleccionadas = form.discapacidades.data  # Esto trae los IDs seleccionados en el formulario
         discapacidades_db = TipoDiscapacidad.query.filter(TipoDiscapacidad.tipos_discapacidad.in_(discapacidades_seleccionadas)).all()
 
+        dni= request.form["dni"]
+        if jya.jinete_dni_exists(dni):
+            flash("El DNI ya está registrado. Por favor elige otro.", "error")
+            return redirect(url_for("jya.add_jinete_form"))
+        
         # Crear el nuevo jinete con todos los datos
         nuevo_jinete = jya.create_jinete(
             nombre=form.nombre.data,
             apellido=form.apellido.data,
-            dni=form.dni.data,
+            dni=dni,
             edad=form.edad.data,
             fecha_nacimiento=form.fecha_nacimiento.data,
             localidad_nacimiento=localidad,
@@ -138,6 +146,11 @@ def add_jinete():
         # Añadir el familiar a la lista de familiares del jinete
         nuevo_jinete.familiares.append(nuevo_familiar)
 
+        nuevo_jinete.profesor_o_terapeuta_id = form.profesor_o_terapeuta.data
+        nuevo_jinete.conductor_caballo_id = form.conductor_caballo.data
+        nuevo_jinete.caballo_id = form.caballo.data
+        nuevo_jinete.auxiliar_pista_id = form.auxiliar_pista.data
+
         # Guardar todo en la base de datos
         db.session.commit()
 
@@ -148,8 +161,8 @@ def add_jinete():
         flash("Por favor corrija los errores en el formulario:", "error")
         for field, errors in form.errors.items():
             for error in errors:
-                flash(f"Error en el campo {field}: {error}", "danger")
-
+                flash(f"Error en el campo {field}: {error}", "error")
+                
     return render_template("jya/agregar_jya.html", form=form)
 
 
@@ -295,7 +308,7 @@ def editar_jinete(jinete_id):
         jinete.estado_pago = (form["estado_pago"] == "si") 
         jinete.becado = (form["becado"] == "si")
         jinete.observaciones_becado = form["observaciones_becado"]
-        jinete.certificado = (form["certificado"] == "si")
+        jinete.certificado_discapacidad = (form["certificado_discapacidad"] == "si")
         jinete.diagnostico = form["diagnostico"] if  (form["diagnostico"] and form["diagnostico"] !="") else None
         jinete.otro = form["otro"]  if (form["otro"] and form["otro"] !="") else None
 
@@ -311,7 +324,7 @@ def editar_jinete(jinete_id):
         jinete.obra_social = form["obra_social"]
         jinete.nro_afiliado = form["nro_afiliado"]
         jinete.curatela = (form["curatela"] == "si")
-        jinete.observaciones_curatela = form.get("observaciones_curatela") if form.get("observaciones_curatela") and form.get("observaciones_curatela") != "" else None
+        jinete.observaciones_curatela = form["observaciones_curatela"]
 
         #Institucion escolar:
         jinete.nombre_institucion = form["nombre_institucion"]
@@ -323,7 +336,7 @@ def editar_jinete(jinete_id):
         jinete.direccion.localidad_id = form["direccion.localidad"]
         jinete.telefono_institucion = form["telefono_institucion"]
         jinete.grado = form["grado"]
-        jinete.observaciones_institucion = form.get("observaciones_institucion") if form.get("observaciones_institucion") and form.get("observaciones_institucion") != "" else None
+        jinete.observaciones_institucion = form["observaciones_institucion"]
         jinete.profesionales = form.get("profesionales") if form.get("profesionales") and form.get("profesionales") != "" else None
 
         #levanto campos del familiar:

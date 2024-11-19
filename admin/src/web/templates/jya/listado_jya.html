@@ -18,7 +18,25 @@
     <!-- Formulario de búsqueda y ordenamiento -->
     <form method="GET" action="{{ url_for('jya.listar_jinetes') }}" class="mb-3">
         <div class="form-row">
-            <div class="form-group col-6">
+            <div class="form-group col-lg-4 col-12 ">
+                <label for="nombre">Buscar por Nombre:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Nombre" class="form-control" value="{{ request.args.get('nombre', '') }}">
+            </div>
+            <div class="form-group col-lg-4 col-12">
+                <label for="apellido">Buscar por Apellido:</label>
+                <input type="text" id="apellido" name="apellido" placeholder="Apellido" class="form-control" value="{{ request.args.get('apellido', '') }}">
+            </div>
+            <div class="form-group col-lg-4 col-12">
+                <label for="dni">Buscar por DNI:</label>
+                <input type="text" id="dni" name="dni" placeholder="DNI" class="form-control" value="{{ request.args.get('dni', '') }}">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-lg-4 col-12">
+                <label for="profesionales">Buscar por Profesionales:</label>
+                <input type="text" id="profesionales" name="profesionales" placeholder="Profesionales" class="form-control" value="{{ request.args.get('profesionales', '') }}">
+            </div>
+            <div class="form-group col-lg-4 col-12">
                 <label for="sort_by">Ordenar por:</label>
                 <select name="sort_by" id="sort_by" class="form-control">
                     <option value="nombre_asc">Nombre (Ascendente)</option>
@@ -27,24 +45,15 @@
                     <option value="apellido_desc">Apellido (Descendente)</option>
                 </select>
             </div>
-            <div class="form-group col-6">
-                <label for="sort_by">Buscar:</label>
-                <input type="text" id="search" name="search" placeholder="Nombre, apellido, dni o profesionales" class="form-control" value="{{ request.args.get('search', '') }}">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-6">
-                <button type="submit" class="btn btn-sort">Ordenar</button>
-            </div>
-            <div class="form-group col-6">
-                <button type="submit" class="btn btn-sort">Buscar</button>
+            <div class="form-group col-lg-4 col-12 text-center" style="margin: auto;">
+                <button type="submit" class="btn btn-sort">Buscar / ordenar</button>
             </div>
         </div>
     </form>
         
     <!-- Lista de jinetes -->
     {% if jinetes %}
-        <table class="table">
+        <table class="table d-none d-md-table">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -58,63 +67,78 @@
             <tbody>
                 {% for jinete in jinetes %}
                     <tr>
-                        <td>{{ jinete.nombre }}</td>
-                        <td>{{ jinete.apellido }}</td>
-                        <td>{{ jinete.dni }}</td>
-                        <td>{{ jinete.profesionales }}</td>
-                        <td>
+                        <td data-label="Nombre">{{ jinete.nombre }}</td>
+                        <td data-label="Apellido">{{ jinete.apellido }}</td>
+                        <td data-label="DNI">{{ jinete.dni }}</td>
+                        <td data-label="Profesionales">{{ jinete.profesionales }}</td>
+                        <td data-label="Estado de Pago">
                             {% if jinete.estado_pago %}
                                 <span class="badge badge-success">Al día</span>
                             {% else %}
                                 <span class="badge badge-danger">En deuda</span>
                             {% endif %}
                         </td>
-                        <td>
+                        <td data-label="Acciones">
                             <!-- Botones visibles solo en pantallas grandes -->
-                            <div class="btn-group d-none d-lg-block">
-                                <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="btn btn-view">Ver jinete</a>
-                                <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Modificar jinete</a>
-                                <a href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}" class="btn btn-delete">Eliminar jinete</a>
+                            <div class="btn-group d-none d-lg-flex">
+                                <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="btn btn-view">Ver</a>
+                                <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Modificar</a>
+                                <a href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}" class="btn btn-delete">Eliminar</a>
                             </div>
-                            <!-- Botón desplegable visible solo en pantallas pequeñas -->
-                            <div class="dropdown action-dropdown d-block d-lg-none">
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ jinete.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Acciones
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ jinete.id }}">
-                                    <a class="dropdown-item" href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}">Ver jinete</a>
-                                    <a class="dropdown-item" href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}">Modificar jinete</a>
-                                    <a class="dropdown-item" href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}">Eliminar jinete</a>
-                                </div>
-                            </div>
-
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    var actionButtons = document.querySelectorAll('.action-dropdown .dropdown-toggle');
-                    var actionMenus = document.querySelectorAll('.action-dropdown .dropdown-menu');
-                    actionButtons.forEach(function(button, index) {
-                        button.addEventListener('click', function(event) {
-                            event.stopPropagation();
-                            var currentMenu = actionMenus[index];
-                            currentMenu.style.display = currentMenu.style.display === 'block' ? 'none' : 'block';
-                        });
+        </table >
+        <div class="caja d-md-none">
+            {% for jinete in jinetes %}
+                <div class="caja-separadora">
+                    <p><strong>Nombre:</strong> {{ jinete.nombre }}</p>
+                    <p><strong>Apellido:</strong> {{ jinete.apellido }}</p>
+                    <p><strong>DNI:</strong> {{ jinete.dni }}</p>
+                    <p><strong>Profesionales:</strong> {{ jinete.profesionales }}</p>
+                    <p><strong>Estado de Pago:</strong>
+                        {% if jinete.estado_pago %}
+                            <span class="badge badge-success">Al día</span>
+                        {% else %}
+                            <span class="badge badge-danger">En deuda</span>
+                        {% endif %}
+                    </p>
+                    <div class="dropdown action-dropdown d-block d-lg-none">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ jinete.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Acciones
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ jinete.id }}">
+                            <a class="dropdown-item" href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}">Ver</a>
+                            <a class="dropdown-item" href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}">Modificar</a>
+                            <a class="dropdown-item" href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var actionButtons = document.querySelectorAll('.action-dropdown .dropdown-toggle');
+                var actionMenus = document.querySelectorAll('.action-dropdown .dropdown-menu');
+                actionButtons.forEach(function(button, index) {
+                    button.addEventListener('click', function(event) {
+                        event.stopPropagation();
+                        var currentMenu = actionMenus[index];
+                        currentMenu.style.display = currentMenu.style.display === 'block' ? 'none' : 'block';
                     });
-                    window.onclick = function(event) {
-                        if (!event.target.matches('.dropdown-toggle')) {
-                            actionMenus.forEach(function(menu) {
-                                if (menu.style.display === 'block') {
-                                    menu.style.display = 'none';
-                                }
-                            });
-                        }
-                    };
                 });
-            </script>
-        </table>
+                window.onclick = function(event) {
+                    if (!event.target.matches('.dropdown-toggle')) {
+                        actionMenus.forEach(function(menu) {
+                            if (menu.style.display === 'block') {
+                                menu.style.display = 'none';
+                            }
+                        });
+                    }
+                };
+            });
+        </script>
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
                 {% if jinetes.has_prev %}
