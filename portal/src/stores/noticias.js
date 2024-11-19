@@ -12,7 +12,7 @@ export const useNoticias = defineStore('noticiasStore', {
                 this.loading=true
                 this.error=null
                 const baseUrl = import.meta.env.VITE_FLASK_API_URL;
-                const response = await axios.get(`${baseUrl}/api/noticias`);
+                const response = await axios.get(`${baseUrl}/api/contenido`);
                 this.noticia = response.data
             } catch (error){
                 this.error = "Error al obtener las noticias"

@@ -20,6 +20,12 @@ const router = createRouter({
       name: 'Noticias',
       component: () => import('../views/NoticiasView.vue'),
     },
+    {
+      path: '/contenido/:id',
+      name: 'ContenidoDetalle',
+      component: () => import('../views/ContenidoDetalleView.vue'),
+      props: true
+    },
 
     // Las siguientes rutas son las de las explicaciones practias (de ejemplo)
     {

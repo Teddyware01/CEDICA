@@ -20,5 +20,7 @@ class Users(db.Model):
    
     empleado_asignado = db.relationship("Empleado", back_populates="usuario_asignado")
 
+    contenido = db.relationship("Contenido", back_populates="autor_user")
+
     def __repr__(self):
         return f"<User #{self.id} email = {self.email}>"
