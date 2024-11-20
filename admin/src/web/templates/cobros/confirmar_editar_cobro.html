@@ -7,12 +7,12 @@
 <form method="POST" action="{{ url_for('cobros.editar_cobro', id=cobro.id) }}">
     <p>¿Está seguro de que desea guardar los siguientes cambios?</p>
     <ul>
-        <p><strong>Jinete:</strong> {{ datos_cobro.jinete.first_name }} {{ datos_cobro.jinete.last_name }}</p>
-        <p><strong>Fecha de Pago:</strong> {{ datos_cobro.fecha_pago }}</p>
-        <p><strong>Medio de Pago:</strong> {{ datos_cobro.medio_pago }}</p>
-        <p><strong>Monto:</strong> ${{ datos_cobro.monto }}</p>
-        <p><strong>Recibido Por:</strong> {{ datos_cobro.recibido_por }}</p>
-        <p><strong>Observaciones:</strong> {{ datos_cobro.observaciones }}</p>
+        <p><strong>Jinete:</strong> {{ cobro.jinete.nombre }} {{ cobro.jinete.apellido }}</p>
+        <p><strong>Fecha de Pago:</strong> {{ cobro.fecha_pago }}</p>
+        <p><strong>Medio de Pago:</strong> {{ cobro.medio_pago }}</p>
+        <p><strong>Monto:</strong> ${{ cobro.monto }}</p>
+        <p><strong>Recibido Por:</strong> {{ cobro.recibido_por }}</p>
+        <p><strong>Observaciones:</strong> {{ cobro.observaciones }}</p>
     </ul>
     <button type="submit" class="btn btn-success">Confirmar</button>
     <a href="{{ url_for('cobros.editar_cobro', id=cobro.id) }}" class="btn btn-warning">Editar</a> <!-- Botón de edición -->

@@ -9,7 +9,6 @@ from sqlalchemy.orm import aliased
 
 cobros_bp = Blueprint("cobros", __name__, template_folder="../templates/cobros")
 
-
 @cobros_bp.route("/registrar", methods=["GET", "POST"])
 @login_required
 @check("cobro_create")
@@ -17,20 +16,35 @@ def registrar_cobro():
     form = RegistroCobroForm()
 
     if form.validate_on_submit():
+        jinete_id = request.form.get("jinete")
+        recibido_por = request.form.get("recibido_por")
+
+        jinete = cobros.obtener_jinete(jinete_id)  
+        empleado = cobros.obtener_empleado(recibido_por)
+
+        
+        nombre_jinete = jinete.nombre
+        apellido_jinete = jinete.apellido
+
         nuevo_cobro = RegistroCobro(
-            jinete_id=form.jinete.data,
-            fecha_pago=form.fecha_pago.data,
-            medio_pago=form.medio_pago.data,
-            monto=form.monto.data,
-            recibido_por=form.recibido_por.data,
-            observaciones=form.observaciones.data,
+            jinete_id=jinete_id,
+            fecha_pago=request.form.get("fecha_pago"),
+            medio_pago=request.form.get("medio_pago"),
+            monto=float(request.form.get("monto")),
+            recibido_por=recibido_por,
+            observaciones=request.form.get("observaciones"),
         )
 
-        cobros.agregar_cobro(nuevo_cobro)
+        """ Renderizar la vista de confirmación con los valores correctos, tengo que pasar 
+        el nombre_jinete y apellido_jinete para la visualizacion en la pantalla de confirmacion
+        """
         return render_template(
             "confirmar_cobro.html",
             cobro=nuevo_cobro,
-            form=form,
+            jinete=jinete,  
+            empleado=empleado,
+            nombre_jinete=nombre_jinete,  
+            apellido_jinete=apellido_jinete 
         )
 
     return render_template("registrar_cobro.html", form=form)
@@ -94,11 +108,19 @@ def editar_cobro(id):
         cobro.recibido_por = form.recibido_por.data
         cobro.observaciones = form.observaciones.data
 
-        cobros.actualizar_cobro()
+        jinete = cobros.obtener_jinete(form.jinete.data)  
+        empleado = cobros.obtener_empleado(form.recibido_por.data)
+
+        nombre_jinete = jinete.nombre
+        apellido_jinete = jinete.apellido
+
         return render_template(
             "confirmar_cobro.html",
             cobro=cobro,
-            form=form,
+            jinete=jinete,  
+            empleado=empleado,
+            nombre_jinete=nombre_jinete,  
+            apellido_jinete=apellido_jinete 
         )
 
     return render_template("editar_cobro.html", form=form, cobro=cobro)
@@ -145,15 +167,15 @@ def buscar_cobros():
 @check("cobro_create")
 def confirmar_registro_cobro():
     action = request.form.get("action")
+    jinete_id = request.form.get("jinete_id")  
     if action == "aceptar":
-        cobro_data = request.form
         nuevo_cobro = RegistroCobro(
-            jinete_id=cobro_data.get("jinete_id"),
-            fecha_pago=cobro_data.get("fecha_pago"),
-            medio_pago=cobro_data.get("medio_pago"),
-            monto=float(cobro_data.get("monto")),
-            recibido_por=cobro_data.get("recibido_por"),
-            observaciones=cobro_data.get("observaciones"),
+            jinete_id=jinete_id,
+            fecha_pago=request.form.get("fecha_pago"),
+            medio_pago=request.form.get("medio_pago"),
+            monto=float(request.form.get("monto")),
+            recibido_por=request.form.get("recibido_por"),
+            observaciones=request.form.get("observaciones"),
         )
         cobros.agregar_cobro(nuevo_cobro)
         return redirect(
@@ -169,37 +191,5 @@ def confirmar_registro_cobro():
             observaciones=request.form.get("observaciones"),
         )
         return render_template("registrar_cobro.html", form=form)
-    else:
-        return redirect(url_for("cobros.listar_cobros"))
-
-@cobros_bp.route("/confirmar_edicion/<int:id>", methods=["POST"])
-@login_required
-@check("cobro_update")
-def confirmar_edicion_cobro(id):
-    action = request.form.get("action")
-    if action == "aceptar":
-        cobro_data = request.form
-        cobro = cobros.obtener_cobro(id)
-        cobro.jinete_id = cobro_data.get("jinete_id")
-        cobro.fecha_pago = cobro_data.get("fecha_pago")
-        cobro.medio_pago = cobro_data.get("medio_pago")
-        cobro.monto = float(cobro_data.get("monto"))
-        cobro.recibido_por = cobro_data.get("recibido_por")
-        cobro.observaciones = cobro_data.get("observaciones")
-        cobros.actualizar_cobro()
-        return redirect(
-            url_for("cobros.listar_cobros", success_cobro="Cobro editado exitosamente.")
-        )
-    elif action == "editar":
-        cobro = cobros.obtener_cobro(id)
-        form = RegistroCobroForm(
-            jinete=cobro.jinete_id,
-            fecha_pago=cobro.fecha_pago,
-            medio_pago=cobro.medio_pago,
-            monto=cobro.monto,
-            recibido_por=cobro.recibido_por,
-            observaciones=cobro.observaciones,
-        )
-        return render_template("editar_cobro.html", form=form, cobro=cobro)
-    else:
+    elif action == "cancelar":
         return redirect(url_for("cobros.listar_cobros"))

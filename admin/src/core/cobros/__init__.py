@@ -1,6 +1,7 @@
 from src.core.database import db
 from src.core.cobros.models import RegistroCobro
 from src.core.equipo.models import Empleado
+from src.core.jya.models import Jinete
 from src.core.cobros.forms import RegistroCobroForm
 from src.core.cobros.models import RegistroCobro
 from sqlalchemy import or_
@@ -126,3 +127,9 @@ def operaciones_filtro(fecha_inicio, fecha_fin, medio_pago, nombre_recibido, ape
         query = query.filter(empleado_alias.apellido.ilike(f"%{apellido_recibido}%"))
 
     return query
+
+def obtener_jinete(jinete_id):
+    return Jinete.query.get(jinete_id)  # Asegúrate de que esta consulta se haga correctamente
+
+def obtener_empleado(empleado_id):
+    return Empleado.query.filter_by(id=empleado_id).first()
