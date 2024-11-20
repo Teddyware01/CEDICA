@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}Confirmar Registro de Pago{% endblock %}
+
+{% block content %}
+<h1>Confirmar Registro de Pago</h1>
+<p>¿Está seguro de que desea registrar el siguiente pago?</p>
+
+<table class="table">
+    <tr>
+        <th>Beneficiario</th>
+        <td>{{ pago.beneficiario }}</td>
+    </tr>
+    <tr>
+        <th>Monto</th>
+        <td>{{ pago.monto }}</td>
+    </tr>
+    <tr>
+        <th>Fecha de Pago</th>
+        <td>{{ pago.fecha_pago }}</td>
+    </tr>
+    <tr>
+        <th>Tipo de Pago</th>
+        <td>{{ pago.tipo_pago }}</td>
+    </tr>
+    <tr>
+        <th>Descripción</th>
+        <td>{{ pago.descripcion }}</td>
+    </tr>
+</table>
+
+<form method="POST" action="{{ url_for('pagos.confirmar_registro') }}">
+    {{ form.hidden_tag() }}
+    <input type="hidden" name="beneficiario" value="{{ pago.beneficiario }}">
+    <input type="hidden" name="monto" value="{{ pago.monto }}">
+    <input type="hidden" name="fecha_pago" value="{{ pago.fecha_pago }}">
+    <input type="hidden" name="tipo_pago" value="{{ pago.tipo_pago }}">
+    <input type="hidden" name="descripcion" value="{{ pago.descripcion }}">
+
+    <button type="submit" name="action" value="aceptar" class="btn btn-success">Aceptar</button>
+    <button type="submit" name="action" value="editar" class="btn btn-warning">Editar</button>
+    <button type="submit" name="action" value="cancelar" class="btn btn-danger">Cancelar</button>
+</form>
+{% endblock %}

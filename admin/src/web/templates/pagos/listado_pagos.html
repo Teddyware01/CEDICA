@@ -23,9 +23,9 @@
             <label for="tipo_pago">Tipo de Pago:</label>
             <select id="tipo_pago" name="tipo_pago" class="form-control">
                 <option value="">Todos</option>
-                <option value="Honorario" {% if tipo_pago == 'Honorario' %}selected{% endif %}>Honorarios</option>
-                <option value="Proveedor" {% if tipo_pago == 'Proveedor' %}selected{% endif %}>Proveedor</option>
-                <option value="Gastos_varios" {% if tipo_pago == 'Gastos_varios' %}selected{% endif %}>Gastos Varios</option>
+                <option value="honorario" {% if tipo_pago == 'honorario' %}selected{% endif %}>Honorarios</option>
+                <option value="proveedor" {% if tipo_pago == 'proveedor' %}selected{% endif %}>Proveedor</option>
+                <option value="gastos_varios" {% if tipo_pago == 'gastos_varios' %}selected{% endif %}>Gastos Varios</option>
             </select>
         </div>
 
@@ -94,7 +94,6 @@
     </tbody>
 </table>
 
-<!-- Paginación -->
 <div class="pagination">
     {% if pagina_actual > 1 %}
     <a href="{{ url_for('pagos.listar_pagos', page=pagina_actual - 1, orden=orden, tipo_pago=tipo_pago, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin) }}">Anterior</a>

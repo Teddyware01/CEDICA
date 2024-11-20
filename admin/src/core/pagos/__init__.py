@@ -7,7 +7,7 @@ def obtener_empleado(form):
     return Empleado.query.get(form.beneficiario.data)
 
 
-def agregar_empleado(nuevo_pago):
+def agregar_pago(nuevo_pago):
     db.session.add(nuevo_pago)
     db.session.commit()
 
@@ -79,3 +79,4 @@ def validacion_fecha_fin(fecha_fin):
             fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d").date()
         except ValueError:
             fecha_fin = None
+    return fecha_fin
