@@ -423,7 +423,8 @@ p {
 
 /* Botones de acciones comunes */
 .btn {
-    padding: 8px 16px; /* Tamaño estándar de padding */
+    padding: 8px 16px !important; /* Tamaño estándar de padding */
+    margin: 2px;
     text-decoration: none; /* Elimina cualquier subrayado */
     color: white; /* Texto en blanco para contraste */
     border-radius: 4px; /* Esquinas redondeadas */
@@ -433,6 +434,13 @@ p {
     font-size: 16px; /* Tamaño de fuente legible */
 }
 
+.btn-edit {
+    background-color: #ffc107; /* Color específico para el botón editar */
+}
+
+.btn-delete {
+    background-color: #dc3545; /* Color específico para el botón eliminar */
+}
 /* Botón Agregar en verde */
 .btn-add {
     background-color: #28a745;
@@ -453,7 +461,7 @@ p {
 /* Botón Editar en amarillo */
 .btn-edit {
     background-color: #ffc107;
-    padding: 1%;
+    padding: 0.1%;
 }
 .btn-edit:hover {
     background-color: #e0a800; /* Oscurecer el color al hacer hover */
@@ -554,7 +562,12 @@ p {
     max-width: 600px;
 }
 
-
+.mail {
+    max-width: 150px; 
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 /* Móviles: Menos de 767px */
 @media (max-width: 767px) {
     .container, .example-wrapper, .demo-wrapper {

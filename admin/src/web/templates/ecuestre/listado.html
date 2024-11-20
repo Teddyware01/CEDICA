@@ -68,18 +68,18 @@
                 <td>{{ ecuestre.pelaje }}</td>
                 <td>
                   <div class="btn-group d-none d-lg-block">
-                    <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}" class="btn btn-view">Ver ecuestre</a>
-                    <a href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-edit">Modificar ecuestre</a>
-                    <a href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-delete">Eliminar ecuestre</a>
+                    <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}" class="btn btn-view">Ver</a>
+                    <a href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-edit">Modificar</a>
+                    <a href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-delete">Eliminar</a>
                 </div>
                 <div class="dropdown action-dropdown d-block d-lg-none">
                   <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ ecuestre.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Acciones
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ ecuestre.id }}">
-                      <a class="dropdown-item" href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}">Ver ecuestre</a>
-                      <a class="dropdown-item" href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}">Modificar ecuestre</a>
-                      <a class="dropdown-item" href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}">Eliminar ecuestre</a>
+                      <a class="dropdown-item" href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}">Ver</a>
+                      <a class="dropdown-item" href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}">Modificar</a>
+                      <a class="dropdown-item" href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}">Eliminar</a>
                   </div>
               </div>
 

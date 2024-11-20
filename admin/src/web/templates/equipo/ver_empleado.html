@@ -66,8 +66,8 @@
             {% endif %}
         </div>
         <div class="form-actions">
-            <a href="{{url_for('equipo.edit_empleado_form', empleado_id=empleado.id )}}" class="btn btn-edit" style="margin-right: 1em;">Editar empleado</a>
-            <a href="{{url_for('equipo.delete_empleado', empleado_id=empleado.id )}}" class="btn btn-delete" style="margin-right: 1em;">Eliminar empleado</a>
+            <a href="{{url_for('equipo.edit_empleado_form', empleado_id=empleado.id )}}" class="btn btn-edit" style="margin-right: 1em;">Modificar</a>
+            <a href="{{url_for('equipo.delete_empleado', empleado_id=empleado.id )}}" class="btn btn-delete" style="margin-right: 1em;">Eliminar</a>
             <a href="{{url_for('equipo.listar_empleados')}}" class="btn btn-back">Lista de empleados</a>
         </div> 
     </div>
@@ -120,9 +120,9 @@
                                     <a href="{{ url_for('equipo.descargar_archivo',empleado_id=empleado.id, file_name=doc.titulo) }}" class="btn btn-add">Descargar</a>
                                     {% endif %}
                                     {% if doc.is_enlace %}
-                                        <a href="{{ url_for('equipo.edit_enlace_form', empleado_id=empleado.id, documento_id=doc.id) }}" class="btn btn-edit">Editar</a>
+                                        <a href="{{ url_for('equipo.edit_enlace_form', empleado_id=empleado.id, documento_id=doc.id) }}" class="btn btn-edit">Modificar</a>
                                     {% else %}
-                                        <a href="{{ url_for('equipo.edit_documento_form', empleado_id=empleado.id, documento_id=doc.id) }}" class="btn btn-edit">Editar</a>
+                                        <a href="{{ url_for('equipo.edit_documento_form', empleado_id=empleado.id, documento_id=doc.id) }}" class="btn btn-edit">Modificar</a>
                                     {% endif %}
                                     <a href="{{ url_for('equipo.eliminar_documento_form', empleado_id=empleado.id, documento_id=doc.id) }}" class="btn btn-delete">Eliminar</a>
                                 </div>
@@ -138,9 +138,9 @@
                                         <a class="dropdown-item" href="{{ url_for('equipo.descargar_archivo',empleado_id=empleado.id, file_name=doc.titulo) }}">Descargar</a>
                                         {% endif %}
                                         {% if doc.is_enlace %}
-                                            <a class="dropdown-item" href="{{ url_for('equipo.edit_enlace_form', empleado_id=empleado.id, documento_id=doc.id) }}" class="btn btn-edit">Editar</a>
+                                            <a class="dropdown-item" href="{{ url_for('equipo.edit_enlace_form', empleado_id=empleado.id, documento_id=doc.id) }}" class="btn btn-edit">Modificar</a>
                                         {% else %}
-                                            <a class="dropdown-item" href="{{ url_for('equipo.edit_documento_form', empleado_id=empleado.id, documento_id=doc.id) }}" class="btn btn-edit">Editar</a>
+                                            <a class="dropdown-item" href="{{ url_for('equipo.edit_documento_form', empleado_id=empleado.id, documento_id=doc.id) }}" class="btn btn-edit">Modificar</a>
                                         {% endif %}
                                         <a class="dropdown-item" href="{{ url_for('equipo.eliminar_documento_form', empleado_id=empleado.id, documento_id=doc.id) }}" class="btn btn-delete">Eliminar</a>
                                     </div>

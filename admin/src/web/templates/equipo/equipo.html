@@ -45,8 +45,6 @@
           <button type="submit" class="btn btn-sort">Ordenar/Buscar</button>
         </div>
       </form>
-
-      <p>Empleados del equipo:</p>
       {% if empleados %}
     
       <table class="table">
@@ -66,15 +64,15 @@
               <tr>
                   <td>{{emp.nombre}}</td>
                   <td>{{emp.apellido}}</td>
-                  <td>{{emp.email}}</td>
+                  <td class="mail">{{emp.email}}</td>
                   <td>{{emp.dni}}</td>
                   <td>{{emp.profesion.nombre}}</td>
                   <td>{{emp.puesto_laboral.nombre}}</td>
                   <td>
                     <div class="btn-group d-none d-lg-block">
-                      <a href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}" class="btn btn-add">Ver empleado</a>
-                      <a href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}" class="btn btn-edit">Modificar empleado</a>
-                      <a href="{{url_for('equipo.delete_empleado', empleado_id=emp.id )}}" class="btn btn-delete">Eliminar empleado</a>
+                      <a href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}" class="btn btn-add">Ver</a>
+                      <a href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}" class="btn btn-edit">Modificar</a>
+                      <a href="{{url_for('equipo.delete_empleado', empleado_id=emp.id )}}" class="btn btn-delete">Eliminar</a>
                     </div>
 
                     <div class="dropdown action-dropdown d-block d-lg-none">
@@ -82,9 +80,9 @@
                           Acciones
                       </button>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ emp.id }}">
-                          <a class="dropdown-item" href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}">Ver empleado</a>
-                          <a class="dropdown-item" href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}">Modificar empleado</a>
-                          <a class="dropdown-item" href="{{url_for('equipo.delete_empleado', empleado_id=emp.id )}}">Eliminar empleado</a>
+                          <a class="dropdown-item" href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}">Ver</a>
+                          <a class="dropdown-item" href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}">Modificar</a>
+                          <a class="dropdown-item" href="{{url_for('equipo.delete_empleado', empleado_id=emp.id )}}">Eliminar</a>
                       </div>
                     </div>
                   </td>
