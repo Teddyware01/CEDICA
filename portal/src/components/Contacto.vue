@@ -42,7 +42,7 @@ export default {
                 mensaje: this.form.mensaje
             };
 
-            fetch('http://localhost:5000/contacto/submit_form', {
+            fetch('https://grupo15.proyecto2024.linti.unlp.edu.ar/contacto/submit_form', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
