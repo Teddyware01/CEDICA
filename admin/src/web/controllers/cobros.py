@@ -27,10 +27,10 @@ def registrar_cobro():
         )
 
         cobros.agregar_cobro(nuevo_cobro)
-        return redirect(
-            url_for(
-                "cobros.listar_cobros", success_cobro="Cobro registrado exitosamente."
-            )
+        return render_template(
+            "confirmar_cobro.html",
+            cobro=nuevo_cobro,
+            form=form,
         )
 
     return render_template("registrar_cobro.html", form=form)
@@ -83,7 +83,10 @@ def editar_cobro(id):
     cobro = cobros.obtener_cobro(id)
     form = cobros.obtener_cobro_param(cobro)
 
-    if form.validate_on_submit():
+    if not cobro:
+        return redirect(url_for("cobros.listar_cobros"))
+
+    if request.method == "POST" and form.validate_on_submit():
         cobro.jinete_id = form.jinete.data
         cobro.fecha_pago = form.fecha_pago.data
         cobro.medio_pago = form.medio_pago.data.lower()
@@ -92,8 +95,10 @@ def editar_cobro(id):
         cobro.observaciones = form.observaciones.data
 
         cobros.actualizar_cobro()
-        return redirect(
-            url_for("cobros.listar_cobros", success_cobro="Cobro editado exitosamente.")
+        return render_template(
+            "confirmar_cobro.html",
+            cobro=cobro,
+            form=form,
         )
 
     return render_template("editar_cobro.html", form=form, cobro=cobro)
@@ -134,3 +139,67 @@ def buscar_cobros():
         cobros_realizado=cobros_realizado.items,
         pagination=cobros_realizado,
     )
+
+@cobros_bp.route("/confirmar_registro", methods=["POST"])
+@login_required
+@check("cobro_create")
+def confirmar_registro_cobro():
+    action = request.form.get("action")
+    if action == "aceptar":
+        cobro_data = request.form
+        nuevo_cobro = RegistroCobro(
+            jinete_id=cobro_data.get("jinete_id"),
+            fecha_pago=cobro_data.get("fecha_pago"),
+            medio_pago=cobro_data.get("medio_pago"),
+            monto=float(cobro_data.get("monto")),
+            recibido_por=cobro_data.get("recibido_por"),
+            observaciones=cobro_data.get("observaciones"),
+        )
+        cobros.agregar_cobro(nuevo_cobro)
+        return redirect(
+            url_for("cobros.listar_cobros", success_cobro="Cobro registrado exitosamente.")
+        )
+    elif action == "editar":
+        form = RegistroCobroForm(
+            jinete=request.form.get("jinete_id"),
+            fecha_pago=request.form.get("fecha_pago"),
+            medio_pago=request.form.get("medio_pago"),
+            monto=request.form.get("monto"),
+            recibido_por=request.form.get("recibido_por"),
+            observaciones=request.form.get("observaciones"),
+        )
+        return render_template("registrar_cobro.html", form=form)
+    else:
+        return redirect(url_for("cobros.listar_cobros"))
+
+@cobros_bp.route("/confirmar_edicion/<int:id>", methods=["POST"])
+@login_required
+@check("cobro_update")
+def confirmar_edicion_cobro(id):
+    action = request.form.get("action")
+    if action == "aceptar":
+        cobro_data = request.form
+        cobro = cobros.obtener_cobro(id)
+        cobro.jinete_id = cobro_data.get("jinete_id")
+        cobro.fecha_pago = cobro_data.get("fecha_pago")
+        cobro.medio_pago = cobro_data.get("medio_pago")
+        cobro.monto = float(cobro_data.get("monto"))
+        cobro.recibido_por = cobro_data.get("recibido_por")
+        cobro.observaciones = cobro_data.get("observaciones")
+        cobros.actualizar_cobro()
+        return redirect(
+            url_for("cobros.listar_cobros", success_cobro="Cobro editado exitosamente.")
+        )
+    elif action == "editar":
+        cobro = cobros.obtener_cobro(id)
+        form = RegistroCobroForm(
+            jinete=cobro.jinete_id,
+            fecha_pago=cobro.fecha_pago,
+            medio_pago=cobro.medio_pago,
+            monto=cobro.monto,
+            recibido_por=cobro.recibido_por,
+            observaciones=cobro.observaciones,
+        )
+        return render_template("editar_cobro.html", form=form, cobro=cobro)
+    else:
+        return redirect(url_for("cobros.listar_cobros"))
