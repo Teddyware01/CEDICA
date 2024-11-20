@@ -42,26 +42,15 @@ export default {
                 mensaje: this.form.mensaje
             };
 
-            fetch('http://localhost:5000/contacto/submit_form', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                alert('Mensaje enviado con éxito');
-                this.resetForm();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        
-            console.log("Enviando formulario con datos:", this.form);
-            alert('Mensaje enviado con éxito');
-            this.resetForm();
+            axios.post('http://localhost:5000/contacto/submit_form', formData)
+                .then(response => {
+                    alert('Mensaje enviado con éxito');
+                    this.resetForm();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Hubo un error al enviar el mensaje');
+                });
         },
         resetForm() {
             this.form.nombre = '';
@@ -69,9 +58,6 @@ export default {
             this.form.mensaje = '';
             this.captchaVerified = false;
             grecaptcha.reset();
-        },
-        onCaptchaVerified() {
-            this.captchaVerified = true;
         }
     },
     mounted() {
