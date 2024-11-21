@@ -1,11 +1,19 @@
 {% extends "layout.html" %}
 
-{% block title %} Editar Cliente {% endblock %}
+{% block title %} Editar usuario {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
 
 {% block content %}
-    <h1 class="text-center">Editar Cliente</h1>
+    {{ super() }}
+    <h1 class="text-center">Editar usuario</h1>
 
-    <form action="{{ url_for('users.update_user', user_id=user.id) }}" method="POST" onsubmit="return validateRoles()">
+    <div class="caja">
+        <h3>Datos del usuario:</h3>
+        <form action="{{ url_for('users.update_user', user_id=user.id) }}" method="POST" onsubmit="return validateRoles()">
         <div class="form-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" value="{{ user.email }}" required>
@@ -65,25 +73,26 @@
         <div class="form-group">
             <label for="roles">Roles (debe tener al menos uno):</label>
             <div class="checkbox-group">
-                <label>
+                <label class="mb-1">
                     <input type="checkbox" name="roles" value="Tecnica" {% if 'Tecnica' in roles %}checked{% endif %}>
                     Técnica
                 </label>
-                <label>
-                    <input type="checkbox" name="roles" value="Encuestre" {% if 'Encuestre' in roles %}checked{% endif %}>
+                <label class="mb-1">
+                    <input type="checkbox" name="roles" value="ecuestre" {% if 'ecuestre' in roles %}checked{% endif %}>
                     Ecuestre
                 </label>
-                <label>
+                <label class="mb-1">
                     <input type="checkbox" name="roles" value="Voluntariado" {% if 'Voluntariado' in roles %}checked{% endif %}>
                     Voluntariado
                 </label>
-                <label>
+                <label class="mb-1">
                     <input type="checkbox" name="roles" value="Administracion" {% if 'Administracion' in roles %}checked{% endif %}>
                     Administración
                 </label>
             </div>
-            <small class="form-text text-muted">Debe seleccionar al menos un rol.</small>
         </div>
+        
+    </div>
 
         <div class="form-actions">
             <button type="submit" class="btn btn-add" style="margin-right: 1em;">Guardar Cambios</button>
@@ -93,16 +102,14 @@
 
     <script>
         function validateRoles() {
-            // Obtiene todos los checkboxes de roles
             const checkboxes = document.querySelectorAll('input[name="roles"]');
-            // Revisa si al menos uno está marcado
             let isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
 
             if (!isChecked) {
                 alert("Debe seleccionar al menos un rol.");
-                return false; // Evita que se envíe el formulario
+                return false;
             }
-            return true; // Permite el envío del formulario
+            return true;
         }
     </script>
 {% endblock %}

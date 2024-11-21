@@ -1,21 +1,33 @@
 from src.core.pagos.forms import Empleado
 from src.core.database import db
 from src.core.pagos.models import Pago as Pagos
-
+from datetime import datetime
 
 def obtener_empleado(form):
     return Empleado.query.get(form.beneficiario.data)
 
 
-def agregar_empleado(nuevo_pago):
+def agregar_pago(nuevo_pago):
     db.session.add(nuevo_pago)
     db.session.commit()
 
+def ordenar_pagos(orden="asc", tipo_pago="", fecha_inicio=None, fecha_fin=None):
+    query = Pagos.query
 
-def ordenar_pagos(orden):
-    return Pagos.query.order_by(
-        Pagos.fecha_pago.asc() if orden == "asc" else Pagos.fecha_pago.desc()
-    ).all()
+    if tipo_pago:
+        query = query.filter(Pagos.tipo_pago == tipo_pago)
+    if fecha_inicio:
+        query = query.filter(Pagos.fecha_pago >= fecha_inicio)
+    if fecha_fin:
+        query = query.filter(Pagos.fecha_pago <= fecha_fin)
+
+    if orden == "asc":
+        query = query.order_by(Pagos.fecha_pago.asc())
+    else:
+        query = query.order_by(Pagos.fecha_pago.desc())
+
+    return query.all()
+
 
 
 def eliminar_pago(pago):
@@ -52,3 +64,19 @@ def guardar_pagos_seeds (pagos_datos):
         )
         db.session.add(nuevo_pago)
     db.session.commit()
+
+def validacion_fecha_inicio(fecha_inicio):
+    if fecha_inicio:
+        try:
+            fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()
+        except ValueError:
+            fecha_inicio = None 
+    return fecha_inicio
+
+def validacion_fecha_fin(fecha_fin):
+    if fecha_fin:
+        try:
+            fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d").date()
+        except ValueError:
+            fecha_fin = None
+    return fecha_fin

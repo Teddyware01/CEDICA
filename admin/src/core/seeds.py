@@ -120,7 +120,7 @@ def run():
         email="admin@hotmail",
         alias="admin",
         password="admin",
-        system_admin=True,
+        system_admin=False,
         activo=True,
     )
 
@@ -377,28 +377,28 @@ def run():
             "beneficiario": "Juan Pérez",
             "monto": 1000.0,
             "fecha_pago": datetime(2024, 10, 1),
-            "tipo_pago": "Honorario",
+            "tipo_pago": "honorario",
             "descripcion": "Pago por servicio de asesoría",
         },
         {
             "beneficiario": "María Gómez",
             "monto": 1500.0,
             "fecha_pago": datetime(2024, 10, 5),
-            "tipo_pago": "Gastos_varios",
+            "tipo_pago": "gastos_varios",
             "descripcion": "Pago por compra de insumos",
         },
         {
             "beneficiario": "Carlos López",
             "monto": 2000.0,
             "fecha_pago": datetime(2024, 10, 10),
-            "tipo_pago": "Gastos_varios",
+            "tipo_pago": "gastos_varios",
             "descripcion": "Pago por servicios de mantenimiento",
         },
         {
             "beneficiario": "Ana Martínez",
             "monto": 1500.0,
             "fecha_pago": datetime(2024, 10, 23),
-            "tipo_pago": "Gastos_varios",
+            "tipo_pago": "gastos_varios",
             "descripcion": "Pagos varios",
         },
     ]

@@ -1,36 +1,38 @@
 {% extends "layout.html" %}
 
-{% block title %}Eliminar Cliente{% endblock %}
+{% block title %}Eliminar usuario{% endblock %}
 
 {% block content %}
-    <h1 class="text-center">Eliminar Cliente</h1>
+    <h1 class="text-center">Eliminar usuario</h1>
 
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" value="{{ user.email }}" readonly>
+    <div class="caja">
+        <div class="form-group">
+            <label for="email"><strong>Email:</strong></label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="alias"><strong>Alias:</strong></label>
+            <input type="text" id="alias" name="alias" value="{{ user.alias }}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="is_admin"><strong>¿Es administrador del sistema?</strong></label>
+            <input type="checkbox" id="is_admin" name="is_admin" {% if user.system_admin %}checked{% endif %} disabled>
+        </div>
+
+        <div class="form-group">
+            <label for="is_active"><strong>¿Está activo?</strong></label>
+            <input type="checkbox" id="is_active" name="is_active" {% if user.activo %}checked{% endif %} disabled>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label for="alias">Alias</label>
-        <input type="text" id="alias" name="alias" value="{{ user.alias }}" readonly>
-    </div>
-
-    <div class="form-group">
-        <label for="is_admin">¿Es administrador del sistema?</label>
-        <input type="checkbox" id="is_admin" name="is_admin" {% if user.system_admin %}checked{% endif %} disabled>
-    </div>
-
-    <div class="form-group">
-        <label for="is_active">¿Está activo?</label>
-        <input type="checkbox" id="is_active" name="is_active" {% if user.activo %}checked{% endif %} disabled>
-    </div>
-
-    <p>¿Estás seguro de que deseas eliminar este cliente?</p>
+    <h3><strong>¿Estás seguro que deseas eliminar este cliente?</strong></h3>
 
     <div class="form-actions">
         <form action="{{ url_for('users.delete_client', user_id=user.id) }}" method="POST">
-            <button type="submit" class="btn btn-danger">Confirmar</button>
+            <button type="submit" class="btn btn-delete" style="margin-right: 1em;">Confirmar</button>
         </form>
-        <a href="{{ url_for('users.listar_usuarios') }}" class="btn btn-secondary">Cancelar</a>
+        <a href="{{ url_for('users.listar_usuarios') }}" class="btn btn-back">Cancelar</a>
     </div>
 {% endblock %}

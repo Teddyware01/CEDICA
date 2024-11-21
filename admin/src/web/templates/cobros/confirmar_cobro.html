@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}Confirmar Registro de Cobro{% endblock %}
+
+{% block content %}
+<h1>Confirmar Registro de Cobro</h1>
+<p>¿Está seguro de que desea registrar el siguiente cobro?</p>
+
+<table class="table">
+    <tr>
+        <th>Jinete</th>
+        <td>{{ nombre_jinete }} {{ apellido_jinete }}</td> 
+    </tr>
+    <tr>
+        <th>Fecha de Pago</th>
+        <td>{{ cobro.fecha_pago }}</td>
+    </tr>
+    <tr>
+        <th>Medio de Pago</th>
+        <td>{{ cobro.medio_pago }}</td>
+    </tr>
+    <tr>
+        <th>Monto</th>
+        <td>{{ cobro.monto }}</td>
+    </tr>
+    <tr>
+        <th>Recibido Por</th>
+        <td>{{ empleado.nombre }} {{ empleado.apellido }}</td>
+    </tr>
+    <tr>
+        <th>Observaciones</th>
+        <td>{{ cobro.observaciones }}</td>
+    </tr>
+</table>
+
+<form method="POST" action="{{ url_for('cobros.confirmar_registro_cobro') }}">
+    <input type="hidden" name="jinete_id" value="{{ cobro.jinete_id }}">
+    <input type="hidden" name="fecha_pago" value="{{ cobro.fecha_pago }}">
+    <input type="hidden" name="medio_pago" value="{{ cobro.medio_pago }}">
+    <input type="hidden" name="monto" value="{{ cobro.monto }}">
+    <input type="hidden" name="recibido_por" value="{{ cobro.recibido_por }}">
+    <input type="hidden" name="observaciones" value="{{ cobro.observaciones }}">
+    <button type="submit" name="action" value="aceptar" class="btn btn-success">Aceptar</button>
+    <button type="submit" name="action" value="editar" class="btn btn-warning">Modificar</button>
+    <button type="submit" name="action" value="cancelar" class="btn btn-danger">Cancelar</button>
+</form>
+{% endblock %}

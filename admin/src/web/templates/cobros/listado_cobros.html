@@ -1,67 +1,72 @@
 {% extends "layout.html" %}
 
-{% block title %} Listado de Cobros {% endblock %}
+{% block title %} Listado de cobros {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
 
 {% block content %}
-    <h1>Listado de Cobros</h1>
+    {{ super() }}
+    <h1 class="text-center">Listado de cobros</h1>
 
     {% if success_cobro %}
     <div class="alert alert-success" role="alert">
         {{ success_cobro }}
     </div>
     {% endif %}
-    
-    {% if is_authenticated(session) and check_permission(session,"cobro_create") %}
+
+    {% if is_authenticated(session) and check_permission(session, "cobro_create") %}
     <div class="actions">
-        <a href="{{ url_for('cobros.registrar_cobro') }}" class="btn btn-add">Registrar Cobro</a>
+        <a href="{{ url_for('cobros.registrar_cobro') }}" class="btn btn-add" style="margin: 10px 0;">Agregar Cobro</a>
     </div>
     {% endif %}
 
-    <form method="GET" action="{{ url_for('cobros.buscar_cobros') }}" class="mb-3 search-form">
+    <form method="GET" action="{{ url_for('cobros.listar_cobros') }}" class="mb-3">
         <div class="form-row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-lg-4 col-12">
                 <label for="fecha_inicio">Fecha Inicio:</label>
-                <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control">
+                <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" value="{{ request.args.get('fecha_inicio', '') }}">
             </div>
-
-            <div class="form-group col-md-4">
+            <div class="form-group col-lg-4 col-12">
                 <label for="fecha_fin">Fecha Fin:</label>
-                <input type="date" id="fecha_fin" name="fecha_fin" class="form-control">
+                <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" value="{{ request.args.get('fecha_fin', '') }}">
             </div>
-            
-            <div class="form-group col-md-4">
-                <label for="nombre">Nombre del que recibio el dinero:</label>
-                <input type="text" id="nombre" name="nombre" class="form-control">
+            <div class="form-group col-lg-4 col-12 ">
+                <label for="nombre_recibido">Nombre que recibió:</label>
+                <input type="text" id="nombre_recibido" name="nombre_recibido" class="form-control" placeholder="Nombre" value="{{ request.args.get('nombre_recibido', '') }}">
             </div>
-    
-            <div class="form-group col-md-4">
-                <label for="apellido">Apellido del que recibio el dinero:</label>
-                <input type="text" id="apellido" name="apellido" class="form-control">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-lg-4 col-12 ">
+                <label for="apellido_recibido">Apellido que recibió:</label>
+                <input type="text" id="apellido_recibido" name="apellido_recibido" class="form-control" placeholder="Apellido" value="{{ request.args.get('apellido_recibido', '') }}">
             </div>
-
-            <div class="form-group col-md-4">
+            <div class="form-group col-lg-4 col-12 ">
                 <label for="medio_pago">Medio de Pago:</label>
                 <select id="medio_pago" name="medio_pago" class="form-control">
-                    <option value="">Todos</option>
-                    <option value="efectivo">Efectivo</option>
-                    <option value="tarjeta_credito">Tarjeta de Crédito</option>
-                    <option value="tarjeta_debito">Tarjeta de Débito</option>
+                    <option value="" {% if medio_pago == "" %}selected{% endif %}>Todos</option>
+                    <option value="efectivo" {% if medio_pago == "efectivo" %}selected{% endif %}>Efectivo</option>
+                    <option value="tarjeta_credito" {% if medio_pago == "tarjeta_credito" %}selected{% endif %}>Tarjeta de Crédito</option>
+                    <option value="tarjeta_debito" {% if medio_pago == "tarjeta_debito" %}selected{% endif %}>Tarjeta de Débito</option>
                 </select>
             </div>
-        </div>
-
-        <div class="form-group text-center">
-            <button type="submit" class="btn btn-primary">Buscar</button>
+            <div class="form-group col-lg-4 col-12 text-center" style="margin: auto;">
+                <button type="submit" class="btn btn-sort">Buscar / ordenar</button>
+            </div>
         </div>
     </form>
-
-    <table class="table">
+    
+    
+    
+    <table  class="table d-none d-md-table">
         <thead>
             <tr>
                 <th>Jinete o Amazona</th>
                 <th>
-                    <a href="{{ url_for('cobros.listar_cobros', orden='asc') }}">Fecha de Pago &#9650;</a> 
-                    <a href="{{ url_for('cobros.listar_cobros', orden='desc') }}">&#9660;</a>
+                    <a href="{{ url_for('cobros.listar_cobros', orden='asc', fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, medio_pago=medio_pago, nombre_recibido=nombre_recibido, apellido_recibido=apellido_recibido, page=pagination.page) }}">Fecha de Pago &#9650;</a> 
+                    <a href="{{ url_for('cobros.listar_cobros', orden='desc', fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, medio_pago=medio_pago, nombre_recibido=nombre_recibido, apellido_recibido=apellido_recibido, page=pagination.page) }}">&#9660;</a>
                 </th>
                 <th>Medio de Pago</th>
                 <th>Monto</th>
@@ -80,36 +85,80 @@
                 <td>{{ cobro.empleado.nombre }} {{ cobro.empleado.apellido }}</td>
                 <td>{{ cobro.observaciones }}</td>
                 <td>
-                    {% if is_authenticated(session) and check_permission(session,"cobro_destroy") %}
-                    <form method="POST" action="{{ url_for('cobros.eliminar_cobro', id=cobro.id) }}" style="display:inline;">
-                        <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que deseas eliminar este cobro?');">Eliminar</button>
-                    </form>
+                    <!-- Botones visibles solo en pantallas grandes -->
+                    <div class="d-none d-lg-flex">
+                        {% if is_authenticated(session) and check_permission(session, "cobro_update") %}                    
+                        <button href="{{ url_for('cobros.editar_cobro', id=cobro.id) }}" class="btn btn-edit">Modificar</button>
+                        {% endif %}
+                        {% if is_authenticated(session) and check_permission(session, "cobro_destroy") %}
+                        <form method="POST" action="{{ url_for('cobros.eliminar_cobro', id=cobro.id) }}">
+                            <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que deseas eliminar este cobro?');">Eliminar</button>
+                        </form>
                     {% endif %}
-                    {% if is_authenticated(session) and check_permission(session,"cobro_update") %}                    
-                    <a href="{{ url_for('cobros.editar_cobro', id=cobro.id) }}" class="btn btn-edit">Editar</a>
-                    {% endif %}
+                    </div>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <div class="caja d-md-none">
+        {% for cobro in cobros_realizado %}
+            <div class="caja-separadora">
+                <p><strong>Jinete o Amazona:</strong> {{ cobro.jinete.nombre }} {{ cobro.jinete.apellido }}</p>
+                <p><strong>Fecha de Pago:</strong> {{ cobro.fecha_pago.strftime('%Y-%m-%d') }}</p>
+                <p><strong>Medio de Pago:</strong> {{ cobro.medio_pago.capitalize() }}</p>
+                <p><strong>Monto:</strong> {{ cobro.monto }}</p>
+                <p><strong>Recibido por:</strong> {{ cobro.empleado.nombre }} {{ cobro.empleado.apellido }}</p>
+                <p><strong>Observaciones:</strong> {{ cobro.observaciones }}</p>
+                <div class="dropdown action-dropdown d-block">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ cobro.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Acciones
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ cobro.id }}">
+                        {% if is_authenticated(session) and check_permission(session, "cobro_update") %}                    
+                        <a class="dropdown-item" href="{{ url_for('cobros.editar_cobro', id=cobro.id) }}">Modificar</a>
+                        {% endif %}
+                        {% if is_authenticated(session) and check_permission(session, "cobro_destroy") %}
+                        <form method="POST" action="{{ url_for('cobros.eliminar_cobro', id=cobro.id) }}" style="display:inline;">
+                            <button type="submit" class="dropdown-item" onclick="return confirm('¿Estás seguro de que deseas eliminar este cobro?');">Eliminar</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+    {% if cobros_realizado|length == 0 %}
+    <p class="text-center">No se encontraron cobros registrados con los filtros aplicados.</p>
+    {% endif %}
+
     <nav aria-label="Paginación">
         <ul class="pagination">
-            {% if pagination.has_prev %}
+            {% if pagina_actual > 1 %}
             <li class="page-item">
-                <a class="page-link" href="{{ url_for('cobros.listar_cobros', page=pagination.prev_num) }}">Anterior</a>
+                <a class="page-link" href="?page={{ pagina_actual - 1 }}&orden={{ orden }}&medio_pago={{ medio_pago }}&fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}&nombre_recibido={{ nombre_recibido }}&apellido_recibido={{ apellido_recibido }}">
+                    «
+                </a>
             </li>
-            {% else %}
-            <li class="page-item disabled"><span class="page-link">Anterior</span></li>
             {% endif %}
-    
-            {% if pagination.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="{{ url_for('cobros.listar_cobros', page=pagination.next_num) }}">Siguiente</a>
+            {% for p in range(1, total_paginas + 1) %}
+            <li class="page-item {% if p == pagina_actual %}active{% endif %}">
+                <a class="page-link" href="?page={{ p }}&orden={{ orden }}&medio_pago={{ medio_pago }}&fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}&nombre_recibido={{ nombre_recibido }}&apellido_recibido={{ apellido_recibido }}">
+                    {{ p }}
+                </a>
             </li>
-            {% else %}
-            <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+            {% endfor %}
+            {% if pagina_actual < total_paginas %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ pagina_actual + 1 }}&orden={{ orden }}&medio_pago={{ medio_pago }}&fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}&nombre_recibido={{ nombre_recibido }}&apellido_recibido={{ apellido_recibido }}">
+                    »
+                </a>
+            </li>
             {% endif %}
         </ul>
-    </nav>
+      </nav>
+      
 {% endblock %}

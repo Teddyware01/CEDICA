@@ -7,7 +7,7 @@ from src.core.jya.models import Jinete
 
 class RegistroCobroForm(FlaskForm):
     jinete = SelectField(
-        "Jinete o Amazona", choices=[], coerce=int, validators=[DataRequired()]
+        "Jinete y Amazona", choices=[], coerce=int, validators=[DataRequired()]
     )
     fecha_pago = DateField(
         "Fecha de Pago", format="%Y-%m-%d", validators=[DataRequired()]
