@@ -58,7 +58,6 @@ def listar_pagos():
 
     pagos_realizado = pagos.ordenar_pagos(orden, tipo_pago, fecha_inicio, fecha_fin)
 
-    PAGOS_POR_PAGINA = 5 
     total_paginas = (len(pagos_realizado) + PAGOS_POR_PAGINA - 1) // PAGOS_POR_PAGINA
     pagos_pag = pagos_realizado[(page - 1) * PAGOS_POR_PAGINA : page * PAGOS_POR_PAGINA]
 
@@ -134,9 +133,7 @@ def buscar_pagos():
     fecha_inicio = request.args.get("fecha_inicio")
     fecha_fin = request.args.get("fecha_fin")
     orden = request.args.get("orden", "asc")
-    page = request.args.get(
-        "page", 1, type=int
-    )  
+    page = request.args.get("page", 1, type=int) 
 
     pagos_realizado = pagos.buscar_pagos(tipo_pago, fecha_inicio, fecha_fin)
 
@@ -158,6 +155,7 @@ def buscar_pagos():
         total_paginas=total_paginas,
         pagina_actual=page,
     )
+
 
 
 @pagos_bp.route("/confirmar_registro", methods=["POST"])

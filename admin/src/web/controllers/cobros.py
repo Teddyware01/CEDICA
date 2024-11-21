@@ -75,9 +75,14 @@ def listar_cobros():
 
     success_cobro = request.args.get("success_cobro")
 
+    total_paginas = cobros_realizado.pages
+    pagina_actual = cobros_realizado.page
+
     return render_template(
         "listado_cobros.html",
         cobros_realizado=cobros_realizado.items,
+        pagina_actual=pagina_actual,
+        total_paginas=total_paginas,
         pagination=cobros_realizado,
         fecha_inicio=fecha_inicio,
         fecha_fin=fecha_fin,
@@ -156,10 +161,20 @@ def buscar_cobros():
         page=page, per_page=per_page
     )
 
+    total_paginas = cobros_realizado.pages
+    pagina_actual = cobros_realizado.page
+
     return render_template(
         "listado_cobros.html",
         cobros_realizado=cobros_realizado.items,
-        pagination=cobros_realizado,
+        pagina_actual=pagina_actual,
+        total_paginas=total_paginas,
+        medio_pago=medio_pago,
+        fecha_inicio=fecha_inicio,
+        fecha_fin=fecha_fin,
+        nombre_recibe=nombre_recibe,
+        apellido_recibe=apellido_recibe,
+        orden=orden,
     )
 
 @cobros_bp.route("/confirmar_registro", methods=["POST"])

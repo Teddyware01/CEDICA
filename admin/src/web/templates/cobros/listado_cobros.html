@@ -100,21 +100,28 @@
 
     <nav aria-label="Paginación">
         <ul class="pagination">
-            {% if pagination.has_prev %}
+            {% if pagina_actual > 1 %}
             <li class="page-item">
-                <a class="page-link" href="{{ url_for('cobros.listar_cobros', page=pagination.prev_num, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, medio_pago=medio_pago, nombre_recibido=nombre_recibido, apellido_recibido=apellido_recibido, orden=orden) }}">Anterior</a>
+                <a class="page-link" href="?page={{ pagina_actual - 1 }}&orden={{ orden }}&medio_pago={{ medio_pago }}&fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}&nombre_recibido={{ nombre_recibido }}&apellido_recibido={{ apellido_recibido }}">
+                    «
+                </a>
             </li>
-            {% else %}
-            <li class="page-item disabled"><span class="page-link">Anterior</span></li>
             {% endif %}
-    
-            {% if pagination.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="{{ url_for('cobros.listar_cobros', page=pagination.next_num, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, medio_pago=medio_pago, nombre_recibido=nombre_recibido, apellido_recibido=apellido_recibido, orden=orden) }}">Siguiente</a>
+            {% for p in range(1, total_paginas + 1) %}
+            <li class="page-item {% if p == pagina_actual %}active{% endif %}">
+                <a class="page-link" href="?page={{ p }}&orden={{ orden }}&medio_pago={{ medio_pago }}&fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}&nombre_recibido={{ nombre_recibido }}&apellido_recibido={{ apellido_recibido }}">
+                    {{ p }}
+                </a>
             </li>
-            {% else %}
-            <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+            {% endfor %}
+            {% if pagina_actual < total_paginas %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ pagina_actual + 1 }}&orden={{ orden }}&medio_pago={{ medio_pago }}&fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}&nombre_recibido={{ nombre_recibido }}&apellido_recibido={{ apellido_recibido }}">
+                    »
+                </a>
+            </li>
             {% endif %}
         </ul>
-    </nav>
+      </nav>
+      
 {% endblock %}
