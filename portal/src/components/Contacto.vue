@@ -42,7 +42,8 @@ export default {
                 mensaje: this.form.mensaje
             };
 
-            fetch('https://grupo15.proyecto2024.linti.unlp.edu.ar/contacto/submit_form', {
+            const baseUrl = import.meta.env.VITE_FLASK_API_URL
+            fetch(`${baseUrl}/contacto/submit_form`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +61,6 @@ export default {
             });
         
             console.log("Enviando formulario con datos:", this.form);
-            alert('Mensaje enviado con éxito');
             this.resetForm();
         },
         resetForm() {
