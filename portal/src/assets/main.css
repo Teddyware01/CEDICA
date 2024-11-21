@@ -30,11 +30,12 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-bottom: 60px;
+  padding-bottom: 160px;
+  padding-top: 106px;
   overflow-y: auto;
   max-width: 800px;
   margin: 0 auto;
-  padding: auto 20px;
+  
 }
 
 footer {

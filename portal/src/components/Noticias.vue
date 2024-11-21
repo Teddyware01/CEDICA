@@ -44,7 +44,6 @@
   }
   
     h1 {
-      padding-top: 60px;
       padding-bottom: 10px;
   }
   

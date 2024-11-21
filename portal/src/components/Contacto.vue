@@ -69,9 +69,6 @@ export default {
             this.form.mensaje = '';
             this.captchaVerified = false;
             grecaptcha.reset();
-        },
-        onCaptchaVerified() {
-            this.captchaVerified = true;
         }
     },
     mounted() {
@@ -90,7 +87,6 @@ export default {
 
 <style scoped>
 h1 {
-    padding-top: 60px;
     padding-bottom: 10px;
 }
 </style>
