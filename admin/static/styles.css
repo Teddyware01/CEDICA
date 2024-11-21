@@ -597,12 +597,11 @@ p {
 
     h2 {
         font-size: 1.5em;
-        margin-top: 2em; 
+        margin-top: 0.5em; 
     }
 
     h3 {
-        font-size: 1em;
-        margin-top: 2em; 
+        margin-top: 0.5em; 
     }
     .tab {
         padding: 5px 10px; 

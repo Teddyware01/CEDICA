@@ -4,159 +4,130 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='equipo_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 {% block content %}
     {{ super() }}
     <h1 class="text-center">Listado de empleados</h1>
-    <body>
-      <div class="actions">
-        <a href="{{ url_for('equipo.add_empleado_form') }}" class="btn btn-add" style="margin: 10px 0; margin-top: 2em;">Agregar empleado</a>
-      </div>
-    
 
-      <form method="GET" action="{{ url_for('equipo.listar_empleados') }}" class="mb-3">
+    <div class="actions">
+        <a href="{{ url_for('equipo.add_empleado_form') }}" class="btn btn-add" style="margin: 10px 0;">Agregar empleado</a>
+    </div>
+
+    <form method="GET" action="{{ url_for('equipo.listar_empleados') }}" class="mb-3">
         <div class="form-row align-items-end">
-          <div class="form-group" style="margin-right: 1em;">
-            <label for="sort_by">Ordenar por:</label>
-            <select name="sort_by" id="sort_by" class="form-control">
-              <option value="email_asc" {% if request.args.get('sort_by') == 'email_asc' %}selected{% endif %}>Email (Ascendente)</option>
-              <option value="email_desc" {% if request.args.get('sort_by') == 'email_desc' %}selected{% endif %}>Email (Descendente)</option>
-              <option value="created_at_asc" {% if request.args.get('sort_by') == 'created_at_asc' %}selected{% endif %}>Fecha de Creación (Ascendente)</option>
-              <option value="created_at_desc" {% if request.args.get('sort_by') == 'created_at_desc' %}selected{% endif %}>Fecha de Creación (Descendente)</option>
-            </select>
-          </div>
-          <div class="form-group" style="margin-right: 1em;">
-            <label for="id_puesto_laboral">Puesto Laboral:</label>
-            <select name="id_puesto_laboral" id="id_puesto_laboral" class="form-control">
-              <option value="cualquiera" {% if request.args.get('id_puesto_laboral') == 'cualquiera' %}selected{% endif %}>Cualquiera</option>
-              {% for puesto in puestos_laborales %}
-                <option value="{{ puesto.id }}" {% if request.args.get('id_puesto_laboral') == puesto.id|string %}selected{% endif %}>{{ puesto.nombre }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="search">Buscar:</label>
-            <input type="text" id="search" name="search" placeholder="Nombre, DNI o Email" class="form-control" value="{{ request.args.get('search', '') }}">
-          </div>
+            <div class="form-group col-lg-4 col-12">
+                <label for="sort_by">Ordenar por:</label>
+                <select name="sort_by" id="sort_by" class="form-control">
+                    <option value="email_asc" {% if request.args.get('sort_by') == 'email_asc' %}selected{% endif %}>Email (Ascendente)</option>
+                    <option value="email_desc" {% if request.args.get('sort_by') == 'email_desc' %}selected{% endif %}>Email (Descendente)</option>
+                    <option value="created_at_asc" {% if request.args.get('created_at') == 'created_at_asc' %}selected{% endif %}>Fecha de Creación (Ascendente)</option>
+                    <option value="created_at_desc" {% if request.args.get('created_at') == 'created_at_desc' %}selected{% endif %}>Fecha de Creación (Descendente)</option>
+                </select>
+            </div>
+            <div class="form-group col-lg-4 col-12">
+                <label for="id_puesto_laboral">Puesto Laboral:</label>
+                <select name="id_puesto_laboral" id="id_puesto_laboral" class="form-control">
+                    <option value="cualquiera" {% if request.args.get('id_puesto_laboral') == 'cualquiera' %}selected{% endif %}>Cualquiera</option>
+                    {% for puesto in puestos_laborales %}
+                        <option value="{{ puesto.id }}" {% if request.args.get('id_puesto_laboral') == puesto.id|string %}selected{% endif %}>{{ puesto.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-lg-4 col-12">
+                <label for="search">Buscar:</label>
+                <input type="text" id="search" name="search" placeholder="Nombre, DNI o Email" class="form-control" value="{{ request.args.get('search', '') }}">
+            </div>
         </div>
-        <div class="form-group">
-          <button type="submit" class="btn btn-sort">Ordenar/Buscar</button>
-        </div>
-      </form>
-      {% if empleados %}
-    
-      <table class="table">
-          <thead>
-              <tr>
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                  <th>Email</th>
-                  <th>DNI</th>
-                  <th>Profesión</th>
-                  <th>Puesto Laboral</th>
-                  <th>Acciones</th>
-              </tr>
-          </thead>
-          <tbody>
-          {% for emp in empleados %}
-              <tr>
-                  <td>{{emp.nombre}}</td>
-                  <td>{{emp.apellido}}</td>
-                  <td class="mail">{{emp.email}}</td>
-                  <td>{{emp.dni}}</td>
-                  <td>{{emp.profesion.nombre}}</td>
-                  <td>{{emp.puesto_laboral.nombre}}</td>
-                  <td>
-                    <div class="btn-group d-none d-lg-block">
-                      <a href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}" class="btn btn-add">Ver</a>
-                      <a href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}" class="btn btn-edit">Modificar</a>
-                      <a href="{{url_for('equipo.delete_empleado', empleado_id=emp.id )}}" class="btn btn-delete">Eliminar</a>
-                    </div>
+        <button type="submit" class="btn btn-sort">Ordenar/Buscar</button>
+    </form>
 
+    {% if empleados %}
+        <table class="table d-none d-md-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>DNI</th>
+                    <th>Profesión</th>
+                    <th>Puesto Laboral</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emp in empleados %}
+                    <tr>
+                        <td>{{ emp.nombre }}</td>
+                        <td>{{ emp.apellido }}</td>
+                        <td class="mail">{{ emp.email }}</td>
+                        <td>{{ emp.dni }}</td>
+                        <td>{{ emp.profesion.nombre }}</td>
+                        <td>{{ emp.puesto_laboral.nombre }}</td>
+                        <td>
+                            <div class="btn-group d-none d-lg-block">
+                                <a href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}" class="btn btn-add">Ver</a>
+                                <a href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}" class="btn btn-edit">Modificar</a>
+                                <a href="{{ url_for('equipo.delete_empleado', empleado_id=emp.id) }}" class="btn btn-delete">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="caja d-md-none">
+            {% for emp in empleados %}
+                <div class="caja-separadora">
+                    <p><strong>Nombre:</strong> {{ emp.nombre }}</p>
+                    <p><strong>Apellido:</strong> {{ emp.apellido }}</p>
+                    <p><strong>Email:</strong> {{ emp.email }}</p>
+                    <p><strong>DNI:</strong> {{ emp.dni }}</p>
+                    <p><strong>Profesión:</strong> {{ emp.profesion.nombre }}</p>
+                    <p><strong>Puesto Laboral:</strong> {{ emp.puesto_laboral.nombre }}</p>
                     <div class="dropdown action-dropdown d-block d-lg-none">
-                      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ emp.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Acciones
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ emp.id }}">
-                          <a class="dropdown-item" href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}">Ver</a>
-                          <a class="dropdown-item" href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}">Modificar</a>
-                          <a class="dropdown-item" href="{{url_for('equipo.delete_empleado', empleado_id=emp.id )}}">Eliminar</a>
-                      </div>
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ emp.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Acciones
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ emp.id }}">
+                            <a class="dropdown-item" href="{{ url_for('equipo.show_empleado', empleado_id=emp.id) }}">Ver</a>
+                            <a class="dropdown-item" href="{{ url_for('equipo.edit_empleado_form', empleado_id=emp.id) }}">Modificar</a>
+                            <a class="dropdown-item" href="{{ url_for('equipo.delete_empleado', empleado_id=emp.id) }}">Eliminar</a>
+                        </div>
                     </div>
-                  </td>
-              </tr>
-              {% endfor %}
-          </tbody>
-          <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var actionButtons = document.querySelectorAll('.action-dropdown .dropdown-toggle');
-                var actionMenus = document.querySelectorAll('.action-dropdown .dropdown-menu');
-                actionButtons.forEach(function(button, index) {
-                    button.addEventListener('click', function(event) {
-                        event.stopPropagation();
-                        var currentMenu = actionMenus[index];
-                        currentMenu.style.display = currentMenu.style.display === 'block' ? 'none' : 'block';
-                    });
-                });
-                window.onclick = function(event) {
-                    if (!event.target.matches('.dropdown-toggle')) {
-                        actionMenus.forEach(function(menu) {
-                            if (menu.style.display === 'block') {
-                                menu.style.display = 'none';
-                            }
-                        });
-                    }
-                };
-            });
-        </script>
-      </table>
-      <nav aria-label="Page navigation">
-          <ul class="pagination justify-content-center">
-            
-            {% if empleados.has_prev %}
-              <li class="page-item">
-                <a class="page-link" href="{{ url_for('equipo.listar_empleados', page=empleados.prev_num, sort_by=sort_by, search=search) }}" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-            {% endif %}
-        
-            
-            {% if empleados.page > 1 %}
-              <li class="page-item">
-                <a class="page-link" href="{{ url_for('equipo.listar_empleados', page=empleados.page - 1, sort_by=sort_by, search=search) }}">
-                  {{ empleados.page - 1 }}
-                </a>
-              </li>
-            {% endif %}
-        
-            <li class="page-item active">
-              <a class="page-link">{{ empleados.page }}</a>
-            </li>
-        
-            
-            {% if empleados.page < empleados.pages %}
-              <li class="page-item">
-                <a class="page-link" href="{{ url_for('equipo.listar_empleados', page=empleados.page + 1, sort_by=sort_by, search=search) }}">
-                  {{ empleados.page + 1 }}
-                </a>
-              </li>
-            {% endif %}
-        
-            
-            {% if empleados.has_next %}
-              <li class="page-item">
-                <a class="page-link" href="{{ url_for('equipo.listar_empleados', page=empleados.next_num, sort_by=sort_by, search=search) }}" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            {% endif %}
-          </ul>
-        </nav> 
-      {% else %}
-          <p>No hay empleados para mostrar.</p>
-      {% endif %}  
-  </body>
+                </div>
+            {% endfor %}
+        </div>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if empleados.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('equipo.listar_empleados', page=empleados.prev_num, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% for page_num in empleados.iter_pages() %}
+                    {% if page_num %}
+                        <li class="page-item {% if page_num == empleados.page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('equipo.listar_empleados', page=page_num, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}">{{ page_num }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                    {% endif %}
+                {% endfor %}
+                {% if empleados.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('equipo.listar_empleados', page=empleados.next_num, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% else %}
+        <p>No hay empleados para mostrar.</p>
+    {% endif %}
 {% endblock %}
