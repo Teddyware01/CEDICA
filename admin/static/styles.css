@@ -568,6 +568,7 @@ p {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
 /* Móviles: Menos de 767px */
 @media (max-width: 767px) {
     .container, .example-wrapper, .demo-wrapper {
@@ -626,6 +627,10 @@ p {
         max-width: 900px; 
         font-family: 'Arial', sans-serif; 
         color: #333;
+    }
+
+    .small-spacing label {
+        margin-bottom: 0.1em;
     }
 }
 
