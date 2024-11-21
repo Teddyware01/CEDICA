@@ -1,0 +1,30 @@
+<!-- src/web/templates/reportes/edad_promedio_actividad.html -->
+{% extends "layout.html" %}
+
+{% block title %}Edad Promedio por Actividad{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Edad Promedio por Actividad</h1>
+
+<!-- Mostrar tabla solo si hay datos -->
+{% if edad_promedio_dict and edad_promedio_dict|length > 0 %}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Actividad</th>
+            <th>Edad Promedio</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for actividad, edad in edad_promedio_dict.items() %}
+        <tr>
+            <td>{{ actividad }}</td>
+            <td>{{ edad }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="text-center alert alert-warning">No hay datos suficientes para calcular la edad promedio por actividad.</p>
+{% endif %}
+{% endblock %}

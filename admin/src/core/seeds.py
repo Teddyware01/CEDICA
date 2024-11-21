@@ -120,7 +120,7 @@ def run():
         email="admin@hotmail",
         alias="admin",
         password="admin",
-        system_admin=True,
+        system_admin=False,
         activo=True,
     )
 
@@ -377,28 +377,28 @@ def run():
             "beneficiario": "Juan Pérez",
             "monto": 1000.0,
             "fecha_pago": datetime(2024, 10, 1),
-            "tipo_pago": "Honorario",
+            "tipo_pago": "honorario",
             "descripcion": "Pago por servicio de asesoría",
         },
         {
             "beneficiario": "María Gómez",
             "monto": 1500.0,
             "fecha_pago": datetime(2024, 10, 5),
-            "tipo_pago": "Gastos_varios",
+            "tipo_pago": "gastos_varios",
             "descripcion": "Pago por compra de insumos",
         },
         {
             "beneficiario": "Carlos López",
             "monto": 2000.0,
             "fecha_pago": datetime(2024, 10, 10),
-            "tipo_pago": "Gastos_varios",
+            "tipo_pago": "gastos_varios",
             "descripcion": "Pago por servicios de mantenimiento",
         },
         {
             "beneficiario": "Ana Martínez",
             "monto": 1500.0,
             "fecha_pago": datetime(2024, 10, 23),
-            "tipo_pago": "Gastos_varios",
+            "tipo_pago": "gastos_varios",
             "descripcion": "Pagos varios",
         },
     ]
@@ -453,6 +453,11 @@ def run():
     ecuestre_create = auth.create_permisos(nombre="ecuestre_create")
     ecuestre_destroy = auth.create_permisos(nombre="ecuestre_destroy")
 
+    grafico_index = auth.create_permisos(nombre="grafico_index")
+    grafico_show = auth.create_permisos(nombre="grafico_show")
+
+    reporte_index = auth.create_permisos(nombre="reporte_index")
+    reporte_show = auth.create_permisos(nombre="reporte_show")
 
 
     # Asignacion a roles
@@ -484,6 +489,12 @@ def run():
     auth.assign_permiso(rol_administracion, ecuestre_index)
     auth.assign_permiso(rol_administracion, ecuestre_show)
 
+    auth.assign_permiso(rol_administracion, grafico_index)
+    auth.assign_permiso(rol_administracion, grafico_show)
+
+    auth.assign_permiso(rol_administracion, reporte_index)
+    auth.assign_permiso(rol_administracion, reporte_show)
+
     #Para el registro con google y la aceptacion de usuarios pebndientes:
     auth.assign_permiso(rol_administracion, user_accept)
 
@@ -502,6 +513,11 @@ def run():
     auth.assign_permiso(rol_tecnica, ecuestre_index)
     auth.assign_permiso(rol_tecnica, ecuestre_show)
 
+    auth.assign_permiso(rol_tecnica, grafico_index)
+    auth.assign_permiso(rol_tecnica, grafico_show)
+
+    auth.assign_permiso(rol_tecnica, reporte_index)
+    auth.assign_permiso(rol_tecnica, reporte_show)
 
     # rol voluntariado
     auth.assign_permiso(rol_voluntariado,jya_index )

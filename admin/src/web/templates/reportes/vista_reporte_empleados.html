@@ -1,0 +1,33 @@
+<!-- src/web/templates/reportes/vista_reporte_empleados.html -->
+{% extends "layout.html" %}
+
+{% block title %}Reporte de Empleados por Puesto y Profesión{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Reporte de Empleados por Puesto y Profesión</h1>
+
+{% if is_authenticated(session) and check_permission(session,"reporte_show") %}
+{% if empleados_data and empleados_data|length > 0 %}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Puesto Laboral</th>
+            <th>Profesión</th>
+            <th>Cantidad</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in empleados_data %}
+        <tr>
+            <td>{{ row.puesto }}</td>
+            <td>{{ row.profesion }}</td>
+            <td>{{ row.cantidad }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="text-center alert alert-warning">No hay datos suficientes de empleados para generar el reporte.</p>
+{% endif %}
+{% endif %}
+{% endblock %}

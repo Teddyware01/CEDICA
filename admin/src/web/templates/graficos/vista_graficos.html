@@ -1,0 +1,127 @@
+<!-- src/web/templates/reportes/vista_graficos.html -->
+{% extends "layout.html" %}
+
+{% block title %}Vista de Gráficos{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Vista de Gráficos</h1>
+
+<!-- Gráfico: Tipos de Discapacidad -->
+<section class="chart-section">
+    <div class="chart-container" style="max-width: 800px; margin: auto;">
+        <h2 class="text-center">Gráfico de Tipos de Discapacidad</h2>
+        <canvas id="discapacidadChart"></canvas>
+    </div>
+</section>
+
+<!-- Gráfico: Proporción de J&A Becados -->
+<section class="chart-section">
+    <div class="chart-container" style="max-width: 800px; margin: auto;">
+        <h2 class="text-center">Gráfico de Proporción de J&A Becados</h2>
+        <canvas id="becadosChart"></canvas>
+    </div>
+</section>
+
+<!-- Gráfico: Propuestas de Trabajo Más Solicitadas -->
+<section class="chart-section">
+    <div class="chart-container" style="max-width: 800px; margin: auto;">
+        <h2 class="text-center">Gráfico de Propuestas de Trabajo Más Solicitadas</h2>
+        <canvas id="propuestasChart"></canvas>
+    </div>
+</section>
+
+{% if is_authenticated(session) and check_permission(session,"grafico_show") %}
+<!-- Scripts de Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Gráfico de Tipos de Discapacidad
+        const ctxDiscapacidad = document.getElementById('discapacidadChart').getContext('2d');
+        const dataDiscapacidad = {
+            labels: {{ discapacidad_counts.keys() | list | tojson | safe }},
+            datasets: [{
+                label: 'Cantidad de Personas',
+                data: {{ discapacidad_counts.values() | list | tojson | safe }},
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(153, 102, 255, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+        new Chart(ctxDiscapacidad, {
+            type: 'bar',
+            data: dataDiscapacidad,
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Gráfico de Proporción de J&A Becados
+        const ctxBecados = document.getElementById('becadosChart').getContext('2d');
+        const dataBecados = {
+            labels: {{ datos_becados.keys() | list | tojson | safe }},
+            datasets: [{
+                label: 'Proporción de J&A Becados',
+                data: {{ datos_becados.values() | list | tojson | safe }},
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.6)',  // Becados
+                    'rgba(255, 99, 132, 0.6)'   // No Becados
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',    // Becados
+                    'rgba(255, 99, 132, 1)'     // No Becados
+                ],
+                borderWidth: 1
+            }]
+        };
+        new Chart(ctxBecados, {
+            type: 'pie',
+            data: dataBecados,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: { enabled: true }
+                }
+            }
+        });
+
+        // Gráfico de Propuestas de Trabajo Más Solicitadas
+        const ctxPropuestas = document.getElementById('propuestasChart').getContext('2d');
+        const dataPropuestas = {
+            labels: {{ propuestas | tojson | safe }},
+            datasets: [{
+                label: 'Cantidad de Asignaciones',
+                data: {{ cantidades_propuestas | tojson | safe }},
+                fill: false,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                tension: 0.1
+            }]
+        };
+        new Chart(ctxPropuestas, {
+            type: 'line',
+            data: dataPropuestas,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: { enabled: true }
+                }
+            }
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}

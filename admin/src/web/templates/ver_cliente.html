@@ -4,55 +4,78 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='ver_usuario.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1 class="text-center">Detalles del Cliente</h1>
+    <div class="caja">
+        <h2><strong>Datos del Usuario:</strong></h2>
 
         <div class="client-info">
             <div class="client-row">
-                <label>Email:</label>
+                <label><strong>Email:</strong></label>
                 <span>{{ user.email }}</span>
             </div>
 
             <div class="client-row">
-                <label>Alias:</label>
+                <label><strong>Alias:</strong></label>
                 <span>{{ user.alias }}</span>
             </div>
 
             <div class="client-row">
-                <label>Contraseña:</label>
+                <label><strong>Contraseña:</strong></label>
                 <span>******</span> 
             </div>
 
             <div class="client-row">
-                <label>Administrador del sistema:</label>
+                <label><strong>Administrador del sistema:</strong></label>
                 <span>{{ 'Sí' if user.system_admin else 'No' }}</span>
             </div>
 
             <div class="client-row">
-                <label>Activo:</label>
+                <label><strong>Activo:</strong></label>
                 <span>{{ 'Sí' if user.activo else 'No' }}</span>
             </div>
 
             <div class="client-row">
-                <label>Usuario asignado:</label>
+                <label><strong>Usuario asignado:</strong></label>
                 {% if user.empleado_asignado %}
                     <span>{{ user.empleado_asignado.dni }}</span> 
                     <span>{{ user.empleado_asignado.profesion.nombre }}</span> 
                     <span>{{ user.empleado_asignado.puesto_laboral.nombre }}</span> 
-                    <a href="{{ url_for('equipo.show_empleado', empleado_id = user.empleado_asignado.id) }}" class="btn btn-secondary">Ver empleado</a>
+                    <a href="{{ url_for('equipo.show_empleado', empleado_id=user.empleado_asignado.id) }}" class="btn btn-secondary">Ver empleado</a>
                 {% else %}
-                   <span>No tiene.</span> 
-                {%endif%}
-            </div>            
-            
-            <div class="form-actions">
-                <a href="{{ url_for('users.edit_client_form', user_id=user.id) }}" class="btn btn-edit">Editar</a>
-                <a href="{{ url_for('users.listar_usuarios') }}" class="btn btn-back">Volver</a>
+                    <span>No tiene.</span> 
+                {% endif %}
+            </div>
+
+            <div class="client-row">
+                <label><strong>Roles asignados:</strong></label>
+                {% if roles_asignados %}
+                    <ul>
+                        {% for rol in roles_asignados %}
+                            <li>{{ rol }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <span>No tiene roles asignados.</span>
+                {% endif %}
             </div>
         </div>
     </div>
+    <div class="form-actions">
+        <a href="{{ url_for('users.edit_client_form', user_id=user.id) }}" class="btn btn-edit" style="margin-right: 0.5em;">Modificar</a>
+        {% if user.activo %}
+            <form method="POST" action="{{ url_for('users.block_user', user_id=user.id) }}" style="display:inline-block; margin-right: 0.5em;">
+                <button type="submit" class="btn btn-block">Bloquear</button>
+            </form>
+        {% else %}
+            <form method="POST" action="{{ url_for('users.activate_user', user_id=user.id) }}" style="display:inline-block; margin-right: 0.5em;">
+                <button type="submit" class="btn btn-add">Activar</button>
+            </form>
+        {% endif %}
+        <a href="{{ url_for('users.delete_client_form', user_id=user.id) }}" class="btn btn-delete" style="margin-right: 0.5em;">Eliminar</a>
+        <a href="{{ url_for('users.listar_usuarios') }}" class="btn btn-back">Volver</a>
+    </div>
+    
 {% endblock %}

@@ -73,8 +73,8 @@
             </table>
         </div>
         <div class="form-actions">
-            <a href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-edit" style="margin-right: 1em;">Editar ecuestre</a>
-            <a href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-delete" style="margin-right: 1em;">Eliminar ecuestre</a>
+            <a href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-edit" style="margin-right: 1em;">Modificar</a>
+            <a href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-delete" style="margin-right: 1em;">Eliminar</a>
             <a href="{{ url_for('ecuestre.listar_ecuestre') }}" class="btn btn-back">Lista de ecuestres</a>
         </div>
     </div>
@@ -138,9 +138,9 @@
                                         <a href="{{ url_for('ecuestre.mostrar_archivo', ecuestre_id=ecuestre.id, file_name=doc.titulo) }}" class="btn btn-add" download>Descargar</a>
                                     {% endif %}
                                     {% if doc.is_enlace %}
-                                        <a href="{{ url_for('ecuestre.edit_enlace_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" class="btn btn-edit">Editar</a>
+                                        <a href="{{ url_for('ecuestre.edit_enlace_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" class="btn btn-edit">Modificar</a>
                                     {% else %}
-                                        <a href="{{ url_for('ecuestre.edit_documento_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" class="btn btn-edit">Editar</a>
+                                        <a href="{{ url_for('ecuestre.edit_documento_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" class="btn btn-edit">Modificar</a>
                                     {% endif %}
                                     <a href="{{ url_for('ecuestre.eliminar_documento_form', ecuestre_id=ecuestre.id, documento_id=doc.id) }}" class="btn btn-delete">Eliminar</a>
                                 </div>
