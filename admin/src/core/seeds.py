@@ -453,6 +453,11 @@ def run():
     ecuestre_create = auth.create_permisos(nombre="ecuestre_create")
     ecuestre_destroy = auth.create_permisos(nombre="ecuestre_destroy")
 
+    grafico_index = auth.create_permisos(nombre="grafico_index")
+    grafico_show = auth.create_permisos(nombre="grafico_show")
+
+    reporte_index = auth.create_permisos(nombre="reporte_index")
+    reporte_show = auth.create_permisos(nombre="reporte_show")
 
 
     # Asignacion a roles
@@ -484,6 +489,12 @@ def run():
     auth.assign_permiso(rol_administracion, ecuestre_index)
     auth.assign_permiso(rol_administracion, ecuestre_show)
 
+    auth.assign_permiso(rol_administracion, grafico_index)
+    auth.assign_permiso(rol_administracion, grafico_show)
+
+    auth.assign_permiso(rol_administracion, reporte_index)
+    auth.assign_permiso(rol_administracion, reporte_show)
+
     #Para el registro con google y la aceptacion de usuarios pebndientes:
     auth.assign_permiso(rol_administracion, user_accept)
 
@@ -502,6 +513,11 @@ def run():
     auth.assign_permiso(rol_tecnica, ecuestre_index)
     auth.assign_permiso(rol_tecnica, ecuestre_show)
 
+    auth.assign_permiso(rol_tecnica, grafico_index)
+    auth.assign_permiso(rol_tecnica, grafico_show)
+
+    auth.assign_permiso(rol_tecnica, reporte_index)
+    auth.assign_permiso(rol_tecnica, reporte_show)
 
     # rol voluntariado
     auth.assign_permiso(rol_voluntariado,jya_index )
