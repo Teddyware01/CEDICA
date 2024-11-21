@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 
-{% block title %}Confirmar Edición del Cobro{% endblock %}
+{% block title %}Confirmar edición del cobro{% endblock %}
 
 {% block content %}
-<h1>Confirmar Edición del Cobro</h1>
+<h1>Confirmar Edición del cobro</h1>
 <form method="POST" action="{{ url_for('cobros.editar_cobro', id=cobro.id) }}">
     <p>¿Está seguro de que desea guardar los siguientes cambios?</p>
     <ul>
@@ -15,6 +15,6 @@
         <p><strong>Observaciones:</strong> {{ cobro.observaciones }}</p>
     </ul>
     <button type="submit" class="btn btn-success">Confirmar</button>
-    <a href="{{ url_for('cobros.editar_cobro', id=cobro.id) }}" class="btn btn-warning">Editar</a> <!-- Botón de edición -->
+    <a href="{{ url_for('cobros.editar_cobro', id=cobro.id) }}" class="btn btn-warning">Editar</a>
 </form>
 {% endblock %}

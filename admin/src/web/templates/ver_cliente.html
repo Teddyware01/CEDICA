@@ -45,7 +45,7 @@
                     <span>{{ user.empleado_asignado.puesto_laboral.nombre }}</span> 
                     <a href="{{ url_for('equipo.show_empleado', empleado_id=user.empleado_asignado.id) }}" class="btn btn-secondary">Ver empleado</a>
                 {% else %}
-                   <span>No tiene.</span> 
+                    <span>No tiene.</span> 
                 {% endif %}
             </div>
 
@@ -63,7 +63,7 @@
             </div>
 
             <div class="form-actions">
-                <a href="{{ url_for('users.edit_client_form', user_id=user.id) }}" class="btn btn-edit">Editar</a>
+                <a href="{{ url_for('users.edit_client_form', user_id=user.id) }}" class="btn btn-edit">Modificar</a>
                 {% if user.activo %}
                     <form method="POST" action="{{ url_for('users.block_user', user_id=user.id) }}" style="display:inline-block;">
                         <button type="submit" class="btn btn-block">Bloquear</button>
