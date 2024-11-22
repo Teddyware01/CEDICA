@@ -34,10 +34,12 @@
             <p>{{ noticia.contenido }}</p>
         </div>
     </div>
-
+    
+        <h5>Tipo de Publicacion: {{ noticia.tipo.value }} </h5>
+        
+        
     <!-- Fechas -->
     <div class="section">
-        <h5>Fechas Importantes</h5>
         <ul>
             <li><strong>Fecha de Creación:</strong> {{ noticia.inserted_at.strftime('%d/%m/%Y %H:%M') }}</li>
             <li><strong>Última Modificación:</strong> {{ noticia.updated_at.strftime('%d/%m/%Y %H:%M') }}</li>

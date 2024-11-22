@@ -98,7 +98,14 @@ def actualizar_noticia(noticia_id):
 
 @bp.get("/eliminar_noticia<int:noticia_id>")
 def eliminar_noticia(noticia_id):
-    return render_template("contenido/listado_noticia.html")
+    noticia = contenido.traer_noticia(noticia_id)
+    return render_template("contenido/delete_noticia.html", noticia=noticia)
+
+@bp.post("/eliminar_noticia<int:noticia_id>")
+def confirmar_eliminacion(noticia_id):
+    contenido.delete_contenido(noticia_id)
+    flash("Noticia borrada exitosamente")
+    return listar_noticias()
 
 @bp.get("/archivar<int:noticia_id>")
 def archivar(noticia_id):
@@ -145,4 +152,43 @@ def publicar(noticia_id):
     )
         contenido.actualizar_estado(noticia_id,estado)
         flash(f"Publicado exitosamente")
+    return listar_noticias()
+
+@bp.post("/publicar")
+def publicar_add():
+    published_at = datetime.now()
+    email = session.get("user") 
+    user = find_user_by_email(email)
+    user_id = user.id
+    attrs = {
+            "titulo": request.form.get('titulo'),
+            "copete": request.form.get('copete'),
+            "contenido": request.form.get('contenido'),
+            "fecha_publicacion": published_at.isoformat(),  
+            "tipo": request.form.get('tipo'),
+            "autor_user_id": user_id
+        }
+    errors = publicate_contenido_schema.validate(attrs)
+    if errors:
+        # Iterar sobre los errores y agregarlos a los mensajes flash
+        for field, error_messages in errors.items():
+            for error in error_messages:
+                flash(f"Error en '{field}': {error}", category="error")
+        return render_template("contenido/add_noticia.html", tipos_contenido=tipos_contenido)
+    
+    # Si no hay errores, crear la noticia
+    tipo_enum = TipoContenidoEnum(attrs["tipo"])
+    estado = estado = EstadoContenidoEnum("Publicado")
+    contenido.create_contenido(
+        titulo=attrs["titulo"],
+        copete=attrs["copete"],
+        contenido=attrs["contenido"],
+        published_at = published_at,
+        tipo=tipo_enum,
+        estado = estado,
+        autor_user_id=attrs["autor_user_id"])
+
+    # Mensaje de éxito
+    flash("Noticia Publicada exitosamente", category="success")
+    
     return listar_noticias()
