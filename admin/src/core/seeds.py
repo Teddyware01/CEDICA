@@ -5,6 +5,8 @@ from src.core import jya
 from src.core import equipo
 from src.core import cobros
 from src.core import contacto
+from src.core import contenido
+from src.core.contenido.contenido import EstadoContenidoEnum,TipoContenidoEnum
 from src.core.equipo.extra_models import Provincia,Localidad, Domicilio
 from src.core.equipo.models import CondicionEnum
 from src.core import pagos
@@ -459,6 +461,12 @@ def run():
     reporte_index = auth.create_permisos(nombre="reporte_index")
     reporte_show = auth.create_permisos(nombre="reporte_show")
 
+    #Modulo contacto
+    contacto_index =  auth.create_permisos(nombre="contacto_index")
+    contacto_show = auth.create_permisos(nombre="contacto_show")
+    contacto_update = auth.create_permisos(nombre="contacto_update")
+    contacto_create = auth.create_permisos(nombre="contacto_create")
+    contacto_destroy = auth.create_permisos(nombre="contacto_destroy")
 
     # Asignacion a roles
     # rol administracion
@@ -494,6 +502,12 @@ def run():
 
     auth.assign_permiso(rol_administracion, reporte_index)
     auth.assign_permiso(rol_administracion, reporte_show)
+
+    auth.assign_permiso(rol_administracion, contacto_index)
+    auth.assign_permiso(rol_administracion, contacto_show)
+    auth.assign_permiso(rol_administracion, contacto_update)
+    auth.assign_permiso(rol_administracion, contacto_create)
+    auth.assign_permiso(rol_administracion, contacto_destroy)
 
     #Para el registro con google y la aceptacion de usuarios pebndientes:
     auth.assign_permiso(rol_administracion, user_accept)
@@ -913,4 +927,34 @@ def run():
         nombre="Juan Diaz",
         email="juan@diaz.com",
         mensaje="Quiero averiguar precios para tener una sesion"
+    )
+
+
+    # Creacion de noticias/contenido de ejemplo
+    contenido.create_contenido(
+        titulo="Expo 2025",
+        copete="Todo acerca de la nueva exposicion de verano.",
+        contenido="El evento de equitación contará con diversas actividades, desde competencias hasta talleres para los más pequeños. Todos están invitados a participar.",
+        tipo=TipoContenidoEnum.ARTICULO_INFO,  
+        estado=EstadoContenidoEnum.PUBLICADO, 
+        autor_user=user1,
+    )
+    
+
+    contenido.create_contenido(
+        titulo="¡No te pierdas el evento de equitación este fin de semana!",
+        copete="Este fin de semana habrá un evento de equitación en la ciudad. ¡Te esperamos!",
+        contenido="El evento de equitación contará con diversas actividades, desde competencias hasta talleres para los más pequeños. Todos están invitados a participar.",
+        tipo=TipoContenidoEnum.AVISO_EVENTO, 
+        estado=EstadoContenidoEnum.ARCHIVADO, 
+        autor_user=user2,
+    )
+
+    contenido.create_contenido(
+        titulo="Nueva actualización del sistema de gestión",
+        copete="Te presentamos las últimas mejoras y actualizaciones en el sistema de gestión.",
+        contenido="La nueva versión incluye mejoras en la interfaz, nuevas funcionalidades y mayor rendimiento.",
+        tipo=TipoContenidoEnum.PUBLICACION, 
+        estado=EstadoContenidoEnum.PUBLICADO,  
+        autor_user=user3
     )

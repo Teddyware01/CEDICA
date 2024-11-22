@@ -2,7 +2,7 @@
   <div class="page">
     <h1 class="titulo">LISTA DE NOTICIAS</h1>
     <p v-if="loading">Cargando noticias...</p>
-    <p v-if="error">{{ error }}</p>
+    <p v-if="error && !loading">{{ error }}</p>
 
     <div v-if="!loading && noticias.length" class="noticias-container">
       <div class="contenido" v-for="noticia in noticias" :key="noticia.id">
@@ -16,24 +16,24 @@
   </div>
 </template>
   
-  <script setup>
-  import { useNoticias } from '../stores/noticias';
-  import { storeToRefs } from 'pinia';
-  import { onMounted } from 'vue';
-  
-  const store = useNoticias()
-  const { noticias, loading, error } = storeToRefs(store)
-  const fetchNoticias = async() => {
-    await store.fetchNoticias();
-  };
-  
-  onMounted(() => {
-    if (!noticias.value.length){
-      fetchNoticias();
-    }
-  })
-  </script>
-  
+<script setup>
+import { useNoticias } from '../stores/noticias';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
+
+const store = useNoticias()
+const { noticias, loading, error } = storeToRefs(store)
+const fetchNoticias = async () => {
+  await store.fetchNoticias();
+};
+
+onMounted(() => {
+  if (!noticias.value.length) {
+    fetchNoticias();
+  }
+})
+</script>
+
   <style scoped>
 
   
