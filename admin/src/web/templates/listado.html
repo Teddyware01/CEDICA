@@ -4,7 +4,7 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 {% block navbar %}
@@ -32,111 +32,150 @@
     </div>
 
     <form method="GET" action="{{ url_for('users.listar_usuarios') }}" class="mb-3">
-        <div class="card">
-            <div class="card-header">
-                <h5>Filtros</h5>
-            </div>
-            <div class="card-body">
-                <div class="form-row">
-                    <div class="form-group col-4">
-                        <label for="sort_by">Ordenar por:</label>
-                        <select name="sort_by" id="sort_by" class="form-control">
-                            <option value="email_asc" {% if request.args.get('sort_by') == 'email_asc' %}selected{% endif %}>Email (Ascendente)</option>
-                            <option value="email_desc" {% if request.args.get('sort_by') == 'email_desc' %}selected{% endif %}>Email (Descendente)</option>
-                            <option value="created_at_asc" {% if request.args.get('sort_by') == 'created_at_asc' %}selected{% endif %}>Fecha de Creación (Ascendente)</option>
-                            <option value="created_at_desc" {% if request.args.get('sort_by') == 'created_at_desc' %}selected{% endif %}>Fecha de Creación (Descendente)</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-4">
-                        <label for="status">Estado:</label>
-                        <select name="status" id="status" class="form-control">
-                            <option value="" {% if not request.args.get('status') %}selected{% endif %}>Todos</option>
-                            <option value="active" {% if request.args.get('status') == 'active' %}selected{% endif %}>Activos</option>
-                            <option value="inactive" {% if request.args.get('status') == 'inactive' %}selected{% endif %}>Inactivos</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-4">
-                        <label for="search">Buscar por Email:</label>
-                        <input type="text" id="search" name="search" placeholder="Buscar por email" class="form-control" value="{{ request.args.get('search', '') }}">
-                    </div>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Filtros</h5>
                 </div>
     
-                <div class="form-row">
-                    <div class="form-group col-6">
-                        <label for="roles">Filtrar por roles:</label>
-                        <div class="checkbox-group">
-                            {% for role in roles %}
-                                <label>
-                                    <input type="checkbox" name="roles" value="{{ role }}" 
-                                            {% if role in request.args.getlist('roles') %}checked{% endif %}>
-                                    {{ role }}
-                                </label><br>
-                            {% endfor %}
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-6 col-lg-4">
+                                <label for="sort_by">Ordenar por:</label>
+                                <select name="sort_by" id="sort_by" class="form-control">
+                                    <option value="email_asc" {% if request.args.get('sort_by') == 'email_asc' %}selected{% endif %}>Email (Ascendente)</option>
+                                    <option value="email_desc" {% if request.args.get('sort_by') == 'email_desc' %}selected{% endif %}>Email (Descendente)</option>
+                                    <option value="created_at_asc" {% if request.args.get('sort_by') == 'created_at_asc' %}selected{% endif %}>Fecha de Creación (Ascendente)</option>
+                                    <option value="created_at_desc" {% if request.args.get('sort_by') == 'created_at_desc' %}selected{% endif %}>Fecha de Creación (Descendente)</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6 col-lg-4">
+                                <label for="status">Estado:</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value="">Todos</option>
+                                    <option value="active">Activos</option>
+                                    <option value="inactive">Inactivos</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12 col-lg-4">
+                                <label for="search">Buscar por Email:</label>
+                                <input type="text" id="search" name="search" placeholder="Buscar por email" class="form-control" value="{{ request.args.get('search', '') }}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group col-6">
-                        <label for="exact_match">Filtrar por roles exactos:</label>
-                        <input type="checkbox" name="exact_match" 
-                                {% if request.args.get('exact_match') %}checked{% endif %}>
-                        <br>
+                        <div class="form-row">
+                            <div class="form-group col-lg-6">
+                                <label for="roles">Filtrar por roles:</label>
+                                <div class="checkbox-group small-spacing">
+                                    {% for role in roles %}
+                                        <label class="d-block mb-1">
+                                            <input type="checkbox" name="roles" value="{{ role }}"
+                                                    {% if role in request.args.getlist('roles') %}checked{% endif %}>
+                                            {{ role }}
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="exact_match">Filtrar por roles exactos:</label>
+                                <input type="checkbox" name="exact_match"
+                                        {% if request.args.get('exact_match') %}checked{% endif %}>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-sort">Aplicar Filtros</button>
                     </div>
                 </div>
-    
-                <button type="submit" class="btn btn-sort">Aplicar Filtros</button>
             </div>
         </div>
     </form>
+    
 
     {% if usuarios %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Alias</th>
-                    <th>Rol</th>
-                    <th>System Admin</th>
-                    <th>Activo</th>
-                    <th>Fecha de Creación</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in usuarios %}
-                <tr>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.alias }}</td>
-                    <td>
+    <table class="table d-none d-md-table">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Alias</th>
+                <th>Rol</th>
+                <th>System Admin</th>
+                <th>Activo</th>
+                <th>Fecha de Creación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in usuarios %}
+            <tr>
+                <td>{{ user.email }}</td>
+                <td>{{ user.alias }}</td>
+                <td>
+                    <ul>
+                        {% for role in user.roles %}
+                        <li>{{ role.nombre }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ 'Sí' if user.system_admin else 'No' }}</td>
+                <td>{{ 'Sí' if user.activo else 'No' }}</td>
+                <td>{{ user.fecha_creacion.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td>
+                    <div>
+                        <a href="{{ url_for('users.mostrar_usuario', user_id=user.id) }}" class="btn btn-add">Ver</a>
+                        <a href="{{ url_for('users.edit_client_form', user_id=user.id) }}" class="btn btn-edit">Modificar</a>
+                        <a href="{{ url_for('users.delete_client_form', user_id=user.id) }}" class="btn btn-delete">Eliminar</a>
+                        {% if user.activo %}
+                            <form method="POST" action="{{ url_for('users.block_user', user_id=user.id) }}" style="display:inline-block;">
+                                <button type="submit" class="btn btn-block">Bloquear</button>
+                            </form>
+                        {% else %}
+                            <form method="POST" action="{{ url_for('users.activate_user', user_id=user.id) }}" style="display:inline-block;">
+                                <button type="submit" class="btn btn-add">Activar</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+        <div class="caja d-md-none">
+            {% for user in usuarios %}
+                <div class="caja-separadora">
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Alias:</strong> {{ user.alias }}</p>
+                    <p><strong>Roles:</strong>
                         <ul>
                             {% for role in user.roles %}
                                 <li>{{ role.nombre }}</li>
                             {% endfor %}
                         </ul>
-                    </td>                    
-                    <td>{{ 'Sí' if user.system_admin else 'No' }}</td>
-                    <td>{{ 'Sí' if user.activo else 'No' }}</td>
-                    <td>{{ user.fecha_creacion.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                    <td>
-                        <div>
-                            <a href="{{ url_for('users.mostrar_usuario', user_id=user.id) }}" class="btn btn-add">Ver</a>
-                            <a href="{{ url_for('users.edit_client_form', user_id=user.id) }}" class="btn btn-edit">Modificar</a>
-                            <a href="{{ url_for('users.delete_client_form', user_id=user.id) }}" class="btn btn-delete">Eliminar</a>
-                        
+                    </p>
+                    <p><strong>Admin del sistema:</strong> {{ 'Sí' if user.system_admin else 'No' }}</p>
+                    <p><strong>Activo:</strong> {{ 'Sí' if user.activo else 'No' }}</p>
+                    <p><strong>Fecha de Creación:</strong> {{ user.fecha_creacion.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    <div class="dropdown action-dropdown d-block d-lg-none">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ user.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Acciones
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ user.id }}">
+                            <a class="dropdown-item" href="{{ url_for('users.mostrar_usuario', user_id=user.id) }}">Ver</a>
+                            <a class="dropdown-item" href="{{ url_for('users.edit_client_form', user_id=user.id) }}">Modificar</a>
+                            <a class="dropdown-item" href="{{ url_for('users.delete_client_form', user_id=user.id) }}">Eliminar</a>
                             {% if user.activo %}
-                                <form method="POST" action="{{ url_for('users.block_user', user_id=user.id) }}" style="display:inline-block;">
-                                    <button type="submit" class="btn btn-block">Bloquear</button>
+                                <form method="POST" action="{{ url_for('users.block_user', user_id=user.id) }}">
+                                    <button type="submit" class="dropdown-item">Bloquear</button>
                                 </form>
                             {% else %}
-                                <form method="POST" action="{{ url_for('users.activate_user', user_id=user.id) }}" style="display:inline-block;">
-                                    <button type="submit" class="btn btn-add">Activar</button>
+                                <form method="POST" action="{{ url_for('users.activate_user', user_id=user.id) }}" >
+                                    <button type="submit" class="dropdown-item">Activar</button>
                                 </form>
                             {% endif %}
-                            
                         </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    
 
         <!-- Paginación -->
         <nav aria-label="Page navigation">
