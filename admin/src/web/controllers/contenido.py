@@ -67,8 +67,35 @@ def ver_noticia(noticia_id):
 
 @bp.get("/editar_noticia<int:noticia_id>")
 def modificar_noticia_form(noticia_id):
-    return render_template("contenido/listado_noticia.html")
+    noticia = contenido.traer_noticia(noticia_id)
+    return render_template("contenido/update_noticia.html", noticia=noticia, tipos_contenido=tipos_contenido)
 
+@bp.post("/editar_noticia<int:noticia_id>")
+def actualizar_noticia(noticia_id):
+    noticia = contenido.traer_noticia(noticia_id)
+    attrs = {
+            "titulo": request.form.get('titulo'),
+            "copete": request.form.get('copete'),
+            "contenido": request.form.get('contenido'),
+            "tipo": request.form.get('tipo'),
+        }
+    tipo_enum = TipoContenidoEnum(attrs["tipo"])
+    errors = contenido_schema.validate(attrs)
+    if errors:
+        # Iterar sobre los errores y agregarlos a los mensajes flash
+        for field, error_messages in errors.items():
+            for error in error_messages:
+                flash(f"Error en '{field}': {error}", category="error")
+        return render_template("contenido/update_noticia.html", noticia=noticia, tipos_contenido=tipos_contenido)
+    
+    updated_contenido = contenido.update_contenido(noticia_id, 
+        titulo=attrs["titulo"],
+        copete=attrs["copete"],
+        contenido=attrs["contenido"],
+        tipo=tipo_enum,
+        autor_user_id=noticia.autor_user_id
+    )
+    return listar_noticias()
 
 @bp.get("/eliminar_noticia<int:noticia_id>")
 def eliminar_noticia(noticia_id):

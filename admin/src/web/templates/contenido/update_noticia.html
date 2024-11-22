@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %} Editar Noticia {% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <h1 class="text-center">Editar Noticia</h1>
+
+    <form method="POST" action="{{ url_for('noticias.actualizar_noticia', noticia_id=noticia.id) }}">
+        <!-- Título -->
+        <div class="form-group">
+            <label for="titulo">Título (máximo 255 caracteres):</label>
+            <input type="text" id="titulo" name="titulo" class="form-control" value="{{ noticia.titulo }}" maxlength="255" placeholder="Ingrese el título" required>
+        </div>
+
+        <!-- Copete -->
+        <div class="form-group">
+            <label for="copete">Copete:</label>
+            <textarea id="copete" name="copete" class="form-control" rows="3" placeholder="Breve resumen de la noticia" required>{{ noticia.copete }}</textarea>
+        </div>
+
+        <!-- Contenido -->
+        <div class="form-group">
+            <label for="contenido">Contenido:</label>
+            <textarea id="contenido" name="contenido" class="form-control" rows="10" placeholder="Ingrese el contenido de la noticia">{{ noticia.contenido }}</textarea>
+        </div>
+
+        <!-- Tipo de Noticia -->
+        <div class="form-group">
+            <label for="tipo">Tipo de Noticia:</label>
+            <select id="tipo" name="tipo" class="form-control" required>
+                {% for tipo in tipos_contenido %}
+                    <option value="{{ tipo }}" {% if noticia.tipo.value == tipo %} selected {% endif %}>{{ tipo }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <!-- Botones -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a href="{{ url_for('noticias.listar_noticias') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+{% endblock %}
