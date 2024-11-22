@@ -3,11 +3,15 @@ from flask import Blueprint, render_template, request, jsonify, current_app, red
 from src.core import contacto
 from src.core.contacto.models import Contacto
 from src.core.database import db
+from src.web.handlers.auth import login_required,check
+
 
 bp = Blueprint("contacto", __name__, url_prefix="/contacto")
 
 
 @bp.get("/")
+@login_required
+@check("contacto_index")
 def listar_consultas():
     sort_by = request.args.get("sort_by")
     search = request.args.get("search")
@@ -17,6 +21,8 @@ def listar_consultas():
 
 
 @bp.get("/agregar_consulta")
+@login_required
+@check("contacto_create")
 def agregar_consulta():
 
     form = AddConsultaForm()
@@ -24,6 +30,8 @@ def agregar_consulta():
 
 
 @bp.post("/agregar_consulta")
+@login_required
+@check("contacto_create")
 def add_consulta():
     form = AddConsultaForm(request.form)
 
@@ -52,6 +60,8 @@ def add_consulta():
 
 
 @bp.get("/ver_consulta/<int:consulta_id>")
+@login_required
+@check("contacto_show")
 def view_consulta(consulta_id):
     consulta = contacto.traer_consulta(consulta_id)
     page=request.args.get("page", 1, type=int)
@@ -62,12 +72,16 @@ def view_consulta(consulta_id):
 
 
 @bp.get("/eliminar_consulta/<int:consulta_id>")
+@login_required
+@check("contacto_destroy")
 def delete_consulta_form(consulta_id):
     consulta = contacto.traer_consulta(consulta_id)
     return render_template("contacto/eliminar_consulta.html", consulta=consulta)
 
 
 @bp.post("/eliminar_consulta/<int:consulta_id>")
+@login_required
+@check("contacto_destroy")
 def delete_consulta(consulta_id):
     contacto.delete_consulta(consulta_id)
     
@@ -75,6 +89,8 @@ def delete_consulta(consulta_id):
 
 
 @bp.get("/editar_consulta/<int:consulta_id>")
+@login_required
+@check("contacto_update")
 def edit_consulta_form(consulta_id):
     consulta = contacto.traer_consulta(consulta_id)
     form = AddConsultaForm(obj=consulta) 
@@ -90,6 +106,8 @@ def edit_consulta_form(consulta_id):
 
 
 @bp.post("/editar_consulta/<int:consulta_id>")
+@login_required
+@check("contacto_update")
 def editar_consulta(consulta_id):
     consulta = contacto.traer_consulta(consulta_id)
     form = AddConsultaForm(request.form, obj=consulta)

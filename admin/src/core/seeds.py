@@ -461,6 +461,12 @@ def run():
     reporte_index = auth.create_permisos(nombre="reporte_index")
     reporte_show = auth.create_permisos(nombre="reporte_show")
 
+    #Modulo contacto
+    contacto_index =  auth.create_permisos(nombre="contacto_index")
+    contacto_show = auth.create_permisos(nombre="contacto_show")
+    contacto_update = auth.create_permisos(nombre="contacto_update")
+    contacto_create = auth.create_permisos(nombre="contacto_create")
+    contacto_destroy = auth.create_permisos(nombre="contacto_destroy")
 
     # Asignacion a roles
     # rol administracion
@@ -496,6 +502,12 @@ def run():
 
     auth.assign_permiso(rol_administracion, reporte_index)
     auth.assign_permiso(rol_administracion, reporte_show)
+
+    auth.assign_permiso(rol_administracion, contacto_index)
+    auth.assign_permiso(rol_administracion, contacto_show)
+    auth.assign_permiso(rol_administracion, contacto_update)
+    auth.assign_permiso(rol_administracion, contacto_create)
+    auth.assign_permiso(rol_administracion, contacto_destroy)
 
     #Para el registro con google y la aceptacion de usuarios pebndientes:
     auth.assign_permiso(rol_administracion, user_accept)
