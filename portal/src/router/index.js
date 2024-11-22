@@ -9,22 +9,26 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      meta: { title: 'Inicio' },
     },
     {
       path: '/contacto',
       name: 'Contacto',
       component: () => import('../views/ContactoView.vue'),
+      meta: { title: 'Contacto' },
     },
     {
       path: '/noticias',
       name: 'Noticias',
       component: () => import('../views/NoticiasView.vue'),
+      meta: { title: 'Actividades y noticias' },
     },
     {
       path: '/contenido/:id',
       name: 'ContenidoDetalle',
       component: () => import('../views/ContenidoDetalleView.vue'),
-      props: true
+      props: true,
+      meta: { title: 'Noticia' },
     },
 
     // Las siguientes rutas son las de las explicaciones practias (de ejemplo)
@@ -41,4 +45,8 @@ const router = createRouter({
   ],
 })
 
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title || 'CEDICA';
+  next();
+});
 export default router

@@ -1,6 +1,6 @@
 <template>
-    <div class="page">
-        <h1>INICIO</h1>
+    <div class="page inicio">
+        <h1 class="titulo">INICIO</h1>
         <h2>
             Bienvenidos al portal de CEDICA
         </h2>
@@ -23,15 +23,20 @@
 </script>
 
 <style scoped>
-    inicio {
+    .inicio {
         font-family: Arial, Helvetica, sans-serif;
+        margin: 0 auto;
+        padding: auto 20px;
+        margin-top: 60px;
+        margin-bottom: 60px;
     }
-    
-    h1 {
+    h1,h2 {
         padding-bottom: 10px;
     }
+
     p {
         padding-top: 10px;
+        font-family: Arial, Helvetica, sans-serif;
         text-align: justify;
     }
 </style>

@@ -1,10 +1,11 @@
 @import './base.css';
 
+
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 30px 2rem 30px;
+  width: 100%;
+  margin: 0; 
 }
+
 
 .page {
   padding: 20px;
@@ -20,7 +21,6 @@ a {
 }
 
 body {
-  min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
   transition: color 0.5s, background-color 0.5s;
@@ -30,24 +30,16 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-bottom: 160px;
   padding-top: 106px;
   overflow-y: auto;
-  max-width: 800px;
-  margin: 0 auto;
-  
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-footer {
-  display: flex;
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 1000;
-  padding: 20px 0;
-  background-color: #e0f7fa; 
-}
+
 
 button {
   width: 100%;
@@ -69,6 +61,20 @@ button:hover {
     padding-top: 10px;
   }
 }
+
+  .titulo {
+    padding-bottom: 10px;
+  }
+
+
+  .page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: auto 20px;
+    margin-top: 60px;
+    margin-bottom: 60px;
+
+  }
 
 /*@media (min-width: 1024px) {
   body {
