@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>Confirmación de eliminación de cobro</h2>
+
+        <div class="alert alert-warning">
+            <strong>¿Estás seguro de que deseas eliminar este cobro?</strong>
+        </div>
+
+        <ul>
+            <li><strong>Jinete:</strong> {{ jinete.nombre }} {{ jinete.apellido }}</li>
+            <li><strong>Empleado:</strong> {{ empleado.nombre }} {{ empleado.apellido }}</li>
+            <li><strong>Monto:</strong> ${{ cobro.monto }}</li>
+            <li><strong>Fecha de Pago:</strong> {{ cobro.fecha_pago }}</li>
+            <li><strong>Medio de Pago:</strong> {{ cobro.medio_pago }}</li>
+            <li><strong>Observaciones:</strong> {{ cobro.observaciones }}</li>
+        </ul>
+
+        <form method="POST">
+            <button type="submit" name="action" value="aceptar" class="btn btn-danger">Aceptar (Eliminar)</button>
+            <a href="{{ url_for('cobros.listar_cobros') }}" class="btn btn-secondary">Rechazar (Cancelar)</a>
+        </form>
+    </div>
+{% endblock %}

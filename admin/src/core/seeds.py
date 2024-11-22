@@ -119,9 +119,9 @@ def run():
     )
 
     user6 = auth.create_user(
-        email="admin@hotmail",
-        alias="admin",
-        password="admin",
+        email="administacion@hotmail",
+        alias="administracion",
+        password="administracion",
         system_admin=False,
         activo=True,
     )

@@ -4,7 +4,9 @@ from src.core.pagos.models import Pago as Pagos
 from datetime import datetime
 
 def obtener_empleado(form):
-    return Empleado.query.get(form.beneficiario.data)
+    # Asegurarse de obtener una instancia del empleado, no una consulta
+    return Empleado.query.filter_by(id=form.beneficiario.data, esta_borrado=False).first()
+
 
 
 def agregar_pago(nuevo_pago):
@@ -70,7 +72,7 @@ def validacion_fecha_inicio(fecha_inicio):
         try:
             fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()
         except ValueError:
-            fecha_inicio = None 
+            fecha_inicio = None
     return fecha_inicio
 
 def validacion_fecha_fin(fecha_fin):
