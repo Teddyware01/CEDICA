@@ -13,6 +13,12 @@ def list_contenido_published():
     return contenido
 
 
+def get_contenido_id(id):
+    contenido = Contenido.query.get(id)
+    if not contenido:
+        return {"error": "Contenido no encontrado"}, 404
+    return contenido
+
 def create_contenido(**kwargs):
     contenido = Contenido(**kwargs)
     db.session.add(contenido)
