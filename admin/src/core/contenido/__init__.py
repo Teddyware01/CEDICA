@@ -1,18 +1,20 @@
 from src.core.database import db
 from .contenido import Contenido
+from src.core.auth import Users
+from src.core.auth import traer_usuario
 
 
 def list_contenido():
-    contenido = Contenido.query.all()
-    print("SE LISTA TODO EL CONTENIDO, que son:",len(contenido))
+    contenido = db.session.query(Contenido, Users.alias).join(Users, Contenido.autor_user_id == Users.id).all()
     return contenido
+
 
 
 def create_contenido(**kwargs):
     contenido = Contenido(**kwargs)
     db.session.add(contenido)
     db.session.commit()
-
+    
     return contenido
 
 def update_contenido(id, **kwargs):
@@ -37,5 +39,12 @@ def delete_contenido(id):
 
     return {"message": "Contenido eliminado exitosamente"}
 
+def obtener_usuario_por_id(id):
+    user = traer_usuario(id)
+    if user:
+        return user
+    return None
 
-
+def traer_noticia(noticia_id):
+    noticia = Contenido.query.get(noticia_id)
+    return noticia

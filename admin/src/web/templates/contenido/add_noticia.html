@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %} Crear Noticia {% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <h1 class="text-center">Crear Noticia</h1>
+
+    <form method="POST" action="{{ url_for('noticias.crear_noticia') }}">
+        <div class="form-group">
+            <label for="titulo">Título (máximo XXX caracteres):</label>
+            <input type="text" id="titulo" name="titulo" class="form-control" maxlength="XXX" placeholder="Ingrese el título" required>
+        </div>
+
+        <div class="form-group">
+            <label for="copete">Copete:</label>
+            <textarea id="copete" name="copete" class="form-control" rows="3" placeholder="Breve resumen de la noticia" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="contenido">Contenido:</label>
+            <textarea id="contenido" name="contenido" class="form-control" rows="10" placeholder="Ingrese el contenido de la noticia"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="tipo">Tipo de Noticia:</label>
+            <select id="tipo" name="tipo" class="form-control" required>
+                {% for tipo in tipos_contenido %}
+                    <option value="{{ tipo }}">{{ tipo }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Guardar Noticia</button>
+            <a href="{{ url_for('noticias.listar_noticias') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+{% endblock %}

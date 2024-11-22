@@ -19,6 +19,7 @@ from src.web.handlers.auth import is_authenticated, check_permission
 from src.web.controllers.jya import bp as jya_bp
 from src.web.api.issues import bp as issues_api_bp
 from src.web.api.contenido import bp as contenido_api_bp
+from src.web.controllers.contenido import bp as noticias_bp
 from flask_cors import CORS
 
 session= Session()
@@ -45,6 +46,7 @@ def create_app(env="development", static_folder="../../static"):
     
     app.register_blueprint(issues_api_bp)
     app.register_blueprint(contenido_api_bp)
+    app.register_blueprint(noticias_bp)
     
     
     @app.route("/")

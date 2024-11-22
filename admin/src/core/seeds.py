@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime,  timedelta
 from src.core import board
 from src.core import auth
 from src.core import jya
@@ -9,6 +9,7 @@ from src.core.equipo.models import CondicionEnum
 from src.core import pagos
 from src.core.cobros.models import RegistroCobro
 from src.core.jya.models import PensionEnum, DiagnosticoEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum, TiposDiscapacidadEnum, EscolaridadEnum
+from src.core.contenido.contenido import Contenido, TipoContenidoEnum, EstadoContenidoEnum
 from datetime import datetime
 
 from src.core.auth import Permisos
@@ -885,3 +886,75 @@ def run():
         auth.assign_permiso(rol_system_admin, perm)
 
     auth.assign_rol(super_user, [rol_system_admin])
+
+    
+    # Crear datos de ejemplo para contenido
+    contenidos = [
+        Contenido(
+            titulo="Primera noticia en borrador",
+            copete="Resumen breve de la primera noticia en estado borrador.",
+            contenido="Contenido completo de la primera noticia en estado borrador.",
+            tipo=TipoContenidoEnum.ARTICULO_INFO,
+            estado=EstadoContenidoEnum.BORRADOR,
+            autor_user_id=1,
+            inserted_at=datetime.now(),
+            updated_at=datetime.now()
+        ),
+        Contenido(
+            titulo="Segunda noticia en borrador",
+            copete="Otro resumen breve para otra noticia en estado borrador.",
+            contenido="Texto más extenso de la segunda noticia en estado borrador.",
+            tipo=TipoContenidoEnum.PUBLICACION,
+            estado=EstadoContenidoEnum.BORRADOR,
+            autor_user_id=1,
+            inserted_at=datetime.now(),
+            updated_at=datetime.now()
+        ),
+        Contenido(
+            titulo="Primera noticia publicada",
+            copete="Resumen breve de la primera noticia publicada.",
+            contenido="Contenido completo de la primera noticia publicada.",
+            tipo=TipoContenidoEnum.AVISO_EVENTO,
+            estado=EstadoContenidoEnum.PUBLICADO,
+            autor_user_id=2,
+            published_at=datetime.now() - timedelta(days=1),
+            inserted_at=datetime.now() - timedelta(days=1),
+            updated_at=datetime.now()
+        ),
+        Contenido(
+            titulo="Segunda noticia publicada",
+            copete="Resumen breve de la segunda noticia publicada.",
+            contenido="Texto detallado de la segunda noticia publicada.",
+            tipo=TipoContenidoEnum.PUBLICACION,
+            estado=EstadoContenidoEnum.PUBLICADO,
+            autor_user_id=2,
+            published_at=datetime.now() - timedelta(days=2),
+            inserted_at=datetime.now() - timedelta(days=2),
+            updated_at=datetime.now()
+        ),
+        Contenido(
+            titulo="Primera noticia archivada",
+            copete="Resumen breve de la primera noticia archivada.",
+            contenido="Contenido completo de la primera noticia archivada.",
+            tipo=TipoContenidoEnum.ARTICULO_INFO,
+            estado=EstadoContenidoEnum.ARCHIVADO,
+            autor_user_id=3,
+            inserted_at=datetime.now() - timedelta(days=30),
+            updated_at=datetime.now() - timedelta(days=15)
+        ),
+        Contenido(
+            titulo="Segunda noticia archivada",
+            copete="Otro resumen breve para otra noticia archivada.",
+            contenido="Texto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivada.",
+            tipo=TipoContenidoEnum.PUBLICACION,
+            estado=EstadoContenidoEnum.ARCHIVADO,
+            autor_user_id=3,
+            inserted_at=datetime.now() - timedelta(days=40),
+            updated_at=datetime.now() - timedelta(days=20)
+        ),
+    ]
+
+    # Insertar datos en la base de datos
+    db.session.bulk_save_objects(contenidos)
+    db.session.commit()
+    print("Seed completada: Se crearon 6 noticias de prueba.")

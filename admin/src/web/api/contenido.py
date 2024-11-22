@@ -1,7 +1,9 @@
 from flask import Blueprint, request, jsonify
 from src.core import contenido
-from src.core.contenido import list_contenido, create_contenido, update_contenido, delete_contenido
+from datetime import datetime
+from src.core.contenido import list_contenido, create_contenido, update_contenido, delete_contenido, obtener_usuario_por_id
 from src.web.schemas.contenido import contenidos_schema, create_contenido_schema, contenido_schema
+from src.core.contenido.contenido import EstadoContenidoEnum
 
 
 bp = Blueprint("contenido_api", __name__, url_prefix="/api/contenido")
@@ -22,7 +24,7 @@ def index():
 @bp.post("/")
 def create():
     attrs = request.get_json()
-
+    
     # Valida datos usando el esquema de creacion
     errors = create_contenido_schema.validate(attrs)
     if errors:
@@ -30,10 +32,19 @@ def create():
 
     # carga y crea  "contenido"
     content_data = create_contenido_schema.load(attrs)
+    content_data["fecha_publicacion"] = datetime.now()
+    content_data["estado"] = EstadoContenidoEnum.PUBLICADO.value
+    autor = obtener_usuario_por_id(content_data["autor_user_id"])
+    if not autor:
+        return jsonify({"autor_user_id": "El autor no existe"}), 404
     new_content = create_contenido(**content_data)
+    new_content.autor = autor
+    
 
     # Serializar el nuevo contenido para la respuesta
     data = contenido_schema.dump(new_content)
+    
+ 
 
     return jsonify(data), 201
 

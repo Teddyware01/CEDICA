@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %} Ver Noticia {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+        /* Estilos para los contenedores con scroll */
+        .content-scroll {
+            max-height: 300px; /* Altura máxima antes de habilitar el scroll */
+            overflow-y: auto; /* Activa el scroll vertical cuando sea necesario */
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">{{ noticia.titulo }}</h1>
+    <!-- Resumen con scroll -->
+    <div class="section">
+        <h3>Copete</h3>
+        <div class="content-scroll">
+            <p>{{ noticia.copete }}</p>
+        </div>
+    </div>
+
+    <!-- Contenido Completo con scroll -->
+    <div class="section">
+        <h3>Contenido Completo</h3>
+        <div class="content-scroll">
+            <p>{{ noticia.contenido }}</p>
+        </div>
+    </div>
+    <div>
+        {% if noticia.estado.value == 'Publicado' %}
+            <h5>Fecha de Publicación: {{ noticia.published_at.strftime('%d/%m/%Y %H:%M') }}</h5>
+        {% else %}
+            <h5>Estado: </h5>
+            <p>{{ noticia.estado.value }}</p>
+        {% endif %}
+    </div>
+    <!-- Datos del Autor con scroll -->
+    <div class="section">
+        <h3>Datos del Autor</h3>
+        <div class="content-scroll">
+            <p><strong>Alias:</strong> {{ autor.alias }}</p>
+            <p><strong>Email:</strong> {{ autor.email }}</p>
+            <p><strong>Estado:</strong> {% if autor.activo %}Activo{% else %}Inactivo{% endif %}</p>
+        </div>
+    </div>
+
+    <div class="actions mt-4">
+        <a href="{{ url_for('noticias.listar_noticias') }}" class="btn btn-primary">Volver al listado</a>
+    </div>
+{% endblock %}

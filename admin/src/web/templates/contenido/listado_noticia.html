@@ -1,0 +1,59 @@
+
+{% extends "layout.html" %}
+
+{% block title %} Listado de Noticias {% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <h1 class="text-center">Listado de Noticias</h1>
+
+    <div class="actions">
+      <a href="{{ url_for('noticias.crear_noticia_form') }}" class="btn btn-add" style="margin: 10px 0;">Agregar Noticia</a>
+    </div>
+    
+    {% if noticias %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Estado</th>
+                <th>Autor</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for noticia, alias in noticias %}
+            <tr>
+                <td>{{ noticia.titulo }}</td>
+                <td>{{ noticia.estado.value }}</td>
+                <td>{{ alias}}</td>
+                <td>
+                  <div class="btn-group d-none d-lg-block">
+                    <a href="{{ url_for('noticias.ver_noticia', noticia_id=noticia.id) }}" class="btn btn-view">Ver</a>
+                    <a href="{{ url_for('noticias.modificar_noticia_form', noticia_id=noticia.id) }}" class="btn btn-edit">Modificar</a>
+                    <a href="{{ url_for('noticias.eliminar_noticia', noticia_id=noticia.id) }}" class="btn btn-delete">Eliminar</a>
+                  </div>
+                  <div class="dropdown action-dropdown d-block d-lg-none">
+                      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ noticia.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Acciones
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ noticia.id }}">
+                          <a class="dropdown-item" href="{{ url_for('noticias.ver_noticia', noticia_id=noticia.id) }}">Ver</a>
+                          <a class="dropdown-item" href="{{ url_for('noticias.modificar_noticia_form', noticia_id=noticia.id) }}">Modificar</a>
+                          <a class="dropdown-item" href="{{ url_for('noticias.eliminar_noticia', noticia_id=noticia.id) }}">Eliminar</a>
+                      </div>
+                  </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No hay noticias disponibles.</p>
+    {% endif %}
+
+{% endblock %}
