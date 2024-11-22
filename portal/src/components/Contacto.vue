@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <h1>CONTÁCTANOS</h1>
+        <h1 class="titulo">CONTÁCTANOS</h1>
         <form @submit.prevent="submitForm">
             <input type="text" v-model="form.nombre" placeholder="Nombre completo" class="input" required>
             <input type="email" v-model="form.email" placeholder="Dirección de correo electrónico" class="input" required>
@@ -86,7 +86,7 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-    padding-bottom: 10px;
-}
+
+
+
 </style>

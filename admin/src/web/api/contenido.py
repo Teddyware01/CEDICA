@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from src.core import contenido
-from src.core.contenido import list_contenido, create_contenido, update_contenido, delete_contenido
+from src.core.contenido import list_contenido,list_contenido_published,get_contenido_id, create_contenido, update_contenido, delete_contenido
 from src.web.schemas.contenido import contenidos_schema, create_contenido_schema, contenido_schema
 
 
@@ -9,7 +9,7 @@ bp = Blueprint("contenido_api", __name__, url_prefix="/api/contenido")
 @bp.get("/")
 def index():
     print("ENTRE")
-    contenidos = list_contenido()
+    contenidos = list_contenido_published()
     data = contenidos_schema.dump(contenidos)
 
     print("TODOS:")
@@ -17,6 +17,19 @@ def index():
 
     return jsonify(data), 200
 
+
+@bp.get("/id/<int:contenido_id>")
+def traer_contenido_por_id(contenido_id):
+    contenido = get_contenido_id(contenido_id)
+    if not contenido:
+        print("contenido is null")
+        return jsonify({"error": "Contenido no encontrado"}), 404
+    
+    data = contenido_schema.dump(contenido)
+
+    print("devolviendo")
+    print( jsonify(data))
+    return jsonify(data), 200
 
 
 @bp.post("/")

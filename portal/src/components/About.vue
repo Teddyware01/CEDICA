@@ -1,6 +1,6 @@
 <template>
     <div class="about page">
-        <h1>SOBRE NOSOTROS</h1>
+        <h1 class="titulo">SOBRE NOSOTROS</h1>
         <p>
             El Centro de Equitación para Personas con Discapacidad y Carenciadas, 
             CEDICA, es una Asociación Civil sin Fines de Lucro, fundada en 1994 en 

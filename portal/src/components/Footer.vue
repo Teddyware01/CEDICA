@@ -25,20 +25,23 @@
     footer {
         display: flex;
         width: 100%;
-        position: fixed;
+        position: static;
         bottom: 0;
         left: 0;
         z-index: 1000;
+        color: var(--vt-c-text-light-1);
         background-color: #e0f7fa; 
         text-align: center;
         padding: 20px 0;
+        padding: 20px 0;
+        max-width: 100%; /* O elimina esta línea */
     }
-
-
 
     .footer-content {
         max-width: 1200px;
         margin: 0 auto;
     }
+
+
 </style>
 

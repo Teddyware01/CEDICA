@@ -195,3 +195,8 @@ def get_permissions(user):
 def all_roles():
     roles = Roles.query.all()
     return roles
+
+
+def get_alias_por_id(user_id):
+    user = traer_usuario(user_id)
+    return user.alias

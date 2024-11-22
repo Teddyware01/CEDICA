@@ -1,6 +1,7 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, post_dump
 from marshmallow.validate import OneOf
 from src.core.contenido.contenido import Contenido, TipoContenidoEnum, EstadoContenidoEnum
+from src.core.auth import get_alias_por_id
 
 class ContenidoSchema(Schema):
     id = fields.Int(dump_only=True)
@@ -19,6 +20,20 @@ class ContenidoSchema(Schema):
     )
 
     autor_user_id = fields.Int(required=True)
+
+
+    @post_dump
+    def translate_enum(self, data, **kwargs):
+        tipo_value = data.get('tipo').split('.')[-1] #Sino entraba todo entero y falla como key ( entraba como TipoContenidoEnum.ARTICULO_INFO)
+        data['tipo'] = TipoContenidoEnum[tipo_value].value if data['tipo'] else None
+        estado_value = data.get('estado').split('.')[-1] 
+        data['estado'] = EstadoContenidoEnum[estado_value].value if data['estado'] else None
+        return data
+    
+    @post_dump
+    def translate_autor(self, data, **kwargs):
+        data['autor'] = get_alias_por_id(data['autor_user_id']) if data['autor_user_id'] else "Desconocido."
+        return data
 
     @post_load
     def make_contenido(self, data, **kwargs):
