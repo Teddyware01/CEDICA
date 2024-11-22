@@ -58,18 +58,42 @@ class CreateContenidoSchema(Schema):
         validate=Length(max=255, error="El título no puede tener más de 255 caracteres.")
     )
     copete = fields.Str(
-        required=True, 
+        required=False, 
         validate=Length(max=500, error="El copete no puede tener más de 500 caracteres.")
     )
-    contenido = fields.Str(required=True)
+    contenido = fields.Str(required=False)
     tipo = fields.Str(
         validate=OneOf(TIPOS_CONTENIDO, error="Tipo de contenido no válido."),
         required=True
     )
     autor_user_id = fields.Int(required=True)
 
+class PublicateContenidoSchema(Schema):
+    titulo = fields.Str(
+        required=True,
+        validate=Length(max=255, error="El título no puede tener más de 255 caracteres y es obligatorio.")
+    )
+    copete = fields.Str(
+        required=True,
+        validate=[
+            Length(min=1, max=500, error="El copete no puede estar vacío y debe tener máximo 500 caracteres."),
+        ]
+    )
+    contenido = fields.Str(
+        required=True,
+        validate=Length(min=1, error="El contenido no puede estar vacío.")
+    )
+    tipo = fields.Str(
+        validate=OneOf(TIPOS_CONTENIDO, error="Tipo de contenido no válido."),
+        required=True
+    )
+    fecha_publicacion = fields.DateTime(required=True)
+    autor_user_id = fields.Int(required=True)
+
+
 # Instancias de los esquemas
 contenido_schema = ContenidoSchema()
 contenidos_schema = ContenidoSchema(many=True)
 simple_contenido_schema = SimpleContenidoSchema()
 create_contenido_schema = CreateContenidoSchema()
+publicate_contenido_schema = PublicateContenidoSchema()

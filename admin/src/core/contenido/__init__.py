@@ -9,7 +9,6 @@ def list_contenido():
     return contenido
 
 
-
 def create_contenido(**kwargs):
     contenido = Contenido(**kwargs)
     db.session.add(contenido)
@@ -48,3 +47,9 @@ def obtener_usuario_por_id(id):
 def traer_noticia(noticia_id):
     noticia = Contenido.query.get(noticia_id)
     return noticia
+
+def actualizar_estado(noticia_id, estado):
+    contenido = Contenido.query.get(noticia_id)
+    contenido.estado = estado
+    db.session.commit()
+    return contenido

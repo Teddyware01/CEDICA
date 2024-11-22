@@ -3,11 +3,12 @@ from flask import session
 from src.core import contenido
 from src.web.handlers.auth import check,login_required
 from src.core.contenido.contenido import Contenido, TipoContenidoEnum, EstadoContenidoEnum
-from src.web.schemas.contenido import contenidos_schema, create_contenido_schema, contenido_schema
+from src.web.schemas.contenido import contenidos_schema, create_contenido_schema, contenido_schema, publicate_contenido_schema
 bp = Blueprint("noticias", __name__, url_prefix="/noticias")
 from src.web.api.contenido import contenido
 from src.web.handlers.auth import check,login_required, is_authenticated
 from src.core.auth import find_user_by_email
+from datetime import datetime
 
 tipos_contenido = [tipo.value for tipo in TipoContenidoEnum]
 
@@ -35,15 +36,12 @@ def crear_noticia():
             "autor_user_id": user_id
         }
     tipo_enum = TipoContenidoEnum(attrs["tipo"])
-    print(tipo_enum)
     errors = create_contenido_schema.validate(attrs)
     if errors:
         # Iterar sobre los errores y agregarlos a los mensajes flash
         for field, error_messages in errors.items():
             for error in error_messages:
                 flash(f"Error en '{field}': {error}", category="error")
-                
-
         return render_template("contenido/add_noticia.html", tipos_contenido=tipos_contenido)
     
     # Si no hay errores, crear la noticia
@@ -87,7 +85,6 @@ def actualizar_noticia(noticia_id):
             for error in error_messages:
                 flash(f"Error en '{field}': {error}", category="error")
         return render_template("contenido/update_noticia.html", noticia=noticia, tipos_contenido=tipos_contenido)
-    
     updated_contenido = contenido.update_contenido(noticia_id, 
         titulo=attrs["titulo"],
         copete=attrs["copete"],
@@ -95,9 +92,57 @@ def actualizar_noticia(noticia_id):
         tipo=tipo_enum,
         autor_user_id=noticia.autor_user_id
     )
+    estado = EstadoContenidoEnum("Borrador")
+    contenido.actualizar_estado(noticia_id,estado)
     return listar_noticias()
 
 @bp.get("/eliminar_noticia<int:noticia_id>")
 def eliminar_noticia(noticia_id):
     return render_template("contenido/listado_noticia.html")
 
+@bp.get("/archivar<int:noticia_id>")
+def archivar(noticia_id):
+    estado = EstadoContenidoEnum("Archivado")
+    contenido.actualizar_estado(noticia_id,estado)
+    flash (f"Archivado exitosamente")
+    return listar_noticias()
+
+@bp.get("/recuperar<int:noticia_id>")
+def recuperar(noticia_id):
+    estado = EstadoContenidoEnum("Borrador")
+    contenido.actualizar_estado(noticia_id,estado)
+    flash (f"Recuperado  exitosamente")
+    return listar_noticias()
+
+@bp.get("/publicar<int:noticia_id>")
+def publicar(noticia_id):
+    noticia = contenido.traer_noticia(noticia_id)
+    published_at = datetime.now()
+    attrs = {
+        "titulo": noticia.titulo,  
+        "copete": noticia.copete,  
+        "contenido": noticia.contenido,  
+        "fecha_publicacion": published_at.isoformat(),  
+        "tipo": noticia.tipo.value,  
+        "autor_user_id": noticia.autor_user_id
+    }
+    errors = publicate_contenido_schema.validate(attrs)
+    if errors:
+        # Iterar sobre los errores y agregarlos a los mensajes flash
+        for field, error_messages in errors.items():
+            for error in error_messages:
+                flash(f"Error en '{field}': {error}", category="error")
+    else:
+        tipo_enum = TipoContenidoEnum(attrs["tipo"])
+        estado = EstadoContenidoEnum("Publicado")
+        contenido.update_contenido(noticia_id, 
+        titulo=attrs["titulo"],
+        copete=attrs["copete"],
+        contenido=attrs["contenido"],
+        tipo=tipo_enum,
+        published_at=published_at,
+        autor_user_id=noticia.autor_user_id
+    )
+        contenido.actualizar_estado(noticia_id,estado)
+        flash(f"Publicado exitosamente")
+    return listar_noticias()

@@ -18,6 +18,7 @@
 
 {% block content %}
     <h1 class="text-center">{{ noticia.titulo }}</h1>
+    
     <!-- Resumen con scroll -->
     <div class="section">
         <h3>Copete</h3>
@@ -33,14 +34,19 @@
             <p>{{ noticia.contenido }}</p>
         </div>
     </div>
-    <div>
-        {% if noticia.estado.value == 'Publicado' %}
-            <h5>Fecha de Publicación: {{ noticia.published_at.strftime('%d/%m/%Y %H:%M') }}</h5>
-        {% else %}
-            <h5>Estado: </h5>
-            <p>{{ noticia.estado.value }}</p>
-        {% endif %}
+
+    <!-- Fechas -->
+    <div class="section">
+        <h5>Fechas Importantes</h5>
+        <ul>
+            <li><strong>Fecha de Creación:</strong> {{ noticia.inserted_at.strftime('%d/%m/%Y %H:%M') }}</li>
+            <li><strong>Última Modificación:</strong> {{ noticia.updated_at.strftime('%d/%m/%Y %H:%M') }}</li>
+            {% if noticia.estado.value == 'Publicado' %}
+                <li><strong>Fecha de Publicación:</strong> {{ noticia.published_at.strftime('%d/%m/%Y %H:%M') }}</li>
+            {% endif %}
+        </ul>
     </div>
+
     <!-- Datos del Autor con scroll -->
     <div class="section">
         <h3>Datos del Autor</h3>
@@ -51,7 +57,17 @@
         </div>
     </div>
 
+    <!-- Acciones -->
     <div class="actions mt-4">
         <a href="{{ url_for('noticias.listar_noticias') }}" class="btn btn-primary">Volver al listado</a>
+        <a href="{{ url_for('noticias.modificar_noticia_form', noticia_id=noticia.id) }}" class="btn btn-edit">Modificar</a>
+        {% if noticia.estado.value == 'Borrador' %}
+            <a href="{{ url_for('noticias.publicar', noticia_id=noticia.id) }}" class="btn btn-primary">Publicar</a>
+        {% elif noticia.estado.value == 'Archivado' %}
+            <a href="{{ url_for('noticias.recuperar', noticia_id=noticia.id) }}" class="btn btn-success">Recuperar</a>
+        {% else %}
+            <a href="{{ url_for('noticias.archivar', noticia_id=noticia.id) }}" class="btn btn-warning">Archivar</a>
+        {% endif %}
+        <a href="{{ url_for('noticias.eliminar_noticia', noticia_id=noticia.id) }}" class="btn btn-delete">Eliminar</a>
     </div>
 {% endblock %}

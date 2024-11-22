@@ -1,4 +1,3 @@
-
 {% extends "layout.html" %}
 
 {% block title %} Listado de Noticias {% endblock %}
@@ -20,6 +19,7 @@
         <thead>
             <tr>
                 <th>Título</th>
+                <th>Tipo</th>
                 <th>Estado</th>
                 <th>Autor</th>
                 <th>Acciones</th>
@@ -29,12 +29,22 @@
         {% for noticia, alias in noticias %}
             <tr>
                 <td>{{ noticia.titulo }}</td>
+                <td>{{ noticia.tipo.value }}</td>
                 <td>{{ noticia.estado.value }}</td>
-                <td>{{ alias}}</td>
+                <td>{{ alias }}</td>
                 <td>
                   <div class="btn-group d-none d-lg-block">
                     <a href="{{ url_for('noticias.ver_noticia', noticia_id=noticia.id) }}" class="btn btn-view">Ver</a>
                     <a href="{{ url_for('noticias.modificar_noticia_form', noticia_id=noticia.id) }}" class="btn btn-edit">Modificar</a>
+                    
+                    {% if noticia.estado.value == 'Borrador' %}
+                        <a href="{{ url_for('noticias.publicar', noticia_id=noticia.id) }}" class="btn btn-primary">Publicar</a>
+                    {% elif noticia.estado.value == 'Archivado' %}
+                        <a href="{{ url_for('noticias.recuperar', noticia_id=noticia.id) }}" class="btn btn-success">Recuperar</a>
+                    {% else %}
+                        <a href="{{ url_for('noticias.archivar', noticia_id=noticia.id) }}" class="btn btn-warning">Archivar</a>
+                    {% endif %}
+                    
                     <a href="{{ url_for('noticias.eliminar_noticia', noticia_id=noticia.id) }}" class="btn btn-delete">Eliminar</a>
                   </div>
                   <div class="dropdown action-dropdown d-block d-lg-none">
@@ -44,6 +54,15 @@
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ noticia.id }}">
                           <a class="dropdown-item" href="{{ url_for('noticias.ver_noticia', noticia_id=noticia.id) }}">Ver</a>
                           <a class="dropdown-item" href="{{ url_for('noticias.modificar_noticia_form', noticia_id=noticia.id) }}">Modificar</a>
+                          
+                          {% if noticia.estado.value == 'Borrador' %}
+                              <a class="dropdown-item" href="{{ url_for('noticias.publicar', noticia_id=noticia.id) }}">Publicar</a>
+                          {% elif noticia.estado.value == 'Archivado' %}
+                              <a class="dropdown-item" href="{{ url_for('noticias.recuperar', noticia_id=noticia.id) }}">Recuperar</a>
+                          {% else %}
+                              <a class="dropdown-item" href="{{ url_for('noticias.archivar', noticia_id=noticia.id) }}">Archivar</a>
+                          {% endif %}
+                          
                           <a class="dropdown-item" href="{{ url_for('noticias.eliminar_noticia', noticia_id=noticia.id) }}">Eliminar</a>
                       </div>
                   </div>

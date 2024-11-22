@@ -17,8 +17,8 @@ class EstadoContenidoEnum(Enum):
 class Contenido(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(256), nullable=False, index=True)
-    copete = db.Column(db.String(600), nullable=False)
-    contenido = db.Column(db.Text, nullable=False)
+    copete = db.Column(db.String(600), nullable=True)
+    contenido = db.Column(db.Text, nullable=True)
     
     published_at = db.Column(db.DateTime, nullable=True) # Fecha en la que se publica, (imaginamos puede estar no publicado )
     inserted_at = db.Column(db.DateTime, default=datetime.now)
