@@ -26,16 +26,19 @@ bp = Blueprint("equipo", __name__, url_prefix="/equipo")
 def listar_empleados():
     sort_by = request.args.get("sort_by")
     id_puesto_laboral = request.args.get("id_puesto_laboral")
-    search = request.args.get("search")
-    page = request.args.get("page", type=int, default=1) 
-    # usa lo de... src/core/equipo/__init__.py
+    nombre = request.args.get("nombre")
+    apellido = request.args.get("apellido")
+    dni = request.args.get("dni")
+    email = request.args.get("email")
+    page = request.args.get("page", type=int, default=1)
     empleados = equipo.list_empleados(
-        sort_by=sort_by, id_puesto_laboral=id_puesto_laboral, search=search, page=page
+        sort_by=sort_by, id_puesto_laboral=id_puesto_laboral, nombre=nombre, apellido=apellido, dni=dni, email=email, page=page
     )
     puestos_laborales = equipo.list_puestos_laborales()
     return render_template(
         "equipo/equipo.html", empleados=empleados, puestos_laborales=puestos_laborales
     )
+
 
 @bp.get("/agregar_empleado")
 @login_required

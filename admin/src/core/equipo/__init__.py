@@ -80,20 +80,19 @@ def get_localidad_by_id(localidad_id):
 
 
 # Tabla Empleado
-def list_empleados(sort_by=None, id_puesto_laboral=None, search=None,page=1, per_page=3):
+def list_empleados(sort_by=None, id_puesto_laboral=None, nombre=None, apellido=None, dni=None, email=None, page=1, per_page=3):
     query = Empleado.query
+
     if id_puesto_laboral and id_puesto_laboral != "cualquiera":
         query = query.filter(Empleado.puesto_laboral_id == id_puesto_laboral)
-    # Filtrar por término de búsqueda
-    if search:
-        query = query.filter(
-            or_(
-                Empleado.nombre.ilike(f"%{search}%"),
-                Empleado.apellido.ilike(f"%{search}%"),
-                Empleado.dni.ilike(f"%{search}%"),
-                Empleado.email.ilike(f"%{search}%"),
-            )
-        )
+    if nombre:
+        query = query.filter(Empleado.nombre.ilike(f"%{nombre}%"))
+    if apellido:
+        query = query.filter(Empleado.apellido.ilike(f"%{apellido}%"))
+    if dni:
+        query = query.filter(Empleado.dni.ilike(f"%{dni}%"))
+    if email:
+        query = query.filter(Empleado.email.ilike(f"%{email}%"))
     if sort_by:
         if sort_by == "nombre_asc":
             query = query.order_by(Empleado.nombre.asc())

@@ -598,6 +598,11 @@ height: 20px;
 margin-right: 10px;
 }
 
+.form-width-control {
+    max-width: 800px;
+    margin: auto;
+}
+
 /* Móviles: Menos de 767px */
 @media (max-width: 767px) {
     .container, .example-wrapper, .demo-wrapper {
