@@ -1,5 +1,4 @@
 from flask import abort, render_template, request, redirect, flash, url_for, current_app
-from flask import abort, render_template, request, redirect, flash, url_for, current_app
 from os import fstat
 from flask import Blueprint
 from src.web.handlers.auth import login_required, check
@@ -177,19 +176,8 @@ def view_jinete(jinete_id):
     sort_by = request.args.get("sort_by")
     search = request.args.get("search")
     documentos = jya.traer_documentos(jinete_id, page=page, sort_by=sort_by, search=search)
-    page=request.args.get("page", 1, type=int)
-    active_tab=request.args.get("tab", "general")
-    sort_by = request.args.get("sort_by")
-    search = request.args.get("search")
-    documentos = jya.traer_documentos(jinete_id, page=page, sort_by=sort_by, search=search)
-    #tipos_discapacidad_nombres = [tipo.name for tipo in jinete.tipos_discapacidad] if jinete.tipos_discapacidad else []
-    #dias_nombres = [d.name for d in jinete.dia] if jinete.dia else []
-    #return render_template("jya/ver_jya.html", jinete=jinete, tipos_discapacidad=tipos_discapacidad_nombres, dia=dias_nombres, documentos=documentos)
     return render_template("jya/ver_jya.html", jinete=jinete, documentos=documentos, active_tab=active_tab)
     
-
-
-
 
 @bp.get("/eliminar_jinete/<int:jinete_id>")
 @login_required
@@ -277,12 +265,6 @@ def edit_jinete_form(jinete_id):
         list_nivel_escolaridad=list_nivel_escolaridad,
         list_caballos=list_caballos, form=form)
 
-def validate_post_edit_jya(form):
-    print("PASSS")
-    return True
-
-
-
 
 
 #agregar que levante el "nuevo_familiar"
@@ -292,115 +274,108 @@ def validate_post_edit_jya(form):
 def editar_jinete(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
     form = request.form
+
+    jinete.nombre = form["nombre"]
+    jinete.apellido = form["apellido"]
+    jinete.dni = form["dni"]
+    jinete.edad = form["edad"]
+    jinete.fecha_nacimiento = form["fecha_nacimiento"]
+    jinete.provincia_nacimiento_id = form["provincia_nacimiento"]
+    jinete.localidad_nacimiento_id = form["localidad_nacimiento"]
+    #domicilio actual
+    jinete.domicilio.calle = form["domicilio.calle"]
+    jinete.domicilio.numero = form["domicilio.numero"]
+    jinete.domicilio.piso= form["domicilio.piso"] if (form["domicilio.piso"] and form["domicilio.piso"] !="") else None
+    jinete.domicilio.departamento= form["domicilio.departamento"] if (form["domicilio.departamento"] and form["domicilio.departamento"] !="") else None
+    jinete.domicilio.provincia_id = form["domicilio.provincia"]
+    jinete.domicilio.localidad_id = form["domicilio.localidad"]        
+    jinete.telefono = form["telefono"]
+    #contacto emergencia:
+    jinete.contacto_emergencia.nombre= form["contacto_emergencia.nombre"]
+    jinete.contacto_emergencia.apellido= form["contacto_emergencia.apellido"]
+    jinete.contacto_emergencia.telefono= form["contacto_emergencia.telefono"]
+    #empieza:
+    jinete.estado_pago = (form["estado_pago"] == "si") 
+    jinete.becado = (form["becado"] == "si")
+    jinete.observaciones_becado = form["observaciones_becado"]
+    jinete.certificado_discapacidad = (form["certificado_discapacidad"] == "si")
+    jinete.diagnostico = form["diagnostico"] if  (form["diagnostico"] and form["diagnostico"] !="") else None
+    jinete.otro = form["otro"]  if (form["otro"] and form["otro"] !="") else None
+
+    #tipos_discapacidades:
+    jya.clear_jinete_discapacidades(jinete_id)
+    for tipo in form.getlist("tipos_discapacidad[]"):
+        jya.associate_jinete_discapacidad_name(jinete_id, tipo)
+
+    jinete.asignacion_familiar = (form["asignacion"] == "si")
+    jinete.tipo_asignacion = form.get("tipo_asignacion") if form.get("tipo_asignacion") and form.get("tipo_asignacion") != "" else None
+    jinete.beneficiario_pension = (form["beneficiario_pension"] == "si")
+    jinete.pension = form.get("pension") if form.get("pension") and form.get("pension") != "" else None
+    jinete.obra_social = form["obra_social"]
+    jinete.nro_afiliado = form["nro_afiliado"]
+    jinete.curatela = (form["curatela"] == "si")
+    jinete.observaciones_curatela = form["observaciones_curatela"]
+
+    #Institucion escolar:
+    jinete.nombre_institucion = form["nombre_institucion"]
+    jinete.direccion.calle = form["direccion.calle"]
+    jinete.direccion.numero = form["direccion.numero"]
+    jinete.direccion.piso= form["direccion.piso"] if (form["direccion.piso"] and form["direccion.piso"] !="") else None
+    jinete.direccion.departamento= form["direccion.departamento"] if (form["direccion.departamento"] and form["direccion.departamento"] !="") else None
+    jinete.direccion.provincia_id = form["direccion.provincia"]
+    jinete.direccion.localidad_id = form["direccion.localidad"]
+    jinete.telefono_institucion = form["telefono_institucion"]
+    jinete.grado = form["grado"]
+    jinete.observaciones_institucion = form["observaciones_institucion"]
+    jinete.profesionales = form.get("profesionales") if form.get("profesionales") and form.get("profesionales") != "" else None
+
+    #levanto campos del familiar:
+    parentezco_familiar = form.get("familiar.parentesco_familiar") or None
+    nombre_familiar = form.get("familiar.nombre_familiar") or None
+    apellido_familiar = form.get("familiar.apellido_familiar") or None
+    dni_familiar = form.get("familiar.dni_familiar") or None
+    domicilio_familiar_calle = form.get("domicilio_familiar.calle") or None
+    domicilio_familiar_numero = form.get("domicilio_familiar.numero") or None
+    domicilio_familiar_piso = form.get("domicilio_familiar.piso") or None
+    domicilio_familiar_departamento = form.get("domicilio_familiar.departamento") or None
+    domicilio_familiar_provincia_id = form.get("familiar.domicilio_familiar_provincia") or None
+    domicilio_familiar_localidad_id = form.get("familiar.domicilio_familiar_localidad") or None
+    celular_familiar = form.get("familiar.celular_familiar") or None
+    email_familiar = form.get("familiar.email_familiar") or None 
+    nivel_escolaridad_familiar = form.get("familiar.nivel_escolaridad_familiar") or None
+    actividad_ocupacion_familiar = form.get("familiar.actividad_ocupacion_familiar") or None
     
-    
-
-    if validate_post_edit_jya(form):
-
-        jinete.nombre = form["nombre"]
-        jinete.apellido = form["apellido"]
-        jinete.dni = form["dni"]
-        jinete.edad = form["edad"]
-        jinete.fecha_nacimiento = form["fecha_nacimiento"]
-        jinete.provincia_nacimiento_id = form["provincia_nacimiento"]
-        jinete.localidad_nacimiento_id = form["localidad_nacimiento"]
-        #domicilio actual
-        jinete.domicilio.calle = form["domicilio.calle"]
-        jinete.domicilio.numero = form["domicilio.numero"]
-        jinete.domicilio.piso= form["domicilio.piso"] if (form["domicilio.piso"] and form["domicilio.piso"] !="") else None
-        jinete.domicilio.departamento= form["domicilio.departamento"] if (form["domicilio.departamento"] and form["domicilio.departamento"] !="") else None
-        jinete.domicilio.provincia_id = form["domicilio.provincia"]
-        jinete.domicilio.localidad_id = form["domicilio.localidad"]        
-        jinete.telefono = form["telefono"]
-        #contacto emergencia:
-        jinete.contacto_emergencia.nombre= form["contacto_emergencia.nombre"]
-        jinete.contacto_emergencia.apellido= form["contacto_emergencia.apellido"]
-        jinete.contacto_emergencia.telefono= form["contacto_emergencia.telefono"]
-        #empieza:
-        jinete.estado_pago = (form["estado_pago"] == "si") 
-        jinete.becado = (form["becado"] == "si")
-        jinete.observaciones_becado = form["observaciones_becado"]
-        jinete.certificado_discapacidad = (form["certificado_discapacidad"] == "si")
-        jinete.diagnostico = form["diagnostico"] if  (form["diagnostico"] and form["diagnostico"] !="") else None
-        jinete.otro = form["otro"]  if (form["otro"] and form["otro"] !="") else None
-
-        #tipos_discapacidades:
-        jya.clear_jinete_discapacidades(jinete_id)
-        for tipo in form.getlist("tipos_discapacidad[]"):
-            jya.associate_jinete_discapacidad_name(jinete_id, tipo)
-
-        jinete.asignacion_familiar = (form["asignacion"] == "si")
-        jinete.tipo_asignacion = form.get("tipo_asignacion") if form.get("tipo_asignacion") and form.get("tipo_asignacion") != "" else None
-        jinete.beneficiario_pension = (form["beneficiario_pension"] == "si")
-        jinete.pension = form.get("pension") if form.get("pension") and form.get("pension") != "" else None
-        jinete.obra_social = form["obra_social"]
-        jinete.nro_afiliado = form["nro_afiliado"]
-        jinete.curatela = (form["curatela"] == "si")
-        jinete.observaciones_curatela = form["observaciones_curatela"]
-
-        #Institucion escolar:
-        jinete.nombre_institucion = form["nombre_institucion"]
-        jinete.direccion.calle = form["direccion.calle"]
-        jinete.direccion.numero = form["direccion.numero"]
-        jinete.direccion.piso= form["direccion.piso"] if (form["direccion.piso"] and form["direccion.piso"] !="") else None
-        jinete.direccion.departamento= form["direccion.departamento"] if (form["direccion.departamento"] and form["direccion.departamento"] !="") else None
-        jinete.direccion.provincia_id = form["direccion.provincia"]
-        jinete.direccion.localidad_id = form["direccion.localidad"]
-        jinete.telefono_institucion = form["telefono_institucion"]
-        jinete.grado = form["grado"]
-        jinete.observaciones_institucion = form["observaciones_institucion"]
-        jinete.profesionales = form.get("profesionales") if form.get("profesionales") and form.get("profesionales") != "" else None
-
-        #levanto campos del familiar:
-        parentezco_familiar = form.get("familiar.parentesco_familiar") or None
-        nombre_familiar = form.get("familiar.nombre_familiar") or None
-        apellido_familiar = form.get("familiar.apellido_familiar") or None
-        dni_familiar = form.get("familiar.dni_familiar") or None
-        domicilio_familiar_calle = form.get("domicilio_familiar.calle") or None
-        domicilio_familiar_numero = form.get("domicilio_familiar.numero") or None
-        domicilio_familiar_piso = form.get("domicilio_familiar.piso") or None
-        domicilio_familiar_departamento = form.get("domicilio_familiar.departamento") or None
-        domicilio_familiar_provincia_id = form.get("familiar.domicilio_familiar_provincia") or None
-        domicilio_familiar_localidad_id = form.get("familiar.domicilio_familiar_localidad") or None
-        celular_familiar = form.get("familiar.celular_familiar") or None
-        email_familiar = form.get("familiar.email_familiar") or None 
-        nivel_escolaridad_familiar = form.get("familiar.nivel_escolaridad_familiar") or None
-        actividad_ocupacion_familiar = form.get("familiar.actividad_ocupacion_familiar") or None
-        
-        if jinete.familiares:
-            familiar_id= jya.get_primer_familiar(jinete_id).id
-            jya.edit_familiar(familiar_id=familiar_id, parentezco_familiar=parentezco_familiar, nombre_familiar=nombre_familiar,apellido_familiar=apellido_familiar, dni_familiar=dni_familiar,domicilio_familiar_calle=domicilio_familiar_calle,domicilio_familiar_numero=domicilio_familiar_numero,
-                            domicilio_familiar_piso=domicilio_familiar_piso, domicilio_familiar_departamento=domicilio_familiar_departamento, domicilio_familiar_provincia_id=domicilio_familiar_provincia_id,domicilio_familiar_localidad_id=domicilio_familiar_localidad_id,celular_familiar=celular_familiar,
-                            email_familiar=email_familiar, nivel_escolaridad_familiar=nivel_escolaridad_familiar, actividad_ocupacion_familiar=actividad_ocupacion_familiar)
-        else:
-            jya.add_familiar(familiar_id=familiar_id, parentezco_familiar=parentezco_familiar, nombre_familiar=nombre_familiar,apellido_familiar=apellido_familiar, dni_familiar=dni_familiar,domicilio_familiar_calle=domicilio_familiar_calle,domicilio_familiar_numero=domicilio_familiar_numero,
-                            domicilio_familiar_piso=domicilio_familiar_piso, domicilio_familiar_departamento=domicilio_familiar_departamento, domicilio_familiar_provincia_id=domicilio_familiar_provincia_id,domicilio_familiar_localidad_id=domicilio_familiar_localidad_id,celular_familiar=celular_familiar,
-                            email_familiar=email_familiar, nivel_escolaridad_familiar=nivel_escolaridad_familiar, actividad_ocupacion_familiar=actividad_ocupacion_familiar)
+    if jinete.familiares:
+        familiar_id= jya.get_primer_familiar(jinete_id).id
+        jya.edit_familiar(familiar_id=familiar_id, parentezco_familiar=parentezco_familiar, nombre_familiar=nombre_familiar,apellido_familiar=apellido_familiar, dni_familiar=dni_familiar,domicilio_familiar_calle=domicilio_familiar_calle,domicilio_familiar_numero=domicilio_familiar_numero,
+                        domicilio_familiar_piso=domicilio_familiar_piso, domicilio_familiar_departamento=domicilio_familiar_departamento, domicilio_familiar_provincia_id=domicilio_familiar_provincia_id,domicilio_familiar_localidad_id=domicilio_familiar_localidad_id,celular_familiar=celular_familiar,
+                        email_familiar=email_familiar, nivel_escolaridad_familiar=nivel_escolaridad_familiar, actividad_ocupacion_familiar=actividad_ocupacion_familiar)
+    else:
+        jya.add_familiar(familiar_id=familiar_id, parentezco_familiar=parentezco_familiar, nombre_familiar=nombre_familiar,apellido_familiar=apellido_familiar, dni_familiar=dni_familiar,domicilio_familiar_calle=domicilio_familiar_calle,domicilio_familiar_numero=domicilio_familiar_numero,
+                        domicilio_familiar_piso=domicilio_familiar_piso, domicilio_familiar_departamento=domicilio_familiar_departamento, domicilio_familiar_provincia_id=domicilio_familiar_provincia_id,domicilio_familiar_localidad_id=domicilio_familiar_localidad_id,celular_familiar=celular_familiar,
+                        email_familiar=email_familiar, nivel_escolaridad_familiar=nivel_escolaridad_familiar, actividad_ocupacion_familiar=actividad_ocupacion_familiar)
 
 
-        # trabajo en institucion:
-        jinete.trabajo_institucional = form.get("trabajo_institucional")
-        jinete.condicion = (form["condicion"]  == "si")
-        jinete.sede = form.get("sede")
-        # dias:
-        jya.clear_jinete_dias(jinete_id)
-        for dia_name in form.getlist("dias_semana"):
-        # asignacion de dias:
-            jya.associate_jinete_dias_name(jinete_id,dia_name)
+    # trabajo en institucion:
+    jinete.trabajo_institucional = form.get("trabajo_institucional")
+    jinete.condicion = (form["condicion"]  == "si")
+    jinete.sede = form.get("sede")
+    # dias:
+    jya.clear_jinete_dias(jinete_id)
+    for dia_name in form.getlist("dias_semana"):
+    # asignacion de dias:
+        jya.associate_jinete_dias_name(jinete_id,dia_name)
 
 
 
-        jinete.profesor_o_terapeuta_id = form.get("profesor_o_terapeuta")
-        jinete.conductor_caballo_id = form.get("conductor_caballo")
-        jinete.caballo_id = form.get("caballo")
-        jinete.auxiliar_pista_id = form.get("auxiliar_pista")
+    jinete.profesor_o_terapeuta_id = form.get("profesor_o_terapeuta")
+    jinete.conductor_caballo_id = form.get("conductor_caballo")
+    jinete.caballo_id = form.get("caballo")
+    jinete.auxiliar_pista_id = form.get("auxiliar_pista")
 
-        flash("Jinete actualizado  exitosamente", "success")
-        db.session.commit()
-        return redirect(url_for("jya.view_jinete",jinete_id=jinete.id))
-
-
-    return render_template("jya/editar_jya.html", form=form, jinete=jinete)
+    flash("Jinete actualizado  exitosamente", "success")
+    db.session.commit()
+    return redirect(url_for("jya.view_jinete",jinete_id=jinete.id))
 
 
 

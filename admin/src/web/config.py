@@ -16,7 +16,12 @@ class ProductionConfig(Config):
     MINIO_SECRET_KEY = environ.get("MINIO_SECRET_KEY")
     MINIO_SECURE = True
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
-    
+
+    # Valores que pueden no tener en sus maquinas, pero que ya cargué en vault:
+    OAUTH_GOOGLE_CLIENT_ID = environ.get('OAUTH_GOOGLE_CLIENT_ID')
+    OAUTH_GOOGLE_CLIENT_SECRET = environ.get('OAUTH_GOOGLE_CLIENT_SECRET')
+    CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
+
 
 class DevelopmentConfig(Config):
     """Development configuration."""
@@ -32,7 +37,7 @@ class DevelopmentConfig(Config):
     DB_PORT = "5432"
     DB_NAME = "grupo15"
     
-    
+     
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
@@ -40,13 +45,19 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://postgres:admin@localhost:5432/grupo15"
     )
+    """
     
     SQLALCHEMY_ENGINE_OPTIONS = {
         'connect_args': {
             'client_encoding': 'utf8'
         }
     }
-    """
+
+    # Valores que pueden no tener en sus maquinas, pero que ya cargué en vault:
+    OAUTH_GOOGLE_CLIENT_ID = environ.get('OAUTH_GOOGLE_CLIENT_ID')
+    OAUTH_GOOGLE_CLIENT_SECRET = environ.get('OAUTH_GOOGLE_CLIENT_SECRET')
+    CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
+
     
 class TestingConfig(Config):
     """Testing configuration."""

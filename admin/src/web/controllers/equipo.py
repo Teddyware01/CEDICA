@@ -6,7 +6,7 @@ from src.core.equipo.extra_models import Domicilio, ContactoEmergencia
 from src.core.equipo.forms import AddEmpleadoForm
 from src.core import equipo
 from src.core import auth
-
+from email_validator import validate_email, EmailNotValidError
 from datetime import timedelta
 
 from flask import current_app
@@ -71,9 +71,10 @@ def show_empleado(empleado_id):
     page = request.args.get('page', 1, type=int)
     documentos_paginated = equipo.traer_documentos(empleado_id, page=page)
     active_tab = request.args.get('tab', 'general')
-
+    roles = auth.traer_roles(empleado_id)
+    roles_asignados = [rol.nombre for rol in roles]
     return render_template(
-        "equipo/ver_empleado.html", empleado=empleado, documentos_paginated=documentos_paginated,active_tab=active_tab
+        "equipo/ver_empleado.html", empleado=empleado, documentos_paginated=documentos_paginated,active_tab=active_tab, roles_asignados=roles_asignados
     )
 
 
@@ -105,6 +106,21 @@ def destroy_empleado(empleado_id):
 def add_empleado():
 
     form = AddEmpleadoForm(request.form)
+    email = form.email
+    # Validar el email
+    try:
+        # Se valida y normaliza el email
+        valid_email = validate_email(email)
+        email = valid_email.email  # Normaliza el email (convierte a minúsculas y corrige algunos errores comunes)
+        # Validar que el email termine en .com
+        if not email.endswith('.com'):
+            flash("El correo electrónico debe terminar en '.com'", "error")
+            return render_template("equipo/agregar_empleado.html", form=form)
+            
+    except EmailNotValidError as e:
+        flash(f"El correo electrónico no es válido: {str(e)}", "error")
+        return render_template("equipo/agregar_empleado.html", form=form)
+    
     cargar_choices_form(form=form)
     if form.validate_on_submit():
         # Crear nuevo Domicilio registrado con los datos del formulario
@@ -221,7 +237,19 @@ def update_empleado(empleado_id):
     form.obj=empleado
     # Cargar las opciones para los campos de selección
     cargar_choices_form(form=form)
-    
+    email = form.email
+    try:
+        # Se valida y normaliza el email
+        valid_email = validate_email(email)
+        email = valid_email.email  # Normaliza el email (convierte a minúsculas y corrige algunos errores comunes)
+        # Validar que el email termine en .com
+        if not email.endswith('.com'):
+            flash("El correo electrónico debe terminar en '.com'", "error")
+            return render_template("equipo/edit_empleado.html", form=form, empleado=empleado)
+            
+    except EmailNotValidError as e:
+        flash(f"El correo electrónico no es válido: {str(e)}", "error")
+        return render_template("equipo/edit_empleado.html", form=form, empleado=empleado)
 
     if form.validate_on_submit():
         # Actualizar los datos del empleado con los valores del formulario
