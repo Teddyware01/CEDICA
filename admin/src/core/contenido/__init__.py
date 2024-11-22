@@ -4,9 +4,11 @@ from src.core.auth import Users
 from src.core.auth import traer_usuario
 
 
-def list_contenido():
-    contenido = db.session.query(Contenido, Users.alias).join(Users, Contenido.autor_user_id == Users.id).all()
-    return contenido
+
+def list_contenido(page=1, per_page=5):
+    query = db.session.query(Contenido, Users.alias).join(Users, Contenido.autor_user_id == Users.id)
+    paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
+    return paginated_query
 
 
 def create_contenido(**kwargs):
