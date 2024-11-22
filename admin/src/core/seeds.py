@@ -26,7 +26,7 @@ from src.core.auth import Roles
 
 from src.core import equipo
 from src.core import auth
-from src.core.equipo.extra_models import Provincia 
+from src.core.equipo.extra_models import Provincia
 
 from src.core.database import db
 from sqlalchemy import text
@@ -42,7 +42,7 @@ def ejecutar_sql_script(file_path):
 def ejecutar_sql_script(file_path):
     with open(file_path, 'r',encoding='utf-8') as sql_file:
         sql_script = sql_file.read()
-    
+
     with db.engine.connect() as connection:
         connection.execute(text(sql_script))
         connection.commit()
@@ -116,9 +116,9 @@ def run():
     )
 
     user6 = auth.create_user(
-        email="admin@hotmail",
-        alias="admin",
-        password="admin",
+        email="administacion@hotmail",
+        alias="administracion",
+        password="administracion",
         system_admin=False,
         activo=True,
     )
@@ -157,7 +157,7 @@ def run():
         nombre="Administracion",
     )
 
-    
+
 
     auth.assign_rol(user1, [rol_administracion, rol_voluntariado])
     auth.assign_rol(
@@ -232,7 +232,7 @@ def run():
         localidad_id=15,
         provincia_id=12,
     )
-    
+
     domicilio_ej4 = equipo.add_domiclio(
         calle="Diagonal 73",
         numero=1214,
@@ -241,7 +241,7 @@ def run():
         localidad_id=232,
         provincia_id=2,
     )
-        
+
     domicilio_ej5 = equipo.add_domiclio(
         calle="San Martin",
         numero=452,
@@ -249,7 +249,7 @@ def run():
         localidad_id=101,
         provincia_id=8,
     )
-        
+
     domicilio_ej6 = equipo.add_domiclio(
         calle="Belgrano",
         numero=23,
@@ -257,7 +257,7 @@ def run():
         localidad_id=531,
         provincia_id=18,
     )
-    
+
     domicilio_ej7 = equipo.add_domiclio(
         calle="Av. 1",
         numero=12,
@@ -279,8 +279,8 @@ def run():
     contacto_emergencia_ej3 = equipo.add_contacto_emergencia(
         nombre="Diego", apellido="Diaz", telefono="0542234545"
     )
-    
-    
+
+
 
     empleado1 = equipo.create_empleado(
         nombre="Ernesto",
@@ -482,14 +482,14 @@ def run():
     auth.assign_permiso(rol_administracion, ecuestre_index)
     auth.assign_permiso(rol_administracion, ecuestre_show)
 
-    
+
     # rol tecnica
     auth.assign_permiso(rol_tecnica,jya_index)
     auth.assign_permiso(rol_tecnica,jya_update)
     auth.assign_permiso(rol_tecnica,jya_show)
     auth.assign_permiso(rol_tecnica,jya_create)
     auth.assign_permiso(rol_tecnica,jya_destroy)
-    
+
     auth.assign_permiso(rol_tecnica, cobro_index)
     auth.assign_permiso(rol_tecnica, cobro_show)
 
@@ -508,14 +508,14 @@ def run():
     auth.assign_permiso(rol_ecuestre, ecuestre_update)
     auth.assign_permiso(rol_ecuestre, ecuestre_create)
     auth.assign_permiso(rol_ecuestre, ecuestre_destroy)
-    
+
     jya.add_direccion(
         calle="Olazabal",
         numero=3241,
         localidad_id=9,
         provincia_id=4,
     )
-    
+
     jya.add_direccion(
         calle="Diagonal 77",
         numero=957,
@@ -531,7 +531,7 @@ def run():
     sede3 = ecuestre.create_sede(
         nombre = "OTRO",
     )
-    
+
     caballo1 = ecuestre.create_ecuestre(
         nombre="Relámpago",
         fecha_nacimiento="2015-04-10",
@@ -553,7 +553,7 @@ def run():
         sede_id=2,
         tipoJyA ="HIPOTERAPIA"  # Asignando un tipo
     )
-    
+
     jya.create_jinete(
         nombre="Martin",
         apellido="Diaz",
@@ -590,9 +590,9 @@ def run():
         auxiliar_pista=empleado3,
         caballo=caballo1,
     )
-    
 
-        
+
+
     jya.create_jinete(
         nombre="Carlos",
         apellido="Lopez",
@@ -632,8 +632,8 @@ def run():
         auxiliar_pista=empleado4,
         caballo=caballo2,
     )
-    
-    jya.add_familiar( 
+
+    jya.add_familiar(
         parentesco_familiar="Tio",
         nombre_familiar="Juan",
         apellido_familiar="Diaz",
@@ -647,7 +647,7 @@ def run():
 
     jya.associate_jinete_familiar(1, 1)
 
-    jya.add_familiar( 
+    jya.add_familiar(
         parentesco_familiar="Abuela",
         nombre_familiar="Alejandra",
         apellido_familiar="Gutierrez",
@@ -660,7 +660,7 @@ def run():
     )
 
     jya.associate_jinete_familiar(2, 2)
-    
+
     jya.add_dias(dias=DiasEnum.lunes)
     jya.add_dias(dias=DiasEnum.martes)
     jya.add_dias(dias=DiasEnum.miercoles)
@@ -668,25 +668,25 @@ def run():
     jya.add_dias(dias=DiasEnum.viernes)
     jya.add_dias(dias=DiasEnum.sabado)
     jya.add_dias(dias=DiasEnum.domingo)
-    
-    
+
+
     jya.associate_jinete_dias(1, 1)
-    
-    
+
+
     jya.associate_jinete_dias(1, 2)
-    
+
     jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.mental)
     jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.motora)
     jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.sensorial)
     jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.visceral)
-    
-    
+
+
     jya.associate_jinete_discapacidad_id(1, 1)
-    
+
     jya.add_discapacidades(
         tipos_discapacidad=TiposDiscapacidadEnum.sensorial,
     )
-    
+
     jya.associate_jinete_discapacidad_id(1, 2)
 
     '''# Modulo ecuestre
@@ -811,59 +811,59 @@ def run():
 
 
     ecuestre.asignar_empleado(caballo1, [empleado1,empleado2])
-    ecuestre.asignar_empleado(caballo2, [empleado3,empleado1]) 
-    ecuestre.asignar_empleado(caballo3, [empleado4,empleado2]) 
-    ecuestre.asignar_empleado(caballo4, [empleado5,empleado3]) 
-    ecuestre.asignar_empleado(caballo5, [empleado1,empleado5]) 
-    ecuestre.asignar_empleado(caballo6, [empleado2,empleado4]) 
-    ecuestre.asignar_empleado(caballo7, [empleado3,empleado2, empleado5])     
-    ecuestre.asignar_empleado(caballo8, [empleado4,empleado2]) 
-    ecuestre.asignar_empleado(caballo9, [empleado5,empleado2]) 
-    ecuestre.asignar_empleado(caballo10, [empleado1,empleado2, empleado4]) 
+    ecuestre.asignar_empleado(caballo2, [empleado3,empleado1])
+    ecuestre.asignar_empleado(caballo3, [empleado4,empleado2])
+    ecuestre.asignar_empleado(caballo4, [empleado5,empleado3])
+    ecuestre.asignar_empleado(caballo5, [empleado1,empleado5])
+    ecuestre.asignar_empleado(caballo6, [empleado2,empleado4])
+    ecuestre.asignar_empleado(caballo7, [empleado3,empleado2, empleado5])
+    ecuestre.asignar_empleado(caballo8, [empleado4,empleado2])
+    ecuestre.asignar_empleado(caballo9, [empleado5,empleado2])
+    ecuestre.asignar_empleado(caballo10, [empleado1,empleado2, empleado4])
 
-    
+
     cobro1 = RegistroCobro(
-        jinete_id=1,  
+        jinete_id=1,
         fecha_pago=datetime(2024, 1, 15),
         medio_pago='efectivo',
         monto=1000.0,
-        recibido_por=1,  
+        recibido_por=1,
         observaciones="Primer pago del año."
     )
 
     cobro2 = RegistroCobro(
-        jinete_id=2, 
+        jinete_id=2,
         fecha_pago=datetime(2024, 2, 20),
         medio_pago='tarjeta_credito',
         monto=1500.0,
-        recibido_por=2, 
+        recibido_por=2,
         observaciones="Pago correspondiente a febrero."
     )
 
     cobro3 = RegistroCobro(
-        jinete_id=1,  
+        jinete_id=1,
         fecha_pago=datetime(2024, 3, 25),
         medio_pago='tarjeta_debito',
         monto=2000.0,
-        recibido_por=1,  
+        recibido_por=1,
         observaciones="Pago de honorarios."
     )
 
     cobro4 = RegistroCobro(
-        jinete_id=1,  
+        jinete_id=1,
         fecha_pago=datetime(2024, 6, 20),
         medio_pago='tarjeta_credito',
         monto=1000.0,
-        recibido_por=2,  
+        recibido_por=2,
         observaciones="Pago de Correspondiente a junio"
     )
 
     cobro5 = RegistroCobro(
-        jinete_id=2,  
+        jinete_id=2,
         fecha_pago=datetime(2024, 7, 27),
         medio_pago='tarjeta_credito',
         monto=3000.0,
-        recibido_por=2,  
+        recibido_por=2,
         observaciones="Pago de Correspondiente a julio"
     )
 
@@ -877,7 +877,7 @@ def run():
         system_admin=True,
         activo=True,
     )
-    
+
     rol_system_admin = auth.create_roles(
         nombre="System Admin",
     )

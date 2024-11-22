@@ -147,6 +147,7 @@ class Jinete(db.Model):
     fecha_nacimiento = db.Column(db.DateTime, nullable=False)
     #nacimiento_id = db.Column(db.Integer, db.ForeignKey("nacimiento.id"), nullable=False)
     #nacimiento = db.relationship("Nacimiento", back_populates="jinetes")
+    esta_borrado = db.Column(db.Boolean, default=False)
     
     provincia_nacimiento_id = db.Column(db.Integer, db.ForeignKey("provincia.id"), nullable=False)
     provincia_nacimiento = db.relationship("Provincia", back_populates="jinetes")

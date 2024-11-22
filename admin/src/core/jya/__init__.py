@@ -12,7 +12,7 @@ from sqlalchemy import String, cast, or_
 
 
 def list_jinetes(sort_by=None, nombre=None, apellido=None, dni=None, profesionales=None):
-    query = Jinete.query
+    query = Jinete.query.filter_by(esta_borrado=False)
     if nombre:
         query = query.filter(Jinete.nombre.ilike(f"%{nombre}%"))
     if apellido:
@@ -394,3 +394,7 @@ def list_trabajo_institucional():
     
 def list_sedes():
     return  [(sede.name, sede.value) for sede in SedeEnum]
+
+def aplicar_borrado_logico(jinete):
+    jinete.esta_borrado = True
+    db.session.commit()

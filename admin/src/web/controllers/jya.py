@@ -205,8 +205,8 @@ def delete_jinete_form(jinete_id):
 @check("jya_destroy")
 def delete_jinete(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
-    jya.delete_jinete(jinete_id)
-    
+    ##jya.delete_jinete(jinete_id)
+    jya.aplicar_borrado_logico(jinete)
     return redirect(url_for("jya.listar_jinetes"))
 
 

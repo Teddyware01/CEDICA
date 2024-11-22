@@ -23,6 +23,7 @@ class Empleado(db.Model):
     activo = db.Column(db.Boolean, default=True)
     obra_social = db.Column(db.String(25), nullable=False, unique=False)
     nro_afiliado = db.Column(db.String(25), nullable=False, unique=False)
+    esta_borrado = db.Column(db.Boolean, default=False)
 
     # campos id
     profesion_id = db.Column(db.Integer, db.ForeignKey("profesion.id"), nullable=False)
