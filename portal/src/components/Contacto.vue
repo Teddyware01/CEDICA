@@ -42,15 +42,26 @@ export default {
                 mensaje: this.form.mensaje
             };
 
-            axios.post('http://localhost:5000/contacto/submit_form', formData)
-                .then(response => {
-                    alert('Mensaje enviado con éxito');
-                    this.resetForm();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Hubo un error al enviar el mensaje');
-                });
+            const baseUrl = import.meta.env.VITE_FLASK_API_URL
+            fetch(`${baseUrl}/contacto/submit_form`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                alert('Mensaje enviado con éxito');
+                this.resetForm();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        
+            console.log("Enviando formulario con datos:", this.form);
+            this.resetForm();
         },
         resetForm() {
             this.form.nombre = '';
