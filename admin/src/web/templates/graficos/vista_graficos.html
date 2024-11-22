@@ -1,4 +1,3 @@
-<!-- src/web/templates/reportes/vista_graficos.html -->
 {% extends "layout.html" %}
 
 {% block title %}Vista de Gráficos{% endblock %}
@@ -8,25 +7,25 @@
 
 <!-- Gráfico: Tipos de Discapacidad -->
 <section class="chart-section">
-    <div class="chart-container" style="max-width: 800px; margin: auto;">
-        <h2 class="text-center">Gráfico de Tipos de Discapacidad</h2>
-        <canvas id="discapacidadChart"></canvas>
+    <div class="chart-container" style="width: 100%; max-width: 1200px; margin: auto; padding: 20px;">
+        <h2 class="text-center">Pagos por Beneficiario</h2>
+        <canvas id="pagosChart" style="width: 100%; height: 500px;"></canvas>
     </div>
 </section>
 
 <!-- Gráfico: Proporción de J&A Becados -->
 <section class="chart-section">
-    <div class="chart-container" style="max-width: 800px; margin: auto;">
+    <div class="chart-container" style="width: 100%; max-width: 1200px; margin: auto; padding: 20px;">
         <h2 class="text-center">Gráfico de Proporción de J&A Becados</h2>
-        <canvas id="becadosChart"></canvas>
+        <canvas id="becadosChart" style="width: 100%; height: 500px;"></canvas>
     </div>
 </section>
 
-<!-- Gráfico: Propuestas de Trabajo Más Solicitadas -->
+<!-- Gráfico: Cobros por Rango de Monto -->
 <section class="chart-section">
-    <div class="chart-container" style="max-width: 800px; margin: auto;">
-        <h2 class="text-center">Gráfico de Propuestas de Trabajo Más Solicitadas</h2>
-        <canvas id="propuestasChart"></canvas>
+    <div class="chart-container" style="width: 100%; max-width: 1200px; margin: auto; padding: 20px;">
+        <h2 class="text-center">Cobros por Rango de Monto</h2>
+        <canvas id="cobrosPorRangoChart" style="width: 100%; height: 500px;"></canvas>
     </div>
 </section>
 
@@ -35,35 +34,38 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Gráfico de Tipos de Discapacidad
-        const ctxDiscapacidad = document.getElementById('discapacidadChart').getContext('2d');
-        const dataDiscapacidad = {
-            labels: {{ discapacidad_counts.keys() | list | tojson | safe }},
+
+        // Gráfico de pagos por beneficiario
+        const ctxPagos = document.getElementById('pagosChart').getContext('2d');
+        const dataPagos = {
+            labels: {{ beneficiarios | tojson | safe }},
             datasets: [{
-                label: 'Cantidad de Personas',
-                data: {{ discapacidad_counts.values() | list | tojson | safe }},
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 206, 86, 0.6)',
-                    'rgba(153, 102, 255, 0.6)'
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(153, 102, 255, 1)'
-                ],
+                label: 'Monto Total Pagado',
+                data: {{ montos | tojson | safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             }]
         };
-        new Chart(ctxDiscapacidad, {
-            type: 'bar',
-            data: dataDiscapacidad,
+        new Chart(ctxPagos, {
+            type: 'bar',  // Tipo de gráfico de barras
+            data: dataPagos,
             options: {
                 responsive: true,
+                indexAxis: 'x',  // Configuración para barras horizontales
                 scales: {
-                    y: { beginAtZero: true }
+                    x: {
+                        beginAtZero: true,  // Empieza desde cero en el eje X
+                        title: { display: true, text: 'Beneficiarios' } // Título del eje X
+                    },
+                    y: {
+                        beginAtZero: true,  // Empieza desde cero en el eje Y
+                        title: { display: true, text: 'Monto Total Pagado' } // Título del eje Y
+                    }
+                },
+                plugins: {
+                    tooltip: { enabled: true }, // Habilitar tooltips para los datos
+                    legend: { position: 'top' }
                 }
             }
         });
@@ -98,26 +100,32 @@
             }
         });
 
-        // Gráfico de Propuestas de Trabajo Más Solicitadas
-        const ctxPropuestas = document.getElementById('propuestasChart').getContext('2d');
-        const dataPropuestas = {
-            labels: {{ propuestas | tojson | safe }},
+        // Gráfico: Cobros por Rango de Monto
+        const ctxCobrosPorRango = document.getElementById('cobrosPorRangoChart').getContext('2d');
+        const dataCobrosPorRango = {
+            labels: {{ rangos | tojson | safe }},
             datasets: [{
-                label: 'Cantidad de Asignaciones',
-                data: {{ cantidades_propuestas | tojson | safe }},
-                fill: false,
+                label: 'Cantidad de Cobros por Rango de Monto',
+                data: {{ cobros_por_rango | tojson | safe }},
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
-                tension: 0.1
+                borderWidth: 1
             }]
         };
-        new Chart(ctxPropuestas, {
-            type: 'line',
-            data: dataPropuestas,
+        new Chart(ctxCobrosPorRango, {
+            type: 'line',  // Cambiado a gráfico de líneas
+            data: dataCobrosPorRango,
             options: {
                 responsive: true,
-                plugins: {
-                    legend: { position: 'top' },
-                    tooltip: { enabled: true }
+                scales: {
+                    x: {
+                        beginAtZero: true,  // Empieza desde cero en el eje X
+                        title: { display: true, text: 'Rangos de Monto' }  // Título del eje X
+                    },
+                    y: {
+                        beginAtZero: true,  // Empieza desde cero en el eje Y
+                        title: { display: true, text: 'Cantidad de Cobros' }  // Título del eje Y
+                    }
                 }
             }
         });
