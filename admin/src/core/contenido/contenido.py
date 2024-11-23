@@ -28,7 +28,7 @@ class Contenido(db.Model):
     tipo = db.Column(db.Enum(TipoContenidoEnum), default=TipoContenidoEnum.PUBLICACION)
     estado = db.Column(db.Enum(EstadoContenidoEnum), default=EstadoContenidoEnum.BORRADOR)
     
-    autor_user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    autor_user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
     autor_user = db.relationship("Users", back_populates="contenido")
 
     def __repr__(self):

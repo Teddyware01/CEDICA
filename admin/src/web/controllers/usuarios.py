@@ -17,8 +17,9 @@ def listar_usuarios_pendientes():
     sort_by = request.args.get("sort_by")
     search = request.args.get("search")
     page = request.args.get("page", type=int, default=1) 
-    
-    pending_users = auth.list_users_pending(sort_by=sort_by, search=search, page=page)
+    status = request.args.get("status")
+
+    pending_users = auth.list_users_pending(sort_by=sort_by, search=search, page=page,status=status)
     return render_template("listado_pendientes.html", usuarios=pending_users)
 
 
