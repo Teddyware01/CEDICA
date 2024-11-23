@@ -34,6 +34,7 @@
         text-align: center;
         padding: 20px 0;
         padding: 20px 0;
+        margin-top: auto;
         max-width: 100%; /* O elimina esta línea */
     }
 

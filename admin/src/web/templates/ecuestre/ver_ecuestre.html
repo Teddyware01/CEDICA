@@ -4,6 +4,7 @@
 
 {% block head %}
     {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='equipo_style.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -18,59 +19,30 @@
     <div id="general" class="tab-content {% if active_tab == 'general' %}active{% endif %}">
         <div class="caja">
             <h3>Datos del ecuestre:</h3>
-            <table class="table">
-                <tr>
-                    <th>Nombre</th>
-                    <td>{{ ecuestre.nombre }}</td>
-                </tr>
-                <tr>
-                    <th>Fecha de Nacimiento</th>
-                    <td>{{ ecuestre.fecha_nacimiento }}</td>
-                </tr>
-                <tr>
-                    <th>Sexo</th>
-                    <td>{{ "Macho" if ecuestre.sexo else "Hembra" }}</td>
-                </tr>
-                <tr>
-                    <th>Raza</th>
-                    <td>{{ ecuestre.raza }}</td>
-                </tr>
-                <tr>
-                    <th>Pelaje</th>
-                    <td>{{ ecuestre.pelaje }}</td>
-                </tr>
-                <tr>
-                    <th>Fecha de Ingreso</th>
-                    <td>{{ ecuestre.fecha_ingreso }}</td>
-                </tr>
-                <tr>
-                    <th>Tipo de JyA</th>
-                    <td>
-                        {% set tipo_jya_dict = {
-                            'HIPOTERAPIA': 'Hipoterapia',
-                            'MONTA_TERAPEUTICA': 'Monta Terapéutica',
-                            'DEPORTE_EQUESTRE': 'Deporte Ecuestre Adaptado',
-                            'ACTIVIDADES_RECREATIVAS': 'Actividades Recreativas',
-                            'EQUITACION': 'Equitación'
-                        } %}
-                        {{ tipo_jya_dict[ecuestre.tipoJyA] if ecuestre.tipoJyA in tipo_jya_dict else 'Desconocido' }}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Sede</th>
-                    <td>{{ sede.nombre }}</td>
-                </tr>
-                <tr>
-                    <th>Entrenadores y Conductores</th>
-                    <td>
-                        <ul>
-                        {% for entrenador in entrenadores %}
-                            <li>{{ entrenador.nombre }} - DNI: {{ entrenador.dni }}</li>
-                        {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-            </table>
+            <p><strong>Nombre:</strong> {{ ecuestre.nombre }}</p>
+            <p><strong>Fecha de Nacimiento:</strong> {{ ecuestre.fecha_nacimiento }}</p>
+            <p><strong>Sexo:</strong> {{ "Macho" if ecuestre.sexo else "Hembra" }}</p>
+            <p><strong>Raza:</strong> {{ ecuestre.raza }}</p>
+            <p><strong>Pelaje:</strong> {{ ecuestre.pelaje }}</p>
+            <p><strong>Fecha de Ingreso:</strong> {{ ecuestre.fecha_ingreso }}</p>
+            <p><strong>Tipo de JyA:</strong>
+                {% set tipo_jya_dict = {
+                    'HIPOTERAPIA': 'Hipoterapia',
+                    'MONTA_TERAPEUTICA': 'Monta Terapéutica',
+                    'DEPORTE_EQUESTRE': 'Deporte Ecuestre Adaptado',
+                    'ACTIVIDADES_RECREATIVAS': 'Actividades Recreativas',
+                    'EQUITACION': 'Equitación'
+                } %}
+                {{ tipo_jya_dict[ecuestre.tipoJyA] if ecuestre.tipoJyA in tipo_jya_dict else 'Desconocido' }}
+            </p>
+            <p><strong>Sede:</strong> {{ sede.nombre }}</p>
+            <p><strong>Entrenadores y Conductores:</strong>
+                <ul>
+                    {% for entrenador in entrenadores %}
+                        <li>{{ entrenador.nombre }} - DNI: {{ entrenador.dni }}</li>
+                    {% endfor %}
+                </ul>
+            </p>
         </div>
         <div class="form-actions">
             <a href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-edit" style="margin-right: 1em;">Modificar</a>

@@ -131,14 +131,8 @@ def editar_cobro(id):
         nombre_jinete = jinete.nombre
         apellido_jinete = jinete.apellido
 
-        return render_template(
-            "confirmar_cobro.html",
-            cobro=cobro,
-            jinete=jinete,
-            empleado=empleado,
-            nombre_jinete=nombre_jinete,
-            apellido_jinete=apellido_jinete
-        )
+        db.session.commit()
+        return redirect(url_for('cobros.listar_cobros'))
     else:
         if not jinetes_activados:
             flash("No hay jinetes o amazonas disponibles para editar el cobro.", "danger")

@@ -83,15 +83,9 @@
                         <td>
                             <!-- Botones visibles solo en pantallas grandes -->
                             <div class="btn-group d-none d-lg-block">
-                                {% if is_authenticated(session) and check_permission(session, "jya_view") %}
-                                    <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="btn btn-view">Ver</a>
-                                {% endif %}
-                                {% if is_authenticated(session) and check_permission(session, "jya_update") %}
-                                    <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Modificar</a>
-                                {% endif %}
-                                {% if is_authenticated(session) and check_permission(session, "jya_destroy") %}
-                                    <a href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}" class="btn btn-delete">Eliminar</a>
-                                {% endif %}
+                                <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="btn btn-view">Ver</a>
+                                <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Modificar</a>
+                                <a href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}" class="btn btn-delete">Eliminar</a>
                             </div>
                         </td>
                     </tr>
@@ -117,15 +111,9 @@
                             Acciones
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ jinete.id }}">
-                            {% if is_authenticated(session) and check_permission(session, "jya_view") %}
-                                <a class="dropdown-item" href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}">Ver</a>
-                            {% endif %}
-                            {% if is_authenticated(session) and check_permission(session, "jya_update") %}
-                                <a class="dropdown-item" href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}">Modificar</a>
-                            {% endif %}
-                            {% if is_authenticated(session) and check_permission(session, "jya_destroy") %}
-                                <a class="dropdown-item" href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}">Eliminar</a>
-                            {% endif %}
+                            <a class="dropdown-item" href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}">Ver</a>
+                            <a class="dropdown-item" href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}">Modificar</a>
+                            <a class="dropdown-item" href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}">Eliminar</a>
                         </div>
                     </div>
                 </div>
