@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for, flash
+from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app
 from src.core.database import db
 from src.core.cobros.models import RegistroCobro
 from src.core.cobros.forms import RegistroCobroForm
@@ -49,12 +49,12 @@ def registrar_cobro():
 
     return render_template("registrar_cobro.html", form=form)
 
-@cobros_bp.route("/listado", methods=["GET"])
+@cobros_bp.route("/listado", methods=["GET"], endpoint="cobros_listado")
 @login_required
 @check("cobro_index")
 def listar_cobros():
     page = request.args.get("page", 1, type=int)
-    per_page = 5
+    per_page = current_app.config.get("PAGINATION_PER_PAGE")
 
     fecha_inicio = request.args.get("fecha_inicio", "")
     fecha_fin = request.args.get("fecha_fin", "")
@@ -64,25 +64,21 @@ def listar_cobros():
     orden = request.args.get("orden", "asc")
 
     empleado_alias = cobros.buscar_empleado()
-
     query = cobros.buscar_empleado_por_id(empleado_alias)
-
-    query = cobros.operaciones_filtro(fecha_inicio, fecha_fin, medio_pago, nombre_recibido, apellido_recibido, empleado_alias, query)
-
+    query = cobros.operaciones_filtro(
+        fecha_inicio, fecha_fin, medio_pago, nombre_recibido, apellido_recibido, empleado_alias, query
+    )
     query = cobros.ordenar_fecha(orden, query)
 
     cobros_realizado = query.paginate(page=page, per_page=per_page)
 
     success_cobro = request.args.get("success_cobro")
 
-    total_paginas = cobros_realizado.pages
-    pagina_actual = cobros_realizado.page
-
     return render_template(
         "listado_cobros.html",
         cobros_realizado=cobros_realizado.items,
-        pagina_actual=pagina_actual,
-        total_paginas=total_paginas,
+        pagina_actual=cobros_realizado.page,
+        total_paginas=cobros_realizado.pages,
         pagination=cobros_realizado,
         fecha_inicio=fecha_inicio,
         fecha_fin=fecha_fin,
@@ -92,7 +88,6 @@ def listar_cobros():
         orden=orden,
         success_cobro=success_cobro,
     )
-
 
 
 @cobros_bp.route("/editar/<int:id>", methods=["GET", "POST"])
@@ -133,42 +128,50 @@ def eliminar_cobro(id):
     return redirect(url_for("cobros.listar_cobros"))
 
 
-@cobros_bp.route("/buscar", methods=["GET"])
+@cobros_bp.route("/listado", methods=["GET"])
 @login_required
-@check("cobro_show")
-def buscar_cobros():
+@check("cobro_index")
+def listar_cobros():
+    # Obtener parámetros de entrada con valores predeterminados
     page = request.args.get("page", 1, type=int)
-    per_page = 5
+    per_page = current_app.config.get("PAGINATION_PER_PAGE", 3)
 
-    medio_pago = request.args.get("medio_pago")
-    fecha_inicio = request.args.get("fecha_inicio")
-    fecha_fin = request.args.get("fecha_fin")
-    nombre_recibe = request.args.get("nombre")
-    apellido_recibe = request.args.get("apellido")
+    fecha_inicio = request.args.get("fecha_inicio", "")
+    fecha_fin = request.args.get("fecha_fin", "")
+    medio_pago = request.args.get("medio_pago", "")
+    nombre_recibido = request.args.get("nombre_recibido", "")
+    apellido_recibido = request.args.get("apellido_recibido", "")
     orden = request.args.get("orden", "asc")
-
-    query = cobros.buscar_cobros(
-        medio_pago, fecha_inicio, fecha_fin, nombre_recibe, apellido_recibe, orden
+    success_cobro = request.args.get("success_cobro")
+    empleado_alias = cobros.buscar_empleado()
+    query = cobros.buscar_empleado_por_id(empleado_alias)
+    query = cobros.operaciones_filtro(
+        fecha_inicio,
+        fecha_fin,
+        medio_pago,
+        nombre_recibido,
+        apellido_recibido,
+        empleado_alias,
+        query,
     )
-    cobros_realizado = cobros.obtener_todos(query).paginate(
-        page=page, per_page=per_page
-    )
-
-    total_paginas = cobros_realizado.pages
-    pagina_actual = cobros_realizado.page
+    query = cobros.ordenar_fecha(orden, query)
+    cobros_realizado = query.paginate(page=page, per_page=per_page, error_out=False)
 
     return render_template(
         "listado_cobros.html",
         cobros_realizado=cobros_realizado.items,
-        pagina_actual=pagina_actual,
-        total_paginas=total_paginas,
-        medio_pago=medio_pago,
+        pagination=cobros_realizado,
+        pagina_actual=cobros_realizado.page,
+        total_paginas=cobros_realizado.pages,
         fecha_inicio=fecha_inicio,
         fecha_fin=fecha_fin,
-        nombre_recibe=nombre_recibe,
-        apellido_recibe=apellido_recibe,
+        medio_pago=medio_pago,
+        nombre_recibido=nombre_recibido,
+        apellido_recibido=apellido_recibido,
         orden=orden,
+        success_cobro=success_cobro,
     )
+
 
 @cobros_bp.route("/confirmar_registro", methods=["POST"])
 @login_required

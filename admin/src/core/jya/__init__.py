@@ -11,7 +11,7 @@ from sqlalchemy import String, cast, or_
 
 
 
-def list_jinetes(sort_by=None, nombre=None, apellido=None, dni=None, profesionales=None):
+def list_jinetes(sort_by=None, nombre=None, apellido=None, dni=None, profesionales=None, page=1, per_page=None):
     query = Jinete.query
     if nombre:
         query = query.filter(Jinete.nombre.ilike(f"%{nombre}%"))
@@ -21,7 +21,6 @@ def list_jinetes(sort_by=None, nombre=None, apellido=None, dni=None, profesional
         query = query.filter(Jinete.dni.ilike(f"%{dni}%"))
     if profesionales:
         query = query.filter(Jinete.profesionales.ilike(f"%{profesionales}%"))
-
     if sort_by:
         if sort_by == "nombre_asc":
             query = query.order_by(Jinete.nombre.asc())
@@ -31,7 +30,9 @@ def list_jinetes(sort_by=None, nombre=None, apellido=None, dni=None, profesional
             query = query.order_by(Jinete.apellido.asc())
         elif sort_by == "apellido_desc":
             query = query.order_by(Jinete.apellido.desc())
-    return query
+        
+    paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
+    return paginated_query
 
 def create_jinete(**kwargs):
     jinete = Jinete(**kwargs)

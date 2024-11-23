@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, flash, url_for
+from flask import render_template, request, redirect, flash, url_for, current_app
 from flask import Blueprint
 from src.core import auth
 from src.core.auth import Users
@@ -64,15 +64,26 @@ def accept_user(user_id):
 @login_required
 @check("user_index")
 def listar_usuarios():    
+    # Obtener parámetros de la solicitud
     sort_by = request.args.get("sort_by")
     search = request.args.get("search")
-    page = request.args.get("page", type=int, default=1) 
+    page = request.args.get("page", default=1, type=int)  
     status_filter = request.args.get('status')
     role_filter = request.args.getlist('roles')
-    exact_match = request.args.get('exact_match')
+    exact_match = request.args.get('exact_match', type=bool)
     roles = auth.all_roles()
     roles_nombres = [rol.nombre for rol in roles]
-    users = auth.list_users(status_filter=status_filter, role_filter=role_filter, exact_match=exact_match, sort_by=sort_by, search=search, page=page)
+    per_page = current_app.config.get("PAGINATION_PER_PAGE")
+    users = auth.list_users(
+        status_filter=status_filter,
+        role_filter=role_filter,
+        exact_match=exact_match,
+        sort_by=sort_by,
+        search=search,
+        page=page,
+        per_page=per_page
+    )
+
     return render_template("listado.html", usuarios=users, roles=roles_nombres)
 
 @bp.get("/cliente/<int:user_id>")

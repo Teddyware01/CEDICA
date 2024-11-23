@@ -6,10 +6,13 @@ from src.core.cobros.forms import RegistroCobroForm
 from src.core.cobros.models import RegistroCobro
 from sqlalchemy import or_
 from sqlalchemy.orm import aliased
+from flask import current_app
+
 
 def agregar_cobro(nuevo_cobro):
     db.session.add(nuevo_cobro)
     db.session.commit()
+
 
 
 def listar_cobros(
@@ -18,26 +21,26 @@ def listar_cobros(
     medio_pago=None,
     nombre_recibido=None,
     apellido_recibido=None,
+    page=1,
+    per_page=None
 ):
     query = db.session.query(RegistroCobro)
 
     if fecha_inicio and fecha_fin:
         query = query.filter(RegistroCobro.fecha_pago.between(fecha_inicio, fecha_fin))
-
     if medio_pago:
         query = query.filter_by(medio_pago=medio_pago)
-
     if nombre_recibido:
         query = query.join(Empleado).filter(
             Empleado.nombre.ilike(f"%{nombre_recibido}%")
         )
-
     if apellido_recibido:
         query = query.join(Empleado).filter(
             Empleado.apellido.ilike(f"%{apellido_recibido}%")
         )
+    paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
+    return paginated_query
 
-    return query
 
 
 def ordenar_fecha(orden, query):

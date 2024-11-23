@@ -3,6 +3,22 @@ from src.core.database import db
 from src.core.pagos.models import Pago as Pagos
 from datetime import datetime
 
+
+def construir_query_pagos(orden="asc", tipo_pago="", fecha_inicio=None, fecha_fin=None):
+    query = Pagos.query
+    if tipo_pago:
+        query = query.filter(Pagos.tipo_pago == tipo_pago)
+    if fecha_inicio:
+        query = query.filter(Pagos.fecha_pago >= fecha_inicio)
+    if fecha_fin:
+        query = query.filter(Pagos.fecha_pago <= fecha_fin)
+    if orden == "asc":
+        query = query.order_by(Pagos.fecha_pago.asc())
+    else:
+        query = query.order_by(Pagos.fecha_pago.desc())
+
+    return query
+
 def obtener_empleado(form):
     return Empleado.query.get(form.beneficiario.data)
 

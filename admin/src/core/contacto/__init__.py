@@ -3,9 +3,9 @@ from src.core.contacto.models import Contacto, EstadoEnum
 from sqlalchemy import or_
 
 
-def list_consultas(sort_by=None, search=None, page=1, per_page=3):
+def list_consultas(sort_by=None, search=None, page=1, per_page=None):
     query = Contacto.query
-    
+
     # Filtrar por término de búsqueda
     if search:
         query = query.filter(
@@ -13,6 +13,7 @@ def list_consultas(sort_by=None, search=None, page=1, per_page=3):
                 Contacto.estado.ilike(f"%{search}%"),
             )
         )
+    
     if sort_by:
         if sort_by == "fecha_asc":
             query = query.order_by(Contacto.fecha_creacion.asc())

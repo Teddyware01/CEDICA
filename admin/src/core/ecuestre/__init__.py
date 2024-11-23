@@ -21,7 +21,7 @@ def create_ecuestre(**kwargs):
 
     return ecuestre
 
-def list_ecuestre(sort_by=None, search=None, page=1, per_page=5):
+def list_ecuestre(sort_by=None, search=None, page=1, per_page=3):
     query = Ecuestre.query
     if search:
         query = query.filter(

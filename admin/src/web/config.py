@@ -7,6 +7,8 @@ class Config(object):
     SECRET_KEY = "secret"
     TESTING = True
     SESSION_TYPE = "filesystem"
+    
+    PAGINATION_PER_PAGE = 3
 
 
 class ProductionConfig(Config):
@@ -37,7 +39,7 @@ class DevelopmentConfig(Config):
     DB_PORT = "5432"
     DB_NAME = "grupo15"
     
-     
+    
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )

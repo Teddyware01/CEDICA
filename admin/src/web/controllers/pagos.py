@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Blueprint, request, render_template, redirect, url_for, flash
+from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app
 from src.core.database import db
 from src.core.pagos.models import Pago as Pagos
 from src.core.equipo.models import Empleado
@@ -47,30 +47,29 @@ def registrar_pago():
 @check("pago_index")
 def listar_pagos():
     orden = request.args.get("orden", "asc")
-    page = request.args.get("page", 1, type=int)
-    success = request.args.get("success")
+    page = request.args.get("page", 1, type=int)  # Página actual
     tipo_pago = request.args.get("tipo_pago", "")
     fecha_inicio = request.args.get("fecha_inicio", "")
     fecha_fin = request.args.get("fecha_fin", "")
+    success = request.args.get("success")
 
     fecha_inicio = pagos.validacion_fecha_inicio(fecha_inicio)
     fecha_fin = pagos.validacion_fecha_fin(fecha_fin)
 
-    pagos_realizado = pagos.ordenar_pagos(orden, tipo_pago, fecha_inicio, fecha_fin)
-
-    total_paginas = (len(pagos_realizado) + PAGOS_POR_PAGINA - 1) // PAGOS_POR_PAGINA
-    pagos_pag = pagos_realizado[(page - 1) * PAGOS_POR_PAGINA : page * PAGOS_POR_PAGINA]
+    pagos_query = pagos.construir_query_pagos(orden, tipo_pago, fecha_inicio, fecha_fin)
+    pagos_pag = pagos_query.paginate(page=page, per_page=current_app.config.get("PAGINATION_PER_PAGE", 10), error_out=False)
 
     return render_template(
         "listado_pagos.html",
-        pagos_realizado=pagos_pag,
+        pagos_realizado=pagos_pag.items,  
         orden=orden,
         success=success,
-        total_paginas=total_paginas,
-        pagina_actual=page,
+        total_paginas=pagos_pag.pages,
+        pagina_actual=pagos_pag.page,
         tipo_pago=tipo_pago,
         fecha_inicio=fecha_inicio.strftime("%Y-%m-%d") if fecha_inicio else "",
         fecha_fin=fecha_fin.strftime("%Y-%m-%d") if fecha_fin else "",
+        pagination=pagos_pag,
     )
 
 @pagos_bp.route("/eliminar/<int:id>", methods=["POST"])
