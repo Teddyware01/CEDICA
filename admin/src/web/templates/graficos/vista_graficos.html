@@ -7,25 +7,25 @@
 
 <!-- Gráfico: Tipos de Discapacidad -->
 <section class="chart-section">
-    <div class="chart-container" style="width: 100%; max-width: 1200px; margin: auto; padding: 20px;">
+    <div class="chart-container" style="width: 100%; max-width: 800px; margin: auto; padding: 10px;">
         <h2 class="text-center">Pagos por Beneficiario</h2>
-        <canvas id="pagosChart" style="width: 100%; height: 500px;"></canvas>
+        <canvas id="pagosChart" style="width: 100%; height: 300px;"></canvas>
     </div>
 </section>
 
 <!-- Gráfico: Proporción de J&A Becados -->
 <section class="chart-section">
-    <div class="chart-container" style="width: 100%; max-width: 1200px; margin: auto; padding: 20px;">
+    <div class="chart-container" style="width: 100%; max-width: 800px; margin: auto; padding: 10px;">
         <h2 class="text-center">Gráfico de Proporción de J&A Becados</h2>
-        <canvas id="becadosChart" style="width: 100%; height: 500px;"></canvas>
+        <canvas id="becadosChart" style="width: 100%; height: 300px;"></canvas>
     </div>
 </section>
 
 <!-- Gráfico: Cobros por Rango de Monto -->
 <section class="chart-section">
-    <div class="chart-container" style="width: 100%; max-width: 1200px; margin: auto; padding: 20px;">
+    <div class="chart-container" style="width: 100%; max-width: 800px; margin: auto; padding: 10px;">
         <h2 class="text-center">Cobros por Rango de Monto</h2>
-        <canvas id="cobrosPorRangoChart" style="width: 100%; height: 500px;"></canvas>
+        <canvas id="cobrosPorRangoChart" style="width: 100%; height: 300px;"></canvas>
     </div>
 </section>
 
@@ -34,7 +34,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-
         // Gráfico de pagos por beneficiario
         const ctxPagos = document.getElementById('pagosChart').getContext('2d');
         const dataPagos = {
@@ -48,23 +47,16 @@
             }]
         };
         new Chart(ctxPagos, {
-            type: 'bar',  // Tipo de gráfico de barras
+            type: 'bar',
             data: dataPagos,
             options: {
                 responsive: true,
-                indexAxis: 'x',  // Configuración para barras horizontales
                 scales: {
-                    x: {
-                        beginAtZero: true,  // Empieza desde cero en el eje X
-                        title: { display: true, text: 'Beneficiarios' } // Título del eje X
-                    },
-                    y: {
-                        beginAtZero: true,  // Empieza desde cero en el eje Y
-                        title: { display: true, text: 'Monto Total Pagado' } // Título del eje Y
-                    }
+                    x: { beginAtZero: true, title: { display: true, text: 'Beneficiarios' } },
+                    y: { beginAtZero: true, title: { display: true, text: 'Monto Total Pagado' } }
                 },
                 plugins: {
-                    tooltip: { enabled: true }, // Habilitar tooltips para los datos
+                    tooltip: { enabled: true },
                     legend: { position: 'top' }
                 }
             }
@@ -77,14 +69,8 @@
             datasets: [{
                 label: 'Proporción de J&A Becados',
                 data: {{ datos_becados.values() | list | tojson | safe }},
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)',  // Becados
-                    'rgba(255, 99, 132, 0.6)'   // No Becados
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',    // Becados
-                    'rgba(255, 99, 132, 1)'     // No Becados
-                ],
+                backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)'],
+                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
                 borderWidth: 1
             }]
         };
@@ -113,19 +99,13 @@
             }]
         };
         new Chart(ctxCobrosPorRango, {
-            type: 'line',  // Cambiado a gráfico de líneas
+            type: 'line',
             data: dataCobrosPorRango,
             options: {
                 responsive: true,
                 scales: {
-                    x: {
-                        beginAtZero: true,  // Empieza desde cero en el eje X
-                        title: { display: true, text: 'Rangos de Monto' }  // Título del eje X
-                    },
-                    y: {
-                        beginAtZero: true,  // Empieza desde cero en el eje Y
-                        title: { display: true, text: 'Cantidad de Cobros' }  // Título del eje Y
-                    }
+                    x: { beginAtZero: true, title: { display: true, text: 'Rangos de Monto' } },
+                    y: { beginAtZero: true, title: { display: true, text: 'Cantidad de Cobros' } }
                 }
             }
         });
