@@ -63,6 +63,38 @@ def list_users(status_filter, role_filter=None, exact_match=None, sort_by=None, 
     paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
     return paginated_query
 
+def list_users_pending(status_filter, role_filter=None, exact_match=None, sort_by=None, search=None, page=1, per_page=None):
+    query = Users.query.filter(Users.is_accept_pending == True)
+
+    if role_filter:
+        if exact_match:
+            filtered_users = filtrado_roles(role_filter, exact_match=True)
+            user_ids = [user.id for user in filtered_users]
+            query = query.filter(Users.id.in_(user_ids))
+        else:
+            query = query.filter(Users.roles.any(Roles.nombre.in_(role_filter)))
+
+    if status_filter == 'active':
+        query = query.filter(Users.activo == True)
+    elif status_filter == 'inactive':
+        query = query.filter(Users.activo == False)
+
+    if search:
+        query = query.filter(Users.email.like(f"%{search}%"))
+
+    if sort_by:
+        if sort_by == "email_asc":
+            query = query.order_by(Users.email.asc())
+        elif sort_by == "email_desc":
+            query = query.order_by(Users.email.desc())
+        elif sort_by == "created_at_asc":
+            query = query.order_by(Users.fecha_creacion.asc())
+        elif sort_by == "created_at_desc":
+            query = query.order_by(Users.fecha_creacion.desc())
+
+    paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
+    return paginated_query
+
 
 def create_user(**kwargs):
     User = Users(**kwargs)

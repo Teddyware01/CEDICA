@@ -10,19 +10,6 @@ from email_validator import validate_email, EmailNotValidError
 bp = Blueprint("users", __name__, url_prefix="/listado_De_usuarios")
 
 
-@bp.get("/pending/")
-@login_required
-@check("user_accept")
-def listar_usuarios_pendientes():    
-    sort_by = request.args.get("sort_by")
-    search = request.args.get("search")
-    page = request.args.get("page", type=int, default=1) 
-    status = request.args.get("status")
-
-    pending_users = auth.list_users_pending(sort_by=sort_by, search=search, page=page,status=status)
-    return render_template("listado_pendientes.html", usuarios=pending_users)
-
-
 @bp.get("/pending/<int:user_id>")
 @login_required
 @check("user_accept")
@@ -85,6 +72,32 @@ def listar_usuarios():
     )
 
     return render_template("listado.html", usuarios=users, roles=roles_nombres)
+###
+
+
+@bp.get("/pending/")
+@login_required
+@check("user_accept")
+def listar_usuarios_pendientes():    
+    sort_by = request.args.get("sort_by")
+    search = request.args.get("search")
+    page = request.args.get("page", type=int, default=1) 
+    status_filter = request.args.get('status')
+    role_filter = request.args.getlist('roles')
+    
+    exact_match = request.args.get('exact_match', type=bool)
+    roles = auth.all_roles()
+    roles_nombres = [rol.nombre for rol in roles]
+    per_page = current_app.config.get("PAGINATION_PER_PAGE")
+    
+
+    pending_users = auth.list_users_pending(status_filter=status_filter,role_filter=role_filter,sort_by=sort_by, search=search, page=page,per_page=per_page,exact_match=exact_match)
+    return render_template("listado_pendientes.html", usuarios=pending_users)
+
+
+
+###
+
 
 @bp.get("/cliente/<int:user_id>")
 @login_required
