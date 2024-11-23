@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime,  timedelta
 from src.core import board
 from src.core import auth
 from src.core import jya
@@ -12,6 +12,7 @@ from src.core.equipo.models import CondicionEnum
 from src.core import pagos
 from src.core.cobros.models import RegistroCobro
 from src.core.jya.models import PensionEnum, DiagnosticoEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum, TiposDiscapacidadEnum, EscolaridadEnum
+from src.core.contenido.contenido import Contenido, TipoContenidoEnum, EstadoContenidoEnum
 from datetime import datetime
 
 from src.core.auth import Permisos
@@ -729,6 +730,13 @@ def run():
     contacto_create = auth.create_permisos(nombre="contacto_create")
     contacto_destroy = auth.create_permisos(nombre="contacto_destroy")
 
+    #Modulo noticia
+    noticia_index =  auth.create_permisos(nombre="noticia_index")
+    noticia_show = auth.create_permisos(nombre="noticia_show")
+    noticia_update = auth.create_permisos(nombre="noticia_update")
+    noticia_create = auth.create_permisos(nombre="noticia_create")
+    noticia_destroy = auth.create_permisos(nombre="noticia_destroy")
+
     # Asignacion a roles
     # rol administracion
     auth.assign_permiso(rol_administracion, empleado_index)
@@ -769,6 +777,12 @@ def run():
     auth.assign_permiso(rol_administracion, contacto_update)
     auth.assign_permiso(rol_administracion, contacto_create)
     auth.assign_permiso(rol_administracion, contacto_destroy)
+
+    auth.assign_permiso(rol_administracion, noticia_index)
+    auth.assign_permiso(rol_administracion, noticia_show)
+    auth.assign_permiso(rol_administracion, noticia_update)
+    auth.assign_permiso(rol_administracion, noticia_create)
+    auth.assign_permiso(rol_administracion, noticia_destroy)
 
     #Para el registro con google y la aceptacion de usuarios pebndientes:
     auth.assign_permiso(rol_administracion, user_accept)
@@ -1445,47 +1459,74 @@ def run():
         activo=True,
     )
 
-    rol_system_admin = auth.create_roles(
-        nombre="System Admin",
-    )
-    for perm in Permisos.query.all():
-        auth.assign_permiso(rol_system_admin, perm)
+        
+    # Crear datos de ejemplo para contenido
+    contenidos = [
+        Contenido(
+            titulo="Primera noticia en borrador",
+            copete="Resumen breve de la primera noticia en estado borrador.",
+            contenido="Contenido completo de la primera noticia en estado borrador.",
+            tipo=TipoContenidoEnum.ARTICULO_INFO,
+            estado=EstadoContenidoEnum.BORRADOR,
+            autor_user_id=1,
+            inserted_at=datetime.now(),
+            updated_at=datetime.now()
+        ),
+        Contenido(
+            titulo="Segunda noticia en borrador",
+            copete="Otro resumen breve para otra noticia en estado borrador.",
+            contenido="Texto más extenso de la segunda noticia en estado borrador.",
+            tipo=TipoContenidoEnum.PUBLICACION,
+            estado=EstadoContenidoEnum.BORRADOR,
+            autor_user_id=1,
+            inserted_at=datetime.now(),
+            updated_at=datetime.now()
+        ),
+        Contenido(
+            titulo="Primera noticia publicada",
+            copete="Resumen breve de la primera noticia publicada.",
+            contenido="Contenido completo de la primera noticia publicada.",
+            tipo=TipoContenidoEnum.AVISO_EVENTO,
+            estado=EstadoContenidoEnum.PUBLICADO,
+            autor_user_id=2,
+            published_at=datetime.now() - timedelta(days=1),
+            inserted_at=datetime.now() - timedelta(days=1),
+            updated_at=datetime.now()
+        ),
+        Contenido(
+            titulo="Segunda noticia publicada",
+            copete="Resumen breve de la segunda noticia publicada.",
+            contenido="Texto detallado de la segunda noticia publicada.",
+            tipo=TipoContenidoEnum.PUBLICACION,
+            estado=EstadoContenidoEnum.PUBLICADO,
+            autor_user_id=2,
+            published_at=datetime.now() - timedelta(days=2),
+            inserted_at=datetime.now() - timedelta(days=2),
+            updated_at=datetime.now()
+        ),
+        Contenido(
+            titulo="Primera noticia archivada",
+            copete="Resumen breve de la primera noticia archivada.",
+            contenido="Contenido completo de la primera noticia archivada.",
+            tipo=TipoContenidoEnum.ARTICULO_INFO,
+            estado=EstadoContenidoEnum.ARCHIVADO,
+            autor_user_id=3,
+            inserted_at=datetime.now() - timedelta(days=30),
+            updated_at=datetime.now() - timedelta(days=15)
+        ),
+        Contenido(
+            titulo="Segunda noticia archivada",
+            copete="Otro resumen breve para otra noticia archivada.",
+            contenido="Texto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivada.",
+            tipo=TipoContenidoEnum.PUBLICACION,
+            estado=EstadoContenidoEnum.ARCHIVADO,
+            autor_user_id=3,
+            inserted_at=datetime.now() - timedelta(days=40),
+            updated_at=datetime.now() - timedelta(days=20)
+        ),
+    ]
 
-    auth.assign_rol(super_user, [rol_system_admin])
-
-
-    contacto.add_consulta(
-        nombre="Juan Diaz",
-        email="juan@diaz.com",
-        mensaje="Quiero averiguar precios para tener una sesion"
-    )
-
-
-    # Creacion de noticias/contenido de ejemplo
-    contenido.create_contenido(
-        titulo="Expo 2025",
-        copete="Todo acerca de la nueva exposicion de verano.",
-        contenido="El evento de equitación contará con diversas actividades, desde competencias hasta talleres para los más pequeños. Todos están invitados a participar.",
-        tipo=TipoContenidoEnum.ARTICULO_INFO,
-        estado=EstadoContenidoEnum.PUBLICADO,
-        autor_user=user1,
-    )
-
-
-    contenido.create_contenido(
-        titulo="¡No te pierdas el evento de equitación este fin de semana!",
-        copete="Este fin de semana habrá un evento de equitación en la ciudad. ¡Te esperamos!",
-        contenido="El evento de equitación contará con diversas actividades, desde competencias hasta talleres para los más pequeños. Todos están invitados a participar.",
-        tipo=TipoContenidoEnum.AVISO_EVENTO,
-        estado=EstadoContenidoEnum.ARCHIVADO,
-        autor_user=user2,
-    )
-
-    contenido.create_contenido(
-        titulo="Nueva actualización del sistema de gestión",
-        copete="Te presentamos las últimas mejoras y actualizaciones en el sistema de gestión.",
-        contenido="La nueva versión incluye mejoras en la interfaz, nuevas funcionalidades y mayor rendimiento.",
-        tipo=TipoContenidoEnum.PUBLICACION,
-        estado=EstadoContenidoEnum.PUBLICADO,
-        autor_user=user3
-    )
+    # Insertar datos en la base de datos
+    db.session.bulk_save_objects(contenidos)
+    db.session.commit()
+    print("Seed completada: Se crearon 6 noticias de prueba.")
