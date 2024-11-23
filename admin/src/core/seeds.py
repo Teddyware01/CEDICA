@@ -730,6 +730,13 @@ def run():
     contacto_create = auth.create_permisos(nombre="contacto_create")
     contacto_destroy = auth.create_permisos(nombre="contacto_destroy")
 
+    #Modulo noticia
+    noticia_index =  auth.create_permisos(nombre="noticia_index")
+    noticia_show = auth.create_permisos(nombre="noticia_show")
+    noticia_update = auth.create_permisos(nombre="noticia_update")
+    noticia_create = auth.create_permisos(nombre="noticia_create")
+    noticia_destroy = auth.create_permisos(nombre="noticia_destroy")
+
     # Asignacion a roles
     # rol administracion
     auth.assign_permiso(rol_administracion, empleado_index)
@@ -770,6 +777,12 @@ def run():
     auth.assign_permiso(rol_administracion, contacto_update)
     auth.assign_permiso(rol_administracion, contacto_create)
     auth.assign_permiso(rol_administracion, contacto_destroy)
+
+    auth.assign_permiso(rol_administracion, noticia_index)
+    auth.assign_permiso(rol_administracion, noticia_show)
+    auth.assign_permiso(rol_administracion, noticia_update)
+    auth.assign_permiso(rol_administracion, noticia_create)
+    auth.assign_permiso(rol_administracion, noticia_destroy)
 
     #Para el registro con google y la aceptacion de usuarios pebndientes:
     auth.assign_permiso(rol_administracion, user_accept)
@@ -1446,15 +1459,7 @@ def run():
         activo=True,
     )
 
-    rol_system_admin = auth.create_roles(
-        nombre="System Admin",
-    )
-    for perm in Permisos.query.all():
-        auth.assign_permiso(rol_system_admin, perm)
-
-    auth.assign_rol(super_user, [rol_system_admin])
-
-    
+        
     # Crear datos de ejemplo para contenido
     contenidos = [
         Contenido(
