@@ -1,9 +1,15 @@
 {% extends "layout.html" %}
 
-{% block title %} Listado de pagos {% endblock %}
+{% block title %} Listado de Pagos {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
 
 {% block content %}
-<h1 class="text-center">Listado de pagos</h1>
+{{ super() }}
+<h1 class="text-center">Listado de Pagos</h1>
 
 {% if success %}
 <div class="alert alert-success" role="alert">

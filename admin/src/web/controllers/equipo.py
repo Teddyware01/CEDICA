@@ -86,7 +86,7 @@ def show_empleado(empleado_id):
 @check("empleado_destroy")
 def delete_empleado(empleado_id):
     empleado = equipo.traer_empleado(empleado_id)
-      
+
     return render_template("equipo/delete_empleado.html", empleado=empleado)
 
 @bp.post("/eliminar_empleado/<int:empleado_id>")
@@ -94,7 +94,11 @@ def delete_empleado(empleado_id):
 @check("empleado_destroy")
 def destroy_empleado(empleado_id):
     try:
-        equipo.delete_empleado(empleado_id)
+        ##equipo.delete_empleado(empleado_id)
+        empleado = equipo.traer_empleado(empleado_id)
+        equipo.borrar_tabla_intermedia(empleado_id)
+        empleado.esta_borrado = True
+        db.session.commit()
         flash("Empleado eliminado exitosamente.", "success")
     except Exception as e:
         db.session.rollback()
@@ -119,11 +123,11 @@ def add_empleado():
         if not email.endswith('.com'):
             flash("El correo electrónico debe terminar en '.com'", "error")
             return render_template("equipo/agregar_empleado.html", form=form)
-            
+
     except EmailNotValidError as e:
         flash(f"El correo electrónico no es válido: {str(e)}", "error")
         return render_template("equipo/agregar_empleado.html", form=form)
-    
+
     cargar_choices_form(form=form)
     if form.validate_on_submit():
         # Crear nuevo Domicilio registrado con los datos del formulario
@@ -195,7 +199,7 @@ def cargar_choices_form(form):
 @check("empleado_update")
 def edit_empleado_form(empleado_id):
     empleado = equipo.traer_empleado(empleado_id)
-    form = AddEmpleadoForm(obj=empleado) 
+    form = AddEmpleadoForm(obj=empleado)
 
     form.nombre.data = empleado.nombre
     form.apellido.data = empleado.apellido
@@ -212,7 +216,7 @@ def edit_empleado_form(empleado_id):
     form.nro_afiliado.data = empleado.nro_afiliado
 
     cargar_choices_form(form=form)
-    
+
 
     # Asignar los valores del domicilio
     form.domicilio_calle.data = empleado.domicilio.calle
@@ -236,7 +240,7 @@ def edit_empleado_form(empleado_id):
 def update_empleado(empleado_id):
     empleado = equipo.traer_empleado(empleado_id)
     # Poblar el formulario con los datos del empleado
-    form = AddEmpleadoForm(obj=empleado)  
+    form = AddEmpleadoForm(obj=empleado)
     form.obj=empleado
     # Cargar las opciones para los campos de selección
     cargar_choices_form(form=form)
@@ -249,7 +253,7 @@ def update_empleado(empleado_id):
         if not email.endswith('.com'):
             flash("El correo electrónico debe terminar en '.com'", "error")
             return render_template("equipo/edit_empleado.html", form=form, empleado=empleado)
-            
+
     except EmailNotValidError as e:
         flash(f"El correo electrónico no es válido: {str(e)}", "error")
         return render_template("equipo/edit_empleado.html", form=form, empleado=empleado)
@@ -293,7 +297,7 @@ def update_empleado(empleado_id):
 @login_required
 @check("empleado_update")
 @bp.get("/editar_empleado/<int:empleado_id>/documentos")
-def subir_archivo_form(empleado_id):    
+def subir_archivo_form(empleado_id):
     empleado = equipo.traer_empleado(empleado_id)
     return render_template("equipo/add_documento.html", empleado=empleado)
 
@@ -301,7 +305,7 @@ def subir_archivo_form(empleado_id):
 @login_required
 @check("empleado_update")
 @bp.get("/editar_empleado/<int:empleado_id>/enlace")
-def subir_enlace_form(empleado_id):    
+def subir_enlace_form(empleado_id):
     empleado = equipo.traer_empleado(empleado_id)
 
     return render_template("equipo/add_enlace.html", empleado=empleado)
@@ -314,7 +318,7 @@ def allowed_file(filename):
 
 
 MAX_CANT_MEGABYTES = 20  # cant megabytes
-MAX_CONTENT_LENGTH = MAX_CANT_MEGABYTES * 1024 * 1024  
+MAX_CONTENT_LENGTH = MAX_CANT_MEGABYTES * 1024 * 1024
 
 @bp.before_request
 def limit_content_length():
@@ -328,7 +332,7 @@ def limit_content_length():
 def agregar_documento(empleado_id):
 
     params = request.form.copy()
-    
+
     if "documento" not in request.files or request.files["documento"].filename == "":
         flash("El archivo es obligatorio.", "error")  # Mensaje de error
         return redirect(url_for("equipo.subir_archivo_form", empleado_id=empleado_id))
@@ -338,7 +342,7 @@ def agregar_documento(empleado_id):
         if not allowed_file(file.filename):
             flash("Tipo de archivo no permitido.", "error")
             return redirect(url_for("equipo.subir_archivo_form", empleado_id=empleado_id))
-        
+
         if file.content_length > MAX_CONTENT_LENGTH:
             flash("El archivo excede el tamaño máximo permitido de 5 MB.", "error")
             return redirect(url_for("equipo.subir_archivo_form", empleado_id=empleado_id))
@@ -350,9 +354,9 @@ def agregar_documento(empleado_id):
         equipo.crear_documento(
             nombre_asignado=request.form["nombre_asignado"],
             titulo=file.filename,
-            tipo_documento=request.form["tipo_documento"], 
+            tipo_documento=request.form["tipo_documento"],
             empleado_id=empleado_id
-        ) 
+        )
     return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id))
 
 
@@ -364,7 +368,7 @@ def agregar_enlace(empleado_id):
         empleado_id=empleado_id,
         url_enlace = request.form["url_enlace"],
         nombre_asignado=request.form["nombre_asignado"]
-    ) 
+    )
     return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id))
 
 
@@ -385,10 +389,10 @@ def eliminar_documento_form(empleado_id, documento_id):
     empleado = equipo.traer_empleado(empleado_id)
     documento = equipo.traer_documento_por_id(documento_id)
     return render_template("equipo/delete_documento.html", empleado=empleado, doc=documento)
-                    
-     
+
+
 @login_required
-@check("empleado_update")               
+@check("empleado_update")
 @bp.post("/editar_empleado/<int:empleado_id>/documentos/<int:documento_id>/eliminar")
 def eliminar_documento(empleado_id, documento_id):
     documento = equipo.traer_documento_por_id(documento_id)
@@ -423,11 +427,11 @@ def editar_documento(empleado_id, documento_id):
     if not nombre_asignado:
         flash("Debe ingresar un titulo de documento.", "error")
         return redirect(url_for("equipo.edit_documento_form", form=request.form, documento_id=documento_id))
-    
+
     if not tipo_documento:
         flash("Debe seleccionar un tipo de documento.", "error")
         return redirect(url_for("equipo.edit_documento_form", form=request.form, documento_id=documento_id))
-    
+
     equipo.edit_documento(documento_id=documento_id,empleado_id=empleado_id, nombre_asignado=nombre_asignado, tipo_documento=tipo_documento)
     flash("Documento editado exitosamente", "success")
     return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id))
@@ -455,11 +459,11 @@ def editar_enlace(empleado_id, documento_id):
     if not nombre_asignado:
         flash("Debe ingresar un titulo de documento.", "error")
         return redirect(url_for("equipo.edit_enlace_form", form=request.form, documento_id=documento_id))
-    
+
     if not url_enlace:
         flash("Debe ingresar una url para el enlace.", "error")
         return redirect(url_for("equipo.edit_enlace_form", form=request.form, documento_id=documento_id))
-    
+
     equipo.edit_documento(documento_id=documento_id,empleado_id=empleado_id, nombre_asignado=nombre_asignado, url_enlace=url_enlace)
     flash("Documento editado exitosamente", "success")
     return redirect(url_for("equipo.show_empleado", empleado_id=empleado_id))

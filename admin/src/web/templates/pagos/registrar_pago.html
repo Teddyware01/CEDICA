@@ -14,7 +14,12 @@
     
     <div class="form-group" id="empleado_field" style="display:none;">
         {{ form.beneficiario.label(class="form-label") }}
-        {{ form.beneficiario(class="form-control") }}
+        <select name="beneficiario" class="form-control">
+            <option value="">Seleccione un empleado</option>
+            {% for empleado in empleados %}
+                <option value="{{ empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
+            {% endfor %}
+        </select>
     </div>
     
     <div class="form-group" id="otro_beneficiario_field" style="display:none;">

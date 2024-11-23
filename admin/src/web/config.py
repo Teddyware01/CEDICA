@@ -48,7 +48,7 @@ class DevelopmentConfig(Config):
         f"postgresql://postgres:admin@localhost:5432/grupo15"
     )
     """
-    
+
     SQLALCHEMY_ENGINE_OPTIONS = {
         'connect_args': {
             'client_encoding': 'utf8'
@@ -60,7 +60,7 @@ class DevelopmentConfig(Config):
     OAUTH_GOOGLE_CLIENT_SECRET = environ.get('OAUTH_GOOGLE_CLIENT_SECRET')
     CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
 
-    
+
 class TestingConfig(Config):
     """Testing configuration."""
 

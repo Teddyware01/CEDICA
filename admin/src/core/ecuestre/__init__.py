@@ -25,7 +25,7 @@ def list_ecuestre(sort_by=None, search=None, page=1, per_page=3):
     query = Ecuestre.query
     if search:
         query = query.filter(
-                Ecuestre.nombre.like(f"%{search}%"),   
+                Ecuestre.nombre.like(f"%{search}%"),
         )
     if sort_by:
         if sort_by == "nombre_asc":
@@ -71,7 +71,7 @@ def traer_equipo(ids_miembros):
     return miembros
 
 def traer_todosempleados():
-    query = Empleado.query
+    query = Empleado.query.filter_by(esta_borrado=False)
     return query.all()
 
 def asignar_empleado(ecuestre,empleado):
@@ -102,7 +102,7 @@ def actualizar_asignados(caballo_id, lista_id):
     # empleados a eliminar (los que ya no están en empleados_asignados_ids)
     empleados_a_eliminar = empleados_actuales - empleados_asignados_ids
     print(f"Estis son los empleados a eliminar : {empleados_a_eliminar}")
-    
+
     for nuevo_id in nuevos_empleados:
         nuevo_empleado = Empleado.query.get(nuevo_id)
         if nuevo_empleado:
@@ -134,13 +134,13 @@ def delete_ecuestre(ecuestre_id):
 def crear_documento(**kwargs):
     # Verificar si ya existe un documento con el mismo título para el mismo ecuestre_id
     existe = db.session.query(Ecuestre_docs).filter_by(titulo=kwargs['titulo'], ecuestre_id=kwargs['ecuestre_id']).first()
-    
+
     if not existe:
         documento = Ecuestre_docs(**kwargs)
         db.session.add(documento)
         db.session.commit()
         return documento
-    
+
     return False
 
 def crear_documento_tipo_enlace(**kwargs):
@@ -179,7 +179,7 @@ def edit_documento(documento_id, **kwargs):
 def ya_tiene_ese_documento(ecuestre_id, name):
     documento = Ecuestre_docs.query.filter(
         Ecuestre_docs.ecuestre_id == ecuestre_id,
-        Ecuestre_docs.titulo.ilike(name)  
-    ).first()  
+        Ecuestre_docs.titulo.ilike(name)
+    ).first()
 
     return documento is not None

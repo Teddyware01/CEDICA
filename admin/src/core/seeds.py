@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime,  timedelta
 from src.core import board
 from src.core import auth
 from src.core import jya
@@ -12,6 +12,7 @@ from src.core.equipo.models import CondicionEnum
 from src.core import pagos
 from src.core.cobros.models import RegistroCobro
 from src.core.jya.models import PensionEnum, DiagnosticoEnum, AsignacionEnum, DiasEnum, SedeEnum, TrabajoEnum, TiposDiscapacidadEnum, EscolaridadEnum
+from src.core.contenido.contenido import Contenido, TipoContenidoEnum, EstadoContenidoEnum
 from datetime import datetime
 
 from src.core.auth import Permisos
@@ -29,7 +30,7 @@ from src.core.auth import Roles
 
 from src.core import equipo
 from src.core import auth
-from src.core.equipo.extra_models import Provincia 
+from src.core.equipo.extra_models import Provincia
 
 from src.core.database import db
 from sqlalchemy import text
@@ -45,7 +46,7 @@ def ejecutar_sql_script(file_path):
 def ejecutar_sql_script(file_path):
     with open(file_path, 'r',encoding='utf-8') as sql_file:
         sql_script = sql_file.read()
-    
+
     with db.engine.connect() as connection:
         connection.execute(text(sql_script))
         connection.commit()
@@ -119,9 +120,9 @@ def run():
     )
 
     user6 = auth.create_user(
-        email="admin@hotmail",
-        alias="admin",
-        password="admin",
+        email="administacion@hotmail",
+        alias="administracion",
+        password="administracion",
         system_admin=False,
         activo=True,
     )
@@ -160,7 +161,7 @@ def run():
         nombre="Administracion",
     )
 
-    
+
 
     auth.assign_rol(user1, [rol_administracion, rol_voluntariado])
     auth.assign_rol(
@@ -235,7 +236,7 @@ def run():
         localidad_id=15,
         provincia_id=12,
     )
-    
+
     domicilio_ej4 = equipo.add_domiclio(
         calle="Diagonal 73",
         numero=1214,
@@ -244,7 +245,7 @@ def run():
         localidad_id=232,
         provincia_id=2,
     )
-        
+
     domicilio_ej5 = equipo.add_domiclio(
         calle="San Martin",
         numero=452,
@@ -252,7 +253,7 @@ def run():
         localidad_id=101,
         provincia_id=8,
     )
-        
+
     domicilio_ej6 = equipo.add_domiclio(
         calle="Belgrano",
         numero=23,
@@ -260,7 +261,7 @@ def run():
         localidad_id=531,
         provincia_id=18,
     )
-    
+
     domicilio_ej7 = equipo.add_domiclio(
         calle="Av. 1",
         numero=12,
@@ -282,8 +283,8 @@ def run():
     contacto_emergencia_ej3 = equipo.add_contacto_emergencia(
         nombre="Diego", apellido="Diaz", telefono="0542234545"
     )
-    
-    
+
+
 
     empleado1 = equipo.create_empleado(
         nombre="Ernesto",
@@ -374,6 +375,183 @@ def run():
         contacto_emergencia_id=2,
     )
 
+    empleado6 = equipo.create_empleado(
+        nombre="Mariana",
+        apellido="González",
+        dni="78965432109",
+        email="mariana.gonzalez@gmail.com",
+        telefono="1198765432",
+        fecha_inicio=datetime(2023, 6, 10),
+        condicion=CondicionEnum.PERSONAL_RENTADO,
+        activo=True,
+        obra_social="Galeno",
+        nro_afiliado=979871,
+        profesion_id=5,
+        puesto_laboral_id=3,
+        domicilio_id=1,
+        contacto_emergencia_id=2,
+    )
+
+
+    empleado7 = equipo.create_empleado(
+        nombre="Rodrigo",
+        apellido="Martínez",
+        dni="32165498702",
+        email="rodrigo.martinez@gmail.com",
+        telefono="1134567890",
+        fecha_inicio=datetime(2020, 12, 1),
+        condicion=CondicionEnum.PERSONAL_RENTADO,
+        activo=True,
+        obra_social="IOMA",
+        nro_afiliado=321456,
+        profesion_id=3,
+        puesto_laboral_id=1,
+        domicilio_id=1,
+        contacto_emergencia_id=2,
+    )
+
+
+    empleado8 = equipo.create_empleado(
+        nombre="Sofía",
+        apellido="Ramírez",
+        dni="98732165407",
+        email="sofia.ramirez@gmail.com",
+        telefono="1187654321",
+        fecha_inicio=datetime(2022, 9, 5),
+        condicion=CondicionEnum.PERSONAL_RENTADO,
+        activo=True,
+        obra_social="Medife",
+        nro_afiliado=112233,
+        profesion_id=2,
+        puesto_laboral_id=5,
+        domicilio_id=1,
+        contacto_emergencia_id=1,
+    )
+
+
+    empleado9 = equipo.create_empleado(
+        nombre="Martín",
+        apellido="López",
+        dni="45678912306",
+        email="martin.lopez@gmail.com",
+        telefono="1143217654",
+        fecha_inicio=datetime(2019, 5, 20),
+        condicion=CondicionEnum.PERSONAL_RENTADO,
+        activo=False,
+        obra_social="Galeno",
+        nro_afiliado=334455,
+        profesion_id=1,
+        puesto_laboral_id=6,
+        domicilio_id=1,
+        contacto_emergencia_id=2,
+    )
+
+
+    empleado10 = equipo.create_empleado(
+        nombre="Julia",
+        apellido="Torres",
+        dni="12365478901",
+        email="julia.torres@gmail.com",
+        telefono="1123456789",
+        fecha_inicio=datetime(2020, 8, 18),
+        condicion=CondicionEnum.PERSONAL_RENTADO,
+        activo=True,
+        obra_social="OSDE",
+        nro_afiliado=778899,
+        profesion_id=2,
+        puesto_laboral_id=3,
+        domicilio_id=2,
+        contacto_emergencia_id=1,
+    )
+
+
+    empleado11 = equipo.create_empleado(
+        nombre="Diego",
+        apellido="Fernández",
+        dni="65432198704",
+        email="diego.fernandez@gmail.com",
+        telefono="1109876543",
+        fecha_inicio=datetime(2021, 7, 12),
+        condicion=CondicionEnum.PERSONAL_RENTADO,
+        activo=True,
+        obra_social="IOMA",
+        nro_afiliado=998877,
+        profesion_id=5,
+        puesto_laboral_id=4,
+        domicilio_id=1,
+        contacto_emergencia_id=1,
+    )
+
+
+    empleado12 = equipo.create_empleado(
+        nombre="Carla",
+        apellido="Benítez",
+        dni="78912345608",
+        email="carla.benitez@gmail.com",
+        telefono="1165432109",
+        fecha_inicio=datetime(2023, 3, 25),
+        condicion=CondicionEnum.PERSONAL_RENTADO,
+        activo=True,
+        obra_social="Swiss Medical",
+        nro_afiliado=445566,
+        profesion_id=3,
+        puesto_laboral_id=7,
+        domicilio_id=5,
+        contacto_emergencia_id=2,
+    )
+
+    empleado13 = equipo.create_empleado(
+        nombre="Josefina",
+        apellido="Benítez",
+        dni="56712375608",
+        email="josefina.benitez@gmail.com",
+        telefono="1165432109",
+        fecha_inicio=datetime(2023, 7, 18),
+        condicion=CondicionEnum.PERSONAL_RENTADO,
+        activo=True,
+        obra_social="Swiss Medical",
+        nro_afiliado=445566,
+        profesion_id=3,
+        puesto_laboral_id=7,
+        domicilio_id=5,
+        contacto_emergencia_id=2,
+    )
+
+    empleado14 = equipo.create_empleado(
+        nombre="Miguel",
+        apellido="Fernandez",
+        dni="90912345238",
+        email="Fernandez98.m@gmail.com",
+        telefono="2345432743",
+        fecha_inicio=datetime(2023, 8, 12),
+        condicion=CondicionEnum.PERSONAL_RENTADO,
+        activo=True,
+        obra_social="OSDE",
+        nro_afiliado=445566,
+        profesion_id=2,
+        puesto_laboral_id=1,
+        domicilio_id=5,
+        contacto_emergencia_id=2,
+    )
+
+    empleado15 = equipo.create_empleado(
+        nombre="Antonio",
+        apellido="Banderas",
+        dni="87512345543",
+        email="Banderas98.anto@gmail.com",
+        telefono="2345432743",
+        fecha_inicio=datetime(2023, 8, 12),
+        condicion=CondicionEnum.PERSONAL_RENTADO,
+        activo=True,
+        obra_social="OSDE",
+        nro_afiliado=445566,
+        profesion_id=5,
+        puesto_laboral_id=4,
+        domicilio_id=5,
+        contacto_emergencia_id=2,
+    )
+
+
     pagos_datos = [
         {
             "beneficiario": "Juan Pérez",
@@ -403,6 +581,90 @@ def run():
             "tipo_pago": "gastos_varios",
             "descripcion": "Pagos varios",
         },
+        {
+        "beneficiario": "Juan Pérez",
+        "monto": 1000.0,
+        "fecha_pago": datetime(2024, 10, 1),
+        "tipo_pago": "honorario",
+        "descripcion": "Pago por servicio de asesoría",
+        },
+        {
+            "beneficiario": "María Gómez",
+            "monto": 1500.0,
+            "fecha_pago": datetime(2024, 10, 5),
+            "tipo_pago": "gastos_varios",
+            "descripcion": "Pago por compra de insumos",
+        },
+        {
+            "beneficiario": "Carlos López",
+            "monto": 2000.0,
+            "fecha_pago": datetime(2024, 10, 10),
+            "tipo_pago": "gastos_varios",
+            "descripcion": "Pago por servicios de mantenimiento",
+        },
+        {
+            "beneficiario": "Ana Martínez",
+            "monto": 1500.0,
+            "fecha_pago": datetime(2024, 10, 23),
+            "tipo_pago": "gastos_varios",
+            "descripcion": "Pagos varios",
+        },
+        {
+            "beneficiario": "Juan Pérez",
+            "monto": 1200.0,
+            "fecha_pago": datetime(2024, 10, 12),
+            "tipo_pago": "honorario",
+            "descripcion": "Pago por consulta y asesoría adicional",
+        },
+        {
+            "beneficiario": "María Gómez",
+            "monto": 1800.0,
+            "fecha_pago": datetime(2024, 10, 15),
+            "tipo_pago": "gastos_varios",
+            "descripcion": "Pago por compra de materiales",
+        },
+        {
+            "beneficiario": "Carlos López",
+            "monto": 2500.0,
+            "fecha_pago": datetime(2024, 10, 18),
+            "tipo_pago": "gastos_varios",
+            "descripcion": "Pago por reparación de equipos",
+        },
+        {
+            "beneficiario": "Ana Martínez",
+            "monto": 1600.0,
+            "fecha_pago": datetime(2024, 10, 22),
+            "tipo_pago": "gastos_varios",
+            "descripcion": "Pago por trabajos de limpieza",
+        },
+        {
+            "beneficiario": "Luis Fernández",
+            "monto": 2200.0,
+            "fecha_pago": datetime(2024, 10, 25),
+            "tipo_pago": "honorario",
+            "descripcion": "Pago por diseño gráfico",
+        },
+        {
+            "beneficiario": "Laura González",
+            "monto": 1300.0,
+            "fecha_pago": datetime(2024, 10, 28),
+            "tipo_pago": "honorario",
+            "descripcion": "Pago por asesoría en marketing digital",
+        },
+        {
+            "beneficiario": "Juan Pérez",
+            "monto": 1400.0,
+            "fecha_pago": datetime(2024, 10, 30),
+            "tipo_pago": "honorario",
+            "descripcion": "Pago por sesión de coaching",
+        },
+        {
+            "beneficiario": "Carlos López",
+            "monto": 2100.0,
+            "fecha_pago": datetime(2024, 10, 20),
+            "tipo_pago": "gastos_varios",
+            "descripcion": "Pago por servicios de mantenimiento en oficina",
+        }
     ]
 
     pagos.guardar_pagos_seeds(pagos_datos)
@@ -468,6 +730,13 @@ def run():
     contacto_create = auth.create_permisos(nombre="contacto_create")
     contacto_destroy = auth.create_permisos(nombre="contacto_destroy")
 
+    #Modulo noticia
+    noticia_index =  auth.create_permisos(nombre="noticia_index")
+    noticia_show = auth.create_permisos(nombre="noticia_show")
+    noticia_update = auth.create_permisos(nombre="noticia_update")
+    noticia_create = auth.create_permisos(nombre="noticia_create")
+    noticia_destroy = auth.create_permisos(nombre="noticia_destroy")
+
     # Asignacion a roles
     # rol administracion
     auth.assign_permiso(rol_administracion, empleado_index)
@@ -509,18 +778,24 @@ def run():
     auth.assign_permiso(rol_administracion, contacto_create)
     auth.assign_permiso(rol_administracion, contacto_destroy)
 
+    auth.assign_permiso(rol_administracion, noticia_index)
+    auth.assign_permiso(rol_administracion, noticia_show)
+    auth.assign_permiso(rol_administracion, noticia_update)
+    auth.assign_permiso(rol_administracion, noticia_create)
+    auth.assign_permiso(rol_administracion, noticia_destroy)
+
     #Para el registro con google y la aceptacion de usuarios pebndientes:
     auth.assign_permiso(rol_administracion, user_accept)
 
 
-    
+
     # rol tecnica
     auth.assign_permiso(rol_tecnica,jya_index)
     auth.assign_permiso(rol_tecnica,jya_update)
     auth.assign_permiso(rol_tecnica,jya_show)
     auth.assign_permiso(rol_tecnica,jya_create)
     auth.assign_permiso(rol_tecnica,jya_destroy)
-    
+
     auth.assign_permiso(rol_tecnica, cobro_index)
     auth.assign_permiso(rol_tecnica, cobro_show)
 
@@ -533,6 +808,8 @@ def run():
     auth.assign_permiso(rol_tecnica, reporte_index)
     auth.assign_permiso(rol_tecnica, reporte_show)
 
+
+
     # rol voluntariado
     auth.assign_permiso(rol_voluntariado,jya_index )
     auth.assign_permiso(rol_voluntariado, jya_show)
@@ -544,14 +821,14 @@ def run():
     auth.assign_permiso(rol_ecuestre, ecuestre_update)
     auth.assign_permiso(rol_ecuestre, ecuestre_create)
     auth.assign_permiso(rol_ecuestre, ecuestre_destroy)
-    
+
     jya.add_direccion(
         calle="Olazabal",
         numero=3241,
         localidad_id=9,
         provincia_id=4,
     )
-    
+
     jya.add_direccion(
         calle="Diagonal 77",
         numero=957,
@@ -567,7 +844,7 @@ def run():
     sede3 = ecuestre.create_sede(
         nombre = "OTRO",
     )
-    
+
     caballo1 = ecuestre.create_ecuestre(
         nombre="Relámpago",
         fecha_nacimiento="2015-04-10",
@@ -589,7 +866,7 @@ def run():
         sede_id=2,
         tipoJyA ="HIPOTERAPIA"  # Asignando un tipo
     )
-    
+
     jya.create_jinete(
         nombre="Martin",
         apellido="Diaz",
@@ -626,9 +903,9 @@ def run():
         auxiliar_pista=empleado3,
         caballo=caballo1,
     )
-    
 
-        
+
+
     jya.create_jinete(
         nombre="Carlos",
         apellido="Lopez",
@@ -668,8 +945,231 @@ def run():
         auxiliar_pista=empleado4,
         caballo=caballo2,
     )
-    
-    jya.add_familiar( 
+
+    jya.create_jinete(
+        nombre="Maria",
+        apellido="Fernandez",
+        dni="123456789",
+        edad=15,
+        fecha_nacimiento=datetime(2009, 3, 15),
+        domicilio_id=3,
+        #nacimiento=nacimiento_2,
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=1,
+        telefono="12345654321",
+        contacto_emergencia=contacto_emergencia_ej2,
+        becado=False,
+        observaciones_becado="Esto es el plan.",
+        certificado_discapacidad=True,
+        beneficiario_pension=True,
+        pension=PensionEnum.nacional,
+        diagnostico=DiagnosticoEnum.trastorno_comunicacion,
+        #tipos_discapacidad=[TiposDiscapacidadEnum.mental,TiposDiscapacidadEnum.motora],
+        asignacion_familiar=True,
+        tipo_asignacion=AsignacionEnum.por_hijo,
+        obra_social="IOMA",
+        nro_afiliado=112233,
+        curatela=True,
+        observaciones_curatela="Ninguna.",
+        nombre_institucion = "Liceo Victor Mercante",
+        direccion_id = 2,
+        telefono_institucion = "0987654321",
+        grado = "2020",
+        observaciones_institucion = "ASDF.",
+        profesionales = "Terapeuta y docente",
+        trabajo_institucional=TrabajoEnum.deporte,
+        condicion=True,
+        sede=SedeEnum.hlp,
+        profesor_o_terapeuta=empleado3,
+        conductor_caballo=empleado5,
+        auxiliar_pista=empleado4,
+        caballo=caballo2,
+    )
+
+
+    jya.create_jinete(
+        nombre="Juan",
+        apellido="Perez",
+        dni="987123456",
+        edad=12,
+        fecha_nacimiento=datetime(2012, 8, 22),
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=10,
+        domicilio_id=6,
+        telefono="54911495620",
+        contacto_emergencia=contacto_emergencia_ej1,
+        becado=False,
+        observaciones_becado="Becado desde el 28-04-2023.",
+        certificado_discapacidad=False,
+        beneficiario_pension=False,
+        diagnostico=DiagnosticoEnum.trastorno_ansiedad,
+        asignacion_familiar=False,
+        tipo_asignacion=AsignacionEnum.por_discapacidad,
+        obra_social="PAMI",
+        nro_afiliado=30576,
+        curatela=False,
+        observaciones_curatela="Hace 1 mes.",
+        nombre_institucion = "Escuela Especial Juan XXIII",
+        direccion_id=1,
+        telefono_institucion = "07654321098",
+        grado = 2024,
+        profesionales = "Terapeuta ocupacional y docente",
+        trabajo_institucional=TrabajoEnum.ecuestre_adaptado,
+        condicion=False,
+        sede=SedeEnum.casj,
+        profesor_o_terapeuta=empleado1,
+        conductor_caballo=empleado2,
+        auxiliar_pista=empleado3,
+        caballo=caballo1,
+    )
+
+
+    jya.create_jinete(
+        nombre="Sofia",
+        apellido="Martinez",
+        dni="567891234",
+        edad=8,
+        fecha_nacimiento=datetime(2016, 1, 30),
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=10,
+        domicilio_id=6,
+        telefono="54911495620",
+        contacto_emergencia=contacto_emergencia_ej1,
+        becado=False,
+        observaciones_becado="No esta becado.",
+        certificado_discapacidad=False,
+        beneficiario_pension=False,
+        diagnostico=DiagnosticoEnum.secuelas_ACV,
+        asignacion_familiar=False,
+        tipo_asignacion=AsignacionEnum.por_discapacidad,
+        obra_social="PAMI",
+        nro_afiliado=30576,
+        curatela=False,
+        observaciones_curatela="Hace 1 mes.",
+        nombre_institucion = "Escuela Especial Juan XXIII",
+        direccion_id=1,
+        telefono_institucion = "4660228",
+        grado = 2024,
+        profesionales = "Terapeuta ocupacional y docente",
+        trabajo_institucional=TrabajoEnum.equitacion,
+        condicion=False,
+        sede=SedeEnum.casj,
+        profesor_o_terapeuta=empleado1,
+        conductor_caballo=empleado2,
+        auxiliar_pista=empleado3,
+        caballo=caballo1,
+    )
+
+    jya.create_jinete(
+        nombre="Alejandro",
+        apellido="Martinez",
+        dni="567899233",
+        edad=23,
+        fecha_nacimiento=datetime(2000, 3, 30),
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=10,
+        domicilio_id=6,
+        telefono="54911495620",
+        contacto_emergencia=contacto_emergencia_ej1,
+        becado=False,
+        observaciones_becado="No esta becado.",
+        certificado_discapacidad=False,
+        beneficiario_pension=False,
+        diagnostico=DiagnosticoEnum.trastorno_ansiedad,
+        asignacion_familiar=False,
+        tipo_asignacion=AsignacionEnum.por_discapacidad,
+        obra_social="PAMI",
+        nro_afiliado=30576,
+        curatela=False,
+        observaciones_curatela="Hace 1 año.",
+        nombre_institucion = "Escuela San Juan",
+        direccion_id=1,
+        telefono_institucion = "4660228",
+        grado = 2024,
+        profesionales = "Terapeuta ocupacional y docente",
+        trabajo_institucional=TrabajoEnum.equitacion,
+        condicion=False,
+        sede=SedeEnum.casj,
+        profesor_o_terapeuta=empleado1,
+        conductor_caballo=empleado2,
+        auxiliar_pista=empleado3,
+        caballo=caballo1,
+    )
+
+    jya.create_jinete(
+        nombre="Fernando",
+        apellido="Martinez",
+        dni="730800233",
+        edad=40,
+        fecha_nacimiento=datetime(1985, 5, 30),
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=10,
+        domicilio_id=6,
+        telefono="54911495620",
+        contacto_emergencia=contacto_emergencia_ej1,
+        becado=False,
+        observaciones_becado="No esta becado.",
+        certificado_discapacidad=False,
+        beneficiario_pension=False,
+        diagnostico=DiagnosticoEnum.trastorno_ansiedad,
+        asignacion_familiar=False,
+        tipo_asignacion=AsignacionEnum.por_discapacidad,
+        obra_social="PAMI",
+        nro_afiliado=30576,
+        curatela=False,
+        observaciones_curatela="No tiene",
+        nombre_institucion = "Escuela San Jorge",
+        direccion_id=1,
+        telefono_institucion = "4660228",
+        grado = 2024,
+        profesionales = "Corredor profesional",
+        trabajo_institucional=TrabajoEnum.deporte,
+        condicion=False,
+        sede=SedeEnum.casj,
+        profesor_o_terapeuta=empleado1,
+        conductor_caballo=empleado2,
+        auxiliar_pista=empleado3,
+        caballo=caballo1,
+    )
+
+    jya.create_jinete(
+        nombre="Gaspar",
+        apellido="Perez",
+        dni="736295233",
+        edad=25,
+        fecha_nacimiento=datetime(1999, 5, 30),
+        localidad_nacimiento_id=1,
+        provincia_nacimiento_id=10,
+        domicilio_id=6,
+        telefono="54911495620",
+        contacto_emergencia=contacto_emergencia_ej1,
+        becado=True,
+        observaciones_becado="Esta becado",
+        certificado_discapacidad=False,
+        beneficiario_pension=False,
+        diagnostico=DiagnosticoEnum.trastorno_comunicacion,
+        asignacion_familiar=False,
+        tipo_asignacion=AsignacionEnum.por_discapacidad,
+        obra_social="Osde",
+        nro_afiliado=30576,
+        curatela=False,
+        observaciones_curatela="No tiene",
+        nombre_institucion = "Escuela San vicente del bosque",
+        direccion_id=1,
+        telefono_institucion = "4660228",
+        grado = 2024,
+        profesionales = "Corredor profesional",
+        trabajo_institucional=TrabajoEnum.ecuestre_adaptado,
+        condicion=False,
+        sede=SedeEnum.casj,
+        profesor_o_terapeuta=empleado1,
+        conductor_caballo=empleado2,
+        auxiliar_pista=empleado3,
+        caballo=caballo1,
+    )
+
+
+    jya.add_familiar(
         parentesco_familiar="Tio",
         nombre_familiar="Juan",
         apellido_familiar="Diaz",
@@ -683,7 +1183,7 @@ def run():
 
     jya.associate_jinete_familiar(1, 1)
 
-    jya.add_familiar( 
+    jya.add_familiar(
         parentesco_familiar="Abuela",
         nombre_familiar="Alejandra",
         apellido_familiar="Gutierrez",
@@ -695,8 +1195,10 @@ def run():
         actividad_ocupacion_familiar="Ingeniera"
     )
 
+
+
     jya.associate_jinete_familiar(2, 2)
-    
+
     jya.add_dias(dias=DiasEnum.lunes)
     jya.add_dias(dias=DiasEnum.martes)
     jya.add_dias(dias=DiasEnum.miercoles)
@@ -704,25 +1206,32 @@ def run():
     jya.add_dias(dias=DiasEnum.viernes)
     jya.add_dias(dias=DiasEnum.sabado)
     jya.add_dias(dias=DiasEnum.domingo)
-    
-    
+
+
     jya.associate_jinete_dias(1, 1)
-    
-    
+
+
     jya.associate_jinete_dias(1, 2)
-    
+
     jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.mental)
     jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.motora)
     jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.sensorial)
     jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.visceral)
-    
-    
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.visceral)
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.visceral)
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.visceral)
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.sensorial)
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.sensorial)
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.sensorial)
+    jya.add_discapacidades(tipos_discapacidad=TiposDiscapacidadEnum.motora)
+
+
     jya.associate_jinete_discapacidad_id(1, 1)
-    
+
     jya.add_discapacidades(
         tipos_discapacidad=TiposDiscapacidadEnum.sensorial,
     )
-    
+
     jya.associate_jinete_discapacidad_id(1, 2)
 
     '''# Modulo ecuestre
@@ -847,63 +1356,99 @@ def run():
 
 
     ecuestre.asignar_empleado(caballo1, [empleado1,empleado2])
-    ecuestre.asignar_empleado(caballo2, [empleado3,empleado1]) 
-    ecuestre.asignar_empleado(caballo3, [empleado4,empleado2]) 
-    ecuestre.asignar_empleado(caballo4, [empleado5,empleado3]) 
-    ecuestre.asignar_empleado(caballo5, [empleado1,empleado5]) 
-    ecuestre.asignar_empleado(caballo6, [empleado2,empleado4]) 
-    ecuestre.asignar_empleado(caballo7, [empleado3,empleado2, empleado5])     
-    ecuestre.asignar_empleado(caballo8, [empleado4,empleado2]) 
-    ecuestre.asignar_empleado(caballo9, [empleado5,empleado2]) 
-    ecuestre.asignar_empleado(caballo10, [empleado1,empleado2, empleado4]) 
+    ecuestre.asignar_empleado(caballo2, [empleado3,empleado1])
+    ecuestre.asignar_empleado(caballo3, [empleado4,empleado2])
+    ecuestre.asignar_empleado(caballo4, [empleado5,empleado3])
+    ecuestre.asignar_empleado(caballo5, [empleado1,empleado5])
+    ecuestre.asignar_empleado(caballo6, [empleado2,empleado4])
+    ecuestre.asignar_empleado(caballo7, [empleado3,empleado2, empleado5])
+    ecuestre.asignar_empleado(caballo8, [empleado4,empleado2])
+    ecuestre.asignar_empleado(caballo9, [empleado5,empleado2])
+    ecuestre.asignar_empleado(caballo10, [empleado1,empleado2, empleado4])
 
-    
+
     cobro1 = RegistroCobro(
-        jinete_id=1,  
+        jinete_id=1,
         fecha_pago=datetime(2024, 1, 15),
         medio_pago='efectivo',
-        monto=1000.0,
-        recibido_por=1,  
+        monto=5000.0,
+        recibido_por=1,
         observaciones="Primer pago del año."
     )
 
     cobro2 = RegistroCobro(
-        jinete_id=2, 
+        jinete_id=2,
         fecha_pago=datetime(2024, 2, 20),
         medio_pago='tarjeta_credito',
         monto=1500.0,
-        recibido_por=2, 
+        recibido_por=2,
         observaciones="Pago correspondiente a febrero."
     )
 
     cobro3 = RegistroCobro(
-        jinete_id=1,  
+        jinete_id=1,
         fecha_pago=datetime(2024, 3, 25),
         medio_pago='tarjeta_debito',
         monto=2000.0,
-        recibido_por=1,  
+        recibido_por=1,
         observaciones="Pago de honorarios."
     )
 
     cobro4 = RegistroCobro(
-        jinete_id=1,  
+        jinete_id=1,
         fecha_pago=datetime(2024, 6, 20),
         medio_pago='tarjeta_credito',
-        monto=1000.0,
-        recibido_por=2,  
+        monto=10000.0,
+        recibido_por=2,
         observaciones="Pago de Correspondiente a junio"
     )
 
     cobro5 = RegistroCobro(
-        jinete_id=2,  
+        jinete_id=2,
         fecha_pago=datetime(2024, 7, 27),
         medio_pago='tarjeta_credito',
-        monto=3000.0,
-        recibido_por=2,  
+        monto=30000.0,
+        recibido_por=2,
         observaciones="Pago de Correspondiente a julio"
     )
 
-    cobros.guardar_cobros_seeds(cobro1, cobro2, cobro3, cobro4, cobro5)
+    cobro6 = RegistroCobro(
+        jinete_id=2,
+        fecha_pago=datetime(2024, 2, 23),
+        medio_pago='tarjeta_credito',
+        monto=15000.0,
+        recibido_por=2,
+        observaciones="Pago de Correspondiente a julio"
+    )
+
+    cobro7 = RegistroCobro(
+        jinete_id=1,
+        fecha_pago=datetime(2024, 1, 19),
+        medio_pago='tarjeta_credito',
+        monto=3000.0,
+        recibido_por=4,
+        observaciones="Pago de Correspondiente a julio"
+    )
+
+    cobro8 = RegistroCobro(
+        jinete_id=2,
+        fecha_pago=datetime(2018, 9, 12),
+        medio_pago='tarjeta_credito',
+        monto=9000.0,
+        recibido_por=2,
+        observaciones="Pago de Correspondiente a julio"
+    )
+
+    cobro9 = RegistroCobro(
+        jinete_id=1,
+        fecha_pago=datetime(2018, 9, 12),
+        medio_pago='tarjeta_credito',
+        monto=500.0,
+        recibido_por=3,
+        observaciones="Pago de Correspondiente a julio"
+    )
+
+    cobros.guardar_cobros_seeds(cobro1, cobro2, cobro3, cobro4, cobro5, cobro6, cobro7, cobro8, cobro9)
 
     # Super_user que tiene todos los permisos. Utililizable para probar la pagina comodamente
     super_user = auth.create_user(
@@ -913,48 +1458,75 @@ def run():
         system_admin=True,
         activo=True,
     )
-    
-    rol_system_admin = auth.create_roles(
-        nombre="System Admin",
-    )
-    for perm in Permisos.query.all():
-        auth.assign_permiso(rol_system_admin, perm)
 
-    auth.assign_rol(super_user, [rol_system_admin])
+        
+    # Crear datos de ejemplo para contenido
+    contenidos = [
+        Contenido(
+            titulo="Primera noticia en borrador",
+            copete="Resumen breve de la primera noticia en estado borrador.",
+            contenido="Contenido completo de la primera noticia en estado borrador.",
+            tipo=TipoContenidoEnum.ARTICULO_INFO,
+            estado=EstadoContenidoEnum.BORRADOR,
+            autor_user_id=1,
+            inserted_at=datetime.now(),
+            updated_at=datetime.now()
+        ),
+        Contenido(
+            titulo="Segunda noticia en borrador",
+            copete="Otro resumen breve para otra noticia en estado borrador.",
+            contenido="Texto más extenso de la segunda noticia en estado borrador.",
+            tipo=TipoContenidoEnum.PUBLICACION,
+            estado=EstadoContenidoEnum.BORRADOR,
+            autor_user_id=1,
+            inserted_at=datetime.now(),
+            updated_at=datetime.now()
+        ),
+        Contenido(
+            titulo="Primera noticia publicada",
+            copete="Resumen breve de la primera noticia publicada.",
+            contenido="Contenido completo de la primera noticia publicada.",
+            tipo=TipoContenidoEnum.AVISO_EVENTO,
+            estado=EstadoContenidoEnum.PUBLICADO,
+            autor_user_id=2,
+            published_at=datetime.now() - timedelta(days=1),
+            inserted_at=datetime.now() - timedelta(days=1),
+            updated_at=datetime.now()
+        ),
+        Contenido(
+            titulo="Segunda noticia publicada",
+            copete="Resumen breve de la segunda noticia publicada.",
+            contenido="Texto detallado de la segunda noticia publicada.",
+            tipo=TipoContenidoEnum.PUBLICACION,
+            estado=EstadoContenidoEnum.PUBLICADO,
+            autor_user_id=2,
+            published_at=datetime.now() - timedelta(days=2),
+            inserted_at=datetime.now() - timedelta(days=2),
+            updated_at=datetime.now()
+        ),
+        Contenido(
+            titulo="Primera noticia archivada",
+            copete="Resumen breve de la primera noticia archivada.",
+            contenido="Contenido completo de la primera noticia archivada.",
+            tipo=TipoContenidoEnum.ARTICULO_INFO,
+            estado=EstadoContenidoEnum.ARCHIVADO,
+            autor_user_id=3,
+            inserted_at=datetime.now() - timedelta(days=30),
+            updated_at=datetime.now() - timedelta(days=15)
+        ),
+        Contenido(
+            titulo="Segunda noticia archivada",
+            copete="Otro resumen breve para otra noticia archivada.",
+            contenido="Texto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivadaTexto más extenso de la segunda noticia archivada.",
+            tipo=TipoContenidoEnum.PUBLICACION,
+            estado=EstadoContenidoEnum.ARCHIVADO,
+            autor_user_id=3,
+            inserted_at=datetime.now() - timedelta(days=40),
+            updated_at=datetime.now() - timedelta(days=20)
+        ),
+    ]
 
-
-    contacto.add_consulta( 
-        nombre="Juan Diaz",
-        email="juan@diaz.com",
-        mensaje="Quiero averiguar precios para tener una sesion"
-    )
-
-
-    # Creacion de noticias/contenido de ejemplo
-    contenido.create_contenido(
-        titulo="Expo 2025",
-        copete="Todo acerca de la nueva exposicion de verano.",
-        contenido="El evento de equitación contará con diversas actividades, desde competencias hasta talleres para los más pequeños. Todos están invitados a participar.",
-        tipo=TipoContenidoEnum.ARTICULO_INFO,  
-        estado=EstadoContenidoEnum.PUBLICADO, 
-        autor_user=user1,
-    )
-    
-
-    contenido.create_contenido(
-        titulo="¡No te pierdas el evento de equitación este fin de semana!",
-        copete="Este fin de semana habrá un evento de equitación en la ciudad. ¡Te esperamos!",
-        contenido="El evento de equitación contará con diversas actividades, desde competencias hasta talleres para los más pequeños. Todos están invitados a participar.",
-        tipo=TipoContenidoEnum.AVISO_EVENTO, 
-        estado=EstadoContenidoEnum.ARCHIVADO, 
-        autor_user=user2,
-    )
-
-    contenido.create_contenido(
-        titulo="Nueva actualización del sistema de gestión",
-        copete="Te presentamos las últimas mejoras y actualizaciones en el sistema de gestión.",
-        contenido="La nueva versión incluye mejoras en la interfaz, nuevas funcionalidades y mayor rendimiento.",
-        tipo=TipoContenidoEnum.PUBLICACION, 
-        estado=EstadoContenidoEnum.PUBLICADO,  
-        autor_user=user3
-    )
+    # Insertar datos en la base de datos
+    db.session.bulk_save_objects(contenidos)
+    db.session.commit()
+    print("Seed completada: Se crearon 6 noticias de prueba.")

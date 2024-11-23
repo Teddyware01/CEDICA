@@ -47,9 +47,13 @@
                                 <a class="nav-link" href="{{ url_for('pagos.listar_pagos') }}">Pagos</a>
                             {% endif %}
                             {% if is_authenticated(session) and check_permission(session,"cobro_index") %}
-                                <a class="nav-link" href="{{ url_for('cobros.listar_cobros') }}">Cobros</a>
+                            <a class="nav-link" href="{{ url_for('cobros.listar_cobros') }}">Cobros</a>
                             {% endif %}
-                            {% if is_authenticated(session) and check_permission(session,"user_index") %}
+                            {% if is_authenticated(session) and check_permission(session,"noticia_index") %}
+                            <a class="nav-link" href="{{ url_for('noticias.listar_noticias') }}">Noticias</a>
+                            {% endif %}
+
+                            {% if is_authenticated(session) and check_permission(session,"contacto_index") %}
                                 <a class="nav-link" href="{{ url_for('contacto.listar_consultas') }}">Consultas</a>
                             {% endif %}
                             {% if is_authenticated(session) and check_permission(session,"grafico_index") %}

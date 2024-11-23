@@ -1,6 +1,7 @@
 # src/core/equipo/__init__.py
 from src.core.database import db
 from src.core.equipo.models import Empleado, Empleado_docs
+from src.core.ecuestre.ecuestre import empleado_ecuestre
 from src.core.equipo.models import Profesion, PuestoLaboral
 from src.core.equipo.extra_models import (
     ContactoEmergencia,
@@ -43,7 +44,7 @@ def edit_documento(documento_id, **kwargs):
     for key, value in kwargs.items():
         if hasattr(documento, key):
             setattr(documento, key, value)
-    db.session.commit()    
+    db.session.commit()
 
 
 
@@ -81,7 +82,7 @@ def get_localidad_by_id(localidad_id):
 
 # Tabla Empleado
 def list_empleados(sort_by=None, id_puesto_laboral=None, nombre=None, apellido=None, dni=None, email=None, page=1, per_page=3):
-    query = Empleado.query
+    query = Empleado.query.filter_by(esta_borrado=False)
 
     if id_puesto_laboral and id_puesto_laboral != "cualquiera":
         query = query.filter(Empleado.puesto_laboral_id == id_puesto_laboral)
@@ -114,32 +115,32 @@ def list_empleados(sort_by=None, id_puesto_laboral=None, nombre=None, apellido=N
 def list_auxiliares_pista():
     auxiliar = PuestoLaboral.query.filter_by(nombre="Auxiliar de pista").first()
     if auxiliar:
-        return Empleado.query.filter_by(puesto_laboral_id=auxiliar.id).all()
+        return Empleado.query.filter(Empleado.puesto_laboral_id == auxiliar.id, Empleado.esta_borrado == False).all()
     return []
 
 def list_conductores_caballos():
     conductor = PuestoLaboral.query.filter_by(nombre="Conductor").first()
     if conductor:
-        return Empleado.query.filter_by(puesto_laboral_id=conductor.id).all()
+        return Empleado.query.filter(Empleado.puesto_laboral_id == conductor.id, Empleado.esta_borrado == False).all()
     return []
 
 def list_terapeutas_y_profesores():
     terapeuta = PuestoLaboral.query.filter_by(nombre="Terapeuta").first()
     profesor = PuestoLaboral.query.filter_by(nombre="Profesor/a").first()
-    
+
     empleados = []
-    
+
     if terapeuta:
-        empleados += Empleado.query.filter(Empleado.puesto_laboral_id == terapeuta.id).all()
+        empleados += Empleado.query.filter(Empleado.puesto_laboral_id == terapeuta.id, Empleado.esta_borrado==False).all()
     if profesor:
-        empleados += Empleado.query.filter(Empleado.puesto_laboral_id == profesor.id).all()
-    
+        empleados += Empleado.query.filter(Empleado.puesto_laboral_id == profesor.id, Empleado.esta_borrado==False).all()
+
     return empleados
 
 
 def traer_empleado(empleado_id):
     return  Empleado.query.get_or_404(empleado_id)
-    
+
 def create_empleado(**kwargs):
     empleado = Empleado(**kwargs)
     db.session.add(empleado)
@@ -205,3 +206,16 @@ def add_domiclio(**kwargs):
     db.session.add(domicilio)
     db.session.commit()
     return domicilio
+
+def borrar_tabla_intermedia(empleado_id):
+   # Obtener las relaciones filtrando dinámicamente
+    relaciones = (
+        db.session.query(empleado_ecuestre)
+        .filter(empleado_ecuestre.c.empleado_id == empleado_id)
+    )
+
+    # Eliminar relaciones directamente
+    relaciones.delete(synchronize_session=False)
+
+    # Confirmar los cambios
+    db.session.commit()

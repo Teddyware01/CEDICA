@@ -1,0 +1,30 @@
+<!-- src/web/templates/reportes/grafico_diagnostico.html -->
+{% extends "layout.html" %}
+
+{% block title %}Diagnóstico de Jinetes{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Diagnóstico de Jinetes</h1>
+
+<!-- Mostrar tabla solo si hay datos -->
+{% if diagnosticos and diagnosticos|length > 0 %}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Diagnóstico</th>
+            <th>Cantidad</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for diagnostico, cantidad in diagnosticos.items() %}
+        <tr>
+            <td>{{ diagnostico }}</td>
+            <td>{{ cantidad }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="text-center alert alert-warning">No hay datos disponibles para los diagnósticos de jinetes.</p>
+{% endif %}
+{% endblock %}

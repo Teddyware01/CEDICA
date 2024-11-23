@@ -57,15 +57,15 @@
             </div>
         </div>
     </form>
-    
-    
-    
+
+
+
     <table  class="table d-none d-md-table">
         <thead>
             <tr>
                 <th>Jinete o Amazona</th>
                 <th>
-                    <a href="{{ url_for('cobros.listar_cobros', orden='asc', fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, medio_pago=medio_pago, nombre_recibido=nombre_recibido, apellido_recibido=apellido_recibido, page=pagination.page) }}">Fecha de Pago &#9650;</a> 
+                    <a href="{{ url_for('cobros.listar_cobros', orden='asc', fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, medio_pago=medio_pago, nombre_recibido=nombre_recibido, apellido_recibido=apellido_recibido, page=pagination.page) }}">Fecha de Pago &#9650;</a>
                     <a href="{{ url_for('cobros.listar_cobros', orden='desc', fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, medio_pago=medio_pago, nombre_recibido=nombre_recibido, apellido_recibido=apellido_recibido, page=pagination.page) }}">&#9660;</a>
                 </th>
                 <th>Medio de Pago</th>
@@ -87,14 +87,12 @@
                 <td>
                     <!-- Botones visibles solo en pantallas grandes -->
                     <div class="d-none d-lg-flex">
-                        {% if is_authenticated(session) and check_permission(session, "cobro_update") %}                    
+                        {% if is_authenticated(session) and check_permission(session, "cobro_update") %}
                         <a href="{{ url_for('cobros.editar_cobro', id=cobro.id) }}" class="btn btn-edit">Modificar</a>
                         {% endif %}
                         {% if is_authenticated(session) and check_permission(session, "cobro_destroy") %}
-                        <form method="POST" action="{{ url_for('cobros.eliminar_cobro', id=cobro.id) }}">
-                            <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que deseas eliminar este cobro?');">Eliminar</button>
-                        </form>
-                    {% endif %}
+                        <a href="{{ url_for('cobros.confirmar_eliminar_cobro', id=cobro.id) }}" class="btn btn-delete">Eliminar</a>
+                        {% endif %}
                     </div>
                 </td>
             </tr>
@@ -116,13 +114,11 @@
                         Acciones
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ cobro.id }}">
-                        {% if is_authenticated(session) and check_permission(session, "cobro_update") %}                    
+                        {% if is_authenticated(session) and check_permission(session, "cobro_update") %}
                         <a class="dropdown-item" href="{{ url_for('cobros.editar_cobro', id=cobro.id) }}">Modificar</a>
                         {% endif %}
                         {% if is_authenticated(session) and check_permission(session, "cobro_destroy") %}
-                        <form method="POST" action="{{ url_for('cobros.eliminar_cobro', id=cobro.id) }}" style="display:inline;">
-                            <button type="submit" class="dropdown-item" onclick="return confirm('¿Estás seguro de que deseas eliminar este cobro?');">Eliminar</button>
-                        </form>
+                        <a href="{{ url_for('cobros.confirmar_eliminar_cobro', id=cobro.id) }}" class="btn btn-delete">Eliminar</a>
                         {% endif %}
                     </div>
                 </div>
@@ -160,5 +156,5 @@
             {% endif %}
         </ul>
       </nav>
-      
+
 {% endblock %}

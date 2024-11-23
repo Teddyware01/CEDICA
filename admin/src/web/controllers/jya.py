@@ -72,7 +72,7 @@ def add_jinete():
             localidad=localidad,
             provincia=provincia,
         )
-        
+
         # Crear el nuevo Contacto de Emergencia
         nuevo_contacto_emergencia = jya.add_contacto_emergencia(
             nombre=form.contacto_emergencia_nombre.data,
@@ -80,8 +80,8 @@ def add_jinete():
             telefono=form.contacto_emergencia_telefono.data,
         )
 
-        dias_seleccionados = form.dias.data  
-        dias_db = Dias.query.filter(Dias.dias.in_(dias_seleccionados)).all()  
+        dias_seleccionados = form.dias.data
+        dias_db = Dias.query.filter(Dias.dias.in_(dias_seleccionados)).all()
 
         # Convertir los IDs de las discapacidades seleccionadas a objetos de la base de datos
         discapacidades_seleccionadas = form.discapacidades.data  # Esto trae los IDs seleccionados en el formulario
@@ -91,7 +91,7 @@ def add_jinete():
         if jya.jinete_dni_exists(dni):
             flash("El DNI ya está registrado. Por favor elige otro.", "error")
             return redirect(url_for("jya.add_jinete_form"))
-        
+
         # Crear el nuevo jinete con todos los datos
         nuevo_jinete = jya.create_jinete(
             nombre=form.nombre.data,
@@ -130,10 +130,10 @@ def add_jinete():
 
         # Asociar los días seleccionados al jinete
         nuevo_jinete.dias.extend(dias_db)
-        
+
         # Asociar las discapacidades seleccionadas al jinete
         nuevo_jinete.discapacidades.extend(discapacidades_db)
-        
+
         #localidad = jya.get_localidad_by_id(form.localidad_familiar.data)
         #provincia = jya.get_provincia_by_id(form.provincia_familiar.data)
         # Crear el familiar asociado al jinete
@@ -170,7 +170,7 @@ def add_jinete():
         for field, errors in form.errors.items():
             for error in errors:
                 flash(f"Error en el campo {field}: {error}", "error")
-                
+
     return render_template("jya/agregar_jya.html", form=form)
 
 
@@ -185,7 +185,7 @@ def view_jinete(jinete_id):
     search = request.args.get("search")
     documentos = jya.traer_documentos(jinete_id, page=page, sort_by=sort_by, search=search)
     return render_template("jya/ver_jya.html", jinete=jinete, documentos=documentos, active_tab=active_tab)
-    
+
 
 @bp.get("/eliminar_jinete/<int:jinete_id>")
 @login_required
@@ -201,8 +201,8 @@ def delete_jinete_form(jinete_id):
 @check("jya_destroy")
 def delete_jinete(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
-    jya.delete_jinete(jinete_id)
-    
+    ##jya.delete_jinete(jinete_id)
+    jya.aplicar_borrado_logico(jinete)
     return redirect(url_for("jya.listar_jinetes"))
 
 
@@ -214,16 +214,16 @@ def cargar_choices_form(form):
     form.tipo_asignacion.choices = [(asig.name, asig.value) for asig in AsignacionEnum]
     form.domicilio_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
     form.domicilio_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]
-    
-    form.localidad_nacimiento.choices = [(l.id, l.nombre) for l in jya.list_localidades()]  
+
+    form.localidad_nacimiento.choices = [(l.id, l.nombre) for l in jya.list_localidades()]
     form.provincia_nacimiento.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
-    
-    form.institucion_direccion_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]  
+
+    form.institucion_direccion_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]
     form.institucion_direccion_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
-    
+
     form.domicilio_familiar_localidad.choices = [(l.id, l.nombre) for l in jya.list_localidades()]
     form.domicilio_familiar_provincia.choices = [(p.id, p.nombre) for p in jya.list_provincias()]
-        
+
     form.caballo.choices = [(ecuestre.id, ecuestre.nombre) for ecuestre in list_ecuestre()]
     form.profesor_o_terapeuta.choices = [(emp.id, f"{emp.apellido}, {emp.nombre}") for emp in list_terapeutas_y_profesores()]
 
@@ -265,7 +265,7 @@ def edit_jinete_form(jinete_id):
 
     return render_template("jya/editar_jya.html", jinete=jinete, fecha_nacimiento=fecha_nacimiento, jinete_dias_name=jinete_dias_name, jinete_tipos_discapacidad_name=jinete_tipos_discapacidad_name,
         jinete_tipos_discapacidades=jinete_tipos_discapacidades, tipos_discapacidad=tipos_discapacidad,dias_semana=dias_semana,jinete_dias_semana=jinete_dias_semana,localidades=localidades,
-        provincias=provincias, tipos_diagnostico=tipos_diagnostico,tipos_de_asignacion=tipos_de_asignacion,tipos_pensiones=tipos_pensiones, 
+        provincias=provincias, tipos_diagnostico=tipos_diagnostico,tipos_de_asignacion=tipos_de_asignacion,tipos_pensiones=tipos_pensiones,
         familiar=familiar,trabajos_institucionales=trabajos_institucionales,list_sedes=list_sedes,
         list_profes_terapeutas=list_profes_terapeutas,
         list_conductores=list_conductores,
@@ -296,14 +296,14 @@ def editar_jinete(jinete_id):
     jinete.domicilio.piso= form["domicilio.piso"] if (form["domicilio.piso"] and form["domicilio.piso"] !="") else None
     jinete.domicilio.departamento= form["domicilio.departamento"] if (form["domicilio.departamento"] and form["domicilio.departamento"] !="") else None
     jinete.domicilio.provincia_id = form["domicilio.provincia"]
-    jinete.domicilio.localidad_id = form["domicilio.localidad"]        
+    jinete.domicilio.localidad_id = form["domicilio.localidad"]
     jinete.telefono = form["telefono"]
     #contacto emergencia:
     jinete.contacto_emergencia.nombre= form["contacto_emergencia.nombre"]
     jinete.contacto_emergencia.apellido= form["contacto_emergencia.apellido"]
     jinete.contacto_emergencia.telefono= form["contacto_emergencia.telefono"]
     #empieza:
-    jinete.estado_pago = (form["estado_pago"] == "si") 
+    jinete.estado_pago = (form["estado_pago"] == "si")
     jinete.becado = (form["becado"] == "si")
     jinete.observaciones_becado = form["observaciones_becado"]
     jinete.certificado_discapacidad = (form["certificado_discapacidad"] == "si")
@@ -349,10 +349,10 @@ def editar_jinete(jinete_id):
     domicilio_familiar_provincia_id = form.get("familiar.domicilio_familiar_provincia") or None
     domicilio_familiar_localidad_id = form.get("familiar.domicilio_familiar_localidad") or None
     celular_familiar = form.get("familiar.celular_familiar") or None
-    email_familiar = form.get("familiar.email_familiar") or None 
+    email_familiar = form.get("familiar.email_familiar") or None
     nivel_escolaridad_familiar = form.get("familiar.nivel_escolaridad_familiar") or None
     actividad_ocupacion_familiar = form.get("familiar.actividad_ocupacion_familiar") or None
-    
+
     if jinete.familiares:
         familiar_id= jya.get_primer_familiar(jinete_id).id
         jya.edit_familiar(familiar_id=familiar_id, parentezco_familiar=parentezco_familiar, nombre_familiar=nombre_familiar,apellido_familiar=apellido_familiar, dni_familiar=dni_familiar,domicilio_familiar_calle=domicilio_familiar_calle,domicilio_familiar_numero=domicilio_familiar_numero,
@@ -395,7 +395,7 @@ def editar_jinete(jinete_id):
 @check("jya_update")
 def add_documento_form(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
-    
+
     return render_template("jya/add_documento.html", jinete=jinete)
 
 ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'}
@@ -417,7 +417,7 @@ def limit_content_length():
 @check("jya_update")
 def update(jinete_id):
     params = request.form.copy()
-        
+
     if "documento" not in request.files or request.files["documento"].filename == "":
         flash("El archivo es obligatorio.", "error")  # Mensaje de error
         return redirect(url_for("jya.subir_archivo_form", jinete_id=jinete_id))
@@ -426,17 +426,17 @@ def update(jinete_id):
         file = request.files["documento"]
         client = current_app.storage.client
         size = fstat(file.fileno()).st_size
-        
+
         #ulid = u.new()
-        
+
         client.put_object(
             "grupo15", file.filename, file, size, content_type=file.content_type
         )           #f"avatars/{ulid}-{file.filename}",
         params["documento"] = file.filename #Hacer funcion para que genere nombres unicos para el archivo y guardarlo en el usuario. Libreria ULID
-                                
+
     jya.update_jinete(jinete_id, **params)
     flash("Usuario modificado correctamente", "success")
-    
+
     return redirect(url_for("jya.listar_jinetes"))'''
 
 # AGREGAR ARCHIVO POST
@@ -465,16 +465,16 @@ def agregar_documento(jinete_id):
             return redirect(url_for("jya.add_documento_form", form=request.form, jinete_id=jinete_id))
         client = current_app.storage.client
         size = fstat(file.fileno()).st_size
-        
+
         nuevo_nombre_archivo = f"jya_{jinete_id}_{file.filename}"
         client.put_object("grupo15", nuevo_nombre_archivo, file, size, content_type=file.content_type)
         jya.add_documento(
             titulo_documento=file.filename,
             nombre_archivo=request.form["nombre_archivo"],
-            tipo_documento=request.form["tipo_documento"], 
+            tipo_documento=request.form["tipo_documento"],
             jinete_id=jinete_id
-        ) 
-    
+        )
+
     flash("Documento agregado exitosamente", "success")
     return redirect(url_for("jya.view_jinete", jinete_id=jinete_id))
 
@@ -539,11 +539,11 @@ def editar_documento(jinete_id, documento_id):
     if not tipo_documento:
         flash("Debe ingresar un titulo de documento.", "error")
         return redirect(url_for("jya.edit_documento_form", form=request.form, documento_id=documento_id))
-    
+
     if not tipo_documento:
         flash("Debe seleccionar un tipo de archivo.", "error")
         return redirect(url_for("jya.edit_documento_form", form=request.form, documento_id=documento_id))
-    
+
     jya.edit_documento(jinete_id=jinete_id, tipo_documento=tipo_documento, nombre_archivo=nombre_archivo)
     flash("Documento editado exitosamente", "success")
     return redirect(url_for("jya.view_jinete", jinete_id=jinete_id))
@@ -554,7 +554,7 @@ def editar_documento(jinete_id, documento_id):
 @login_required
 @check("jya_update")
 @bp.get("/editar_jinete/<int:jinete_id>/enlace")
-def subir_enlace_form(jinete_id):    
+def subir_enlace_form(jinete_id):
     jinete = jya.traer_jinete(jinete_id)
 
     return render_template("jya/add_enlace.html", jinete=jinete)
@@ -568,7 +568,7 @@ def agregar_enlace(jinete_id):
         jinete_id=jinete_id,
         url_enlace = request.form["url_enlace"],
         nombre_archivo=request.form["nombre_asignado"]
-    ) 
+    )
     return redirect(url_for("jya.view_jinete", jinete_id=jinete_id))
 
 
@@ -593,11 +593,27 @@ def editar_enlace(jinete_id, documento_id):
     if not nombre_archivo:
         flash("Debe ingresar un titulo de documento.", "error")
         return redirect(url_for("jya.edit_enlace_form", form=request.form, documento_id=documento_id))
-    
+
     if not url_enlace:
         flash("Debe ingresar una url para el enlace.", "error")
         return redirect(url_for("jya.edit_enlace_form", form=request.form, documento_id=documento_id))
-    
+
     jya.edit_documento(documento_id=documento_id,jinete_id=jinete_id, nombre_archivo=nombre_archivo, url_enlace=url_enlace)
     flash("Documento editado exitosamente", "success")
     return redirect(url_for("jya.view_jinete", jinete_id=jinete_id))
+
+@bp.route("/toggle_estado_pago/<int:jinete_id>", methods=["POST"])
+@login_required
+@check("jya_update")
+def toggle_estado_pago(jinete_id):
+    jinete = jya.traer_jinete(jinete_id)
+
+    if not jinete:
+        flash("El jinete no existe.", "error")
+        return redirect(url_for("jya.listar_jinetes"))
+    jinete.estado_pago = not jinete.estado_pago
+    db.session.commit()
+
+    nuevo_estado = "Al día" if jinete.estado_pago else "En deuda"
+    flash(f"El estado de pago del jinete se ha cambiado a: {nuevo_estado}.", "success")
+    return redirect(url_for("jya.listar_jinetes"))
