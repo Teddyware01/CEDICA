@@ -29,12 +29,19 @@ body {
     color: var(--text-color-default);
     -webkit-font-smoothing: antialiased;
     overflow-y: scroll;
-    overflow-x: scroll;
     padding: 0;
     width: 100%;
     margin: 0; /* Importante */
 }
-
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
 .main-content {
     display: grid;
     place-items: center;
@@ -186,6 +193,7 @@ p {
     font-family: 'Arial', sans-serif; 
     color: #333;
 }
+
 .inline-link-1:hover {
     background: var(--link-hover-background);
 }
@@ -415,7 +423,8 @@ p {
 
 /* Botones de acciones comunes */
 .btn {
-    padding: 8px 16px; /* Tamaño estándar de padding */
+    padding: 8px 16px !important; /* Tamaño estándar de padding */
+    margin: 2px;
     text-decoration: none; /* Elimina cualquier subrayado */
     color: white; /* Texto en blanco para contraste */
     border-radius: 4px; /* Esquinas redondeadas */
@@ -425,6 +434,13 @@ p {
     font-size: 16px; /* Tamaño de fuente legible */
 }
 
+.btn-edit {
+    background-color: #ffc107; /* Color específico para el botón editar */
+}
+
+.btn-delete {
+    background-color: #dc3545; /* Color específico para el botón eliminar */
+}
 /* Botón Agregar en verde */
 .btn-add {
     background-color: #28a745;
@@ -436,6 +452,7 @@ p {
 /* Botón Ver en verde */
 .btn-view {
     background-color: #28a745;
+    padding: 1%;
 }
 .btn-edit:hover {
     background-color: #218838; /* Oscurecer el color al hacer hover */
@@ -444,6 +461,7 @@ p {
 /* Botón Editar en amarillo */
 .btn-edit {
     background-color: #ffc107;
+    padding: 0.1%;
 }
 .btn-edit:hover {
     background-color: #e0a800; /* Oscurecer el color al hacer hover */
@@ -452,6 +470,7 @@ p {
 /* Botón Eliminar en rojo */
 .btn-delete {
     background-color: #dc3545;
+    padding: 1%;
 }
 .btn-delete:hover {
     background-color: #c82333; /* Oscurecer el color al hacer hover */
@@ -543,6 +562,12 @@ p {
     max-width: 600px;
 }
 
+.mail {
+    max-width: 150px; 
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 
 /* Móviles: Menos de 767px */
 @media (max-width: 767px) {
@@ -572,12 +597,11 @@ p {
 
     h2 {
         font-size: 1.5em;
-        margin-top: 2em; 
+        margin-top: 0.5em; 
     }
 
     h3 {
-        font-size: 1em;
-        margin-top: 2em; 
+        margin-top: 0.5em; 
     }
     .tab {
         padding: 5px 10px; 
@@ -589,6 +613,23 @@ p {
 
     footer {
         width: 100% !important;
+    }
+
+
+    .caja-separadora {
+        background-color: white; 
+        border: 1px solid; 
+        border-radius: 10px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        padding: 20px; 
+        margin: 20px auto; 
+        max-width: 900px; 
+        font-family: 'Arial', sans-serif; 
+        color: #333;
+    }
+
+    .small-spacing label {
+        margin-bottom: 0.1em;
     }
 }
 
@@ -689,20 +730,30 @@ p {
     }
 }
 
-.flashes {
-    list-style-type: none; /* Elimina los puntos de la lista */
-    margin: 20px 0; /* Espacio superior e inferior */
-    padding: 15px; /* Espaciado interno */
-    border: 1px solid #f44336; /* Color del borde */
-    border-radius: 5px; /* Esquinas redondeadas */
-    background-color: #f8d7da; /* Color de fondo */
-    color: #721c24; /* Color del texto */
-    font-size: 1.2em; /* Aumentar el tamaño de la fuente */
-    font-weight: bold; /* Negrita */
+.flashes-success {
+    list-style-type: none;
+    margin: 20px 0; 
+    padding: 15px; 
+    background-color: #d4edda; 
+    color: #155724; 
+    border: 1px solid #11dc41; 
+    font-size: 1.2em; 
+    font-weight: bold;
+}
+
+.flashes-error {
+    list-style-type: none;
+    margin: 20px 0; 
+    padding: 15px; 
+    background-color: #f8d7da;
+    color: #721c24; 
+    border: 1px solid #f44336; 
+    font-size: 1.2em; 
+    font-weight: bold;
 }
 
 .flashes li {
-    margin-bottom: 10px; /* Espacio entre los mensajes */
+    margin-bottom: 10px;
 
     .hamburger {
         display: block;

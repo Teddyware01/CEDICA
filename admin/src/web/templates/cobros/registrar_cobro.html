@@ -6,10 +6,14 @@
 <h1>Registrar Cobro</h1>
 <form method="POST" action="{{ url_for('cobros.registrar_cobro') }}">
     {{ form.hidden_tag() }}
-    
+
     <div class="form-group">
-        {{ form.jinete.label(class="form-label") }}
-        {{ form.jinete(class="form-control") }}
+        <label for="jinete" class="form-label">Selecciona un jinete</label>
+        <select name="jinete" id="jinete" class="form-control">
+            {% for jinete in jinetes_activados %}
+                <option value="{{ jinete.id }}">{{ jinete.nombre }} {{ jinete.apellido }}</option>
+            {% endfor %}
+        </select>
     </div>
 
     <div class="form-group">
@@ -28,9 +32,13 @@
     </div>
 
     <div class="form-group">
-        {{ form.recibido_por.label(class="form-label") }}
-        {{ form.recibido_por(class="form-control") }}
-    </div>
+        <label for="recibido_por" class="form-label">Selecciona el empleado que recibe el cobro</label>
+        <select name="recibido_por" id="recibido_por" class="form-control">
+            {% for empleado in empleados_disponibles %}
+                <option value="{{ empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
+            {% endfor %}
+        </select>
+    </div>    
 
     <div class="form-group">
         {{ form.observaciones.label(class="form-label") }}
@@ -38,5 +46,6 @@
     </div>
 
     {{ form.submit(class="btn btn-primary") }}
+
 </form>
 {% endblock %}

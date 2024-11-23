@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@unhead/vue": "^1.11.11",
+    "@vueuse/head": "^2.0.0",
     "axios": "^1.7.7",
     "pinia": "^2.2.6",
     "vue": "^3.5.12",

@@ -14,16 +14,20 @@ from src.web.controllers.pagos import pagos_bp
 from src.web.controllers.cobros import cobros_bp
 from src.web.controllers.ecuestre import bp as ecuestre_bp
 from src.web.controllers.auth import bp as auth_blueprint
+from src.web.controllers.contacto import bp as contacto_bp
 from flask_session import Session
 from src.web.handlers.auth import is_authenticated, check_permission
 from src.web.controllers.jya import bp as jya_bp
+from src.web.controllers.graficos import graficos_bp
+from src.web.controllers.reportes import reportes_bp
 from src.web.api.issues import bp as issues_api_bp
 from src.web.api.contenido import bp as contenido_api_bp
 from src.web.controllers.contenido import bp as noticias_bp
 from flask_cors import CORS
 
-session= Session()
+from authlib.integrations.flask_client import OAuth
 
+session= Session()
 #logging.basicConfig()
 #logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
@@ -42,13 +46,16 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(ecuestre_bp)
     app.register_blueprint(equipo_blueprint)
     app.register_blueprint(auth_blueprint)
+    app.register_blueprint(graficos_bp, url_prefix="/graficos")
+    app.register_blueprint(reportes_bp)
     app.register_blueprint(jya_bp)
+    app.register_blueprint(contacto_bp)
     
     app.register_blueprint(issues_api_bp)
     app.register_blueprint(contenido_api_bp)
     app.register_blueprint(noticias_bp)
     
-    
+
     @app.route("/")
     def home():
         return redirect(url_for("auth.login"))
@@ -78,6 +85,20 @@ def create_app(env="development", static_folder="../../static"):
     #ENABLE CORS
     CORS(app)
 
+    # Configuracion para el oAuth
+    oauth = OAuth(app)
+    oauth.register(
+        name='google',
+        client_id=app.config.get("OAUTH_GOOGLE_CLIENT_ID"),  # Carga desde la configuración
+        client_secret=app.config.get("OAUTH_GOOGLE_CLIENT_SECRET"),  # Carga desde la configuración
+        server_metadata_url=app.config.get("CONF_URL"),
+        client_kwargs={
+        'scope': 'openid email profile'
+        }
+    )
+
+    app.oauth = oauth   #para añadirlo al contexto de la app y poder referenciarlo
+
     @app.cli.command(name="reset-db")
     def reset_db():
         database.reset()
@@ -88,7 +109,7 @@ def create_app(env="development", static_folder="../../static"):
     
     # Reset y seeds automáticos al iniciar la app
     # Deberia sacarse la eliminacion de la base de datos a la hora de usarse en deploy.
-    #Lo comento porque me molesta a la hora de trabajar.
+    # Comentar si molesta a la hora de trabajar.
     with app.app_context():
         database.reset()  # Restablece la base de datos
         seeds.run()       # Ejecuta los seeds de la base de datos

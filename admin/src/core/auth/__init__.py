@@ -2,6 +2,8 @@ from src.core.database import db
 from src.core.auth.user import Users
 from src.core.auth.roles import Roles
 from src.core.auth.permisos import Permisos
+from sqlalchemy import func
+
 
 def find_user_by_email_and_password(email, password):
     user = Users.query.filter_by(email=email, password=password).first()
@@ -10,12 +12,50 @@ def find_user_by_email_and_password(email, password):
 def find_user_by_email(email):
     user = Users.query.filter_by(email=email).first()
     return user
-def list_users(sort_by=None, search=None, page=1, per_page=5):
+
+def filtrado_roles(role_filter, exact_match=False):
+    users = Users.query.all()
+    filtered_users = []
+    for user in users:
+        # Obtener los roles del usuario en una lista
+        user_roles = [role.nombre for role in user.roles]  
+
+        if exact_match:
+            # Filtrar por roles exactamente iguales
+            if sorted(user_roles) == sorted(role_filter):  
+                filtered_users.append(user)
+        else:
+            if any(role in role_filter for role in user_roles):
+                filtered_users.append(user)
+
+    return filtered_users
+
+def list_users(status_filter, role_filter=None, exact_match=None, sort_by=None, search=None, page=1, per_page=5):
     query = Users.query
+
+    # Filtrar por roles
+    if role_filter:
+        if exact_match:
+            # Filtrar usuarios con exactamente los roles seleccionados
+            filtered_users = filtrado_roles(role_filter, exact_match=True)
+            # Convertir la lista de usuarios filtrados en un query compatible para paginación
+            user_ids = [user.id for user in filtered_users]
+            query = query.filter(Users.id.in_(user_ids))
+        else:
+            # Filtrar usuarios que tienen al menos uno de los roles seleccionados
+            query = query.filter(Users.roles.any(Roles.nombre.in_(role_filter)))
+
+    # Filtrar por estado (activo/inactivo)
+    if status_filter == 'active':
+        query = query.filter(Users.activo == True)
+    elif status_filter == 'inactive':
+        query = query.filter(Users.activo == False)
+
+    # Filtrar por búsqueda (por email)
     if search:
-        query = query.filter(
-                Users.email.like(f"%{search}%"),   
-        )
+        query = query.filter(Users.email.like(f"%{search}%"))
+
+    # Aplicar ordenación
     if sort_by:
         if sort_by == "email_asc":
             query = query.order_by(Users.email.asc())
@@ -26,6 +66,7 @@ def list_users(sort_by=None, search=None, page=1, per_page=5):
         elif sort_by == "created_at_desc":
             query = query.order_by(Users.fecha_creacion.desc())
 
+    # Paginación
     paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
     return paginated_query
 
@@ -34,7 +75,6 @@ def create_user(**kwargs):
     User = Users(**kwargs)
     db.session.add(User)
     db.session.commit()
-
     return User
 
 
@@ -151,3 +191,12 @@ def get_permissions(user):
     print(f"Get roles= ", roles_usuario)
     print(f"Get permisos= ",permisos_usuario)
     return permisos_usuario
+
+def all_roles():
+    roles = Roles.query.all()
+    return roles
+
+
+def get_alias_por_id(user_id):
+    user = traer_usuario(user_id)
+    return user.alias

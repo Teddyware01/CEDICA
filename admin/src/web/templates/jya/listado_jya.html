@@ -10,59 +10,70 @@
 {% block content %}
     {{ super() }}
     <h1 class="text-center">Listado de jinetes</h1>
-    
-    <div class="actions">
-        <a href="{{ url_for('jya.add_jinete_form') }}" class="btn btn-add" style="margin: 10px 0;">Agregar jinete</a>
-    </div>
-    
+
+    {% if is_authenticated(session) and check_permission(session, "jya_create") %}
+        <div class="actions">
+            <a href="{{ url_for('jya.add_jinete_form') }}" class="btn btn-add" style="margin: 10px 0;">Agregar jinete</a>
+        </div>
+    {% endif %}
+
     <!-- Formulario de búsqueda y ordenamiento -->
     <form method="GET" action="{{ url_for('jya.listar_jinetes') }}" class="mb-3">
         <div class="form-row">
-            <div class="form-group col-6">
-                <label for="sort_by">Ordenar por:</label>
-                <select name="sort_by" id="sort_by" class="form-control">
-                    <option value="nombre_asc">Nombre (Ascendente)</option>
-                    <option value="nombre_desc">Nombre (Descendente)</option>
-                    <option value="apellido_asc">Apellido (Ascendente)</option>
-                    <option value="apellido_desc">Apellido (Descendente)</option>
-                </select>
+            <div class="form-group col-lg-4 col-12 ">
+                <label for="nombre">Buscar por Nombre:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Nombre" class="form-control" value="{{ request.args.get('nombre', '') }}">
             </div>
-            <div class="form-group col-6">
-                <label for="sort_by">Buscar:</label>
-                <input type="text" id="search" name="search" placeholder="Nombre, apellido, dni o profesionales" class="form-control" value="{{ request.args.get('search', '') }}">
+            <div class="form-group col-lg-4 col-12">
+                <label for="apellido">Buscar por Apellido:</label>
+                <input type="text" id="apellido" name="apellido" placeholder="Apellido" class="form-control" value="{{ request.args.get('apellido', '') }}">
+            </div>
+            <div class="form-group col-lg-4 col-12">
+                <label for="dni">Buscar por DNI:</label>
+                <input type="text" id="dni" name="dni" placeholder="DNI" class="form-control" value="{{ request.args.get('dni', '') }}">
             </div>
         </div>
         <div class="form-row">
-            <div class="form-group col-6">
-                <button type="submit" class="btn btn-sort">Ordenar</button>
+            <div class="form-group col-lg-4 col-12">
+                <label for="profesionales">Buscar por Profesionales:</label>
+                <input type="text" id="profesionales" name="profesionales" placeholder="Profesionales" class="form-control" value="{{ request.args.get('profesionales', '') }}">
             </div>
-            <div class="form-group col-6">
-                <button type="submit" class="btn btn-sort">Buscar</button>
+            <div class="form-group col-lg-4 col-12">
+                <label for="sort_by">Ordenar por:</label>
+                <select name="sort_by" id="sort_by" class="form-control">
+                    <option value="nombre_asc" {% if request.args.get('sort_by') == 'nombre_asc' %}selected{% endif %}>Nombre (Ascendente)</option>
+                    <option value="nombre_desc" {% if request.args.get('sort_by') == 'nombre_desc' %}selected{% endif %}>Nombre (Descendente)</option>
+                    <option value="apellido_asc" {% if request.args.get('sort_by') == 'apellido_asc' %}selected{% endif %}>Apellido (Ascendente)</option>
+                    <option value="apellido_desc" {% if request.args.get('sort_by') == 'apellido_desc' %}selected{% endif %}>Apellido (Descendente)</option>
+                </select>
+            </div>
+            <div class="form-group col-lg-4 col-12 text-center" style="margin: auto;">
+                <button type="submit" class="btn btn-sort">Buscar / ordenar</button>
             </div>
         </div>
     </form>
         
     <!-- Lista de jinetes -->
     {% if jinetes %}
-        <table class="table">
+        <table class="table d-none d-md-table">
             <thead>
                 <tr>
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>DNI</th>
                     <th>Profesionales</th>
-                    <th>Estado de Pago</th>
+                    <th>Estado de pago</th>
                     <th>Acciones</th>
                 </tr>
             </thead>            
             <tbody>
                 {% for jinete in jinetes %}
                     <tr>
-                        <td>{{ jinete.nombre }}</td>
-                        <td>{{ jinete.apellido }}</td>
-                        <td>{{ jinete.dni }}</td>
-                        <td>{{ jinete.profesionales }}</td>
-                        <td>
+                        <td data-label="Nombre">{{ jinete.nombre }}</td>
+                        <td data-label="Apellido">{{ jinete.apellido }}</td>
+                        <td data-label="DNI">{{ jinete.dni }}</td>
+                        <td data-label="Profesionales">{{ jinete.profesionales }}</td>
+                        <td data-label="Estado de Pago">
                             {% if jinete.estado_pago %}
                                 <span class="badge badge-success">Al día</span>
                             {% else %}
@@ -72,54 +83,81 @@
                         <td>
                             <!-- Botones visibles solo en pantallas grandes -->
                             <div class="btn-group d-none d-lg-block">
-                                <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="btn btn-view">Ver jinete</a>
-                                <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Modificar jinete</a>
-                                <a href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}" class="btn btn-delete">Eliminar jinete</a>
+                                {% if is_authenticated(session) and check_permission(session, "jya_view") %}
+                                    <a href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}" class="btn btn-view">Ver</a>
+                                {% endif %}
+                                {% if is_authenticated(session) and check_permission(session, "jya_update") %}
+                                    <a href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}" class="btn btn-edit">Modificar</a>
+                                {% endif %}
+                                {% if is_authenticated(session) and check_permission(session, "jya_destroy") %}
+                                    <a href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}" class="btn btn-delete">Eliminar</a>
+                                {% endif %}
                             </div>
-                            <!-- Botón desplegable visible solo en pantallas pequeñas -->
-                            <div class="dropdown action-dropdown d-block d-lg-none">
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ jinete.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Acciones
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ jinete.id }}">
-                                    <a class="dropdown-item" href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}">Ver jinete</a>
-                                    <a class="dropdown-item" href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}">Modificar jinete</a>
-                                    <a class="dropdown-item" href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}">Eliminar jinete</a>
-                                </div>
-                            </div>
-
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    var actionButtons = document.querySelectorAll('.action-dropdown .dropdown-toggle');
-                    var actionMenus = document.querySelectorAll('.action-dropdown .dropdown-menu');
-                    actionButtons.forEach(function(button, index) {
-                        button.addEventListener('click', function(event) {
-                            event.stopPropagation();
-                            var currentMenu = actionMenus[index];
-                            currentMenu.style.display = currentMenu.style.display === 'block' ? 'none' : 'block';
-                        });
+        </table >
+        <div class="caja d-md-none">
+            {% for jinete in jinetes %}
+                <div class="caja-separadora">
+                    <p><strong>Nombre:</strong> {{ jinete.nombre }}</p>
+                    <p><strong>Apellido:</strong> {{ jinete.apellido }}</p>
+                    <p><strong>DNI:</strong> {{ jinete.dni }}</p>
+                    <p><strong>Profesionales:</strong> {{ jinete.profesionales }}</p>
+                    <p><strong>Estado de Pago:</strong>
+                        {% if jinete.estado_pago %}
+                            <span class="badge badge-success">Al día</span>
+                        {% else %}
+                            <span class="badge badge-danger">En deuda</span>
+                        {% endif %}
+                    </p>
+                    <div class="dropdown action-dropdown d-block d-lg-none">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ jinete.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Acciones
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ jinete.id }}">
+                            {% if is_authenticated(session) and check_permission(session, "jya_view") %}
+                                <a class="dropdown-item" href="{{ url_for('jya.view_jinete', jinete_id=jinete.id) }}">Ver</a>
+                            {% endif %}
+                            {% if is_authenticated(session) and check_permission(session, "jya_update") %}
+                                <a class="dropdown-item" href="{{ url_for('jya.edit_jinete_form', jinete_id=jinete.id) }}">Modificar</a>
+                            {% endif %}
+                            {% if is_authenticated(session) and check_permission(session, "jya_destroy") %}
+                                <a class="dropdown-item" href="{{ url_for('jya.delete_jinete_form', jinete_id=jinete.id) }}">Eliminar</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var actionButtons = document.querySelectorAll('.action-dropdown .dropdown-toggle');
+                var actionMenus = document.querySelectorAll('.action-dropdown .dropdown-menu');
+                actionButtons.forEach(function(button, index) {
+                    button.addEventListener('click', function(event) {
+                        event.stopPropagation();
+                        var currentMenu = actionMenus[index];
+                        currentMenu.style.display = currentMenu.style.display === 'block' ? 'none' : 'block';
                     });
-                    window.onclick = function(event) {
-                        if (!event.target.matches('.dropdown-toggle')) {
-                            actionMenus.forEach(function(menu) {
-                                if (menu.style.display === 'block') {
-                                    menu.style.display = 'none';
-                                }
-                            });
-                        }
-                    };
                 });
-            </script>
-        </table>
+                window.onclick = function(event) {
+                    if (!event.target.matches('.dropdown-toggle')) {
+                        actionMenus.forEach(function(menu) {
+                            if (menu.style.display === 'block') {
+                                menu.style.display = 'none';
+                            }
+                        });
+                    }
+                };
+            });
+        </script>
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
                 {% if jinetes.has_prev %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.prev_num, sort_by=sort_by, search=search) }}"aria-label="Next">
+                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.prev_num, sort_by=request.args.get('sort_by', ''), nombre=request.args.get('nombre', ''), apellido=request.args.get('apellido', ''), dni=request.args.get('dni', ''), profesionales=request.args.get('profesionales', '') ) }}"aria-label="Next">
                         <span aria-hidden="true">&laquo;</span></a>
                     </li>
                 {% endif %}
@@ -127,7 +165,7 @@
                 {% for page_num in jinetes.iter_pages() %}
                     {% if page_num %}
                         <li class="page-item {% if page_num == jinetes.page %}active{% endif %}">
-                            <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=page_num) }}">{{ page_num }}</a>
+                            <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=page_num, sort_by=request.args.get('sort_by', ''), nombre=request.args.get('nombre', ''), apellido=request.args.get('apellido', ''), dni=request.args.get('dni', ''), profesionales=request.args.get('profesionales', '') ) }}">{{ page_num }}</a>
                         </li>
                     {% else %}
                         <li class="page-item disabled"><span class="page-link">…</span></li>
@@ -136,7 +174,7 @@
         
                 {% if jinetes.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.next_num, sort_by=sort_by, search=search) }}"aria-label="Next">
+                        <a class="page-link" href="{{ url_for('jya.listar_jinetes', page=jinetes.next_num, sort_by=request.args.get('sort_by', ''), nombre=request.args.get('nombre', ''), apellido=request.args.get('apellido', ''), dni=request.args.get('dni', ''), profesionales=request.args.get('profesionales', '') ) }}"aria-label="Next">
                             <span aria-hidden="true">&raquo;</span></a>
                     </li>
                 {% endif %}

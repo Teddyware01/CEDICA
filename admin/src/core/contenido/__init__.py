@@ -3,13 +3,30 @@ from .contenido import Contenido
 from src.core.auth import Users
 from src.core.auth import traer_usuario
 
-
+from .contenido import EstadoContenidoEnum
 
 def list_contenido(page=1, per_page=5):
     query = db.session.query(Contenido, Users.alias).join(Users, Contenido.autor_user_id == Users.id)
     paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
     return paginated_query
 
+def list_contenido_published():
+    contenido = Contenido.query.filter_by(estado=EstadoContenidoEnum.PUBLICADO).all()
+    print("SE LISTA TODO EL CONTENIDO <<PUBLISHED>>, que son:", len(contenido))
+    return contenido
+
+
+def get_contenido_id(id):
+    contenido = Contenido.query.get(id)
+    if not contenido:
+        return {"error": "Contenido no encontrado"}, 404
+    return contenido
+
+def get_contenido_id(id):
+    contenido = Contenido.query.get(id)
+    if not contenido:
+        return {"error": "Contenido no encontrado"}, 404
+    return contenido
 
 def create_contenido(**kwargs):
     contenido = Contenido(**kwargs)
