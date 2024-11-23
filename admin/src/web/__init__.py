@@ -84,6 +84,7 @@ def create_app(env="development", static_folder="../../static"):
 
     #ENABLE CORS
     CORS(app)
+    
 
     # Configuracion para el oAuth
     oauth = OAuth(app)

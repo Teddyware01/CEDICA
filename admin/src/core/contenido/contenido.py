@@ -6,7 +6,7 @@ from enum import Enum
 # Pueden haber mas o ser cambiados...
 class TipoContenidoEnum(Enum):
     ARTICULO_INFO='Articulo informativo'
-    PUBLICACION='Publicicacion'
+    PUBLICACION='Publicacion'
     AVISO_EVENTO='Notificacion de evento'
     
 class EstadoContenidoEnum(Enum):

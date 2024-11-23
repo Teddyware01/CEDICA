@@ -18,44 +18,46 @@
 
 {% block content %}
     <h1 class="text-center">{{ noticia.titulo }}</h1>
-    
-    <!-- Resumen con scroll -->
-    <div class="section">
-        <h3>Copete</h3>
-        <div class="content-scroll">
-            <p>{{ noticia.copete }}</p>
-        </div>
-    </div>
+    <div class="caja">
 
-    <!-- Contenido Completo con scroll -->
-    <div class="section">
-        <h3>Contenido Completo</h3>
-        <div class="content-scroll">
-            <p>{{ noticia.contenido }}</p>
+        <!-- Resumen con scroll -->
+        <div class="section">
+            <h3>Copete</h3>
+            <div class="content-scroll">
+                <p>{{ noticia.copete }}</p>
+            </div>
         </div>
-    </div>
-    
-        <h5>Tipo de Publicacion: {{ noticia.tipo.value }} </h5>
-        
-        
-    <!-- Fechas -->
-    <div class="section">
-        <ul>
-            <li><strong>Fecha de Creación:</strong> {{ noticia.inserted_at.strftime('%d/%m/%Y %H:%M') }}</li>
-            <li><strong>Última Modificación:</strong> {{ noticia.updated_at.strftime('%d/%m/%Y %H:%M') }}</li>
-            {% if noticia.estado.value == 'Publicado' %}
-                <li><strong>Fecha de Publicación:</strong> {{ noticia.published_at.strftime('%d/%m/%Y %H:%M') }}</li>
-            {% endif %}
-        </ul>
-    </div>
 
-    <!-- Datos del Autor con scroll -->
-    <div class="section">
-        <h3>Datos del Autor</h3>
-        <div class="content-scroll">
-            <p><strong>Alias:</strong> {{ autor.alias }}</p>
-            <p><strong>Email:</strong> {{ autor.email }}</p>
-            <p><strong>Estado:</strong> {% if autor.activo %}Activo{% else %}Inactivo{% endif %}</p>
+        <!-- Contenido Completo con scroll -->
+        <div class="section">
+            <h3>Contenido Completo</h3>
+            <div class="content-scroll">
+                <p>{{ noticia.contenido }}</p>
+            </div>
+        </div>
+        
+            <h5>Tipo de Publicacion: {{ noticia.tipo.value }} </h5>
+            
+            
+        <!-- Fechas -->
+        <div class="section">
+            <ul>
+                <li><strong>Fecha de Creación:</strong> {{ noticia.inserted_at.strftime('%d/%m/%Y %H:%M') }}</li>
+                <li><strong>Última Modificación:</strong> {{ noticia.updated_at.strftime('%d/%m/%Y %H:%M') }}</li>
+                {% if noticia.estado.value == 'Publicado' %}
+                    <li><strong>Fecha de Publicación:</strong> {{ noticia.published_at.strftime('%d/%m/%Y %H:%M') }}</li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Datos del Autor con scroll -->
+        <div class="section">
+            <h3>Datos del Autor</h3>
+            <div class="content-scroll">
+                <p><strong>Alias:</strong> {{ autor.alias }}</p>
+                <p><strong>Email:</strong> {{ autor.email }}</p>
+                <p><strong>Estado:</strong> {% if autor.activo %}Activo{% else %}Inactivo{% endif %}</p>
+            </div>
         </div>
     </div>
 
@@ -72,4 +74,5 @@
         {% endif %}
         <a href="{{ url_for('noticias.eliminar_noticia', noticia_id=noticia.id) }}" class="btn btn-delete">Eliminar</a>
     </div>
+    
 {% endblock %}

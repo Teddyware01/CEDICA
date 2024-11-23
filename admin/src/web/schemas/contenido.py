@@ -18,15 +18,20 @@ class ContenidoSchema(Schema):
         validate=Length(max=500, error="El copete no puede tener más de 500 caracteres.")
     )
     contenido = fields.Str(required=True)
-    fecha_publicacion = fields.DateTime(allow_none=True)
-    fecha_creacion = fields.DateTime(dump_only=True)
-    fecha_actualizacion = fields.DateTime(dump_only=True)
     
+    published_at = fields.DateTime(allow_none=True)
+    inserted_at = fields.DateTime(dump_only=True)
+    updated_at = fields.DateTime(dump_only=True)
+    estado = fields.Str(
+        validate=OneOf([e.value for e in EstadoContenidoEnum]), required=False
+    )
     tipo = fields.Str(
         validate=OneOf(TIPOS_CONTENIDO, error="Tipo de contenido no válido."),
         required=True
     )
-    
+
+    autor_user_id = fields.Int()
+
 
 
     @post_dump

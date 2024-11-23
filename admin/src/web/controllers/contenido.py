@@ -17,7 +17,7 @@ tipos_contenido = [tipo.value for tipo in TipoContenidoEnum]
 @check("noticia_index")
 def listar_noticias():
     page = request.args.get("page", type=int, default=1)
-    contenidos = contenido.list_contenido(page=page, per_page=5)
+    contenidos = contenido.list_contenido(page=page, per_page=3)
     return render_template("contenido/listado_noticia.html", noticias=contenidos)
 
 
