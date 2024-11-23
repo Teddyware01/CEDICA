@@ -18,7 +18,7 @@
     <!-- Información general -->
     <div id="general" class="tab-content {% if active_tab == 'general' %}active{% endif %}">
         <div class="caja">
-            <h2><strong> DATOS PERSONALES DEL JINETE O AMAZONA </strong></h2>
+            <h3>DATOS PERSONALES DEL JINETE O AMAZONA:</h3>
 
             <p><strong>Nombre/s:</strong> {{ jinete.nombre }}</p>
             <p><strong>Apellido/s:</strong> {{ jinete.apellido }}</p>
@@ -58,14 +58,14 @@
             {% endif  %}
         </div>
         <div class="caja">
-        <h2><strong> SITUACIÓN PREVISIONAL </strong></h2>
+        <h3> SITUACIÓN PREVISIONAL:</h3>
             <p><strong>Obra social del alumno:</strong> {{ jinete.obra_social }}</p>
             <p><strong>N° afiliado:</strong> {{ jinete.nro_afiliado }}</p>
             <p><strong>¿Posee curatela?</strong> {{"SI" if jinete.curatela else "NO" }}</p>
             <p><strong>Observaciones:</strong> {{ jinete.observaciones_curatela }}</p>
         </div>
         <div class="caja">
-            <h2><strong> INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE </strong></h2>
+            <h3>INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE:</h3>
             <p><strong>Nombre de la Institución: </strong> {{ jinete.nombre_institucion }}</p>
             <p><strong>Dirección: </strong> <strong>Calle: </strong>{{ jinete.direccion.calle }}, 
                 <strong>numero: </strong>{{ jinete.direccion.numero }}, 
@@ -76,7 +76,7 @@
             <p><strong>PROFESIONALES que lo ATIENDEN: </strong> {{ jinete.profesionales }}</p>
         </div>
         <div class="caja">
-            <h2><strong> DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s </strong></h2>
+            <h3>DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s:</h3>
             {% if jinete.familiares %}
                 {% for familiar in jinete.familiares %}
                     <div>
@@ -99,7 +99,7 @@
             {% endif %}         
         </div>
         <div class="caja">
-            <h2><strong> TRABAJO EN NUESTRA INSTITUCIÓN </strong></h2>
+            <h3>TRABAJO EN NUESTRA INSTITUCIÓN:</h3>
             <p><strong>Propuesta de trabajo institucional:</strong> {{ jinete.trabajo_institucional.value }}</p>
             <p><strong>Condición:</strong> {{ "REGULAR" if jinete.condicion else "DE BAJA" }}</p>
             <p><strong>SEDE:</strong> {{ jinete.sede.value }}</p>
@@ -178,7 +178,7 @@
 
 
         <!-- Lista de documentos -->
-        <h2>Documentos y enlaces:</h2>
+        <h3>Documentos y enlaces:</h3>
         {% if documentos %}
             <table class="table">
                 <thead>

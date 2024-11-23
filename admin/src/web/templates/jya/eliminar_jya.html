@@ -9,21 +9,11 @@
 
 {% block content %}
     <h1 class="text-center">Eliminar jinete</h1>
-    <div id="general">
-        <div>
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" value="{{ jinete.nombre }}" readonly>
-        </div>
 
-        <div>
-            <label for="apellido">Apellido</label>
-            <input type="text" id="apellido" name="apellido" value="{{ jinete.apellido }}" readonly>
-        </div>
-
-        <div>
-            <label for="dni">Dni</label>
-            <input type="text" id="dni" name="dni" value="{{ jinete.dni }}" readonly>
-        </div>
+    <div class="caja">
+        <h5><strong>Nombre:</strong> {{jinete.nombre}}</h5>
+        <h5><strong>Apellido:</strong> {{jinete.apellido}}</h5>
+        <h5><strong>DNI:</strong> {{jinete.dni}}</h5>
     </div>
 
     <div>

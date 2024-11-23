@@ -47,9 +47,13 @@
                                 <a class="nav-link" href="{{ url_for('pagos.listar_pagos') }}">Pagos</a>
                             {% endif %}
                             {% if is_authenticated(session) and check_permission(session,"cobro_index") %}
-                                <a class="nav-link" href="{{ url_for('cobros.listar_cobros') }}">Cobros</a>
+                            <a class="nav-link" href="{{ url_for('cobros.listar_cobros') }}">Cobros</a>
                             {% endif %}
-                            {% if is_authenticated(session) and check_permission(session,"user_index") %}
+                            {% if is_authenticated(session) and check_permission(session,"noticia_index") %}
+                            <a class="nav-link" href="{{ url_for('noticias.listar_noticias') }}">Noticias</a>
+                            {% endif %}
+
+                            {% if is_authenticated(session) and check_permission(session,"contacto_index") %}
                                 <a class="nav-link" href="{{ url_for('contacto.listar_consultas') }}">Consultas</a>
                             {% endif %}
                             {% if is_authenticated(session) and check_permission(session,"grafico_index") %}
@@ -69,8 +73,7 @@
                                 <i class="fas fa-user-circle"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                                {% if user and is_authenticated(session) %}
-                                    <a class="dropdown-item" href="{{ url_for("users.mostrar_usuario", user_id=user.id) }}" role="button">Perfil</a>
+                                {% if is_authenticated(session) %}
                                     <a class="dropdown-item" href="{{ url_for("auth.logout") }}" role="button">Cerrar sesión</a>
                                 {% else %}
                                     <a class="dropdown-item" href="{{ url_for("auth.login") }}" role="button">Iniciar sesión</a>

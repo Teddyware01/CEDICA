@@ -19,14 +19,14 @@
 
 {% if is_authenticated(session) and check_permission(session, "pago_create") %}
 <div class="actions">
-    <a href="{{ url_for('pagos.registrar_pago') }}" class="btn btn-add">Registrar Pago</a>
+    <a href="{{ url_for('pagos.registrar_pago') }}" class="btn btn-add">Registrar pago</a>
 </div>
 {% endif %}
 
 <form method="GET" action="{{ url_for('pagos.listar_pagos') }}" class="mb-3 search-form">
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="tipo_pago">Tipo de Pago:</label>
+            <label for="tipo_pago">Tipo de pago:</label>
             <select id="tipo_pago" name="tipo_pago" class="form-control">
                 <option value="">Todos</option>
                 <option value="honorario" {% if tipo_pago == 'honorario' %}selected{% endif %}>Honorarios</option>
@@ -36,12 +36,12 @@
         </div>
 
         <div class="form-group col-md-4">
-            <label for="fecha_inicio">Fecha Inicio:</label>
+            <label for="fecha_inicio">Fecha inicio:</label>
             <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" value="{{ fecha_inicio }}">
         </div>
 
         <div class="form-group col-md-4">
-            <label for="fecha_fin">Fecha Fin:</label>
+            <label for="fecha_fin">Fecha fin:</label>
             <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" value="{{ fecha_fin }}">
         </div>
     </div>
@@ -71,8 +71,8 @@
         <tr>
             <th>Beneficiario</th>
             <th>Monto</th>
-            <th>Fecha de Pago</th>
-            <th>Tipo de Pago</th>
+            <th>Fecha de pago</th>
+            <th>Tipo de pago</th>
             <th>Descripción</th>
             <th>Acciones</th>
         </tr>
@@ -86,11 +86,11 @@
             <td>{{ pago.tipo_pago.capitalize() }}</td>
             <td>{{ pago.descripcion }}</td>
             <td>
-                {% if is_authenticated(session) and check_permission(session, "pago_destroy") %}
-                <a href="{{ url_for('pagos.confirmar_eliminacion', id=pago.id) }}" class="btn btn-danger">Eliminar</a>
-                {% endif %}
                 {% if is_authenticated(session) and check_permission(session, "pago_update") %}
                 <a href="{{ url_for('pagos.editar_pago', id=pago.id) }}" class="btn btn-edit">Modificar</a>
+                {% endif %}
+                {% if is_authenticated(session) and check_permission(session, "pago_destroy") %}
+                <a href="{{ url_for('pagos.confirmar_eliminacion', id=pago.id) }}" class="btn btn-danger">Eliminar</a>
                 {% endif %}
             </td>
         </tr>

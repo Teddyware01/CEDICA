@@ -18,20 +18,20 @@
         </select>
     </div>
 
-    <div class="form-group">
-        {{ form.fecha_pago.label(class="form-label") }}
-        {{ form.fecha_pago(class="form-control") }}
-    </div>
+        <div class="form-group">
+            {{ form.fecha_pago.label(class="form-label") }}
+            {{ form.fecha_pago(class="form-control") }}
+        </div>
 
-    <div class="form-group">
-        {{ form.medio_pago.label(class="form-label") }}
-        {{ form.medio_pago(class="form-control") }}
-    </div>
+        <div class="form-group">
+            {{ form.medio_pago.label(class="form-label") }}
+            {{ form.medio_pago(class="form-control") }}
+        </div>
 
-    <div class="form-group">
-        {{ form.monto.label(class="form-label") }}
-        {{ form.monto(class="form-control") }}
-    </div>
+        <div class="form-group">
+            {{ form.monto.label(class="form-label") }}
+            {{ form.monto(class="form-control") }}
+        </div>
 
     <div class="form-group">
         <label for="recibido_por" class="form-label">Selecciona el empleado que recibe el cobro</label>
@@ -50,6 +50,7 @@
         {{ form.observaciones(class="form-control") }}
     </div>
 
-    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    <button type="submit" class="btn btn-add">Guardar Cambios</button>
+    <a href="{{ url_for('cobros.listar_cobros') }}" class="btn btn-back">Cancelar</a>
 </form>
 {% endblock %}

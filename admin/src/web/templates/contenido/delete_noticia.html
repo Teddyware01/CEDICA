@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}Eliminar Noticia{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Eliminar Noticia</h1>
+
+    <!-- Campo: Título -->
+    <div class="form-group">
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" name="titulo" value="{{ noticia.titulo }}" readonly>
+    </div>
+
+    <!-- Campo: Tipo de Contenido -->
+    <div class="form-group">
+        <label for="tipo">Tipo</label>
+        <input type="text" id="tipo" name="tipo" value="{{ noticia.tipo.value }}" readonly>
+    </div>
+
+    <!-- Campo: Estado -->
+    <div class="form-group">
+        <label for="estado">Estado</label>
+        <input type="text" id="estado" name="estado" value="{{ noticia.estado.value }}" readonly>
+    </div>
+
+
+    <p>¿Estás seguro de que deseas eliminar esta noticia?</p>
+
+    <!-- Acciones -->
+    <div class="form-actions">
+        <form action="{{ url_for('noticias.confirmar_eliminacion', noticia_id=noticia.id) }}" method="POST">
+            <button type="submit" class="btn btn-danger">Confirmar</button>
+        </form>
+        <a href="{{ url_for('noticias.listar_noticias') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
+{% endblock %}
