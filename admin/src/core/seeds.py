@@ -1526,6 +1526,23 @@ def run():
         ),
     ]
 
+    contacto.add_consulta( 
+        nombre="Juan Diaz",
+        email="juan@gmail.com",
+        mensaje="Quiero averiguar precios para tener una sesion"
+    )
+    contacto.add_consulta( 
+        nombre="Martin",
+        email="martinds@gmail.com",
+        mensaje="Quiero averiguar turnos."
+    )
+    contacto.add_consulta( 
+        nombre="Martin Anto",
+        email="martinanto@gmail.com",
+        mensaje="Hola como me contacto?"
+    )
+    
+
     # Insertar datos en la base de datos
     db.session.bulk_save_objects(contenidos)
     db.session.commit()
