@@ -113,7 +113,7 @@ def destroy_empleado(empleado_id):
 def add_empleado():
 
     form = AddEmpleadoForm(request.form)
-    email = form.email
+    email = str(form.email.data) 
     # Validar el email
     try:
         # Se valida y normaliza el email
@@ -244,7 +244,7 @@ def update_empleado(empleado_id):
     form.obj=empleado
     # Cargar las opciones para los campos de selección
     cargar_choices_form(form=form)
-    email = form.email
+    email = str(form.email.data) 
     try:
         # Se valida y normaliza el email
         valid_email = validate_email(email)
