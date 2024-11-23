@@ -4,6 +4,7 @@
 
 {% block head %}
     {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -11,147 +12,120 @@
     <h1 class="text-center">Listado de caballos</h1>
 
     <div class="actions">
-      <a href="{{ url_for('ecuestre.add_ecuestre_form') }}" class="btn btn-add"  style="margin: 10px 0;">Agregar ecuestre</a>
+        <a href="{{ url_for('ecuestre.add_ecuestre_form') }}" class="btn btn-add" style="margin: 10px 0;">Agregar ecuestre</a>
     </div>
-    
+
+    <!-- Formulario de búsqueda y ordenamiento -->
     <form method="GET" action="{{ url_for('ecuestre.listar_ecuestre') }}" class="mb-3">
-      <div class="form-row">
-        <div class="form-group col-6">
-          <label for="sort_by">Ordenar por:</label>
-          <select name="sort_by" id="sort_by" class="form-control">
-            <option value="nombre_asc" {% if request.args.get('sort_by') == 'nombre_asc' %}selected{% endif %}>Nombre (Ascendente)</option>
-            <option value="nombre_desc" {% if request.args.get('sort_by') == 'nombre_desc' %}selected{% endif %}>Nombre (Descendente)</option>
-            <option value="fecha_nacimiento_asc" {% if request.args.get('sort_by') == 'fecha_nacimiento_asc' %}selected{% endif %}>Fecha de Nacimiento (Ascendente)</option>
-            <option value="fecha_nacimiento_desc" {% if request.args.get('sort_by') == 'fecha_nacimiento_desc' %}selected{% endif %}>Fecha de Nacimiento (Descendente)</option>
-            <option value="fecha_ingreso_asc" {% if request.args.get('sort_by') == 'fecha_ingreso_asc' %}selected{% endif %}>Fecha de Ingreso (Ascendente)</option>
-            <option value="fecha_ingreso_desc" {% if request.args.get('sort_by') == 'fecha_ingreso_desc' %}selected{% endif %}>Fecha de Ingreso (Descendente)</option>
-          </select>
+        <div class="form-row">
+            <div class="form-group col-lg-6 col-12">
+                <label for="sort_by">Ordenar por:</label>
+                <select name="sort_by" id="sort_by" class="form-control">
+                    <option value="nombre_asc" {% if request.args.get('sort_by') == 'nombre_asc' %}selected{% endif %}>Nombre (Ascendente)</option>
+                    <option value="nombre_desc" {% if request.args.get('sort_by') == 'nombre_desc' %}selected{% endif %}>Nombre (Descendente)</option>
+                    <option value="fecha_nacimiento_asc" {% if request.args.get('sort_by') == 'fecha_nacimiento_asc' %}selected{% endif %}>Fecha de Nacimiento (Ascendente)</option>
+                    <option value="fecha_nacimiento_desc" {% if request.args.get('sort_by') == 'fecha_nacimiento_desc' %}selected{% endif %}>Fecha de Nacimiento (Descendente)</option>
+                    <option value="fecha_ingreso_asc" {% if request.args.get('sort_by') == 'fecha_ingreso_asc' %}selected{% endif %}>Fecha de Ingreso (Ascendente)</option>
+                    <option value="fecha_ingreso_desc" {% if request.args.get('sort_by') == 'fecha_ingreso_desc' %}selected{% endif %}>Fecha de Ingreso (Descendente)</option>
+                </select>
+            </div>
+            <div class="form-group col-lg-6 col-12">
+                <label for="search">Buscar:</label>
+                <input type="text" id="search" name="search" placeholder="Nombre" class="form-control" value="{{ request.args.get('search', '') }}">
+            </div>
         </div>
-        <div class="form-group col-6">
-          <label for="search">Buscar:</label>
-          <input type="text" id="search" name="search" placeholder="Nombre" class="form-control" value="{{ request.args.get('search', '') }}">
+        <div class="form-row">
+            <div class="form-group col-12 text-center">
+                <button type="submit" class="btn btn-sort">Buscar / Ordenar</button>
+            </div>
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-6">
-          <button type="submit" class="btn btn-sort">Ordenar</button>
-        </div>
-        <div class="form-group col-6">
-          <button type="submit" class="btn btn-sort">Buscar</button>
-        </div>
-      </div>
     </form>
-    
-    
+
+    <!-- Listado de caballos -->
     {% if ecuestre %}
+        <!-- Tabla para pantallas grandes -->
+        <table class="table d-none d-md-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>Fecha de Ingreso</th>
+                    <th>Sexo</th>
+                    <th>Raza</th>
+                    <th>Pelaje</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ecuestre in ecuestre %}
+                    <tr>
+                        <td>{{ ecuestre.nombre }}</td>
+                        <td>{{ ecuestre.fecha_nacimiento }}</td>
+                        <td>{{ ecuestre.fecha_ingreso }}</td>
+                        <td>{{ "Macho" if ecuestre.sexo else "Hembra" }}</td>
+                        <td>{{ ecuestre.raza }}</td>
+                        <td>{{ ecuestre.pelaje }}</td>
+                        <td>
+                            <div class="btn-group d-none d-lg-block">
+                                <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}" class="btn btn-view">Ver</a>
+                                <a href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-edit">Modificar</a>
+                                <a href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-delete">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Fecha de Nacimiento</th>
-                <th>Fecha de Ingreso</th>
-                <th>Sexo</th>
-                <th>Raza</th>
-                <th>Pelaje</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for ecuestre in ecuestre %}
-            <tr>
-                <td>{{ ecuestre.nombre }}</td>
-                <td>{{ ecuestre.fecha_nacimiento }}</td>
-                <td>{{ ecuestre.fecha_ingreso }}</td>
-                <td>{{ "Macho" if ecuestre.sexo else "Hembra" }}</td>
-                <td>{{ ecuestre.raza }}</td>
-                <td>{{ ecuestre.pelaje }}</td>
-                <td>
-                  <div class="btn-group d-none d-lg-block">
-                    <a href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}" class="btn btn-view">Ver</a>
-                    <a href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-edit">Modificar</a>
-                    <a href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}" class="btn btn-delete">Eliminar</a>
+        <!-- Vista en formato tarjeta para pantallas pequeñas -->
+        <div class="caja d-md-none">
+            {% for ecuestre in ecuestre %}
+                <div class="caja-separadora">
+                    <p><strong>Nombre:</strong> {{ ecuestre.nombre }}</p>
+                    <p><strong>Fecha de Nacimiento:</strong> {{ ecuestre.fecha_nacimiento }}</p>
+                    <p><strong>Fecha de Ingreso:</strong> {{ ecuestre.fecha_ingreso }}</p>
+                    <p><strong>Sexo:</strong> {{ "Macho" if ecuestre.sexo else "Hembra" }}</p>
+                    <p><strong>Raza:</strong> {{ ecuestre.raza }}</p>
+                    <p><strong>Pelaje:</strong> {{ ecuestre.pelaje }}</p>
+                    <div class="dropdown action-dropdown d-block d-lg-none">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ ecuestre.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Acciones
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ ecuestre.id }}">
+                            <a class="dropdown-item" href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}">Ver</a>
+                            <a class="dropdown-item" href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}">Modificar</a>
+                            <a class="dropdown-item" href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}">Eliminar</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="dropdown action-dropdown d-block d-lg-none">
-                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ ecuestre.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Acciones
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ ecuestre.id }}">
-                      <a class="dropdown-item" href="{{ url_for('ecuestre.ver_ecuestre', ecuestre_id=ecuestre.id) }}">Ver</a>
-                      <a class="dropdown-item" href="{{ url_for('ecuestre.edit_ecuestre_form', ecuestre_id=ecuestre.id) }}">Modificar</a>
-                      <a class="dropdown-item" href="{{ url_for('ecuestre.delete_ecuestre_form', ecuestre_id=ecuestre.id) }}">Eliminar</a>
-                  </div>
-              </div>
+            {% endfor %}
+        </div>
 
-              </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-        <script>
-          document.addEventListener('DOMContentLoaded', function() {
-              var actionButtons = document.querySelectorAll('.action-dropdown .dropdown-toggle');
-              var actionMenus = document.querySelectorAll('.action-dropdown .dropdown-menu');
-              actionButtons.forEach(function(button, index) {
-                  button.addEventListener('click', function(event) {
-                      event.stopPropagation();
-                      var currentMenu = actionMenus[index];
-                      currentMenu.style.display = currentMenu.style.display === 'block' ? 'none' : 'block';
-                  });
-              });
-              window.onclick = function(event) {
-                  if (!event.target.matches('.dropdown-toggle')) {
-                      actionMenus.forEach(function(menu) {
-                          if (menu.style.display === 'block') {
-                              menu.style.display = 'none';
-                          }
-                      });
-                  }
-              };
-          });
-      </script>
-    </table>
-    <nav aria-label="Page navigation">
-      <ul class="pagination">
-        {% if ecuestre.has_prev %}
-          <li class="page-item">
-            <a class="page-link" href="{{ url_for('ecuestre.listar_ecuestre', page=ecuestre.prev_num, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-        {% endif %}
-    
-        {% if ecuestre.page > 1 %}
-          <li class="page-item">
-            <a class="page-link" href="{{ url_for('ecuestre.listar_ecuestre', page=ecuestre.page - 1, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}">
-              {{ ecuestre.page - 1 }}
-            </a>
-          </li>
-        {% endif %}
-    
-        <li class="page-item active">
-          <a class="page-link">{{ ecuestre.page }}</a>
-        </li>
-    
-        {% if ecuestre.page < ecuestre.pages %}
-          <li class="page-item">
-            <a class="page-link" href="{{ url_for('ecuestre.listar_ecuestre', page=ecuestre.page + 1, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}">
-              {{ ecuestre.page + 1 }}
-            </a>
-          </li>
-        {% endif %}
-    
-        {% if ecuestre.has_next %}
-          <li class="page-item">
-            <a class="page-link" href="{{ url_for('ecuestre.listar_ecuestre', page=ecuestre.next_num, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        {% endif %}
-      </ul>
-    </nav> 
+        <!-- Paginación -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if ecuestre.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('ecuestre.listar_ecuestre', page=ecuestre.prev_num, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}">&laquo;</a>
+                    </li>
+                {% endif %}
+                {% for page_num in ecuestre.iter_pages() %}
+                    {% if page_num %}
+                        <li class="page-item {% if page_num == ecuestre.page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('ecuestre.listar_ecuestre', page=page_num, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}">{{ page_num }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                    {% endif %}
+                {% endfor %}
+                {% if ecuestre.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('ecuestre.listar_ecuestre', page=ecuestre.next_num, sort_by=request.args.get('sort_by', ''), search=request.args.get('search', '')) }}">&raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
     {% else %}
         <p>No hay caballos para mostrar.</p>
     {% endif %}
-
 {% endblock %}
-
