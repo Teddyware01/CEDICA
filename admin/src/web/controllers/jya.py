@@ -26,15 +26,13 @@ def listar_jinetes():
     dni = request.args.get("dni", '')
     profesionales = request.args.get("profesionales", '')
     page = request.args.get('page', 1, type=int)
-    per_page = current_app.config['PAGINATION_PER_PAGE']
     jinetes = jya.list_jinetes(
         sort_by=sort_by,
         nombre=nombre,
         apellido=apellido,
         dni=dni,
         profesionales=profesionales,
-        page=page,
-        per_page=per_page
+        page=page
     )
     return render_template("jya/listado_jya.html", jinetes=jinetes)
 

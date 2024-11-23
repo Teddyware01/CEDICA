@@ -8,10 +8,11 @@ from src.core.jya.models import (Jinete, Familiar, Dias, JineteDocumento,
                                 TipoDiscapacidad, EscolaridadEnum)
 from src.core.equipo.extra_models import Domicilio, ContactoEmergencia, Provincia, Localidad
 from sqlalchemy import String, cast, or_
+from flask import current_app
 
 
-
-def list_jinetes(sort_by=None, nombre=None, apellido=None, dni=None, profesionales=None):
+def list_jinetes(sort_by=None, nombre=None, apellido=None, dni=None, profesionales=None, page=1):
+    per_page = current_app.config['PAGINATION_PER_PAGE']
     query = Jinete.query.filter_by(esta_borrado=False)
     if nombre:
         query = query.filter(Jinete.nombre.ilike(f"%{nombre}%"))
@@ -30,9 +31,9 @@ def list_jinetes(sort_by=None, nombre=None, apellido=None, dni=None, profesional
             query = query.order_by(Jinete.apellido.asc())
         elif sort_by == "apellido_desc":
             query = query.order_by(Jinete.apellido.desc())
-        
     paginated_query = query.paginate(page=page, per_page=per_page, error_out=False)
     return paginated_query
+
 
 def create_jinete(**kwargs):
     jinete = Jinete(**kwargs)
